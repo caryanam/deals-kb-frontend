@@ -1,0 +1,692 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { AlertTriangle, Camera, CheckCircle2, FileText, Film, Loader2, Upload, X } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { createProduct, getProductById, updateProduct } from '../../api/productApi';
+import { useAuth } from '../../hooks/useAuth';
+import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
+import { triggerPayment } from '../../utils/paymentHelper';
+
+const CATEGORIES = [
+  { value: 'car', label: 'CAR' },
+  { value: 'bike', label: 'BIKE' },
+  { value: 'mobile', label: 'MOBILE' },
+  { value: 'laptop', label: 'LAPTOP' }
+];
+
+const LISTING_FEES = {
+  car: '₹399',
+  mobile: '₹21',
+  bike: '₹99',
+  laptop: '₹51'
+};
+
+const CONDITIONS = ['Excellent', 'Good', 'Average', 'Needs Repair'];
+const FUEL_TYPES = ['Petrol', 'Diesel', 'Cng', 'Electric', 'Hybrid'];
+const OWNERSHIP_OPTIONS = ['1st', '2nd', '3rd', '4th+'];
+
+const PHOTO_SLOTS = {
+  car: [
+    'Front image',
+    'Back image',
+    'Dashboard',
+    'Seat',
+    'Tyre',
+    'Engine',
+    'Speedometer',
+    'Damage image'
+  ],
+  bike: [
+    'Front image',
+    'Back image',
+    'Dashboard',
+    'Seat',
+    'Tyre',
+    'Engine',
+    'Speedometer',
+    'Damage image'
+  ],
+  laptop: [
+    'Front image',
+    'Back image',
+    'Barcode image',
+    'Specification image',
+    'Damage image'
+  ],
+  mobile: [
+    'Front image',
+    'Back image',
+    'Specification image',
+    'Damage image'
+  ]
+};
+
+const initialSpecs = {
+  year: '',
+  kmDriven: '',
+  insuranceStatus: '',
+  fuelType: 'Petrol',
+  ownership: '1st',
+  accidental: 'No',
+  processor: '',
+  ram: '',
+  storage: '',
+  graphics: '',
+  batteryBackup: '',
+  batteryHealth: '',
+  imeiNumber: '',
+  warrantyAvailable: 'No'
+};
+
+const sectionTitle = {
+  car: 'Car Details',
+  bike: 'Bike Details',
+  laptop: 'Laptop Details',
+  mobile: 'Mobile Details'
+};
+
+export const CreateListingPage = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const basePath = user?.role === 'Dealer' ? '/dealer' : '/seller';
+  const [searchParams] = useSearchParams();
+  const editId = searchParams.get('edit');
+
+  const [productType, setProductType] = useState('car');
+  const [title, setTitle] = useState('');
+  const [brand, setBrand] = useState('');
+  const [make, setMake] = useState('');
+  const [model, setModel] = useState('');
+  const [condition, setCondition] = useState('Good');
+  const [productPrice, setProductPrice] = useState('');
+  const [expectedPrice, setExpectedPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [specs, setSpecs] = useState(initialSpecs);
+
+  const [photos, setPhotos] = useState([]);
+  const [photoSlots, setPhotoSlots] = useState({});
+  const [video, setVideo] = useState(null);
+  const [rcCopy, setRcCopy] = useState(null);
+  const [insuranceCopy, setInsuranceCopy] = useState(null);
+  const [aadhaarCard, setAadhaarCard] = useState(null);
+  const [panCard, setPanCard] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+
+  useEffect(() => {
+    if (!editId) return;
+
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        const product = await getProductById(editId);
+        const parsedSpecs = safeParseJSON(product.specifications, {});
+        const parsedDocs = safeParseJSON(product.documents, {});
+
+        setProductType(product.product_type || 'car');
+        setTitle(product.title || '');
+        setBrand(product.brand || '');
+        setMake(parsedSpecs.make || '');
+        setModel(product.model || '');
+        setCondition(product.condition || 'Good');
+        setProductPrice(product.product_price || '');
+        setExpectedPrice(product.expected_price || '');
+        setDescription(product.description || '');
+        setPhotos(safeParseJSON(product.photos, []));
+        setVideo(product.video || null);
+        setSpecs({
+          ...initialSpecs,
+          year: parsedSpecs.year || '',
+          kmDriven: parsedSpecs.km_driven || '',
+          insuranceStatus: parsedSpecs.insurance_status || '',
+          fuelType: parsedSpecs.fuel_type || 'Petrol',
+          ownership: parsedSpecs.ownership || '1st',
+          accidental: parsedSpecs.accidental || 'No',
+          processor: parsedSpecs.processor || '',
+          ram: parsedSpecs.ram || '',
+          storage: parsedSpecs.storage || '',
+          graphics: parsedSpecs.graphics || '',
+          batteryBackup: parsedSpecs.battery_backup || '',
+          batteryHealth: parsedSpecs.battery_health || '',
+          imeiNumber: parsedSpecs.imei_number || '',
+          warrantyAvailable: parsedSpecs.warranty_available || 'No'
+        });
+        setRcCopy(parsedDocs.rc_copy || null);
+        setInsuranceCopy(parsedDocs.insurance_copy || null);
+        setAadhaarCard(parsedDocs.aadhaar_card || null);
+        setPanCard(parsedDocs.pan_card || null);
+      } catch (err) {
+        console.error('Failed to load listing:', err);
+        setErrorMsg('Failed to load listing data for editing.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
+  }, [editId]);
+
+  const updateSpec = (key, value) => {
+    setSpecs((current) => ({ ...current, [key]: value }));
+  };
+
+  const switchCategory = (type) => {
+    setProductType(type);
+    setErrorMsg('');
+    setRcCopy(null);
+    setInsuranceCopy(null);
+    setAadhaarCard(null);
+    setPanCard(null);
+    setPhotoSlots({});
+    setPhotos([]);
+  };
+
+  const handlePhotoUpload = async (e, slotLabel) => {
+    setErrorMsg('');
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const value = await compressImage(file, 1024, 1024, 0.7).catch(() => fileToBase64(file));
+      setPhotoSlots((current) => {
+        const next = { ...current, [slotLabel]: value };
+        setPhotos(Object.values(next).filter(Boolean));
+        return next;
+      });
+    } catch {
+      setErrorMsg('Failed to process image files.');
+    } finally {
+      e.target.value = '';
+    }
+  };
+
+  const handleDocUpload = async (e, setter) => {
+    setErrorMsg('');
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const value = file.type.startsWith('image/')
+        ? await compressImage(file, 1024, 1024, 0.7).catch(() => fileToBase64(file))
+        : await fileToBase64(file);
+      setter(value);
+    } catch {
+      setErrorMsg('Failed to process document file.');
+    } finally {
+      e.target.value = '';
+    }
+  };
+
+  const handleVideoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('video/')) {
+      setErrorMsg('Please upload a valid video file.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setVideo(await fileToBase64(file));
+    } catch {
+      setErrorMsg('Failed to process video file.');
+    } finally {
+      setLoading(false);
+      e.target.value = '';
+    }
+  };
+
+  const buildPayload = () => {
+    const specifications = {
+      warranty_available: specs.warrantyAvailable
+    };
+    const documents = {};
+
+    if (make.trim()) specifications.make = make.trim();
+
+    if (productType === 'car' || productType === 'bike') {
+      Object.assign(specifications, {
+        year: Number(specs.year),
+        km_driven: Number(specs.kmDriven),
+        insurance_status: specs.insuranceStatus.trim(),
+        fuel_type: specs.fuelType,
+        ownership: specs.ownership,
+        accidental: specs.accidental
+      });
+      documents.rc_copy = rcCopy;
+      documents.insurance_copy = insuranceCopy;
+    }
+
+    if (productType === 'laptop') {
+      Object.assign(specifications, {
+        processor: specs.processor.trim(),
+        ram: specs.ram.trim(),
+        storage: specs.storage.trim()
+      });
+      documents.aadhaar_card = aadhaarCard;
+      documents.pan_card = panCard;
+      if (specs.batteryBackup.trim()) specifications.battery_backup = specs.batteryBackup.trim();
+      if (specs.graphics.trim()) specifications.graphics = specs.graphics.trim();
+      if (specs.batteryHealth.trim()) specifications.battery_health = specs.batteryHealth.trim();
+    }
+
+    if (productType === 'mobile') {
+      Object.assign(specifications, {
+        ram: specs.ram.trim(),
+        storage: specs.storage.trim()
+      });
+      documents.aadhaar_card = aadhaarCard;
+      documents.pan_card = panCard;
+      if (specs.imeiNumber.trim()) specifications.imei_number = specs.imeiNumber.trim();
+    }
+
+    return {
+      title: title.trim(),
+      product_type: productType,
+      brand: brand.trim(),
+      model: model.trim(),
+      condition,
+      description: description.trim(),
+      product_price: Number(productPrice),
+      expected_price: Number(expectedPrice),
+      photos,
+      video: video || null,
+      specifications,
+      documents
+    };
+  };
+
+  const validateForm = () => {
+    if (!title.trim() || !brand.trim() || !model.trim()) return 'Please complete title, brand, and model.';
+    if (!productPrice || Number(productPrice) <= 0) return 'Product price must be greater than 0.';
+    if (!expectedPrice || Number(expectedPrice) <= 0) return 'Expected price must be greater than 0.';
+    if (!video) return 'Video walkthrough is required.';
+
+    if (productType === 'car' || productType === 'bike') {
+      if (!specs.ownership || !specs.accidental) return 'Please select ownership and accidental status.';
+      if (!rcCopy || !insuranceCopy) return 'RC Document and Insurance Document are required.';
+    }
+
+    if (productType === 'laptop') {
+      if (!specs.ram.trim() || !specs.storage.trim()) {
+        return 'RAM and Storage are required.';
+      }
+      if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
+    }
+
+    if (productType === 'mobile') {
+      if (!specs.ram.trim() || !specs.storage.trim()) return 'Storage and RAM are required.';
+      if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
+    }
+
+    return '';
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMsg('');
+    setSuccessMsg('');
+
+    const validation = validateForm();
+    if (validation) {
+      setErrorMsg(validation);
+      return;
+    }
+
+    const payload = buildPayload();
+    setLoading(true);
+
+    try {
+      if (editId) {
+        await updateProduct(editId, payload);
+        toast.success('Product listing updated successfully!');
+      } else {
+        const paymentResult = await triggerPayment(`seller_listing_${productType}`);
+        if (!paymentResult) return;
+        await createProduct(payload);
+        toast.success('Product listing created successfully!');
+      }
+      setSuccessMsg('Listing submitted for approval. Redirecting...');
+      setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
+    } catch (err) {
+      const msg = err.response?.data?.detail || err.response?.data?.message || 'Failed to submit product listing.';
+      setErrorMsg(msg);
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const pillStyle = (selected) => ({
+    border: selected ? '1px solid #111827' : '1px solid #d1d5db',
+    backgroundColor: selected ? '#111827' : '#ffffff',
+    color: selected ? '#ffffff' : '#374151',
+    borderRadius: '999px',
+    padding: '0.75rem 1.25rem',
+    fontWeight: 800,
+    cursor: 'pointer',
+    minHeight: '44px'
+  });
+
+  return (
+    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", maxWidth: '1120px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif", margin: 0 }}>
+          {editId ? 'Edit Product Listing' : 'Create Listing'}
+        </h1>
+        <p style={{ color: '#64748b', fontSize: '0.9rem', marginTop: '0.35rem' }}>
+          Add category-specific product details, documents, product price, expected price, and description.
+        </p>
+      </div>
+
+      {successMsg && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', backgroundColor: '#d1fae5', border: '1px solid #10b981', padding: '1rem', borderRadius: '0.75rem', color: '#065f46', fontWeight: 700, marginBottom: '1rem' }}>
+          <CheckCircle2 size={20} />
+          <span>{successMsg}</span>
+        </div>
+      )}
+
+      {errorMsg && (
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', backgroundColor: '#fef2f2', border: '1px solid #fca5a5', padding: '1rem', borderRadius: '0.75rem', color: '#b91c1c', lineHeight: 1.4, marginBottom: '1rem' }}>
+          <AlertTriangle size={20} style={{ flexShrink: 0 }} />
+          <div>
+            <strong>Validation Error</strong>
+            <p style={{ margin: '0.2rem 0 0' }}>{errorMsg}</p>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.15fr) minmax(320px, 0.85fr)', gap: '1.5rem' }}>
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <section>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.85rem' }}>Category</h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+              {CATEGORIES.map((category) => (
+                <button key={category.value} type="button" onClick={() => switchCategory(category.value)} style={pillStyle(productType === category.value)}>
+                  {category.label}
+                </button>
+              ))}
+            </div>
+            <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+              <span style={{ color: '#1e40af', fontWeight: 800, fontSize: '0.9rem' }}>Listing fee for selected category</span>
+              <strong style={{ color: '#0f172a', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
+            </div>
+          </section>
+
+          <section>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Basic Details</h2>
+            <Input label="Title *" value={title} onChange={setTitle} placeholder="e.g. Honda City / iPhone 13 / Dell Laptop" />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+              <Input label="Brand *" value={brand} onChange={setBrand} placeholder="e.g. Honda / Apple / Dell" />
+              {(productType === 'car' || productType === 'bike') && <Input label="Make" value={make} onChange={setMake} placeholder="e.g. Honda" />}
+              <Input label="Model *" value={model} onChange={setModel} placeholder="e.g. City / iPhone 13 / Inspiron" />
+            </div>
+          </section>
+
+          <section>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>{sectionTitle[productType]}</h2>
+            {(productType === 'car' || productType === 'bike') && (
+              <>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+                  <Input label="Manufacturing Year" type="number" value={specs.year} onChange={(v) => updateSpec('year', v)} placeholder="e.g. 2020" />
+                  <Input label="Kilometer Driven" type="number" value={specs.kmDriven} onChange={(v) => updateSpec('kmDriven', v)} placeholder="e.g. 45000" />
+                  <Input label="Insurance Details" value={specs.insuranceStatus} onChange={(v) => updateSpec('insuranceStatus', v)} placeholder="e.g. Valid till March 2026" />
+                </div>
+                <ChipGroup label="Fuel Type" options={FUEL_TYPES} value={specs.fuelType} onChange={(v) => updateSpec('fuelType', v)} />
+                <ChipGroup label="Ownership *" options={OWNERSHIP_OPTIONS} value={specs.ownership} onChange={(v) => updateSpec('ownership', v)} />
+                <Segmented label="Accidental *" options={['No', 'Yes']} value={specs.accidental} onChange={(v) => updateSpec('accidental', v)} />
+              </>
+            )}
+
+            {productType === 'laptop' && (
+              <>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+                  <Input label="Processor" value={specs.processor} onChange={(v) => updateSpec('processor', v)} placeholder="e.g. Intel i5 / Ryzen 5" />
+                  <Input label="RAM *" value={specs.ram} onChange={(v) => updateSpec('ram', v)} placeholder="e.g. 8GB" />
+                  <Input label="Storage *" value={specs.storage} onChange={(v) => updateSpec('storage', v)} placeholder="e.g. 512GB SSD" />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+                  <Input label="Graphics Card" value={specs.graphics} onChange={(v) => updateSpec('graphics', v)} placeholder="Graphics card" />
+                  <Input label="Battery Backup" value={specs.batteryBackup} onChange={(v) => updateSpec('batteryBackup', v)} placeholder="e.g. 3-4 hours" />
+                  <Input label="Battery Health" value={specs.batteryHealth} onChange={(v) => updateSpec('batteryHealth', v)} placeholder="Battery health" />
+                </div>
+              </>
+            )}
+
+            {productType === 'mobile' && (
+              <>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+                  <Input label="Storage *" value={specs.storage} onChange={(v) => updateSpec('storage', v)} placeholder="e.g. 128GB" />
+                  <Input label="RAM *" value={specs.ram} onChange={(v) => updateSpec('ram', v)} placeholder="e.g. 6GB" />
+                  <Input label="IMEI Number" value={specs.imeiNumber} onChange={(v) => updateSpec('imeiNumber', v)} placeholder="IMEI Number" />
+                </div>
+              </>
+            )}
+
+            {(productType === 'laptop' || productType === 'mobile') && (
+              <>
+                <ChipGroup label="Condition *" options={CONDITIONS} value={condition} onChange={setCondition} />
+                <Segmented label="Warranty Available?" options={['No', 'Yes']} value={specs.warrantyAvailable} onChange={(v) => updateSpec('warrantyAvailable', v)} />
+              </>
+            )}
+          </section>
+
+          <section>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Price & Description</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '1rem' }}>
+              <Input label="Product Price Rs *" type="number" value={productPrice} onChange={setProductPrice} placeholder="e.g. 500000" />
+              <Input label="Expected Price Rs *" type="number" value={expectedPrice} onChange={setExpectedPrice} placeholder="e.g. 450000" />
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label" htmlFor="description">Description</label>
+              <textarea id="description" className="form-control" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Write product condition, features, reason for selling..." />
+            </div>
+          </section>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="card">
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Product Photos</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.75rem' }}>
+              {(PHOTO_SLOTS[productType] || []).map((slot) => (
+                <PhotoSlot
+                  key={slot}
+                  label={slot}
+                  value={photoSlots[slot]}
+                  onUpload={(e) => handlePhotoUpload(e, slot)}
+                  onRemove={() => {
+                    setPhotoSlots((current) => {
+                      const next = { ...current };
+                      delete next[slot];
+                      setPhotos(Object.values(next).filter(Boolean));
+                      return next;
+                    });
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {(productType === 'car' || productType === 'bike') && (
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.25rem' }}>Admin Documents *</h2>
+              <>
+                <UploadRow label="RC Document" file={rcCopy} onUpload={(e) => handleDocUpload(e, setRcCopy)} onRemove={() => setRcCopy(null)} />
+                <UploadRow label="Insurance Document" file={insuranceCopy} onUpload={(e) => handleDocUpload(e, setInsuranceCopy)} onRemove={() => setInsuranceCopy(null)} />
+              </>
+            </div>
+          )}
+
+          {(productType === 'laptop' || productType === 'mobile') && (
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.25rem' }}>KYC Documents *</h2>
+              <>
+                <UploadRow label="Aadhaar Card" file={aadhaarCard} onUpload={(e) => handleDocUpload(e, setAadhaarCard)} onRemove={() => setAadhaarCard(null)} />
+                <UploadRow label="PAN Card" file={panCard} onUpload={(e) => handleDocUpload(e, setPanCard)} onRemove={() => setPanCard(null)} />
+              </>
+            </div>
+          )}
+
+          <div className="card">
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Upload Video Walkthrough *</h2>
+            <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '-0.35rem 0 0.85rem', fontWeight: 700 }}>
+              Video length should be between 10-15 sec max.
+            </p>
+            {!video ? (
+              <label style={{ border: '1px dashed #cbd5e1', borderRadius: '0.75rem', padding: '1rem', textAlign: 'center', position: 'relative', backgroundColor: '#f8fafc', display: 'block', cursor: 'pointer' }}>
+                <Film size={24} style={{ color: '#2563eb', marginBottom: '0.25rem' }} />
+                <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, fontWeight: 700 }}>Select video walkthrough</p>
+                <input type="file" accept="video/*" onChange={handleVideoUpload} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+              </label>
+            ) : (
+              <UploadedBadge label="Video Walkthrough Uploaded" onRemove={() => setVideo(null)} />
+            )}
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <button type="button" onClick={() => navigate(`${basePath}/my-listings`)} className="btn btn-secondary" style={{ flex: 1, height: '52px' }}>
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary" disabled={loading} style={{ flex: 2, height: '52px', backgroundColor: '#111827', borderColor: '#111827', fontWeight: 900 }}>
+              {loading ? (
+                <>
+                  <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
+                  Submitting...
+                </>
+              ) : (
+                'Submit for Approval'
+              )}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 900px) {
+          form {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+const Input = ({ label, value, onChange, placeholder, type = 'text' }) => (
+  <div className="form-group" style={{ marginBottom: 0 }}>
+    <label className="form-label">{label}</label>
+    <input type={type} className="form-control" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+  </div>
+);
+
+const ChipGroup = ({ label, options, value, onChange }) => (
+  <div className="form-group" style={{ marginBottom: 0 }}>
+    <label className="form-label">{label}</label>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+      {options.map((option) => (
+        <button key={option} type="button" onClick={() => onChange(option)} style={{
+          border: value === option ? '1px solid #111827' : '1px solid #d1d5db',
+          backgroundColor: value === option ? '#111827' : '#ffffff',
+          color: value === option ? '#ffffff' : '#374151',
+          borderRadius: '999px',
+          padding: '0.7rem 1.15rem',
+          fontWeight: 800,
+          cursor: 'pointer'
+        }}>
+          {option}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
+const Segmented = ({ label, options, value, onChange }) => (
+  <div className="form-group" style={{ marginBottom: 0 }}>
+    <label className="form-label">{label}</label>
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${options.length}, 1fr)`, gap: '0.75rem' }}>
+      {options.map((option) => (
+        <button key={option} type="button" onClick={() => onChange(option)} style={{
+          border: value === option ? '1px solid #111827' : '1px solid #d1d5db',
+          backgroundColor: value === option ? '#111827' : '#ffffff',
+          color: value === option ? '#ffffff' : '#374151',
+          borderRadius: '0.85rem',
+          minHeight: '50px',
+          fontWeight: 900,
+          cursor: 'pointer'
+        }}>
+          {option}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
+const PhotoSlot = ({ label, value, onUpload, onRemove }) => (
+  <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '0.75rem', minHeight: '112px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.65rem' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
+      <Camera size={20} style={{ color: '#334155', flexShrink: 0 }} />
+      <div style={{ minWidth: 0 }}>
+        <span style={{ fontWeight: 850, color: '#111827', fontSize: '0.9rem', lineHeight: 1.25 }}>{label}</span>
+        {(label === 'Front image' || label === 'Back image') && (
+          <p style={{ margin: '0.15rem 0 0', color: '#64748b', fontSize: '0.72rem', fontWeight: 700, lineHeight: 1.25 }}>
+            Note: number plate should be hidden.
+          </p>
+        )}
+      </div>
+    </div>
+    {value ? (
+      <div style={{ height: '72px', borderRadius: '0.65rem', overflow: 'hidden', position: 'relative', border: '1px solid #d1fae5' }}>
+        <img src={value} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <button type="button" onClick={onRemove} style={{ position: 'absolute', top: 5, right: 5, border: 'none', background: '#ef4444', color: '#ffffff', borderRadius: '50%', width: 22, height: 22, display: 'grid', placeItems: 'center', cursor: 'pointer' }}>
+          <X size={13} />
+        </button>
+      </div>
+    ) : (
+      <label style={{ border: '1px dashed #cbd5e1', borderRadius: '0.65rem', minHeight: '58px', display: 'grid', placeItems: 'center', color: '#2563eb', fontWeight: 900, cursor: 'pointer', position: 'relative', backgroundColor: '#f8fafc' }}>
+        Upload
+        <input type="file" accept="image/*" onChange={onUpload} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+      </label>
+    )}
+  </div>
+);
+
+const UploadRow = ({ label, file, onUpload, onRemove }) => (
+  <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '1rem', display: 'flex', alignItems: 'center', gap: '0.85rem', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 0 }}>
+      <FileText size={28} style={{ color: '#334155', flexShrink: 0 }} />
+      <div>
+        <p style={{ margin: 0, fontWeight: 900, color: '#111827' }}>{label}</p>
+        <p style={{ margin: '0.15rem 0 0', color: file ? '#047857' : '#475569', fontSize: '0.85rem', fontWeight: 700 }}>
+          {file ? 'Uploaded' : 'Tap to upload image'}
+        </p>
+      </div>
+    </div>
+    {file ? (
+      <button type="button" onClick={onRemove} style={{ border: 'none', background: 'transparent', color: '#ef4444', cursor: 'pointer' }}>
+        <X size={18} />
+      </button>
+    ) : (
+      <label style={{ color: '#2563eb', fontWeight: 900, cursor: 'pointer', position: 'relative' }}>
+        Upload
+        <input type="file" accept="image/*,application/pdf" onChange={onUpload} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+      </label>
+    )}
+  </div>
+);
+
+const UploadedBadge = ({ label, onRemove }) => (
+  <div style={{ padding: '0.75rem', backgroundColor: '#ecfdf5', borderRadius: '0.75rem', border: '1px solid #a7f3d0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <span style={{ fontSize: '0.85rem', color: '#065f46', fontWeight: 800 }}>{label}</span>
+    <button type="button" onClick={onRemove} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}>
+      <X size={16} />
+    </button>
+  </div>
+);
+
+export default CreateListingPage;
