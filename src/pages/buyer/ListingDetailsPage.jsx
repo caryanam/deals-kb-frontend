@@ -51,6 +51,7 @@ export const ListingDetailsPage = () => {
 
       if (request?.status === 'ACCEPTED' && chatId) {
         localStorage.setItem('open_chat_id', chatId);
+        window.dispatchEvent(new CustomEvent('dealskb:open-chat', { detail: { chatId } }));
         toast.success('Chat room opened!');
         return;
       }
@@ -78,6 +79,7 @@ export const ListingDetailsPage = () => {
         throw new Error('Failed to resolve conversation ID from server response.');
       }
       localStorage.setItem('open_chat_id', chatId);
+      window.dispatchEvent(new CustomEvent('dealskb:open-chat', { detail: { chatId } }));
       toast.success('Chat room opened!');
     } catch (err) {
       console.error('Failed to open accepted chat:', err);

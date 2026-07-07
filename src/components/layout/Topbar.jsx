@@ -146,8 +146,6 @@ export const Topbar = ({ onToggleSidebar }) => {
   useEffect(() => {
     if (user) {
       fetchNotifs();
-      const interval = setInterval(fetchNotifs, 15000);
-      return () => clearInterval(interval);
     }
   }, [user]);
 
@@ -240,6 +238,7 @@ export const Topbar = ({ onToggleSidebar }) => {
             await handleOpenChat(found);
           } else {
             localStorage.setItem('open_chat_id', chatId);
+            window.dispatchEvent(new CustomEvent('dealskb:open-chat', { detail: { chatId } }));
           }
         }
       }
@@ -293,6 +292,7 @@ export const Topbar = ({ onToggleSidebar }) => {
         await handleOpenChat(found);
       } else {
         localStorage.setItem('open_chat_id', chatId);
+        window.dispatchEvent(new CustomEvent('dealskb:open-chat', { detail: { chatId } }));
       }
     } catch (err) {
       console.error("Failed to open accepted request chat:", err);
@@ -396,39 +396,16 @@ export const Topbar = ({ onToggleSidebar }) => {
     setShowChatReportModal(true);
   };
 
-  // Background polling for conversations
+  // Load conversations once after login. Manual refresh is available in the chats panel.
   useEffect(() => {
     if (!user || !['buyer', 'seller', 'dealer'].includes(user.role?.toLowerCase())) return;
-
     fetchChats();
-    const interval = setInterval(fetchChats, 10000);
-    return () => clearInterval(interval);
   }, [user]);
 
-  // Background polling for active conversation messages
+  // External chat triggering without polling.
   useEffect(() => {
-    if (!activeChat) return;
-    const cid = activeChat.conversation_id || activeChat.id;
-
-    const interval = setInterval(async () => {
-      try {
-        const data = await getMessages(cid);
-        const list = Array.isArray(data) ? data : (data?.messages || data?.data || []);
-        setMessages(list);
-        await markConversationRead(cid);
-        fetchChats();
-      } catch (err) {
-        console.error("Error polling messages:", err);
-      }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [activeChat]);
-
-  // External chat triggering via localStorage
-  useEffect(() => {
-    const checkExternalChatOpen = async () => {
-      const openChatId = localStorage.getItem('open_chat_id');
+    const checkExternalChatOpen = async (event) => {
+      const openChatId = event?.detail?.chatId || localStorage.getItem('open_chat_id');
       if (openChatId) {
         localStorage.removeItem('open_chat_id');
         try {
@@ -450,8 +427,17 @@ export const Topbar = ({ onToggleSidebar }) => {
     };
 
     checkExternalChatOpen();
-    const intv = setInterval(checkExternalChatOpen, 1000);
-    return () => clearInterval(intv);
+    const handleStorage = (event) => {
+      if (event.key === 'open_chat_id') {
+        checkExternalChatOpen({ detail: { chatId: event.newValue } });
+      }
+    };
+    window.addEventListener('dealskb:open-chat', checkExternalChatOpen);
+    window.addEventListener('storage', handleStorage);
+    return () => {
+      window.removeEventListener('dealskb:open-chat', checkExternalChatOpen);
+      window.removeEventListener('storage', handleStorage);
+    };
   }, []);
 
   const unreadChatsCount = Array.isArray(conversations) ? conversations.reduce((acc, c) => acc + (c.unread_count || 0), 0) : 0;
