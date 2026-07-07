@@ -10,6 +10,7 @@ import {
   deleteCommunityRequest
 } from '../../api/communityRequestsApi';
 import { formatCurrency } from '../../utils/helpers';
+import { CAR_BRANDS, CAR_BRAND_TO_MODELS, LAPTOP_BRANDS, LAPTOP_BRAND_TO_MODELS } from '../../data/carLaptopData';
 
 export const CommunityRequestsPage = () => {
   const [requests, setRequests] = useState([]);
@@ -198,8 +199,8 @@ export const CommunityRequestsPage = () => {
       {/* Header banner */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0b0f19', margin: 0, fontFamily: "'Outfit', sans-serif" }}>Explore Community</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem', margin: '0.25rem 0 0 0' }}>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1F1A1D', margin: 0, fontFamily: "'Outfit', sans-serif" }}>Explore Community</h1>
+          <p style={{ color: '#8B8278', fontSize: '0.9rem', margin: '0.25rem 0 0 0' }}>
             Post what you're looking for and join requests from other buyers in the DealsKB community.
           </p>
         </div>
@@ -217,8 +218,8 @@ export const CommunityRequestsPage = () => {
         display: 'flex',
         alignItems: 'center',
         gap: '0.75rem',
-        backgroundColor: '#eff6ff',
-        border: '1px solid #bfdbfe',
+        backgroundColor: '#F5ECDD',
+        border: '1px solid #D8CFC1',
         color: '#1e3a8a',
         padding: '1rem',
         borderRadius: '0.75rem',
@@ -226,14 +227,14 @@ export const CommunityRequestsPage = () => {
         fontSize: '0.875rem',
         lineHeight: 1.4
       }}>
-        <Info size={20} style={{ color: '#2563eb', flexShrink: 0 }} />
+        <Info size={20} style={{ color: '#6B1B71', flexShrink: 0 }} />
         <span>
           <strong>Matching Rule:</strong> You'll be notified automatically when a product with the same category, brand, and model is approved by administrators.
         </span>
       </div>
 
       {/* Tab Selectors */}
-      <div style={{ display: 'flex', borderBottom: '2px solid #e2e8f0', marginBottom: '1.5rem', gap: '1.5rem' }}>
+      <div style={{ display: 'flex', borderBottom: '2px solid #D8CFC1', marginBottom: '1.5rem', gap: '1.5rem' }}>
         {[
           { key: 'all', label: 'All Requests' },
           { key: 'created', label: 'My Created' },
@@ -245,10 +246,10 @@ export const CommunityRequestsPage = () => {
             style={{
               padding: '0.75rem 0.25rem',
               fontWeight: activeTab === tab.key ? 800 : 600,
-              color: activeTab === tab.key ? '#2563eb' : '#64748b',
+              color: activeTab === tab.key ? '#6B1B71' : '#8B8278',
               border: 'none',
               background: 'none',
-              borderBottom: activeTab === tab.key ? '3px solid #2563eb' : '3px solid transparent',
+              borderBottom: activeTab === tab.key ? '3px solid #6B1B71' : '3px solid transparent',
               cursor: 'pointer',
               fontSize: '0.925rem',
               transition: 'all 0.2s'
@@ -272,9 +273,9 @@ export const CommunityRequestsPage = () => {
                   padding: '0.5rem 1rem',
                   borderRadius: '9999px',
                   border: '1px solid',
-                  borderColor: categoryFilter === cat ? '#2563eb' : '#e2e8f0',
-                  backgroundColor: categoryFilter === cat ? '#eff6ff' : '#ffffff',
-                  color: categoryFilter === cat ? '#2563eb' : '#475569',
+                  borderColor: categoryFilter === cat ? '#6B1B71' : '#D8CFC1',
+                  backgroundColor: categoryFilter === cat ? '#F5ECDD' : '#ffffff',
+                  color: categoryFilter === cat ? '#6B1B71' : '#8B8278',
                   fontSize: '0.8rem',
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -303,7 +304,7 @@ export const CommunityRequestsPage = () => {
                 outline: 'none'
               }}
             />
-            <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
           </div>
         </div>
       )}
@@ -316,10 +317,10 @@ export const CommunityRequestsPage = () => {
           </div>
         </div>
       ) : displayRequests.length === 0 ? (
-        <div className="card text-center" style={{ padding: '3.5rem 2rem', borderColor: '#e2e8f0' }}>
+        <div className="card text-center" style={{ padding: '3.5rem 2rem', borderColor: '#D8CFC1' }}>
           <Users size={48} style={{ color: '#cbd5e1', margin: '0 auto 1rem auto' }} />
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#334155', margin: '0 0 0.5rem 0' }}>No Demands Found</h3>
-          <p style={{ color: '#64748b', fontSize: '0.875rem', margin: '0 0 1rem 0' }}>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#4a1a50', margin: '0 0 0.5rem 0' }}>No Demands Found</h3>
+          <p style={{ color: '#8B8278', fontSize: '0.875rem', margin: '0 0 1rem 0' }}>
             No community requests found matching these filter choices. Be the first to post a new request!
           </p>
           <button 
@@ -336,7 +337,7 @@ export const CommunityRequestsPage = () => {
             <div key={req.request_id} className="col-12 col-sm-6 col-md-4 col-lg-3">
               <div className="card h-100" style={{
                 borderRadius: '1rem',
-                borderColor: '#e2e8f0',
+                borderColor: '#D8CFC1',
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.03)',
                 transition: 'all 0.2s',
                 display: 'flex',
@@ -350,8 +351,8 @@ export const CommunityRequestsPage = () => {
                       fontSize: '0.7rem',
                       fontWeight: 800,
                       textTransform: 'uppercase',
-                      color: '#2563eb',
-                      backgroundColor: '#eff6ff',
+                      color: '#6B1B71',
+                      backgroundColor: '#F5ECDD',
                       padding: '0.25rem 0.65rem',
                       borderRadius: '0.5rem',
                       letterSpacing: '0.05em'
@@ -361,31 +362,31 @@ export const CommunityRequestsPage = () => {
                     <span style={{
                       fontSize: '0.75rem',
                       fontWeight: 700,
-                      color: req.status === 'active' ? '#10b981' : '#64748b',
+                      color: req.status === 'active' ? '#10b981' : '#8B8278',
                       textTransform: 'capitalize',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.25rem'
                     }}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: req.status === 'active' ? '#10b981' : '#64748b' }} />
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: req.status === 'active' ? '#10b981' : '#8B8278' }} />
                       {req.status}
                     </span>
                   </div>
 
                   {/* Brand & Model */}
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b', margin: '0 0 0.5rem 0' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#2d0a32', margin: '0 0 0.5rem 0' }}>
                     {req.brand} {req.model}
                   </h3>
 
                   {/* Range and Condition */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.75rem', fontSize: '0.8rem' }}>
-                    <div style={{ backgroundColor: '#f8fafc', padding: '0.35rem 0.65rem', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
-                      <span style={{ color: '#64748b', fontWeight: 600 }}>Budget: </span>
-                      <strong style={{ color: '#0f172a', display: 'block', marginTop: '0.1rem' }}>{formatCurrency(req.budget_min)} - {formatCurrency(req.budget_max)}</strong>
+                    <div style={{ backgroundColor: '#FAF6EA', padding: '0.35rem 0.65rem', borderRadius: '0.5rem', border: '1px solid #D8CFC1' }}>
+                      <span style={{ color: '#8B8278', fontWeight: 600 }}>Budget: </span>
+                      <strong style={{ color: '#1F1A1D', display: 'block', marginTop: '0.1rem' }}>{formatCurrency(req.budget_min)} - {formatCurrency(req.budget_max)}</strong>
                     </div>
-                    <div style={{ backgroundColor: '#f8fafc', padding: '0.35rem 0.65rem', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
-                      <span style={{ color: '#64748b', fontWeight: 600 }}>Condition: </span>
-                      <strong style={{ color: '#0f172a', display: 'block', marginTop: '0.1rem' }}>{req.condition_preference}</strong>
+                    <div style={{ backgroundColor: '#FAF6EA', padding: '0.35rem 0.65rem', borderRadius: '0.5rem', border: '1px solid #D8CFC1' }}>
+                      <span style={{ color: '#8B8278', fontWeight: 600 }}>Condition: </span>
+                      <strong style={{ color: '#1F1A1D', display: 'block', marginTop: '0.1rem' }}>{req.condition_preference}</strong>
                     </div>
                   </div>
 
@@ -393,7 +394,7 @@ export const CommunityRequestsPage = () => {
                   {req.description && (
                     <p style={{
                       fontSize: '0.85rem',
-                      color: '#475569',
+                      color: '#8B8278',
                       lineHeight: 1.5,
                       margin: '0 0 1.25rem 0',
                       flexGrow: 1,
@@ -415,18 +416,18 @@ export const CommunityRequestsPage = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     fontSize: '0.75rem',
-                    color: '#94a3b8'
+                    color: '#8B8278'
                   }}>
                     <div>
-                      <span style={{ display: 'block', color: '#64748b', fontWeight: 600 }}>Requested by {req.created_by_name || 'Anonymous'}</span>
+                      <span style={{ display: 'block', color: '#8B8278', fontWeight: 600 }}>Requested by {req.created_by_name || 'Anonymous'}</span>
                       <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.15rem' }}>
                         <Clock size={12} />
                         {req.created_at ? new Date(req.created_at).toLocaleDateString() : 'Recent'}
                       </span>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#475569', fontWeight: 700 }}>
-                      <Users size={14} style={{ color: '#2563eb' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#8B8278', fontWeight: 700 }}>
+                      <Users size={14} style={{ color: '#6B1B71' }} />
                       <span>{req.interested_count} interested</span>
                     </div>
                   </div>
@@ -483,8 +484,8 @@ export const CommunityRequestsPage = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '0.35rem',
-                          backgroundColor: '#2563eb',
-                          borderColor: '#2563eb'
+                          backgroundColor: '#6B1B71',
+                          borderColor: '#6B1B71'
                         }}
                       >
                         <Heart size={14} /> I'm Interested
@@ -519,7 +520,7 @@ export const CommunityRequestsPage = () => {
             maxWidth: '500px',
             width: '100%',
             borderRadius: '1.25rem',
-            borderColor: '#e2e8f0',
+            borderColor: '#D8CFC1',
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
             overflow: 'hidden'
           }}>
@@ -530,12 +531,12 @@ export const CommunityRequestsPage = () => {
               alignItems: 'center',
               padding: '1.25rem',
               borderBottom: '1px solid #f1f5f9',
-              backgroundColor: '#f8fafc'
+              backgroundColor: '#FAF6EA'
             }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1e293b', margin: 0 }}>Post Community Request</h2>
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#2d0a32', margin: 0 }}>Post Community Request</h2>
               <button 
                 onClick={() => setModalOpen(false)}
-                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '0.25rem' }}
+                style={{ background: 'none', border: 'none', color: '#8B8278', cursor: 'pointer', padding: '0.25rem' }}
               >
                 <X size={20} />
               </button>
@@ -557,14 +558,18 @@ export const CommunityRequestsPage = () => {
                     <button
                       key={cat.value}
                       type="button"
-                      onClick={() => setProductType(cat.value)}
+                      onClick={() => {
+                        setProductType(cat.value);
+                        setBrand('');
+                        setModel('');
+                      }}
                       style={{
                         padding: '0.5rem 1.25rem',
                         borderRadius: '9999px',
                         border: '1px solid',
-                        borderColor: productType === cat.value ? '#0f172a' : '#e2e8f0',
-                        backgroundColor: productType === cat.value ? '#0f172a' : '#ffffff',
-                        color: productType === cat.value ? '#ffffff' : '#475569',
+                        borderColor: productType === cat.value ? '#1F1A1D' : '#D8CFC1',
+                        backgroundColor: productType === cat.value ? '#1F1A1D' : '#ffffff',
+                        color: productType === cat.value ? '#ffffff' : '#8B8278',
                         fontSize: '0.75rem',
                         fontWeight: 800,
                         cursor: 'pointer',
@@ -581,40 +586,104 @@ export const CommunityRequestsPage = () => {
               <div className="row">
                 <div className="col-6 mb-3">
                   <label className="form-label" style={{ fontWeight: 700, fontSize: '0.85rem' }}>Brand *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="e.g. Apple"
-                    value={brand}
-                    onChange={(e) => setBrand(e.target.value)}
-                    required
-                    style={{ borderRadius: '0.5rem' }}
-                  />
+                  {productType === 'car' ? (
+                    <select
+                      className="form-control"
+                      value={brand}
+                      onChange={(e) => {
+                        setBrand(e.target.value);
+                        setModel('');
+                      }}
+                      required
+                      style={{ borderRadius: '0.5rem', cursor: 'pointer' }}
+                    >
+                      <option value="">Select Car Brand</option>
+                      {CAR_BRANDS.map((b) => (
+                        <option key={b} value={b}>{b}</option>
+                      ))}
+                    </select>
+                  ) : productType === 'laptop' ? (
+                    <select
+                      className="form-control"
+                      value={brand}
+                      onChange={(e) => {
+                        setBrand(e.target.value);
+                        setModel('');
+                      }}
+                      required
+                      style={{ borderRadius: '0.5rem', cursor: 'pointer' }}
+                    >
+                      <option value="">Select Laptop Brand</option>
+                      {LAPTOP_BRANDS.map((b) => (
+                        <option key={b} value={b}>{b}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="e.g. Apple"
+                      value={brand}
+                      onChange={(e) => setBrand(e.target.value)}
+                      required
+                      style={{ borderRadius: '0.5rem' }}
+                    />
+                  )}
                 </div>
                 <div className="col-6 mb-3">
                   <label className="form-label" style={{ fontWeight: 700, fontSize: '0.85rem' }}>Model *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="e.g. iPhone 13"
-                    value={model}
-                    onChange={(e) => setModel(e.target.value)}
-                    required
-                    style={{ borderRadius: '0.5rem' }}
-                  />
+                  {productType === 'car' ? (
+                    <select
+                      className="form-control"
+                      value={model}
+                      onChange={(e) => setModel(e.target.value)}
+                      required
+                      disabled={!brand}
+                      style={{ borderRadius: '0.5rem', cursor: !brand ? 'not-allowed' : 'pointer' }}
+                    >
+                      <option value="">{brand ? 'Select Car Model' : 'Select Brand First'}</option>
+                      {(CAR_BRAND_TO_MODELS[brand] || []).map((m) => (
+                        <option key={m} value={m}>{m}</option>
+                      ))}
+                    </select>
+                  ) : productType === 'laptop' ? (
+                    <select
+                      className="form-control"
+                      value={model}
+                      onChange={(e) => setModel(e.target.value)}
+                      required
+                      disabled={!brand}
+                      style={{ borderRadius: '0.5rem', cursor: !brand ? 'not-allowed' : 'pointer' }}
+                    >
+                      <option value="">{brand ? 'Select Laptop Model' : 'Select Brand First'}</option>
+                      {(LAPTOP_BRAND_TO_MODELS[brand] || []).map((m) => (
+                        <option key={m} value={m}>{m}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="e.g. iPhone 13"
+                      value={model}
+                      onChange={(e) => setModel(e.target.value)}
+                      required
+                      style={{ borderRadius: '0.5rem' }}
+                    />
+                  )}
                 </div>
               </div>
 
               {/* Budget Sliders starting from 3,000 to 1 Crore (10,000,000) */}
               <div className="mb-3">
                 <label className="form-label" style={{ fontWeight: 700, fontSize: '0.85rem' }}>Budget Limits (INR) *</label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0.85rem', backgroundColor: '#f8fafc', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '0.85rem', backgroundColor: '#FAF6EA', borderRadius: '0.5rem', border: '1px solid #D8CFC1' }}>
                   
                   {/* Min budget slider */}
                   <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '0.25rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.25rem' }}>
                       <span>Min Budget:</span>
-                      <span style={{ color: '#2563eb' }}>{formatBudgetLabel(budgetMin)}</span>
+                      <span style={{ color: '#6B1B71' }}>{formatBudgetLabel(budgetMin)}</span>
                     </div>
                     <input
                       type="range"
@@ -633,9 +702,9 @@ export const CommunityRequestsPage = () => {
 
                   {/* Max budget slider */}
                   <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '0.25rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.25rem' }}>
                       <span>Max Budget:</span>
-                      <span style={{ color: '#2563eb' }}>{formatBudgetLabel(budgetMax)}</span>
+                      <span style={{ color: '#6B1B71' }}>{formatBudgetLabel(budgetMax)}</span>
                     </div>
                     <input
                       type="range"
@@ -668,9 +737,9 @@ export const CommunityRequestsPage = () => {
                         padding: '0.5rem 1.25rem',
                         borderRadius: '9999px',
                         border: '1px solid',
-                        borderColor: conditionPreference === cond ? '#0f172a' : '#e2e8f0',
-                        backgroundColor: conditionPreference === cond ? '#0f172a' : '#ffffff',
-                        color: conditionPreference === cond ? '#ffffff' : '#475569',
+                        borderColor: conditionPreference === cond ? '#1F1A1D' : '#D8CFC1',
+                        backgroundColor: conditionPreference === cond ? '#1F1A1D' : '#ffffff',
+                        color: conditionPreference === cond ? '#ffffff' : '#8B8278',
                         fontSize: '0.75rem',
                         fontWeight: 800,
                         cursor: 'pointer',
@@ -697,7 +766,7 @@ export const CommunityRequestsPage = () => {
                   type="submit" 
                   disabled={submitting}
                   className="btn btn-primary"
-                  style={{ fontWeight: 700, borderRadius: '0.5rem', backgroundColor: '#2563eb', borderColor: '#2563eb' }}
+                  style={{ fontWeight: 700, borderRadius: '0.5rem', backgroundColor: '#6B1B71', borderColor: '#6B1B71' }}
                 >
                   {submitting ? 'Submitting...' : 'Post Request'}
                 </button>

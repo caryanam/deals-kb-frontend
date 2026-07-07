@@ -1,28 +1,36 @@
 import React, { useState } from 'react';
 import { Mail, ShieldCheck } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { subscribeNewsletter } from '../../api/newsletterApi';
 
 const NewsletterSection = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    const subscriberEmail = email.trim();
+    if (!subscriberEmail) return;
 
     setLoading(true);
-    setTimeout(() => {
-      toast.success('Successfully subscribed to deals alerts!');
+    try {
+      const data = await subscribeNewsletter(subscriberEmail);
+      toast.success(data?.message || 'Subscription email will be sent shortly!');
       setEmail('');
+    } catch (err) {
+      console.error('Newsletter subscription failed:', err);
+      const errMsg = err.response?.data?.detail || err.response?.data?.message || 'Failed to send subscription email.';
+      toast.error(errMsg);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
     <section className="landing-section" style={{
-      background: 'radial-gradient(ellipse at center, #1e293b 0%, #0b0f19 100%)',
+      background: 'radial-gradient(ellipse at center, #2d0a32 0%, #1F1A1D 100%)',
       color: '#ffffff',
-      borderBottom: '1px solid #1e293b'
+      borderBottom: '1px solid #2d0a32'
     }}>
       <div className="landing-container" style={{ maxWidth: '800px', textAlign: 'center' }}>
         
@@ -31,8 +39,8 @@ const NewsletterSection = () => {
           width: '56px',
           height: '56px',
           borderRadius: '50%',
-          backgroundColor: 'rgba(37, 99, 235, 0.15)',
-          color: '#3b82f6',
+          backgroundColor: 'rgba(107, 27, 113, 0.15)',
+          color: '#965284',
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -52,7 +60,7 @@ const NewsletterSection = () => {
           Never Miss an Auction Deal
         </h2>
         <p style={{
-          color: '#94a3b8',
+          color: '#8B8278',
           fontSize: '1rem',
           lineHeight: 1.6,
           marginBottom: '2.5rem',
@@ -82,8 +90,8 @@ const NewsletterSection = () => {
               flex: 1,
               padding: '0.9rem 1.25rem',
               borderRadius: '0.75rem',
-              border: '1px solid #334155',
-              backgroundColor: '#0f172a',
+              border: '1px solid #4a1a50',
+              backgroundColor: '#1F1A1D',
               color: '#ffffff',
               fontSize: '0.9rem',
               outline: 'none',
@@ -94,7 +102,7 @@ const NewsletterSection = () => {
             type="submit"
             disabled={loading}
             style={{
-              backgroundColor: '#2563eb',
+              backgroundColor: '#6B1B71',
               color: '#ffffff',
               border: 'none',
               padding: '0.9rem 1.75rem',
@@ -102,7 +110,7 @@ const NewsletterSection = () => {
               fontWeight: 800,
               fontSize: '0.9rem',
               cursor: 'pointer',
-              boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)',
+              boxShadow: '0 4px 6px -1px rgba(107, 27, 113, 0.2)',
               minWidth: '120px'
             }}
           >
@@ -113,7 +121,7 @@ const NewsletterSection = () => {
         {/* Small text info */}
         <p style={{
           fontSize: '0.75rem',
-          color: '#475569',
+          color: '#8B8278',
           marginTop: '1.25rem',
           display: 'flex',
           alignItems: 'center',

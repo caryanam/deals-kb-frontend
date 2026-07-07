@@ -124,7 +124,7 @@ export const LiveAuctionPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <button 
           onClick={() => navigate('/buyer/marketplace')} 
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: '#64748b', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: '#8B8278', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}
         >
           <ArrowLeft size={16} /> Back to Marketplace
         </button>
@@ -138,11 +138,11 @@ export const LiveAuctionPage = () => {
             backgroundColor: isConnected ? '#10b981' : '#ef4444',
             display: 'inline-block'
           }} />
-          <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>
+          <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700 }}>
             {isConnected ? 'Real-Time Sync Active' : 'Connecting WebSocket...'}
           </span>
           {!isConnected && (
-            <button onClick={reconnect} style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', padding: 0 }}>
+            <button onClick={reconnect} style={{ background: 'none', border: 'none', color: '#6B1B71', cursor: 'pointer', padding: 0 }}>
               <RefreshCw size={12} />
             </button>
           )}
@@ -200,23 +200,23 @@ export const LiveAuctionPage = () => {
                 )}
               </div>
               <div style={{ padding: '1.5rem' }}>
-                <span style={{ fontSize: '0.75rem', color: '#2563eb', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <span style={{ fontSize: '0.75rem', color: '#6B1B71', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Live Auction Room
                 </span>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif", margin: '0.25rem 0' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif", margin: '0.25rem 0' }}>
                   {product.title}
                 </h2>
-                <p style={{ color: '#475569', fontSize: '0.875rem' }}>
+                <p style={{ color: '#8B8278', fontSize: '0.875rem' }}>
                   Category: <strong>{product.product_type}</strong> &bull; Brand: <strong>{product.brand}</strong> &bull; Model: <strong>{product.model}</strong>
                 </p>
                 <div style={{
                   padding: '1rem',
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: '#FAF6EA',
                   border: '1px solid #cbd5e1',
                   borderRadius: '0.75rem',
                   marginTop: '1rem',
                   fontSize: '0.85rem',
-                  color: '#475569',
+                  color: '#8B8278',
                   lineHeight: 1.5
                 }}>
                   {product.description}
@@ -226,8 +226,8 @@ export const LiveAuctionPage = () => {
           )}
 
           {/* Guidelines */}
-          <div className="card" style={{ backgroundColor: '#eff6ff', borderColor: '#bfdbfe' }}>
-            <h4 style={{ color: '#1e40af', fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.5rem' }}>
+          <div className="card" style={{ backgroundColor: '#F5ECDD', borderColor: '#D8CFC1' }}>
+            <h4 style={{ color: '#7A2181', fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.5rem' }}>
               <AlertTriangle size={16} /> Bidding Policy
             </h4>
             <p style={{ color: '#1e3a8a', fontSize: '0.8rem', lineHeight: 1.4 }}>
@@ -242,7 +242,7 @@ export const LiveAuctionPage = () => {
           
           {/* Main Console Board */}
           <div className="card" style={{
-            background: 'linear-gradient(to bottom, #0f172a, #1e293b)',
+            background: 'linear-gradient(to bottom, #1F1A1D, #2d0a32)',
             color: '#ffffff',
             padding: '2rem',
             textAlign: 'center',
@@ -278,7 +278,7 @@ export const LiveAuctionPage = () => {
 
             {/* Clock Timer */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Time Remaining
               </span>
               <div style={{
@@ -291,7 +291,7 @@ export const LiveAuctionPage = () => {
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 animation: timer <= 10 && auctionStatus === 'live' ? 'pulse-live 1s infinite' : 'none'
               }}>
-                <Clock size={22} style={{ color: timer <= 10 ? '#ef4444' : '#3b82f6' }} />
+                <Clock size={22} style={{ color: timer <= 10 ? '#ef4444' : '#965284' }} />
                 <span style={{
                   fontSize: '2rem',
                   fontWeight: 800,
@@ -305,13 +305,13 @@ export const LiveAuctionPage = () => {
 
             {/* Current Valuation Display */}
             <div style={{ padding: '1rem', backgroundColor: 'rgba(255, 255, 255, 0.02)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-              <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Current Bid
               </span>
               <h3 style={{ fontSize: '3rem', fontWeight: 900, color: '#10b981', margin: '0.25rem 0', letterSpacing: '-0.03em' }}>
                 {formatCurrency(currentHighestBid || 0)}
               </h3>
-              <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: 0 }}>
+              <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: 0 }}>
                 Highest Bidder: <strong style={{ color: '#ffffff' }}>{highestBidder || 'No bids placed'}</strong>
               </p>
             </div>
@@ -350,7 +350,7 @@ export const LiveAuctionPage = () => {
               }}>
                 <Trophy size={36} style={{ color: '#10b981' }} />
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff' }}>Auction Ended</h3>
-                <p style={{ fontSize: '0.9rem', color: '#94a3b8', margin: 0 }}>
+                <p style={{ fontSize: '0.9rem', color: '#8B8278', margin: 0 }}>
                   Winner:{' '}
                   <strong style={{ color: '#ffffff', fontSize: '1.1rem' }}>
                     {winner || highestBidder || 'No winning bids registered'}
@@ -361,7 +361,7 @@ export const LiveAuctionPage = () => {
               <form onSubmit={handleBidSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <div style={{ position: 'relative', flex: 1 }}>
-                    <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: 800, color: '#94a3b8' }}>₹</span>
+                    <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: 800, color: '#8B8278' }}>₹</span>
                     <input
                       type="number"
                       className="form-control"
@@ -370,7 +370,7 @@ export const LiveAuctionPage = () => {
                       disabled={isBiddingDisabled}
                       style={{
                         backgroundColor: '#070a10',
-                        border: '1px solid #334155',
+                        border: '1px solid #4a1a50',
                         color: '#ffffff',
                         paddingLeft: '2rem',
                         fontSize: '1.2rem',
@@ -465,8 +465,8 @@ export const LiveAuctionPage = () => {
 
           {/* Bid History log */}
           <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Gavel size={16} style={{ color: '#2563eb' }} /> Live Bids Log
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', borderBottom: '1px solid #D8CFC1', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Gavel size={16} style={{ color: '#6B1B71' }} /> Live Bids Log
             </h3>
             
             <div style={{
@@ -478,7 +478,7 @@ export const LiveAuctionPage = () => {
               paddingRight: '0.25rem'
             }}>
               {bidHistory.length === 0 ? (
-                <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.85rem' }}>
+                <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#8B8278', fontSize: '0.85rem' }}>
                   No bids have been submitted yet. Be the first to place a bid!
                 </div>
               ) : (
@@ -490,20 +490,20 @@ export const LiveAuctionPage = () => {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       padding: '0.65rem 0.85rem',
-                      backgroundColor: index === 0 ? '#eff6ff' : '#f8fafc',
-                      border: index === 0 ? '1px solid #bfdbfe' : '1px solid #e2e8f0',
+                      backgroundColor: index === 0 ? '#F5ECDD' : '#FAF6EA',
+                      border: index === 0 ? '1px solid #D8CFC1' : '1px solid #D8CFC1',
                       borderRadius: '0.5rem'
                     }}
                   >
                     <div>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#334155' }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#4a1a50' }}>
                         {bid.bidderName || bid.bidder_name}
                       </span>
                       {index === 0 && (
                         <span style={{
                           marginLeft: '0.5rem',
                           fontSize: '0.65rem',
-                          backgroundColor: '#2563eb',
+                          backgroundColor: '#6B1B71',
                           color: '#ffffff',
                           padding: '0.15rem 0.35rem',
                           borderRadius: '0.25rem',
@@ -513,12 +513,12 @@ export const LiveAuctionPage = () => {
                           Highest
                         </span>
                       )}
-                      <p style={{ fontSize: '0.7rem', color: '#94a3b8', margin: 0 }}>{bid.time || 'Just now'}</p>
+                      <p style={{ fontSize: '0.7rem', color: '#8B8278', margin: 0 }}>{bid.time || 'Just now'}</p>
                     </div>
                     <span style={{
                       fontWeight: 800,
                       fontSize: '1rem',
-                      color: index === 0 ? '#10b981' : '#475569'
+                      color: index === 0 ? '#10b981' : '#8B8278'
                     }}>
                       {formatCurrency(bid.amount)}
                     </span>

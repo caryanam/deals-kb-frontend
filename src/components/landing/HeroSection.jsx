@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, Gavel, ShoppingBag, ShieldCheck } from 'lucide-react';
 import LandingNavbar from './LandingNavbar';
+import landingVideo from '../../assets/landing_video.mp4';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -14,13 +15,46 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="landing-hero-wrapper">
-      
+    <section id="home" className="landing-hero-wrapper" style={{ position: 'relative', overflow: 'hidden' }}>
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          position: 'absolute',
+          top: '72px',
+          left: 0,
+          width: '100%',
+          height: 'calc(100% - 72px)',
+          objectFit: 'cover',
+          zIndex: 1,
+        }}
+      >
+        <source src={landingVideo} type="video/mp4" />
+      </video>
+
+      {/* Dark overlay for text readability */}
+      <div 
+        style={{
+          position: 'absolute',
+          top: '72px',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(to right, rgba(9, 13, 22, 0.45), rgba(9, 13, 22, 0))',
+          zIndex: 2,
+        }}
+      />
+
       {/* Integrated transparent Navbar */}
-      <LandingNavbar />
+      <div style={{ position: 'relative', zIndex: 50 }}>
+        <LandingNavbar />
+      </div>
 
       {/* Main Hero content container */}
-      <div className="hero-container">
+      <div className="hero-container" style={{ position: 'relative', zIndex: 10 }}>
         
         {/* Left side: Text, CTAs, Stats */}
         <div className="hero-left">

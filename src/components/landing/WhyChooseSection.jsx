@@ -12,8 +12,8 @@ const WhyChooseSection = () => {
     },
     {
       icon: Zap,
-      color: '#eff6ff',
-      iconColor: '#2563eb',
+      color: '#F5ECDD',
+      iconColor: '#6B1B71',
       title: 'Instant Sockets Sync',
       desc: 'WebSocket integration pushes every single bid, timestamp, and winner to active users within milliseconds.'
     },
@@ -48,7 +48,7 @@ const WhyChooseSection = () => {
   ];
 
   return (
-    <section className="landing-section" style={{ backgroundColor: '#ffffff' }}>
+    <section id="about-us" className="landing-section" style={{ backgroundColor: '#FAF6EA' }}>
       <div className="landing-container">
         
         {/* Title */}

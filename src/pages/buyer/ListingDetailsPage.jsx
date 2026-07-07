@@ -250,29 +250,29 @@ export const ListingDetailsPage = () => {
       return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Manufacturing Year</span>
-            <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.year || 'N/A'}</p>
+            <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Manufacturing Year</span>
+            <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.year || 'N/A'}</p>
           </div>
           <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Fuel Type</span>
-            <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.fuel_type || 'N/A'}</p>
+            <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Fuel Type</span>
+            <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.fuel_type || 'N/A'}</p>
           </div>
           <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Odometer Reading</span>
-            <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.km_driven ? specs.km_driven.toLocaleString() + ' km' : 'N/A'}</p>
+            <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Odometer Reading</span>
+            <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.km_driven ? specs.km_driven.toLocaleString() + ' km' : 'N/A'}</p>
           </div>
           <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Ownership History</span>
-            <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.ownership || 'N/A'}</p>
+            <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Ownership History</span>
+            <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.ownership || 'N/A'}</p>
           </div>
           <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Insurance Status</span>
-            <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.insurance_status || 'N/A'}</p>
+            <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Insurance Status</span>
+            <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.insurance_status || 'N/A'}</p>
           </div>
           {specs.transmission && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Transmission</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.transmission}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Transmission</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.transmission}</p>
             </div>
           )}
         </div>
@@ -283,70 +283,70 @@ export const ListingDetailsPage = () => {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           {specs.processor && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Processor</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.processor}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Processor</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.processor}</p>
             </div>
           )}
           <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>RAM Memory</span>
-            <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.ram || 'N/A'}</p>
+            <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>RAM Memory</span>
+            <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.ram || 'N/A'}</p>
           </div>
           <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Storage Capacity</span>
-            <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.storage || 'N/A'}</p>
+            <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Storage Capacity</span>
+            <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.storage || 'N/A'}</p>
           </div>
           {specs.imei_available !== undefined && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>IMEI Verified</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.imei_available ? 'Yes' : 'No'}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>IMEI Verified</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.imei_available ? 'Yes' : 'No'}</p>
             </div>
           )}
           {specs.imei_number && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>IMEI Number</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.imei_number}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>IMEI Number</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.imei_number}</p>
             </div>
           )}
           {specs.screen_size && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Screen Size</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.screen_size}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Screen Size</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.screen_size}</p>
             </div>
           )}
           {specs.graphics && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Graphics Card</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.graphics}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Graphics Card</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.graphics}</p>
             </div>
           )}
           {specs.battery_health && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Battery Health</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.battery_health}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Battery Health</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.battery_health}</p>
             </div>
           )}
           {specs.battery_backup && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Battery Backup</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.battery_backup}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Battery Backup</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.battery_backup}</p>
             </div>
           )}
           {specs.warranty_status && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Warranty Status</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.warranty_status}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Warranty Status</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.warranty_status}</p>
             </div>
           )}
           {specs.bill_available && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Bill Available</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.bill_available}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Bill Available</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.bill_available}</p>
             </div>
           )}
           {specs.warranty_available && (
             <div style={{ padding: '0.75rem 1rem', border: '1px solid #cbd5e1', borderRadius: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Warranty Available</span>
-              <p style={{ fontWeight: 700, color: '#0f172a', margin: 0 }}>{specs.warranty_available}</p>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Warranty Available</span>
+              <p style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>{specs.warranty_available}</p>
             </div>
           )}
         </div>
@@ -361,7 +361,7 @@ export const ListingDetailsPage = () => {
     return (
       <div className="card" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <h4 style={{ fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <FileText size={16} style={{ color: '#2563eb' }} /> Attached Legal Verification Docs
+          <FileText size={16} style={{ color: '#6B1B71' }} /> Attached Legal Verification Docs
         </h4>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
           {Object.entries(docs).map(([key, val]) => (
@@ -372,10 +372,10 @@ export const ListingDetailsPage = () => {
               padding: '0.5rem 0.75rem',
               border: '1.5px solid #cbd5e1',
               borderRadius: '0.5rem',
-              backgroundColor: '#f8fafc',
+              backgroundColor: '#FAF6EA',
               fontSize: '0.8rem',
               fontWeight: 600,
-              color: '#334155'
+              color: '#4a1a50'
             }}>
               <CheckCircle size={14} style={{ color: '#10b981' }} />
               <span>{key.replace('_', ' ').toUpperCase()}</span>
@@ -394,10 +394,10 @@ export const ListingDetailsPage = () => {
           width: '40px',
           height: '40px',
           borderRadius: '50%',
-          borderLeftColor: '#2563eb',
+          borderLeftColor: '#6B1B71',
           animation: 'spin 1s linear infinite'
         }} />
-        <span style={{ color: '#64748b', fontSize: '0.9rem' }}>Loading specifications...</span>
+        <span style={{ color: '#8B8278', fontSize: '0.9rem' }}>Loading specifications...</span>
       </div>
     );
   }
@@ -407,7 +407,7 @@ export const ListingDetailsPage = () => {
       <div className="card" style={{ padding: '3rem', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1.25rem', alignItems: 'center', maxWidth: '600px', margin: '2rem auto' }}>
         <AlertCircle size={48} style={{ color: '#ef4444' }} />
         <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Product details error</h2>
-        <p style={{ color: '#64748b' }}>{errorMsg || 'Failed to retrieve details.'}</p>
+        <p style={{ color: '#8B8278' }}>{errorMsg || 'Failed to retrieve details.'}</p>
         <button onClick={handleBack} className="btn btn-primary">
           Back to Marketplace
         </button>
@@ -428,7 +428,7 @@ export const ListingDetailsPage = () => {
           gap: '0.5rem',
           background: 'none',
           border: 'none',
-          color: '#64748b',
+          color: '#8B8278',
           fontWeight: 700,
           cursor: 'pointer',
           marginBottom: '1.5rem',
@@ -475,7 +475,7 @@ export const ListingDetailsPage = () => {
                   width: '80px',
                   height: '60px',
                   borderRadius: '0.5rem',
-                  border: mediaMode === 'image' && activeImage === img ? '2.5px solid #2563eb' : '1px solid #cbd5e1',
+                  border: mediaMode === 'image' && activeImage === img ? '2.5px solid #6B1B71' : '1px solid #cbd5e1',
                   overflow: 'hidden',
                   cursor: 'pointer',
                   padding: 0,
@@ -494,8 +494,8 @@ export const ListingDetailsPage = () => {
                   width: '80px',
                   height: '60px',
                   borderRadius: '0.5rem',
-                  border: mediaMode === 'video' ? '2.5px solid #2563eb' : '1px solid #cbd5e1',
-                  backgroundColor: '#0f172a',
+                  border: mediaMode === 'video' ? '2.5px solid #6B1B71' : '1px solid #cbd5e1',
+                  backgroundColor: '#1F1A1D',
                   color: '#ffffff',
                   display: 'flex',
                   flexDirection: 'column',
@@ -536,12 +536,12 @@ export const ListingDetailsPage = () => {
               )}
             </div>
             
-            <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif", letterSpacing: '-0.02em', marginBottom: '0.5rem', lineHeight: 1.25 }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif", letterSpacing: '-0.02em', marginBottom: '0.5rem', lineHeight: 1.25 }}>
               {product.title}
             </h1>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem' }}>
-              <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0 }}>
+              <p style={{ color: '#8B8278', fontSize: '0.95rem', margin: 0 }}>
                 Brand: <strong>{product.brand}</strong> &bull; Model: <strong>{product.model}</strong> &bull; Condition: <strong>{product.condition}</strong>
               </p>
               {user && user.role?.toLowerCase() !== 'admin' && (
@@ -570,7 +570,7 @@ export const ListingDetailsPage = () => {
 
           {/* Bid Status Banner */}
           <div className="card" style={{
-            backgroundColor: '#f8fafc',
+            backgroundColor: '#FAF6EA',
             border: '1px solid #cbd5e1',
             padding: '1.5rem',
             display: 'flex',
@@ -579,16 +579,16 @@ export const ListingDetailsPage = () => {
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>
                   {product.status === 'live' ? 'Current Highest Bid' : 'Listing Status'}
                 </span>
-                <p style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', margin: 0 }}>
+                <p style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>
                   {product.status === 'live' ? formatCurrency(product.current_bid || 0) : (product.status || '').toUpperCase()}
                 </p>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Bidding status</span>
-                <p style={{ fontWeight: 800, color: product.status === 'live' ? '#ef4444' : '#2563eb', textTransform: 'capitalize', margin: 0 }}>
+                <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Bidding status</span>
+                <p style={{ fontWeight: 800, color: product.status === 'live' ? '#ef4444' : '#6B1B71', textTransform: 'capitalize', margin: 0 }}>
                   {product.status}
                 </p>
               </div>
@@ -629,10 +629,10 @@ export const ListingDetailsPage = () => {
             ) : product.status === 'approved' ? (
               <div style={{
                 padding: '1rem',
-                backgroundColor: '#eff6ff',
-                border: '1px solid #bfdbfe',
+                backgroundColor: '#F5ECDD',
+                border: '1px solid #D8CFC1',
                 borderRadius: '0.75rem',
-                color: '#1e40af',
+                color: '#7A2181',
                 fontSize: '0.9rem',
                 display: 'flex',
                 alignItems: 'center',
@@ -649,14 +649,14 @@ export const ListingDetailsPage = () => {
                   backgroundColor: '#f1f5f9',
                   border: '1px solid #cbd5e1',
                   borderRadius: '0.75rem',
-                  color: '#475569',
+                  color: '#8B8278',
                   fontSize: '0.9rem',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem',
                   fontWeight: 600
                 }}>
-                  <CheckCircle size={18} style={{ color: '#64748b' }} />
+                  <CheckCircle size={18} style={{ color: '#8B8278' }} />
                   <span>Bidding concluded. Winner: <strong>{product.winner_name || 'No bids placed'}</strong></span>
                 </div>
 
@@ -684,7 +684,7 @@ export const ListingDetailsPage = () => {
                         width: '100%',
                         padding: '0.5rem',
                         fontSize: '0.85rem',
-                        backgroundColor: '#2563eb',
+                        backgroundColor: '#6B1B71',
                         border: 'none',
                         color: '#ffffff',
                         fontWeight: 700,
@@ -706,15 +706,15 @@ export const ListingDetailsPage = () => {
                 {isSeller && product.winner_id && (
                   <div style={{
                     padding: '1rem',
-                    border: '1.5px solid #2563eb',
+                    border: '1.5px solid #6B1B71',
                     borderRadius: '0.75rem',
-                    backgroundColor: '#eff6ff',
+                    backgroundColor: '#F5ECDD',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.75rem'
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#1e40af', fontSize: '0.85rem', fontWeight: 700 }}>
-                      <CheckCircle size={16} style={{ color: '#2563eb' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#7A2181', fontSize: '0.85rem', fontWeight: 700 }}>
+                      <CheckCircle size={16} style={{ color: '#6B1B71' }} />
                       <span>This is your listing. Bidding concluded.</span>
                     </div>
 
@@ -726,7 +726,7 @@ export const ListingDetailsPage = () => {
                         width: '100%',
                         padding: '0.5rem',
                         fontSize: '0.85rem',
-                        backgroundColor: '#2563eb',
+                        backgroundColor: '#6B1B71',
                         border: 'none',
                         color: '#ffffff',
                         fontWeight: 700,
@@ -772,7 +772,7 @@ export const ListingDetailsPage = () => {
           {/* Description */}
           <div>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem' }}>Listing Description</h3>
-            <p style={{ color: '#475569', fontSize: '0.925rem', lineHeight: 1.6 }}>
+            <p style={{ color: '#8B8278', fontSize: '0.925rem', lineHeight: 1.6 }}>
               {product.description}
             </p>
           </div>
@@ -780,8 +780,8 @@ export const ListingDetailsPage = () => {
           {/* Optional video walkthrough link */}
           {product.video && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
-              <PlayCircle size={20} style={{ color: '#2563eb' }} />
-              <a href={product.video} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', fontWeight: 700, fontSize: '0.9rem' }}>
+              <PlayCircle size={20} style={{ color: '#6B1B71' }} />
+              <a href={product.video} target="_blank" rel="noopener noreferrer" style={{ color: '#6B1B71', fontWeight: 700, fontSize: '0.9rem' }}>
                 Open Video Walkthrough
               </a>
             </div>
@@ -790,12 +790,12 @@ export const ListingDetailsPage = () => {
           {/* Seller Bids Received Log */}
           {isSeller && (
             <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Trophy size={16} style={{ color: '#2563eb' }} /> Bids Received Log ({bidHistoryList.length})
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, borderBottom: '1px solid #D8CFC1', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Trophy size={16} style={{ color: '#6B1B71' }} /> Bids Received Log ({bidHistoryList.length})
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '250px', overflowY: 'auto' }}>
                 {bidHistoryList.length === 0 ? (
-                  <span style={{ fontSize: '0.85rem', color: '#94a3b8', textAlign: 'center', padding: '1.5rem 0' }}>
+                  <span style={{ fontSize: '0.85rem', color: '#8B8278', textAlign: 'center', padding: '1.5rem 0' }}>
                     No bids received yet.
                   </span>
                 ) : (
@@ -805,16 +805,16 @@ export const ListingDetailsPage = () => {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       padding: '0.5rem 0.75rem',
-                      backgroundColor: '#f8fafc',
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: '#FAF6EA',
+                      border: '1px solid #D8CFC1',
                       borderRadius: '0.5rem',
                       fontSize: '0.85rem'
                     }}>
                       <div>
-                        <span style={{ fontWeight: 700, color: '#334155' }}>{bid.bidderName || bid.bidder_name || 'Anonymous'}</span>
-                        <p style={{ fontSize: '0.7rem', color: '#94a3b8', margin: 0 }}>{bid.time || 'N/A'}</p>
+                        <span style={{ fontWeight: 700, color: '#4a1a50' }}>{bid.bidderName || bid.bidder_name || 'Anonymous'}</span>
+                        <p style={{ fontSize: '0.7rem', color: '#8B8278', margin: 0 }}>{bid.time || 'N/A'}</p>
                       </div>
-                      <span style={{ fontWeight: 800, color: '#2563eb' }}>{formatCurrency(bid.amount)}</span>
+                      <span style={{ fontWeight: 800, color: '#6B1B71' }}>{formatCurrency(bid.amount)}</span>
                     </div>
                   ))
                 )}
@@ -840,12 +840,12 @@ export const ListingDetailsPage = () => {
           fontFamily: "'Plus Jakarta Sans', sans-serif"
         }}>
           <div style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1rem',
             width: '100%',
             maxWidth: '500px',
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid #D8CFC1',
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column'
@@ -853,19 +853,19 @@ export const ListingDetailsPage = () => {
             {/* Header */}
             <div style={{
               padding: '1.25rem 1.5rem',
-              borderBottom: '1px solid #e2e8f0',
+              borderBottom: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: '#f8fafc'
+              backgroundColor: '#FAF6EA'
             }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#1F1A1D', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                 <AlertCircle size={20} style={{ color: '#ef4444' }} /> Report Listing Violation
               </h3>
               <button 
                 type="button"
                 onClick={() => setShowReportModal(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278' }}
               >
                 <X size={20} />
               </button>
@@ -877,7 +877,7 @@ export const ListingDetailsPage = () => {
                 
                 {/* Select Type */}
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label" style={{ fontWeight: 700, fontSize: '0.8rem', color: '#334155' }}>Violation Type *</label>
+                  <label className="form-label" style={{ fontWeight: 700, fontSize: '0.8rem', color: '#4a1a50' }}>Violation Type *</label>
                   <select
                     className="form-control"
                     value={reportType}
@@ -899,7 +899,7 @@ export const ListingDetailsPage = () => {
 
                 {/* Reason Text */}
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label" style={{ fontWeight: 700, fontSize: '0.8rem', color: '#334155' }}>Reason Details (Minimum 10 characters) *</label>
+                  <label className="form-label" style={{ fontWeight: 700, fontSize: '0.8rem', color: '#4a1a50' }}>Reason Details (Minimum 10 characters) *</label>
                   <textarea
                     rows={4}
                     className="form-control"
@@ -916,7 +916,7 @@ export const ListingDetailsPage = () => {
 
                 {/* Evidence URL / Base64 */}
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label" style={{ fontWeight: 700, fontSize: '0.8rem', color: '#334155' }}>Evidence Attachment Link (Optional)</label>
+                  <label className="form-label" style={{ fontWeight: 700, fontSize: '0.8rem', color: '#4a1a50' }}>Evidence Attachment Link (Optional)</label>
                   <input
                     type="text"
                     className="form-control"
@@ -932,8 +932,8 @@ export const ListingDetailsPage = () => {
               {/* Form Footer */}
               <div style={{
                 padding: '1rem 1.5rem',
-                borderTop: '1px solid #e2e8f0',
-                backgroundColor: '#f8fafc',
+                borderTop: '1px solid #D8CFC1',
+                backgroundColor: '#FAF6EA',
                 display: 'flex',
                 justifyContent: 'flex-end',
                 gap: '0.75rem'

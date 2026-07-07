@@ -12,9 +12,9 @@ const BiddingPassBanner = ({ productType = 'mobile', onActivated }) => {
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: '1rem',
-        backgroundColor: '#eff6ff',
-        border: '1px solid #bfdbfe',
-        color: '#1e40af',
+        backgroundColor: '#F5ECDD',
+        border: '1px solid #D8CFC1',
+        color: '#7A2181',
         padding: '1.1rem 1.25rem',
         borderRadius: '0.75rem',
         marginBottom: '2rem',
@@ -27,7 +27,7 @@ const BiddingPassBanner = ({ productType = 'mobile', onActivated }) => {
             <span style={{ fontWeight: 900, fontSize: '0.95rem', display: 'block' }}>
               Start your unlimited bidding experience with us.
             </span>
-            <span style={{ fontSize: '0.85rem', color: '#475569', fontWeight: 650 }}>
+            <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 650 }}>
               Choose a 24-hour bidding pass and place unlimited bids on live auctions for this category.
             </span>
           </div>

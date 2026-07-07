@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AlertCircle, Car, Loader2, Lock, Mail, Phone, ShieldCheck, User } from 'lucide-react';
+import { AlertCircle, Car, Loader2, Lock, Mail, Phone, ShieldCheck, User, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { checkRegistrationOtp, sendRegistrationOtp } from '../../api/authApi';
 import { useAuth } from '../../hooks/useAuth';
+import '../../styles/auth.css';
+import loginBg from '../../assets/login_bg.jpg';
 
 const roleOptions = ['Buyer', 'Seller', 'Dealer'];
 
@@ -19,7 +21,7 @@ export const RegisterPage = () => {
   const [otpVerified, setOtpVerified] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [validationError, setValidationError] = useState('');
@@ -42,8 +44,9 @@ export const RegisterPage = () => {
   const validateTopFields = () => {
     if (!role) return 'Please select a role.';
     if (!name.trim()) return 'Full Name is required.';
-    if (!email.trim()) return 'Email address is required for OTP verification.';
-    if (!/\S+@\S+\.\S+/.test(email)) return 'Please enter a valid email address.';
+    if (!email.trim()) return 'Email Address is required.';
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(email.trim())) return 'Please enter a valid email address.';
     return '';
   };
 
@@ -51,10 +54,10 @@ export const RegisterPage = () => {
     setValidationError('');
     setSuccessMsg('');
 
-    const error = validateTopFields();
-    if (error) {
-      setValidationError(error);
-      toast.error(error);
+    const topError = validateTopFields();
+    if (topError) {
+      setValidationError(topError);
+      toast.error(topError);
       return;
     }
 
@@ -139,12 +142,6 @@ export const RegisterPage = () => {
       toast.error(errMsg);
       return;
     }
-    if (password !== confirmPassword) {
-      const errMsg = 'Passwords do not match.';
-      setValidationError(errMsg);
-      toast.error(errMsg);
-      return;
-    }
 
     setLoading(true);
     try {
@@ -170,323 +167,304 @@ export const RegisterPage = () => {
   const fieldDisabledUntilOtp = loading || !otpVerified;
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#0b0f19',
-      backgroundImage: 'radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 40%)',
-      padding: '1.5rem',
-      fontFamily: "'Plus Jakarta Sans', sans-serif"
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '520px',
-        backgroundColor: '#ffffff',
-        borderRadius: '1.25rem',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-        padding: '2.5rem',
-        border: '1px solid #1e293b'
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-            <Car size={32} style={{ color: '#2563eb' }} />
-            <span style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#0b0f19', letterSpacing: 0 }}>
-              Create Account
-            </span>
-          </div>
-          <p style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: 500 }}>
-            Join AutoBid and start bidding or listing products today
-          </p>
-        </div>
+    <div className="auth-page register-auth">
+      <img src={loginBg} className="auth-bg-img" alt="DealsKB Auction Background" />
+      <div className="auth-overlay" />
 
-        {successMsg && (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            backgroundColor: '#d1fae5',
-            border: '1px solid #10b981',
-            padding: '0.75rem 1rem',
-            borderRadius: '0.75rem',
-            color: '#065f46',
-            fontSize: '0.85rem',
-            fontWeight: 600,
-            marginBottom: '1.5rem'
-          }}>
-            <span>{successMsg}</span>
-          </div>
-        )}
-
-        {(validationError || authError) && !successMsg && (
-          <div style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '0.75rem',
-            backgroundColor: '#fef2f2',
-            border: '1px solid #fca5a5',
-            padding: '1rem',
-            borderRadius: '0.75rem',
-            color: '#b91c1c',
-            fontSize: '0.85rem',
-            marginBottom: '1.5rem',
-            lineHeight: 1.4
-          }}>
-            <AlertCircle size={18} style={{ flexShrink: 0, marginTop: '0.1rem' }} />
-            <div>
-              <strong style={{ display: 'block', marginBottom: '0.15rem' }}>Registration Error</strong>
-              <span>{validationError || authError}</span>
-            </div>
-          </div>
-        )}
-
-        <form onSubmit={handleVerifyAndRegister} style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Select Platform Role *</label>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-              border: '1px solid #cbd5e1',
-              borderRadius: '0.8rem',
-              overflow: 'hidden',
-              minHeight: '3.1rem',
-              backgroundColor: '#f8fafc'
-            }}>
-              {roleOptions.map((roleOption) => {
-                const selected = role === roleOption;
-                return (
-                  <button
-                    key={roleOption}
-                    type="button"
-                    onClick={() => setRole(roleOption)}
-                    disabled={loading || otpSent}
-                    style={{
-                      border: 'none',
-                      borderRight: roleOption === 'Dealer' ? 'none' : '1px solid #cbd5e1',
-                      backgroundColor: selected ? '#2563eb' : 'transparent',
-                      color: selected ? '#ffffff' : '#0f172a',
-                      fontWeight: 800,
-                      fontSize: '0.85rem',
-                      cursor: loading || otpSent ? 'not-allowed' : 'pointer',
-                      opacity: loading || otpSent ? 0.7 : 1
-                    }}
-                  >
-                    {roleOption}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" htmlFor="name-input">Full Name *</label>
-            <div style={{ position: 'relative' }}>
-              <User size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-              <input
-                type="text"
-                id="name-input"
-                className="form-control"
-                placeholder="John Doe"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  if (otpSent) resetEmailVerification();
-                }}
-                disabled={loading || otpVerified}
-                style={{ paddingLeft: '2.75rem' }}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" htmlFor="email-input">Email Address *</label>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <div style={{ position: 'relative', flex: 1 }}>
-                <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-                <input
-                  type="email"
-                  id="email-input"
-                  className="form-control"
-                  placeholder="buyer@example.com"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (otpSent) resetEmailVerification();
-                  }}
-                  disabled={loading || otpVerified}
-                  style={{ paddingLeft: '2.75rem' }}
-                  required
-                />
+      <div className="auth-content">
+        <div className="auth-card-wrapper">
+          <div className="auth-card register-card">
+            <div style={{ textAlign: 'center', marginBottom: '0.85rem' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
+                <Car size={26} style={{ color: '#ffffff' }} />
+                <span style={{ fontSize: '1.45rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#ffffff', letterSpacing: 0 }}>
+                  Create Account
+                </span>
               </div>
-              <button
-                type="button"
-                onClick={handleSendOtp}
-                disabled={loading || otpSent || otpVerified}
-                className="btn btn-primary"
-                style={{
-                  padding: '0 1rem',
-                  fontSize: '0.85rem',
-                  fontWeight: 700,
-                  backgroundColor: otpSent || otpVerified ? '#10b981' : '#2563eb',
-                  borderColor: otpSent || otpVerified ? '#10b981' : '#2563eb',
-                  whiteSpace: 'nowrap',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.25rem'
-                }}
-              >
-                {loading && !otpSent ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : null}
-                {otpVerified ? 'Verified' : otpSent ? 'OTP Sent' : 'Send OTP'}
-              </button>
+              <p className="auth-muted-text" style={{ fontSize: '0.8rem', fontWeight: 500, margin: 0 }}>
+                Register to continue on DealsKB
+              </p>
             </div>
-          </div>
 
-          {otpSent && !otpVerified && (
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" htmlFor="otp-input">Enter Email OTP *</label>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <div style={{ position: 'relative', flex: 1 }}>
-                  <ShieldCheck size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            {successMsg && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                backgroundColor: '#d1fae5',
+                border: '1px solid #10b981',
+                padding: '0.4rem 0.65rem',
+                borderRadius: '0.5rem',
+                color: '#065f46',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                marginBottom: '0.65rem'
+              }}>
+                <span>{successMsg}</span>
+              </div>
+            )}
+
+            {(validationError || authError) && !successMsg && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.5rem',
+                backgroundColor: '#fef2f2',
+                border: '1px solid #fca5a5',
+                padding: '0.4rem 0.65rem',
+                borderRadius: '0.5rem',
+                color: '#b91c1c',
+                fontSize: '0.78rem',
+                marginBottom: '0.65rem',
+                lineHeight: 1.3
+              }}>
+                <AlertCircle size={15} style={{ flexShrink: 0, marginTop: '0.1rem' }} />
+                <div>
+                  <strong style={{ display: 'block', marginBottom: '0.05rem' }}>Registration Error</strong>
+                  <span>{validationError || authError}</span>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleVerifyAndRegister} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Select Platform Role *</label>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: '0.5rem',
+                  overflow: 'hidden',
+                  minHeight: '2.3rem',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }}>
+                  {roleOptions.map((roleOption) => {
+                    const selected = role === roleOption;
+                    return (
+                      <button
+                        key={roleOption}
+                        type="button"
+                        onClick={() => setRole(roleOption)}
+                        disabled={loading || otpSent}
+                        style={{
+                          border: 'none',
+                          borderRight: roleOption === 'Dealer' ? 'none' : '1px solid rgba(255, 255, 255, 0.2)',
+                          backgroundColor: selected ? '#6B1B71' : 'transparent',
+                          color: selected ? '#ffffff' : 'rgba(255, 255, 255, 0.75)',
+                          fontWeight: 800,
+                          fontSize: '0.8rem',
+                          cursor: loading || otpSent ? 'not-allowed' : 'pointer',
+                          opacity: loading || otpSent ? 0.7 : 1
+                        }}
+                      >
+                        {roleOption}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" htmlFor="name-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Full Name *</label>
+                <div style={{ position: 'relative' }}>
+                  <User size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="text"
-                    id="otp-input"
+                    id="name-input"
                     className="form-control"
-                    placeholder="Enter OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    disabled={loading}
-                    style={{ paddingLeft: '2.75rem', fontWeight: 700, letterSpacing: '0.1rem' }}
+                    placeholder="Enter full name"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (otpSent) resetEmailVerification();
+                    }}
+                    disabled={loading || otpVerified}
+                    style={{ paddingLeft: '2.5rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.85rem' }}
                     required
                   />
                 </div>
-                <button
-                  type="button"
-                  onClick={handleVerifyEmailOtp}
-                  disabled={loading}
-                  className="btn btn-success"
-                  style={{
-                    padding: '0 1rem',
-                    fontSize: '0.85rem',
-                    fontWeight: 800,
-                    backgroundColor: '#10b981',
-                    borderColor: '#10b981',
-                    whiteSpace: 'nowrap',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.25rem'
-                  }}
-                >
-                  {loading ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : null}
-                  Verify OTP
-                </button>
               </div>
+
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" htmlFor="email-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Email Address *</label>
+                <div style={{ display: 'flex', gap: '0.4rem' }}>
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                    <input
+                      type="email"
+                      id="email-input"
+                      className="form-control"
+                      placeholder="buyer@example.com"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (otpSent) resetEmailVerification();
+                      }}
+                      disabled={loading || otpVerified}
+                      style={{ paddingLeft: '2.5rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.85rem' }}
+                      required
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={loading || otpSent || otpVerified}
+                    className="btn btn-primary"
+                    style={{
+                      padding: '0 0.85rem',
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      backgroundColor: otpSent || otpVerified ? '#10b981' : '#6B1B71',
+                      borderColor: otpSent || otpVerified ? '#10b981' : '#6B1B71',
+                      whiteSpace: 'nowrap',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      borderRadius: '0.5rem'
+                    }}
+                  >
+                    {loading && !otpSent ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> : null}
+                    {otpVerified ? 'Verified' : otpSent ? 'OTP Sent' : 'Verify Email'}
+                  </button>
+                </div>
+              </div>
+
+              {otpSent && !otpVerified && (
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label" htmlFor="otp-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Email Verification OTP *</label>
+                  <div style={{ display: 'flex', gap: '0.4rem' }}>
+                    <div style={{ position: 'relative', flex: 1 }}>
+                      <ShieldCheck size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                      <input
+                        type="text"
+                        id="otp-input"
+                        className="form-control"
+                        placeholder="Enter 6-digit OTP"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        disabled={loading || otpVerified}
+                        style={{ paddingLeft: '2.5rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.85rem', fontWeight: 700 }}
+                        required
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleVerifyEmailOtp}
+                      disabled={loading || !otp.trim()}
+                      className="btn btn-primary"
+                      style={{ padding: '0 0.85rem', fontSize: '0.8rem', fontWeight: 700, backgroundColor: '#10b981', borderColor: '#10b981', borderRadius: '0.5rem' }}
+                    >
+                      {loading ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> : 'Confirm Code'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" htmlFor="phone-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Mobile Number *</label>
+                <div style={{ position: 'relative' }}>
+                  <Phone size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <input
+                    type="tel"
+                    id="phone-input"
+                    className="form-control"
+                    placeholder="Enter mobile number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    disabled={fieldDisabledUntilOtp}
+                    style={{ paddingLeft: '2.5rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.85rem' }}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" htmlFor="password-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Password *</label>
+                <div style={{ position: 'relative' }}>
+                  <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password-input"
+                    className="form-control"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={fieldDisabledUntilOtp}
+                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.85rem' }}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '0.85rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#8B8278',
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: 0
+                    }}
+                    title={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
               <button
-                type="button"
-                onClick={resetEmailVerification}
-                style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', padding: '0.35rem 0 0' }}
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading || !otpVerified}
+                style={{
+                  width: '100%',
+                  padding: '0.65rem',
+                  fontSize: '0.9rem',
+                  marginTop: '0.4rem',
+                  opacity: loading || !otpVerified ? 0.55 : 1,
+                  cursor: loading || !otpVerified ? 'not-allowed' : 'pointer',
+                  borderRadius: '0.5rem'
+                }}
               >
-                Edit email / Resend OTP
+                {loading ? (
+                  <>
+                    <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+                    Registering...
+                  </>
+                ) : (
+                  'Register →'
+                )}
               </button>
-            </div>
-          )}
+            </form>
 
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" htmlFor="phone-input">Mobile Number (Optional)</label>
-            <div style={{ position: 'relative' }}>
-              <Phone size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-              <input
-                type="text"
-                id="phone-input"
-                className="form-control"
-                placeholder="Enter 10-digit mobile"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                disabled={fieldDisabledUntilOtp}
-                style={{ paddingLeft: '2.75rem' }}
-              />
-            </div>
-          </div>
-
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" htmlFor="password-input">Password * (Min 6 characters)</label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-              <input
-                type="password"
-                id="password-input"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={fieldDisabledUntilOtp}
-                style={{ paddingLeft: '2.75rem' }}
-                required
-              />
+            <div className="auth-card-divider" style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: '0.85rem',
+              paddingTop: '0.65rem',
+              fontSize: '0.8rem'
+            }}>
+              <span className="auth-muted-text">
+                Already have an account?{' '}
+                <Link to="/login" style={{ color: '#ffffff', fontWeight: 700 }}>
+                  Login
+                </Link>
+              </span>
             </div>
           </div>
-
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" htmlFor="confirm-password-input">Confirm Password *</label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-              <input
-                type="password"
-                id="confirm-password-input"
-                className="form-control"
-                placeholder="Confirm password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={fieldDisabledUntilOtp}
-                style={{ paddingLeft: '2.75rem' }}
-                required
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading || !otpVerified}
-            style={{
-              width: '100%',
-              padding: '0.85rem',
-              fontSize: '1rem',
-              marginTop: '0.25rem',
-              opacity: loading || !otpVerified ? 0.55 : 1,
-              cursor: loading || !otpVerified ? 'not-allowed' : 'pointer'
-            }}
-          >
-            {loading ? (
-              <>
-                <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
-                Registering...
-              </>
-            ) : (
-              'Register'
-            )}
-          </button>
-        </form>
-
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: '2rem',
-          borderTop: '1px solid #e2e8f0',
-          paddingTop: '1.25rem',
-          fontSize: '0.85rem'
-        }}>
-          <Link to="/login" style={{ color: '#64748b', fontWeight: 600 }}>Back to Login</Link>
-          <span style={{ color: '#94a3b8' }}>
-            Have account?{' '}
-            <Link to="/login" style={{ color: '#2563eb', fontWeight: 700 }}>
-              Sign In
-            </Link>
-          </span>
         </div>
       </div>
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };

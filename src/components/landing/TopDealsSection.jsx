@@ -30,7 +30,7 @@ const TopDealsSection = () => {
   }, []);
 
   return (
-    <section className="landing-section" style={{ backgroundColor: '#f8fafc', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0' }}>
+    <section className="landing-section" style={{ backgroundColor: '#FAF6EA', borderTop: '1px solid #D8CFC1', borderBottom: '1px solid #D8CFC1' }}>
       <div className="landing-container">
         
         {/* Title */}
@@ -42,7 +42,7 @@ const TopDealsSection = () => {
         {/* Loader/Grid display */}
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-            <RefreshCw size={36} className="spin-anim" style={{ color: '#2563eb' }} />
+            <RefreshCw size={36} className="spin-anim" style={{ color: '#6B1B71' }} />
           </div>
         ) : error ? (
           <div style={{
@@ -65,9 +65,9 @@ const TopDealsSection = () => {
           <div style={{
             textAlign: 'center',
             padding: '4rem 2rem',
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1rem',
-            border: '1px solid #e2e8f0',
+            border: '1px solid #D8CFC1',
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02)'
           }}>
             <Sparkles size={48} style={{ color: '#cbd5e1', marginBottom: '1rem' }} />
@@ -78,7 +78,7 @@ const TopDealsSection = () => {
             <button 
               onClick={() => navigate('/seller/create-listing')}
               style={{
-                backgroundColor: '#2563eb',
+                backgroundColor: '#6B1B71',
                 color: '#ffffff',
                 border: 'none',
                 padding: '0.65rem 1.25rem',
@@ -112,7 +112,7 @@ const TopDealsSection = () => {
                       fontSize: '0.7rem',
                       fontWeight: 800,
                       textTransform: 'uppercase',
-                      color: '#2563eb',
+                      color: '#6B1B71',
                       letterSpacing: '0.05em',
                       marginBottom: '0.25rem',
                       display: 'block'
@@ -130,8 +130,8 @@ const TopDealsSection = () => {
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f1f5f9', paddingTop: '0.75rem', marginTop: 'auto' }}>
                       <div>
-                        <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', fontWeight: 600 }}>STATUS</span>
-                        <strong style={{ fontSize: '1.1rem', color: '#0f172a', fontWeight: 800, textTransform: 'capitalize' }}>
+                        <span style={{ fontSize: '0.7rem', color: '#8B8278', display: 'block', fontWeight: 600 }}>STATUS</span>
+                        <strong style={{ fontSize: '1.1rem', color: '#1F1A1D', fontWeight: 800, textTransform: 'capitalize' }}>
                           {product.status || 'Approved'}
                         </strong>
                       </div>

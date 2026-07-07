@@ -99,40 +99,40 @@ export const PendingListingsPage = () => {
     if (selectedListing.product_type === 'car' || selectedListing.product_type === 'bike') {
       return (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }} className="grid-cols-2">
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Brand/Model</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Brand/Model</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{selectedListing.brand} {selectedListing.model}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Year</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Year</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{specs.year || 'N/A'}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Odometer</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Odometer</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{specs.km_driven ? Number(specs.km_driven).toLocaleString() + ' km' : 'N/A'}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Product Price</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Product Price</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{formatINR(selectedListing.product_price)}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Expected Price</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Expected Price</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{formatINR(selectedListing.expected_price)}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Ownership</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Ownership</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{specs.ownership || 'N/A'}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Fuel Type</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Fuel Type</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{specs.fuel_type || 'N/A'}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Accident Logs</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Accident Logs</span>
             <p style={{ fontWeight: 700, color: specs.accidental === 'Yes' || specs.accidental === 'Accidental' ? '#ef4444' : '#10b981', margin: 0 }}>{specs.accidental || 'N/A'}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Seller Account</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Seller Account</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{selectedListing.seller_name || 'Seller'}</p>
           </div>
         </div>
@@ -141,70 +141,70 @@ export const PendingListingsPage = () => {
       // Laptop / Mobile Specs
       return (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' }} className="grid-cols-2">
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Brand/Model</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Brand/Model</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{selectedListing.brand} {selectedListing.model}</p>
           </div>
           {specs.processor && (
-            <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Processor</span>
+            <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Processor</span>
               <p style={{ fontWeight: 700, margin: 0 }}>{specs.processor}</p>
             </div>
           )}
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>RAM</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>RAM</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{specs.ram || 'N/A'}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Storage</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Storage</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{specs.storage || 'N/A'}</p>
           </div>
           {specs.battery_backup && (
-            <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Battery Backup</span>
+            <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Battery Backup</span>
               <p style={{ fontWeight: 700, margin: 0 }}>{specs.battery_backup}</p>
             </div>
           )}
           {specs.imei_number && (
-            <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>IMEI Number</span>
+            <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>IMEI Number</span>
               <p style={{ fontWeight: 700, margin: 0 }}>{specs.imei_number}</p>
             </div>
           )}
           {specs.imei_available !== undefined && (
-            <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>IMEI Verified</span>
+            <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>IMEI Verified</span>
               <p style={{ fontWeight: 700, margin: 0 }}>{specs.imei_available ? 'Yes' : 'No'}</p>
             </div>
           )}
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Product Price</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Product Price</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{formatINR(selectedListing.product_price)}</p>
           </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Expected Valuation</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Expected Valuation</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{formatINR(selectedListing.expected_price)}</p>
           </div>
           {specs.warranty_status && (
-            <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Warranty</span>
+            <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Warranty</span>
               <p style={{ fontWeight: 700, margin: 0 }}>{specs.warranty_status}</p>
             </div>
           )}
           {specs.bill_available && (
-            <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Bill Available</span>
+            <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Bill Available</span>
               <p style={{ fontWeight: 700, margin: 0 }}>{specs.bill_available}</p>
             </div>
           )}
           {specs.warranty_available && (
-            <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Warranty Available</span>
+            <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Warranty Available</span>
               <p style={{ fontWeight: 700, margin: 0 }}>{specs.warranty_available}</p>
             </div>
           )}
-          <div style={{ padding: '0.75rem', border: '1.5px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>Seller Account</span>
+          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
+            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Seller Account</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{selectedListing.seller_name || 'Seller'}</p>
           </div>
         </div>
@@ -217,8 +217,8 @@ export const PendingListingsPage = () => {
       {/* Page Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif" }}>Pending Verifications</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Inspect specifications, check legal attached documents, and approve or reject submissions</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>Pending Verifications</h1>
+          <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Inspect specifications, check legal attached documents, and approve or reject submissions</p>
         </div>
         <button 
           onClick={fetchPending} 
@@ -237,17 +237,17 @@ export const PendingListingsPage = () => {
             width: '30px',
             height: '30px',
             borderRadius: '50%',
-            borderLeftColor: '#2563eb',
+            borderLeftColor: '#6B1B71',
             animation: 'spin 1s linear infinite'
           }} />
-          <span style={{ color: '#64748b', fontSize: '0.85rem' }}>Loading review queue...</span>
+          <span style={{ color: '#8B8278', fontSize: '0.85rem' }}>Loading review queue...</span>
         </div>
       ) : pendingList.length === 0 ? (
-        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#8B8278', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
           <ClipboardList size={48} style={{ color: '#cbd5e1' }} />
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#334155' }}>Verification queue is clear</h3>
-            <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '0.25rem' }}>No pending listings waiting for review.</p>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#4a1a50' }}>Verification queue is clear</h3>
+            <p style={{ fontSize: '0.9rem', color: '#8B8278', marginTop: '0.25rem' }}>No pending listings waiting for review.</p>
           </div>
         </div>
       ) : (
@@ -256,27 +256,27 @@ export const PendingListingsPage = () => {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
               <thead>
-                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Listing Title</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Category</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Brand & Model</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Valuation</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Actions</th>
+                <tr style={{ backgroundColor: '#FAF6EA', borderBottom: '1px solid #D8CFC1' }}>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Listing Title</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Category</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Brand & Model</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Valuation</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {pendingList.map((listing) => (
-                  <tr key={listing.product_id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>
+                  <tr key={listing.product_id} style={{ borderBottom: '1px solid #D8CFC1' }}>
+                    <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#1F1A1D' }}>
                       {listing.title}
                     </td>
                     <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase' }}>
                       {PRODUCT_TYPE_LABELS[listing.product_type] || listing.product_type}
                     </td>
-                    <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.9rem', color: '#475569' }}>
+                    <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.9rem', color: '#8B8278' }}>
                       {listing.brand} {listing.model}
                     </td>
-                    <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.95rem', fontWeight: 800, color: '#0f172a' }}>
+                    <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.95rem', fontWeight: 800, color: '#1F1A1D' }}>
                       {formatINR(listing.expected_price)}
                     </td>
                     <td style={{ padding: '1.25rem 1.5rem' }}>
@@ -309,7 +309,7 @@ export const PendingListingsPage = () => {
           padding: '2rem'
         }}>
           <div style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1.25rem',
             width: '100%',
             maxWidth: '850px',
@@ -322,11 +322,11 @@ export const PendingListingsPage = () => {
             {/* Modal Header */}
             <div style={{
               padding: '1.5rem',
-              borderBottom: '1px solid #e2e8f0',
+              borderBottom: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: '#f8fafc'
+              backgroundColor: '#FAF6EA'
             }}>
               <div>
                 <span className="badge badge-pending">Inspection Queue</span>
@@ -336,7 +336,7 @@ export const PendingListingsPage = () => {
               </div>
               <button 
                 onClick={() => { setSelectedListing(null); setShowRejectForm(false); }} 
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278' }}
               >
                 <X size={24} />
               </button>
@@ -347,7 +347,7 @@ export const PendingListingsPage = () => {
               
               {/* Media gallery */}
               <div>
-                <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Photos (Click to preview)</span>
+                <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Photos (Click to preview)</span>
                 <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
                   {safeParseJSON(selectedListing.photos, []).map((img, idx) => (
                     <div 
@@ -374,14 +374,14 @@ export const PendingListingsPage = () => {
 
               {/* Video preview marker */}
               {selectedListing.video && (
-                <div style={{ padding: '1rem', border: '1px dashed #cbd5e1', borderRadius: '0.75rem', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ fontSize: '0.85rem', color: '#334155', display: 'block', marginBottom: '0.5rem' }}>Video Walkthrough:</strong>
+                <div style={{ padding: '1rem', border: '1px dashed #cbd5e1', borderRadius: '0.75rem', backgroundColor: '#FAF6EA' }}>
+                  <strong style={{ fontSize: '0.85rem', color: '#4a1a50', display: 'block', marginBottom: '0.5rem' }}>Video Walkthrough:</strong>
                   <div 
                     onClick={() => setPreviewMedia({ type: 'video', src: selectedListing.video, title: 'Listing Video Walkthrough' })}
                     style={{
                       width: '240px',
                       height: '135px',
-                      backgroundColor: '#0b0f19',
+                      backgroundColor: '#1F1A1D',
                       borderRadius: '0.5rem',
                       display: 'flex',
                       alignItems: 'center',
@@ -389,7 +389,7 @@ export const PendingListingsPage = () => {
                       cursor: 'pointer',
                       position: 'relative',
                       overflow: 'hidden',
-                      border: '1px solid #e2e8f0'
+                      border: '1px solid #D8CFC1'
                     }}
                   >
                     <Film size={28} style={{ color: '#ffffff', zIndex: 2 }} />
@@ -408,7 +408,7 @@ export const PendingListingsPage = () => {
                 if (!docs || Object.keys(docs).length === 0) return null;
                 return (
                   <div className="card" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Attached Verification Documents (Click to preview)</span>
+                    <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Attached Verification Documents (Click to preview)</span>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                       {Object.entries(docs).map(([key, val]) => {
                         const isPdf = val && (val.includes('application/pdf') || val.includes('.pdf'));
@@ -434,12 +434,12 @@ export const PendingListingsPage = () => {
                               alignItems: 'center',
                               gap: '0.35rem',
                               padding: '0.5rem 0.75rem',
-                              border: '1.5px solid #bfdbfe',
-                              backgroundColor: '#eff6ff',
+                              border: '1.5px solid #D8CFC1',
+                              backgroundColor: '#F5ECDD',
                               borderRadius: '0.5rem',
                               fontSize: '0.8rem',
                               fontWeight: 700,
-                              color: '#1e40af',
+                              color: '#7A2181',
                               cursor: 'pointer'
                             }}
                           >
@@ -456,7 +456,7 @@ export const PendingListingsPage = () => {
               {/* Description */}
               <div>
                 <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.25rem' }}>Description</h4>
-                <p style={{ color: '#475569', fontSize: '0.9rem', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                <p style={{ color: '#8B8278', fontSize: '0.9rem', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
                   {selectedListing.description}
                 </p>
               </div>
@@ -510,11 +510,11 @@ export const PendingListingsPage = () => {
             {!showRejectForm && (
               <div style={{
                 padding: '1.5rem',
-                borderTop: '1px solid #e2e8f0',
+                borderTop: '1px solid #D8CFC1',
                 display: 'flex',
                 gap: '1rem',
                 justifyContent: 'flex-end',
-                backgroundColor: '#f8fafc'
+                backgroundColor: '#FAF6EA'
               }}>
                 <button
                   onClick={() => setShowRejectForm(true)}
@@ -551,12 +551,12 @@ export const PendingListingsPage = () => {
           padding: '2rem'
         }}>
           <div style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1.25rem',
             width: '100%',
             maxWidth: '800px',
             boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid #D8CFC1',
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column'
@@ -564,23 +564,23 @@ export const PendingListingsPage = () => {
             {/* Header */}
             <div style={{
               padding: '1rem 1.5rem',
-              borderBottom: '1px solid #e2e8f0',
+              borderBottom: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: '#f8fafc'
+              backgroundColor: '#FAF6EA'
             }}>
-              <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a' }}>{previewMedia.title}</span>
+              <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1F1A1D' }}>{previewMedia.title}</span>
               <button 
                 onClick={() => setPreviewMedia(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278' }}
               >
                 <X size={20} />
               </button>
             </div>
 
             {/* Viewer Content */}
-            <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f172a' }}>
+            <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1F1A1D' }}>
               {previewMedia.type === 'image' && (
                 <img 
                   src={previewMedia.src} 
@@ -599,14 +599,14 @@ export const PendingListingsPage = () => {
               {previewMedia.type === 'pdf' && (
                 <iframe 
                   src={previewMedia.src} 
-                  style={{ width: '100%', height: '60vh', border: 'none', borderRadius: '0.5rem', backgroundColor: '#ffffff' }} 
+                  style={{ width: '100%', height: '60vh', border: 'none', borderRadius: '0.5rem', backgroundColor: '#FAF6EA' }} 
                   title="PDF Preview"
                 />
               )}
             </div>
 
             {/* Footer */}
-            <div style={{ padding: '0.75rem 1.5rem', backgroundColor: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+            <div style={{ padding: '0.75rem 1.5rem', backgroundColor: '#FAF6EA', borderTop: '1px solid #D8CFC1', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
               {previewMedia.src?.startsWith('data:') && (
                 <a 
                   href={previewMedia.src} 
@@ -642,26 +642,26 @@ export const PendingListingsPage = () => {
           padding: '1.5rem'
         }}>
           <div style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1rem',
             width: '100%',
             maxWidth: '400px',
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid #D8CFC1',
             overflow: 'hidden'
           }}>
             <div style={{ padding: '1.25rem 1.5rem' }}>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#1F1A1D' }}>
                 {confirmModal.title}
               </h4>
-              <p style={{ fontSize: '0.875rem', color: '#475569', marginTop: '0.5rem', lineHeight: 1.5, marginBlockEnd: 0 }}>
+              <p style={{ fontSize: '0.875rem', color: '#8B8278', marginTop: '0.5rem', lineHeight: 1.5, marginBlockEnd: 0 }}>
                 {confirmModal.message}
               </p>
             </div>
             <div style={{
               padding: '0.85rem 1.5rem',
-              backgroundColor: '#f8fafc',
-              borderTop: '1px solid #e2e8f0',
+              backgroundColor: '#FAF6EA',
+              borderTop: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '0.75rem'

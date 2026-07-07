@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Gavel } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import logoImg from '../../assets/logo.png';
 import Topbar from './Topbar';
 import BuyerSidebar from './BuyerSidebar';
 import SellerSidebar from './SellerSidebar';
 import AdminSidebar from './AdminSidebar';
+import Footer from '../common/Footer';
 
 export const DashboardLayout = () => {
   const { user } = useAuth();
@@ -37,38 +39,42 @@ export const DashboardLayout = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-layout">
       {/* Mobile Backdrop */}
       <div 
         className={`mobile-backdrop ${isSidebarOpen ? 'backdrop-open' : ''}`}
         onClick={closeSidebar}
       />
 
-      {/* Responsive Sidebar */}
-      <aside className={`sidebar-wrapper ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <div className="sidebar-header">
-          <Gavel size={24} style={{ color: '#2563eb' }} />
-          <span style={{ letterSpacing: '-0.03em' }}>DealsKB</span>
+      {/* Left Sidebar */}
+      <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <img src={logoImg} alt="DealsKB Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
+          <span style={{ letterSpacing: '-0.03em', fontWeight: 800 }}>DealsKB</span>
         </div>
         
-        {/* Navigation items */}
-        <div className="sidebar-nav-region">
+        <nav className="sidebar-menu">
           {renderSidebar()}
-        </div>
+        </nav>
 
-        {/* Footer info in sidebar */}
         <div className="sidebar-footer">
           &copy; 2026 DealsKB Platform.
         </div>
       </aside>
 
-      {/* Main Page Content Wrapper */}
-      <div className="main-content-wrapper">
+      {/* Right Content Area */}
+      <div className="dashboard-right">
         <Topbar onToggleSidebar={toggleSidebar} />
         
-        <main className="dashboard-content">
-          <Outlet />
+        <main className="dashboard-main">
+          <div className="dashboard-page-content">
+            <Outlet />
+          </div>
         </main>
+
+        <footer>
+          <Footer />
+        </footer>
       </div>
     </div>
   );

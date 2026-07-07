@@ -81,8 +81,8 @@ export const MarketplacePage = () => {
       {/* Page Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif" }}>Product Marketplace</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Browse approved items, join live auctions, and place bids in real time</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>Product Marketplace</h1>
+          <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Browse approved items, join live auctions, and place bids in real time</p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           {user?.role === 'Buyer' && (
@@ -121,7 +121,7 @@ export const MarketplacePage = () => {
         }}>
           <AlertCircle size={20} />
           <span>{error}</span>
-          <button onClick={fetchListings} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#2563eb', fontWeight: 700, cursor: 'pointer' }}>Retry</button>
+          <button onClick={fetchListings} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#6B1B71', fontWeight: 700, cursor: 'pointer' }}>Retry</button>
         </div>
       )}
 
@@ -133,7 +133,7 @@ export const MarketplacePage = () => {
           
           {/* Search bar */}
           <div style={{ flex: 2, minWidth: '280px', position: 'relative' }}>
-            <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
             <input
               type="text"
               placeholder="Search by brand, model, or title..."
@@ -186,17 +186,17 @@ export const MarketplacePage = () => {
             width: '40px',
             height: '40px',
             borderRadius: '50%',
-            borderLeftColor: '#2563eb',
+            borderLeftColor: '#6B1B71',
             animation: 'spin 1s linear infinite'
           }} />
-          <span style={{ color: '#64748b', fontSize: '0.9rem' }}>Loading listings...</span>
+          <span style={{ color: '#8B8278', fontSize: '0.9rem' }}>Loading listings...</span>
         </div>
       ) : filteredListings.length === 0 ? (
-        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#8B8278', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
           <Search size={48} style={{ color: '#cbd5e1' }} />
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#334155' }}>No listings found</h3>
-            <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '0.25rem' }}>Try modifying your filters or search term.</p>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#4a1a50' }}>No listings found</h3>
+            <p style={{ fontSize: '0.9rem', color: '#8B8278', marginTop: '0.25rem' }}>Try modifying your filters or search term.</p>
           </div>
           <button 
             onClick={() => {

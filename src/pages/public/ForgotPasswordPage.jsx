@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Car, Lock, Mail, Phone, Loader2, AlertCircle, ShieldCheck, Check } from 'lucide-react';
+import { Car, Lock, Mail, Loader2, AlertCircle, ShieldCheck, Check, Eye, EyeOff } from 'lucide-react';
 import { sendForgotPasswordOtp, verifyForgotPasswordOtp, resetPassword } from '../../api/authApi';
 import { toast } from 'react-toastify';
+import '../../styles/auth.css';
+import loginBg from '../../assets/login_bg.jpg';
 
 export const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -11,19 +13,46 @@ export const ForgotPasswordPage = () => {
   const [step, setStep] = useState(1);
 
   // Input states
-  const [email, setEmail] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [otp, setOtp] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   // Session keys
   const [resetToken, setResetToken] = useState('');
 
   // UX states
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return undefined;
+    const timer = setInterval(() => {
+      setResendCooldown((seconds) => Math.max(0, seconds - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
+
+  const getApiErrorMessage = (err, fallback) => {
+    const detail = err?.response?.data?.detail || err?.response?.data?.message || err?.message;
+    if (typeof detail === 'string') return detail;
+    if (Array.isArray(detail)) {
+      return detail
+        .map((item) => item?.msg || item?.message || JSON.stringify(item))
+        .join(', ');
+    }
+    if (detail && typeof detail === 'object') {
+      return detail.msg || detail.message || JSON.stringify(detail);
+    }
+    if (err?.code === 'ECONNABORTED') {
+      return 'OTP request timed out. Please check backend/email service and try again.';
+    }
+    return fallback;
+  };
 
   // Step 1: Send Forgot Password OTP
   const handleSendOtp = async (e) => {
@@ -31,39 +60,55 @@ export const ForgotPasswordPage = () => {
     setErrorMsg('');
     setSuccessMsg('');
 
-    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
-      setErrorMsg('Please enter a valid email address.');
-      toast.error('Please enter a valid email address.');
+    const normalizedIdentifier = identifier.trim();
+    if (!normalizedIdentifier) {
+      setErrorMsg('Please enter mobile or email.');
+      toast.error('Please enter mobile or email.');
       return;
     }
 
-    if (!mobileNumber) {
-      setErrorMsg('Please enter your mobile number.');
-      toast.error('Please enter your mobile number.');
-      return;
-    }
-
-    // Validate 10-digit Indian mobile format
+    const emailRegex = /^\S+@\S+\.\S+$/;
     const mobileRegex = /^[6-9]\d{9}$/;
-    if (!mobileRegex.test(mobileNumber)) {
-      setErrorMsg('Please enter a valid 10-digit Indian mobile number.');
-      toast.error('Please enter a valid 10-digit Indian mobile number.');
+    if (!emailRegex.test(normalizedIdentifier) && !mobileRegex.test(normalizedIdentifier)) {
+      setErrorMsg('Please enter a valid email or 10-digit Indian mobile number.');
+      toast.error('Please enter a valid email or 10-digit Indian mobile number.');
       return;
     }
 
     setLoading(true);
     try {
-      await sendForgotPasswordOtp({ email, mobile_number: mobileNumber });
+      await sendForgotPasswordOtp({ identifier: normalizedIdentifier });
       toast.success('Forgot password OTP sent successfully!');
-      setSuccessMsg('OTP code sent successfully to your mobile/email.');
+      setSuccessMsg('OTP code sent successfully.');
+      setResendCooldown(30);
       setStep(2);
     } catch (err) {
       console.error('Failed to send forgot password OTP:', err);
-      const errMsg = err.response?.data?.detail || err.response?.data?.message || 'Failed to send OTP code.';
+      const errMsg = getApiErrorMessage(err, 'Failed to send OTP code.');
       setErrorMsg(errMsg);
       toast.error(errMsg);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendCooldown > 0 || resendLoading) return;
+    setErrorMsg('');
+    setSuccessMsg('');
+    setResendLoading(true);
+    try {
+      await sendForgotPasswordOtp({ identifier: identifier.trim() });
+      toast.success('OTP resent successfully!');
+      setSuccessMsg('New OTP sent successfully.');
+      setResendCooldown(30);
+    } catch (err) {
+      console.error('Failed to resend forgot password OTP:', err);
+      const errMsg = getApiErrorMessage(err, 'Failed to resend OTP code.');
+      setErrorMsg(errMsg);
+      toast.error(errMsg);
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -81,16 +126,14 @@ export const ForgotPasswordPage = () => {
 
     setLoading(true);
     try {
-      const data = await verifyForgotPasswordOtp({ email, mobile_number: mobileNumber, otp: otp.trim() });
+      const data = await verifyForgotPasswordOtp({ identifier: identifier.trim(), otp: otp.trim() });
       toast.success('OTP verified successfully!');
-      
-      // Save reset token returned by backend
       setResetToken(data.reset_token);
       setSuccessMsg('OTP verified! Please set your new password.');
       setStep(3);
     } catch (err) {
       console.error('OTP verification failed:', err);
-      const errMsg = err.response?.data?.detail || err.response?.data?.message || 'OTP verification failed.';
+      const errMsg = getApiErrorMessage(err, 'OTP verification failed.');
       setErrorMsg(errMsg);
       toast.error(errMsg);
     } finally {
@@ -118,13 +161,13 @@ export const ForgotPasswordPage = () => {
 
     setLoading(true);
     try {
-      await resetPassword({ email, reset_token: resetToken, new_password: password });
+      await resetPassword({ identifier: identifier.trim(), reset_token: resetToken, new_password: password });
       toast.success('Password reset successfully!');
       setSuccessMsg('Password has been updated successfully.');
       setStep(4);
     } catch (err) {
       console.error('Password reset failed:', err);
-      const errMsg = err.response?.data?.detail || err.response?.data?.message || 'Password reset failed.';
+      const errMsg = getApiErrorMessage(err, 'Password reset failed.');
       setErrorMsg(errMsg);
       toast.error(errMsg);
     } finally {
@@ -133,40 +176,27 @@ export const ForgotPasswordPage = () => {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#0b0f19',
-      backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.08) 0%, transparent 40%)',
-      padding: '1.5rem',
-      fontFamily: "'Plus Jakarta Sans', sans-serif"
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '450px',
-        backgroundColor: '#ffffff',
-        borderRadius: '1.25rem',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-        padding: '2.5rem',
-        border: '1px solid #1e293b'
-      }}>
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-            <Car size={36} style={{ color: '#ef4444' }} />
-            <span style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#0b0f19', letterSpacing: '-0.03em' }}>
-              Reset Password
-            </span>
+    <div className="auth-page forgot-auth">
+      <img src={loginBg} className="auth-bg-img" alt="DealsKB Auction Background" />
+      <div className="auth-overlay" />
+
+      <div className="auth-content">
+        <div className="auth-card forgot-card">
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              <Car size={36} style={{ color: '#ffffff' }} />
+              <span style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#ffffff', letterSpacing: '-0.03em' }}>
+                Reset Password
+              </span>
+            </div>
+            <p className="auth-muted-text" style={{ fontSize: '0.9rem', fontWeight: 500 }}>
+              {step === 1 && 'Enter mobile or email to receive recovery OTP'}
+              {step === 2 && 'Enter verification code'}
+              {step === 3 && 'Choose your new login password'}
+              {step === 4 && 'Recovery completed successfully!'}
+            </p>
           </div>
-          <p style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: 500 }}>
-            {step === 1 && 'Enter credentials to receive recovery OTP'}
-            {step === 2 && 'Enter verification code'}
-            {step === 3 && 'Choose your new login password'}
-            {step === 4 && 'Recovery completed successfully!'}
-          </p>
-        </div>
 
         {/* Alerts */}
         {successMsg && step !== 4 && (
@@ -206,38 +236,20 @@ export const ForgotPasswordPage = () => {
           </div>
         )}
 
-        {/* STEP 1: Enter Email & Phone */}
+        {/* STEP 1: Enter Email or Mobile */}
         {step === 1 && (
           <form onSubmit={handleSendOtp} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" htmlFor="email-input">Email Address</label>
+              <label className="form-label" htmlFor="identifier-input">Mobile or Email</label>
               <div style={{ position: 'relative' }}>
-                <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-                <input
-                  type="email"
-                  id="email-input"
-                  className="form-control"
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={loading}
-                  style={{ paddingLeft: '2.75rem' }}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" htmlFor="mobile-input">Mobile Number</label>
-              <div style={{ position: 'relative' }}>
-                <Phone size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                 <input
                   type="text"
-                  id="mobile-input"
+                  id="identifier-input"
                   className="form-control"
-                  placeholder="Enter 10-digit mobile"
-                  value={mobileNumber}
-                  onChange={(e) => setMobileNumber(e.target.value)}
+                  placeholder="Enter mobile or email"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                   disabled={loading}
                   style={{ paddingLeft: '2.75rem' }}
                   required
@@ -269,7 +281,7 @@ export const ForgotPasswordPage = () => {
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="otp-input">Verification Code (OTP)</label>
               <div style={{ position: 'relative' }}>
-                <ShieldCheck size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <ShieldCheck size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                 <input
                   type="text"
                   id="otp-input"
@@ -310,6 +322,32 @@ export const ForgotPasswordPage = () => {
                 )}
               </button>
             </div>
+
+            <button
+              type="button"
+              onClick={handleResendOtp}
+              disabled={loading || resendLoading || resendCooldown > 0}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                color: resendCooldown > 0 ? '#8B8278' : '#ef4444',
+                fontWeight: 800,
+                cursor: resendCooldown > 0 || loading || resendLoading ? 'not-allowed' : 'pointer',
+                padding: '0.2rem',
+                alignSelf: 'center'
+              }}
+            >
+              {resendLoading ? (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />
+                  Resending OTP...
+                </span>
+              ) : resendCooldown > 0 ? (
+                `Resend OTP in ${resendCooldown}s`
+              ) : (
+                'Resend OTP'
+              )}
+            </button>
           </form>
         )}
 
@@ -319,36 +357,76 @@ export const ForgotPasswordPage = () => {
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="password-input">New Password (Min 6 chars)</label>
               <div style={{ position: 'relative' }}>
-                <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password-input"
                   className="form-control"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  style={{ paddingLeft: '2.75rem' }}
+                  style={{ paddingLeft: '2.75rem', paddingRight: '2.75rem' }}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '1rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#8B8278',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: 0
+                  }}
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="confirm-input">Confirm New Password</label>
               <div style={{ position: 'relative' }}>
-                <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="confirm-input"
                   className="form-control"
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   disabled={loading}
-                  style={{ paddingLeft: '2.75rem' }}
+                  style={{ paddingLeft: '2.75rem', paddingRight: '2.75rem' }}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '1rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#8B8278',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: 0
+                  }}
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
@@ -386,8 +464,8 @@ export const ForgotPasswordPage = () => {
             }}>
               <Check size={32} />
             </div>
-            <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>Password Reset Complete</h4>
-            <p style={{ fontSize: '0.875rem', color: '#64748b', lineHeight: 1.5 }}>
+            <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>Password Reset Complete</h4>
+            <p style={{ fontSize: '0.875rem', color: '#8B8278', lineHeight: 1.5 }}>
               Your account password has been updated. You can now use your new password to sign in.
             </p>
             <Link to="/login" className="btn btn-primary" style={{ width: '100%', padding: '0.8rem', textDecoration: 'none', display: 'block', backgroundColor: '#10b981', borderColor: '#10b981' }}>
@@ -398,17 +476,23 @@ export const ForgotPasswordPage = () => {
 
         {/* Footer Back navigation */}
         {step !== 4 && (
-          <div style={{
+          <div className="auth-card-divider" style={{
             marginTop: '2rem',
-            borderTop: '1px solid #e2e8f0',
             paddingTop: '1.25rem',
             textAlign: 'center',
             fontSize: '0.85rem'
           }}>
-            <Link to="/login" style={{ color: '#64748b', fontWeight: 600 }}>← Cancel & Back</Link>
+            <Link to="/login" style={{ color: '#ffffff', fontWeight: 600 }}>← Cancel &amp; Back to Login</Link>
           </div>
         )}
+        </div>
       </div>
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };

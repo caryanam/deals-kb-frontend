@@ -111,20 +111,20 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
       <div style={{
         width: '100%',
         maxWidth: '760px',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#FAF6EA',
         borderRadius: '1rem',
         boxShadow: '0 24px 60px rgba(15, 23, 42, 0.28)',
         overflow: 'hidden',
-        border: '1px solid #e2e8f0'
+        border: '1px solid #D8CFC1'
       }}>
         <div style={{ padding: '1.25rem 1.35rem', display: 'flex', justifyContent: 'space-between', gap: '1rem', alignItems: 'flex-start' }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 900, color: '#0f172a' }}>Start your unlimited bidding experience with us.</h2>
-            <p style={{ margin: '0.5rem 0 0', color: '#64748b', fontSize: '0.9rem', lineHeight: 1.45 }}>
+            <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 900, color: '#1F1A1D' }}>Start your unlimited bidding experience with us.</h2>
+            <p style={{ margin: '0.5rem 0 0', color: '#8B8278', fontSize: '0.9rem', lineHeight: 1.45 }}>
               Choose a 24-hour bidding pass and place unlimited bids on live auctions for this category.
             </p>
           </div>
-          <button type="button" onClick={onClose} style={{ border: 'none', background: '#f8fafc', borderRadius: '50%', width: 34, height: 34, display: 'grid', placeItems: 'center', cursor: 'pointer', color: '#475569' }}>
+          <button type="button" onClick={onClose} style={{ border: 'none', background: '#FAF6EA', borderRadius: '50%', width: 34, height: 34, display: 'grid', placeItems: 'center', cursor: 'pointer', color: '#8B8278' }}>
             <X size={18} />
           </button>
         </div>
@@ -137,8 +137,8 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
               const activating = activatingPlanId === plan.plan_id;
               return (
                 <div key={plan.plan_id} style={{
-                  border: isRequired ? '1.5px solid #2563eb' : '1px solid #e2e8f0',
-                  backgroundColor: plan.active ? '#f0fdf4' : isRequired ? '#eff6ff' : '#ffffff',
+                  border: isRequired ? '1.5px solid #6B1B71' : '1px solid #D8CFC1',
+                  backgroundColor: plan.active ? '#f0fdf4' : isRequired ? '#F5ECDD' : '#ffffff',
                   borderRadius: '0.9rem',
                   padding: '1rem',
                   display: 'flex',
@@ -146,16 +146,16 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                   gap: '0.65rem'
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem', alignItems: 'center' }}>
-                    <span style={{ color: isRequired ? '#1d4ed8' : '#64748b', fontSize: '0.72rem', fontWeight: 900, textTransform: 'uppercase' }}>
+                    <span style={{ color: isRequired ? '#7A2181' : '#8B8278', fontSize: '0.72rem', fontWeight: 900, textTransform: 'uppercase' }}>
                       {PRODUCT_TYPE_LABELS[type] || type} Plan
                     </span>
                     {plan.active && <CheckCircle2 size={17} style={{ color: '#16a34a' }} />}
                   </div>
-                  <h3 style={{ margin: 0, color: '#0f172a', fontSize: '1.03rem', fontWeight: 900 }}>{plan.name}</h3>
-                  <strong style={{ color: '#0f172a', fontSize: '1.75rem', fontWeight: 950 }}>
-                    {formatCurrency(plan.amount / 100)} <span style={{ fontSize: '0.86rem', color: '#64748b', fontWeight: 800 }}>/ 24 hours</span>
+                  <h3 style={{ margin: 0, color: '#1F1A1D', fontSize: '1.03rem', fontWeight: 900 }}>{plan.name}</h3>
+                  <strong style={{ color: '#1F1A1D', fontSize: '1.75rem', fontWeight: 950 }}>
+                    {formatCurrency(plan.amount / 100)} <span style={{ fontSize: '0.86rem', color: '#8B8278', fontWeight: 800 }}>/ 24 hours</span>
                   </strong>
-                  <p style={{ margin: 0, color: '#475569', fontSize: '0.84rem', fontWeight: 650, minHeight: 38 }}>{plan.description}</p>
+                  <p style={{ margin: 0, color: '#8B8278', fontSize: '0.84rem', fontWeight: 650, minHeight: 38 }}>{plan.description}</p>
                   {plan.active && plan.expires_at && (
                     <span style={{ fontSize: '0.72rem', color: '#166534', fontWeight: 800 }}>
                       Active until {new Date(plan.expires_at).toLocaleString()}
@@ -175,7 +175,7 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
               );
             })}
           </div>
-          <p style={{ margin: '0.65rem 0 0', color: '#64748b', fontSize: '0.78rem', textAlign: 'center', fontWeight: 700 }}>
+          <p style={{ margin: '0.65rem 0 0', color: '#8B8278', fontSize: '0.78rem', textAlign: 'center', fontWeight: 700 }}>
             Secure payment powered by Razorpay
           </p>
         </div>

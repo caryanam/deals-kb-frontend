@@ -66,7 +66,7 @@ export const AdminDashboard = () => {
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Welcome banner */}
       <div style={{
-        background: 'linear-gradient(to right, #0f172a, #1e293b)',
+        background: 'linear-gradient(to right, #1F1A1D, #2d0a32)',
         padding: '2.5rem',
         borderRadius: '1rem',
         color: '#ffffff',
@@ -82,7 +82,7 @@ export const AdminDashboard = () => {
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#ffffff', fontFamily: "'Outfit', sans-serif", marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
             Administrator Control Panel
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.95rem', margin: 0 }}>
+          <p style={{ color: '#8B8278', fontSize: '0.95rem', margin: 0 }}>
             Manage user rosters, inspect and verify product specifications, and review real-time platform metrics.
           </p>
         </div>
@@ -111,32 +111,32 @@ export const AdminDashboard = () => {
         }}>
           <AlertCircle size={20} />
           <span>{error}</span>
-          <button onClick={loadDashboardData} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#2563eb', fontWeight: 700, cursor: 'pointer' }}>Retry</button>
+          <button onClick={loadDashboardData} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#6B1B71', fontWeight: 700, cursor: 'pointer' }}>Retry</button>
         </div>
       )}
 
       {/* Roster counts */}
-      <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#475569', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>User Overview</h2>
+      <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#8B8278', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>User Overview</h2>
       <div className="grid grid-cols-3" style={{ marginBottom: '2.5rem' }}>
         
         {/* Total Users */}
         <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', color: '#6B1B71', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Users size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Total Users</span>
+            <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Total Users</span>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : analytics?.total_users}</h3>
           </div>
         </div>
 
         {/* Buyers */}
         <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', color: '#965284', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <UserCheck size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Platform Buyers</span>
+            <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Platform Buyers</span>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : analytics?.total_buyers}</h3>
           </div>
         </div>
@@ -147,14 +147,14 @@ export const AdminDashboard = () => {
             <ShieldCheck size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Platform Sellers</span>
+            <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Platform Sellers</span>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : analytics?.total_sellers}</h3>
           </div>
         </div>
       </div>
 
       {/* Listing counts */}
-      <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#475569', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Inventory Overview</h2>
+      <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#8B8278', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Inventory Overview</h2>
       <div className="grid grid-cols-5" style={{ marginBottom: '2.5rem' }}>
         
         {/* Pending approvals */}
@@ -167,7 +167,7 @@ export const AdminDashboard = () => {
             <ClipboardList size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Pending Review</span>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Pending Review</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#d97706' }}>{loading ? '...' : analytics?.pending_listings}</h3>
           </div>
         </div>
@@ -182,7 +182,7 @@ export const AdminDashboard = () => {
             <CheckCircle2 size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Approved</span>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Approved</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : analytics?.approved_listings}</h3>
           </div>
         </div>
@@ -197,7 +197,7 @@ export const AdminDashboard = () => {
             <XCircle size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Rejected</span>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Rejected</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : analytics?.rejected_listings || 0}</h3>
           </div>
         </div>
@@ -208,12 +208,12 @@ export const AdminDashboard = () => {
           onClick={() => handleCardClick('live')}
           style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer' }}
         >
-          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', color: '#965284', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Gavel size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Live Auctions</span>
-            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#2563eb' }}>{loading ? '...' : analytics?.live_auctions}</h3>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Live Auctions</span>
+            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#6B1B71' }}>{loading ? '...' : analytics?.live_auctions}</h3>
           </div>
         </div>
 
@@ -223,11 +223,11 @@ export const AdminDashboard = () => {
           onClick={() => handleCardClick('ended')}
           style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer' }}
         >
-          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#f1f5f9', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#f1f5f9', color: '#8B8278', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Award size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Completed</span>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Completed</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : analytics?.ended_auctions}</h3>
           </div>
         </div>
@@ -242,7 +242,7 @@ export const AdminDashboard = () => {
             <DollarSign size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Platform GMV</span>
+            <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Platform GMV</span>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, color: '#0369a1' }}>
               {loading ? '...' : formatINR(analytics?.gmv || 0)}
             </h3>
@@ -255,7 +255,7 @@ export const AdminDashboard = () => {
             <Gavel size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Total Bids Placed</span>
+            <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Total Bids Placed</span>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, color: '#7e22ce' }}>
               {loading ? '...' : analytics?.total_bids || 0}
             </h3>
@@ -295,17 +295,17 @@ export const AdminDashboard = () => {
 
       {/* PRODUCT LISTING REGISTRY / HISTORY */}
       <div ref={listRef} className="card" style={{ padding: '1.5rem', scrollMarginTop: '80px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid #D8CFC1', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>Listing Registry History</h3>
-            <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.15rem' }}>Roster of products on the platform filtered by approval status and type</p>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>Listing Registry History</h3>
+            <p style={{ fontSize: '0.8rem', color: '#8B8278', marginTop: '0.15rem' }}>Roster of products on the platform filtered by approval status and type</p>
           </div>
 
           {/* Filters Bar */}
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
             {/* Category Filter */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Filter size={16} style={{ color: '#64748b' }} />
+              <Filter size={16} style={{ color: '#8B8278' }} />
               <select
                 className="form-control"
                 value={categoryFilter}
@@ -323,7 +323,7 @@ export const AdminDashboard = () => {
         </div>
 
         {/* Status Tabs Navigation */}
-        <div style={{ display: 'flex', gap: '0.25rem', borderBottom: '1px solid #e2e8f0', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '1px' }}>
+        <div style={{ display: 'flex', gap: '0.25rem', borderBottom: '1px solid #D8CFC1', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '1px' }}>
           {['all', 'approved', 'rejected', 'live', 'ended'].map((status) => (
             <button
               key={status}
@@ -332,10 +332,10 @@ export const AdminDashboard = () => {
                 padding: '0.6rem 1.25rem',
                 fontSize: '0.85rem',
                 fontWeight: 700,
-                color: statusFilter === status ? '#2563eb' : '#64748b',
+                color: statusFilter === status ? '#6B1B71' : '#8B8278',
                 background: 'none',
                 border: 'none',
-                borderBottom: statusFilter === status ? '3px solid #2563eb' : '3px solid transparent',
+                borderBottom: statusFilter === status ? '3px solid #6B1B71' : '3px solid transparent',
                 cursor: 'pointer',
                 textTransform: 'capitalize',
                 transition: 'all 0.15s ease'
@@ -348,28 +348,28 @@ export const AdminDashboard = () => {
 
         {/* Tab content list */}
         {filteredProducts.length === 0 ? (
-          <div style={{ padding: '3rem 1rem', textAlign: 'center', color: '#64748b', fontSize: '0.85rem' }}>
+          <div style={{ padding: '3rem 1rem', textAlign: 'center', color: '#8B8278', fontSize: '0.85rem' }}>
             No listings found matching this status or category.
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
               <thead>
-                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Product</th>
-                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Category</th>
-                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Status</th>
-                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Expected Valuation</th>
-                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Seller</th>
+                <tr style={{ backgroundColor: '#FAF6EA', borderBottom: '1px solid #D8CFC1' }}>
+                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Product</th>
+                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Category</th>
+                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Status</th>
+                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Expected Valuation</th>
+                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Seller</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredProducts.map((p) => (
                   <tr key={p.product_id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '1rem', fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>
+                    <td style={{ padding: '1rem', fontSize: '0.9rem', fontWeight: 700, color: '#1F1A1D' }}>
                       {p.title}
                     </td>
-                    <td style={{ padding: '1rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#475569' }}>
+                    <td style={{ padding: '1rem', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#8B8278' }}>
                       {PRODUCT_TYPE_LABELS[p.product_type] || p.product_type}
                     </td>
                     <td style={{ padding: '1rem' }}>
@@ -377,10 +377,10 @@ export const AdminDashboard = () => {
                         {p.status}
                       </span>
                     </td>
-                    <td style={{ padding: '1rem', fontSize: '0.9rem', fontWeight: 800, color: '#0f172a' }}>
+                    <td style={{ padding: '1rem', fontSize: '0.9rem', fontWeight: 800, color: '#1F1A1D' }}>
                       {formatINR(p.expected_price)}
                     </td>
-                    <td style={{ padding: '1rem', fontSize: '0.85rem', color: '#64748b' }}>
+                    <td style={{ padding: '1rem', fontSize: '0.85rem', color: '#8B8278' }}>
                       {p.seller_name || 'Seller'}
                     </td>
                   </tr>

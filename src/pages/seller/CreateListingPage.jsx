@@ -6,6 +6,7 @@ import { createProduct, getProductById, updateProduct } from '../../api/productA
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
 import { triggerPayment } from '../../utils/paymentHelper';
+import { CAR_BRANDS, CAR_BRAND_TO_MODELS, LAPTOP_BRANDS, LAPTOP_BRAND_TO_MODELS } from '../../data/carLaptopData';
 
 const CATEGORIES = [
   { value: 'car', label: 'CAR' },
@@ -172,8 +173,19 @@ export const CreateListingPage = () => {
     setSpecs((current) => ({ ...current, [key]: value }));
   };
 
+  const handleBrandChange = (newBrand) => {
+    setBrand(newBrand);
+    setModel('');
+    if (productType === 'car' || productType === 'bike') {
+      setMake(newBrand);
+    }
+  };
+
   const switchCategory = (type) => {
     setProductType(type);
+    setBrand('');
+    setMake('');
+    setModel('');
     setErrorMsg('');
     setRcCopy(null);
     setInsuranceCopy(null);
@@ -244,7 +256,8 @@ export const CreateListingPage = () => {
     };
     const documents = {};
 
-    if (make.trim()) specifications.make = make.trim();
+    const finalMake = (productType === 'car' || productType === 'bike') ? brand : make;
+    if (finalMake.trim()) specifications.make = finalMake.trim();
 
     if (productType === 'car' || productType === 'bike') {
       Object.assign(specifications, {
@@ -373,10 +386,10 @@ export const CreateListingPage = () => {
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", maxWidth: '1120px', margin: '0 auto' }}>
       <div style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif", margin: 0 }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif", margin: 0 }}>
           {editId ? 'Edit Product Listing' : 'Create Listing'}
         </h1>
-        <p style={{ color: '#64748b', fontSize: '0.9rem', marginTop: '0.35rem' }}>
+        <p style={{ color: '#8B8278', fontSize: '0.9rem', marginTop: '0.35rem' }}>
           Add category-specific product details, documents, product price, expected price, and description.
         </p>
       </div>
@@ -409,19 +422,57 @@ export const CreateListingPage = () => {
                 </button>
               ))}
             </div>
-            <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-              <span style={{ color: '#1e40af', fontWeight: 800, fontSize: '0.9rem' }}>Listing fee for selected category</span>
-              <strong style={{ color: '#0f172a', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
+            <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', border: '1px solid #D8CFC1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+              <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Listing fee for selected category</span>
+              <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
             </div>
           </section>
 
           <section>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Basic Details</h2>
             <Input label="Title *" value={title} onChange={setTitle} placeholder="e.g. Honda City / iPhone 13 / Dell Laptop" />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
-              <Input label="Brand *" value={brand} onChange={setBrand} placeholder="e.g. Honda / Apple / Dell" />
-              {(productType === 'car' || productType === 'bike') && <Input label="Make" value={make} onChange={setMake} placeholder="e.g. Honda" />}
-              <Input label="Model *" value={model} onChange={setModel} placeholder="e.g. City / iPhone 13 / Inspiron" />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '1rem' }}>
+              {productType === 'car' ? (
+                <Select
+                  label="Brand *"
+                  value={brand}
+                  onChange={handleBrandChange}
+                  options={CAR_BRANDS}
+                  placeholder="Select Car Brand"
+                />
+              ) : productType === 'laptop' ? (
+                <Select
+                  label="Brand *"
+                  value={brand}
+                  onChange={handleBrandChange}
+                  options={LAPTOP_BRANDS}
+                  placeholder="Select Laptop Brand"
+                />
+              ) : (
+                <Input label="Brand *" value={brand} onChange={setBrand} placeholder="e.g. Honda / Apple / Dell" />
+              )}
+
+              {productType === 'car' ? (
+                <Select
+                  label="Model *"
+                  value={model}
+                  onChange={setModel}
+                  options={CAR_BRAND_TO_MODELS[brand] || []}
+                  placeholder={brand ? "Select Car Model" : "Select Brand First"}
+                  disabled={!brand}
+                />
+              ) : productType === 'laptop' ? (
+                <Select
+                  label="Model *"
+                  value={model}
+                  onChange={setModel}
+                  options={LAPTOP_BRAND_TO_MODELS[brand] || []}
+                  placeholder={brand ? "Select Laptop Model" : "Select Brand First"}
+                  disabled={!brand}
+                />
+              ) : (
+                <Input label="Model *" value={model} onChange={setModel} placeholder="e.g. City / iPhone 13 / Inspiron" />
+              )}
             </div>
           </section>
 
@@ -531,13 +582,13 @@ export const CreateListingPage = () => {
 
           <div className="card">
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Upload Video Walkthrough *</h2>
-            <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '-0.35rem 0 0.85rem', fontWeight: 700 }}>
+            <p style={{ fontSize: '0.82rem', color: '#8B8278', margin: '-0.35rem 0 0.85rem', fontWeight: 700 }}>
               Video length should be between 10-15 sec max.
             </p>
             {!video ? (
-              <label style={{ border: '1px dashed #cbd5e1', borderRadius: '0.75rem', padding: '1rem', textAlign: 'center', position: 'relative', backgroundColor: '#f8fafc', display: 'block', cursor: 'pointer' }}>
-                <Film size={24} style={{ color: '#2563eb', marginBottom: '0.25rem' }} />
-                <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0, fontWeight: 700 }}>Select video walkthrough</p>
+              <label style={{ border: '1px dashed #cbd5e1', borderRadius: '0.75rem', padding: '1rem', textAlign: 'center', position: 'relative', backgroundColor: '#FAF6EA', display: 'block', cursor: 'pointer' }}>
+                <Film size={24} style={{ color: '#6B1B71', marginBottom: '0.25rem' }} />
+                <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: 0, fontWeight: 700 }}>Select video walkthrough</p>
                 <input type="file" accept="video/*" onChange={handleVideoUpload} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
               </label>
             ) : (
@@ -582,6 +633,43 @@ const Input = ({ label, value, onChange, placeholder, type = 'text' }) => (
   <div className="form-group" style={{ marginBottom: 0 }}>
     <label className="form-label">{label}</label>
     <input type={type} className="form-control" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+  </div>
+);
+
+const Select = ({ label, value, onChange, options, placeholder, disabled = false }) => (
+  <div className="form-group" style={{ marginBottom: 0 }}>
+    <label className="form-label">{label}</label>
+    <select 
+      className="form-control" 
+      value={value} 
+      onChange={(e) => onChange(e.target.value)}
+      disabled={disabled}
+      style={{
+        width: '100%',
+        padding: '0.85rem 1.15rem',
+        borderRadius: '0.85rem',
+        border: '1px solid #d1d5db',
+        backgroundColor: disabled ? '#f3f4f6' : '#ffffff',
+        color: disabled ? '#9ca3af' : '#1F1A1D',
+        fontSize: '0.9rem',
+        fontWeight: 600,
+        outline: 'none',
+        appearance: 'none',
+        backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%238B8278\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'right 1rem center',
+        backgroundSize: '1.2em',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        height: '50px'
+      }}
+    >
+      <option value="">{placeholder || 'Select option'}</option>
+      {options.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
   </div>
 );
 
@@ -630,11 +718,11 @@ const Segmented = ({ label, options, value, onChange }) => (
 const PhotoSlot = ({ label, value, onUpload, onRemove }) => (
   <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '0.75rem', minHeight: '112px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.65rem' }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
-      <Camera size={20} style={{ color: '#334155', flexShrink: 0 }} />
+      <Camera size={20} style={{ color: '#4a1a50', flexShrink: 0 }} />
       <div style={{ minWidth: 0 }}>
         <span style={{ fontWeight: 850, color: '#111827', fontSize: '0.9rem', lineHeight: 1.25 }}>{label}</span>
         {(label === 'Front image' || label === 'Back image') && (
-          <p style={{ margin: '0.15rem 0 0', color: '#64748b', fontSize: '0.72rem', fontWeight: 700, lineHeight: 1.25 }}>
+          <p style={{ margin: '0.15rem 0 0', color: '#8B8278', fontSize: '0.72rem', fontWeight: 700, lineHeight: 1.25 }}>
             Note: number plate should be hidden.
           </p>
         )}
@@ -648,7 +736,7 @@ const PhotoSlot = ({ label, value, onUpload, onRemove }) => (
         </button>
       </div>
     ) : (
-      <label style={{ border: '1px dashed #cbd5e1', borderRadius: '0.65rem', minHeight: '58px', display: 'grid', placeItems: 'center', color: '#2563eb', fontWeight: 900, cursor: 'pointer', position: 'relative', backgroundColor: '#f8fafc' }}>
+      <label style={{ border: '1px dashed #cbd5e1', borderRadius: '0.65rem', minHeight: '58px', display: 'grid', placeItems: 'center', color: '#6B1B71', fontWeight: 900, cursor: 'pointer', position: 'relative', backgroundColor: '#FAF6EA' }}>
         Upload
         <input type="file" accept="image/*" onChange={onUpload} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
       </label>
@@ -659,10 +747,10 @@ const PhotoSlot = ({ label, value, onUpload, onRemove }) => (
 const UploadRow = ({ label, file, onUpload, onRemove }) => (
   <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '1rem', display: 'flex', alignItems: 'center', gap: '0.85rem', justifyContent: 'space-between' }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 0 }}>
-      <FileText size={28} style={{ color: '#334155', flexShrink: 0 }} />
+      <FileText size={28} style={{ color: '#4a1a50', flexShrink: 0 }} />
       <div>
         <p style={{ margin: 0, fontWeight: 900, color: '#111827' }}>{label}</p>
-        <p style={{ margin: '0.15rem 0 0', color: file ? '#047857' : '#475569', fontSize: '0.85rem', fontWeight: 700 }}>
+        <p style={{ margin: '0.15rem 0 0', color: file ? '#047857' : '#8B8278', fontSize: '0.85rem', fontWeight: 700 }}>
           {file ? 'Uploaded' : 'Tap to upload image'}
         </p>
       </div>
@@ -672,7 +760,7 @@ const UploadRow = ({ label, file, onUpload, onRemove }) => (
         <X size={18} />
       </button>
     ) : (
-      <label style={{ color: '#2563eb', fontWeight: 900, cursor: 'pointer', position: 'relative' }}>
+      <label style={{ color: '#6B1B71', fontWeight: 900, cursor: 'pointer', position: 'relative' }}>
         Upload
         <input type="file" accept="image/*,application/pdf" onChange={onUpload} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
       </label>

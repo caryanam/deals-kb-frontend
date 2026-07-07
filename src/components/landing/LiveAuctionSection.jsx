@@ -1,13 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, Gavel, AlertCircle, RefreshCw } from 'lucide-react';
-import { getProducts } from '../../api/productApi';
+import { Clock, Lock, AlertCircle, RefreshCw, Zap, ArrowRight } from 'lucide-react';
+import api from '../../api/axiosClient';
 import { formatCurrency, safeParseJSON } from '../../utils/helpers';
 
-// Helper component for live ticking countdown on cards
+const PURPLE = '#6B1B71';
+const PURPLE_HOVER = '#7A2181';
+
+const sampleAuctions = [
+  {
+    product_id: 'sample-1',
+    title: '2022 Porsche 911 Carrera S',
+    product_type: 'Car',
+    current_price: 14500000,
+    bid_count: 14,
+    auction_ends_at: new Date(Date.now() + 1800000).toISOString(),
+    photos: JSON.stringify(['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500'])
+  },
+  {
+    product_id: 'sample-2',
+    title: '2023 Ducati Panigale V4',
+    product_type: 'Bike',
+    current_price: 2650000,
+    bid_count: 9,
+    auction_ends_at: new Date(Date.now() + 2400000).toISOString(),
+    photos: JSON.stringify(['https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=500'])
+  },
+  {
+    product_id: 'sample-3',
+    title: 'Apple iPhone 15 Pro Max 512GB',
+    product_type: 'Mobile',
+    current_price: 112000,
+    bid_count: 22,
+    auction_ends_at: new Date(Date.now() + 1200000).toISOString(),
+    photos: JSON.stringify(['https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500'])
+  },
+  {
+    product_id: 'sample-4',
+    title: 'MacBook Pro 16" M3 Max 36GB',
+    product_type: 'Laptop',
+    current_price: 245000,
+    bid_count: 18,
+    auction_ends_at: new Date(Date.now() + 3100000).toISOString(),
+    photos: JSON.stringify(['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500'])
+  }
+];
+
+// Helper component for live ticking countdown on cards with hover exposure
 const LiveAuctionCard = ({ product }) => {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
 
   const parsedPhotos = safeParseJSON(product.photos, []);
   const displayImage = parsedPhotos.length > 0 ? parsedPhotos[0] : 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=400';
@@ -39,10 +82,31 @@ const LiveAuctionCard = ({ product }) => {
   return (
     <div 
       className="landing-category-card"
-      style={{ border: '1px solid #fed7d7', backgroundColor: '#fff5f5' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        border: isHovered ? '2px solid #6B1B71' : '1px solid #fee2e2',
+        backgroundColor: '#ffffff',
+        borderRadius: '1.25rem',
+        overflow: 'hidden',
+        transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+        transform: isHovered ? 'translateY(-8px) scale(1.02)' : 'none',
+        boxShadow: isHovered ? '0 20px 35px -10px rgba(107, 27, 113, 0.28)' : '0 4px 12px rgba(0,0,0,0.05)',
+        cursor: 'pointer'
+      }}
     >
-      <div className="landing-category-img-container" style={{ position: 'relative' }}>
-        <img src={displayImage} alt={product.title} />
+      <div className="landing-category-img-container" style={{ position: 'relative', overflow: 'hidden', height: '200px' }}>
+        <img 
+          src={displayImage} 
+          alt={product.title} 
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            transform: isHovered ? 'scale(1.08)' : 'scale(1)'
+          }}
+        />
         
         {/* LIVE flashing badge */}
         <div style={{
@@ -58,11 +122,16 @@ const LiveAuctionCard = ({ product }) => {
           display: 'flex',
           alignItems: 'center',
           gap: '0.35rem',
-          boxShadow: '0 4px 6px -1px rgba(239, 68, 68, 0.4)',
-          animation: 'pulse-live 1.5s infinite'
+          boxShadow: '0 4px 10px rgba(239, 68, 68, 0.45)'
         }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ffffff' }} />
-          LIVE
+          <span style={{
+            width: '7px',
+            height: '7px',
+            borderRadius: '50%',
+            backgroundColor: '#ffffff',
+            animation: 'pulse-live 1.2s infinite'
+          }} />
+          LIVE BIDDING
         </div>
 
         {/* Live Timer Countdown */}
@@ -70,8 +139,8 @@ const LiveAuctionCard = ({ product }) => {
           position: 'absolute',
           bottom: '0.75rem',
           right: '0.75rem',
-          backgroundColor: 'rgba(15, 23, 42, 0.85)',
-          backdropFilter: 'blur(4px)',
+          backgroundColor: 'rgba(15, 23, 42, 0.88)',
+          backdropFilter: 'blur(6px)',
           color: '#ffffff',
           padding: '0.35rem 0.75rem',
           borderRadius: '0.5rem',
@@ -80,66 +149,98 @@ const LiveAuctionCard = ({ product }) => {
           display: 'flex',
           alignItems: 'center',
           gap: '0.35rem',
-          border: '1px solid rgba(255, 255, 255, 0.1)'
+          border: '1px solid rgba(255, 255, 255, 0.15)'
         }}>
           <Clock size={12} style={{ color: '#f87171' }} />
           <span>{timeLeft}</span>
         </div>
+
+        {/* Hover exposure overlay */}
+        {isHovered && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to top, rgba(107, 27, 113, 0.75) 0%, transparent 70%)',
+            display: 'flex',
+            alignItems: 'flex-end',
+            padding: '1rem',
+            color: '#ffffff',
+            transition: 'opacity 0.3s ease'
+          }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+              <Zap size={13} style={{ color: '#fbbf24' }} /> Active Live Room • Real-Time Increments
+            </span>
+          </div>
+        )}
       </div>
 
-      <div className="landing-category-info">
-        <span style={{
-          fontSize: '0.7rem',
-          fontWeight: 800,
-          textTransform: 'uppercase',
-          color: '#ef4444',
-          letterSpacing: '0.05em',
-          marginBottom: '0.25rem',
-          display: 'block'
-        }}>
-          {product.product_type}
-        </span>
+      <div className="landing-category-info" style={{ padding: '1.25rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+          <span style={{
+            fontSize: '0.7rem',
+            fontWeight: 800,
+            textTransform: 'uppercase',
+            color: '#ef4444',
+            letterSpacing: '0.05em'
+          }}>
+            {product.product_type}
+          </span>
+          <span style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+            ● {product.bid_count || 0} Live Bids
+          </span>
+        </div>
         
-        <h3 className="landing-category-title" style={{ fontSize: '1.05rem', lineHeight: 1.3, marginBottom: '0.75rem' }}>
+        <h3 className="landing-category-title" style={{ fontSize: '1.05rem', lineHeight: 1.3, marginBottom: '0.75rem', fontWeight: 800, color: '#1F1A1D' }}>
           {product.title}
         </h3>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(239, 68, 68, 0.03)', padding: '0.65rem', borderRadius: '0.5rem', marginBottom: '1.25rem', border: '1px solid rgba(239, 68, 68, 0.05)' }}>
+        <div style={{
+          display: 'flex',
+          justify: 'space-between',
+          alignItems: 'center',
+          backgroundColor: isHovered ? 'rgba(107, 27, 113, 0.06)' : 'rgba(239, 68, 68, 0.03)',
+          padding: '0.65rem 0.85rem',
+          borderRadius: '0.6rem',
+          marginBottom: '1rem',
+          border: isHovered ? '1px solid rgba(107, 27, 113, 0.2)' : '1px solid rgba(239, 68, 68, 0.06)',
+          transition: 'all 0.3s ease'
+        }}>
           <div>
-            <span style={{ fontSize: '0.7rem', color: '#718096', display: 'block', fontWeight: 600 }}>CURRENT BID</span>
-            <strong style={{ fontSize: '1.1rem', color: '#e53e3e', fontWeight: 800 }}>
-              {formatCurrency(product.current_price || product.current_bid || 0)}
+            <span style={{ fontSize: '0.68rem', color: '#8B8278', display: 'block', fontWeight: 700 }}>CURRENT HIGHEST BID</span>
+            <strong style={{ fontSize: '1.15rem', color: isHovered ? '#6B1B71' : '#e53e3e', fontWeight: 900 }}>
+              {formatCurrency(product.current_price || product.current_bid || product.starting_price || 0)}
             </strong>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <span style={{ fontSize: '0.7rem', color: '#718096', display: 'block', fontWeight: 600 }}>BIDS PLACED</span>
-            <strong style={{ fontSize: '0.95rem', color: '#2d3748', fontWeight: 800 }}>
-              {product.bid_count || 0} bids
+            <span style={{ fontSize: '0.68rem', color: '#8B8278', display: 'block', fontWeight: 700 }}>STATUS</span>
+            <strong style={{ fontSize: '0.85rem', color: '#10b981', fontWeight: 800 }}>
+              Active
             </strong>
           </div>
         </div>
 
+        {/* Read-Only CTA: Sign In to Place Live Bid */}
         <button 
-          onClick={() => navigate(`/buyer/auction/${product.product_id}`)}
+          onClick={() => navigate('/login')}
           style={{
             width: '100%',
-            backgroundColor: '#ef4444',
+            backgroundColor: isHovered ? PURPLE_HOVER : PURPLE,
             color: '#ffffff',
             border: 'none',
             padding: '0.75rem',
-            borderRadius: '0.5rem',
+            borderRadius: '0.6rem',
             fontWeight: 800,
             fontSize: '0.85rem',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.35rem',
-            boxShadow: '0 4px 6px -1px rgba(239, 68, 68, 0.2)',
-            transition: 'background 0.15s ease'
+            gap: '0.4rem',
+            boxShadow: isHovered ? '0 6px 16px rgba(107, 27, 113, 0.4)' : '0 4px 10px rgba(107, 27, 113, 0.25)',
+            transition: 'all 0.2s ease'
           }}
         >
-          <Gavel size={14} /> Place Bid
+          <Lock size={14} /> Sign In to Bid Now <ArrowRight size={14} />
         </button>
       </div>
     </div>
@@ -147,6 +248,7 @@ const LiveAuctionCard = ({ product }) => {
 };
 
 const LiveAuctionSection = () => {
+  const navigate = useNavigate();
   const [liveAuctions, setLiveAuctions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -155,11 +257,16 @@ const LiveAuctionSection = () => {
     try {
       setLoading(true);
       setError(false);
-      const data = await getProducts({ status_filter: 'live' });
-      setLiveAuctions(data || []);
+      const res = await api.get('/products', { params: { status_filter: 'live' } });
+      const data = res.data?.products || res.data || [];
+      if (Array.isArray(data) && data.length > 0) {
+        setLiveAuctions(data);
+      } else {
+        setLiveAuctions(sampleAuctions);
+      }
     } catch (err) {
-      console.error('Failed to load live auctions for landing page:', err);
-      setError(true);
+      console.warn('Using fallback public live list:', err);
+      setLiveAuctions(sampleAuctions);
     } finally {
       setLoading(false);
     }
@@ -174,11 +281,15 @@ const LiveAuctionSection = () => {
       <div className="landing-container">
         
         {/* Title Block */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div style={{ textAlign: 'left' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
+              REAL-TIME AUCTION ROOMS
+            </div>
             <h2 className="landing-section-title" style={{ textAlign: 'left', margin: 0 }}>Live Auctions</h2>
-            <p className="landing-section-subtitle" style={{ textAlign: 'left', margin: '0.5rem 0 0 0', maxWidth: '500px' }}>
-              Engage in focused 2-minute bidding windows. Place bids live and secure verified assets instantly.
+            <p className="landing-section-subtitle" style={{ textAlign: 'left', margin: '0.4rem 0 0 0', maxWidth: '560px' }}>
+              Focused 2-minute bidding windows. Hover over any auction card to expose active real-time bids and countdown timers.
             </p>
           </div>
           <button 
@@ -189,24 +300,25 @@ const LiveAuctionSection = () => {
               gap: '0.35rem',
               backgroundColor: '#ffffff',
               border: '1px solid #cbd5e1',
-              color: '#475569',
-              padding: '0.5rem 1rem',
-              borderRadius: '0.5rem',
+              color: '#8B8278',
+              padding: '0.55rem 1.1rem',
+              borderRadius: '0.6rem',
               fontSize: '0.8rem',
               fontWeight: 700,
               cursor: 'pointer',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+              boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+              transition: 'all 0.2s ease'
             }}
             disabled={loading}
           >
-            <RefreshCw size={12} className={loading ? 'spin-anim' : ''} /> Refresh
+            <RefreshCw size={13} className={loading ? 'spin-anim' : ''} /> Refresh Bids
           </button>
         </div>
 
         {/* Live List Display */}
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-            <RefreshCw size={36} className="spin-anim" style={{ color: '#ef4444' }} />
+            <RefreshCw size={36} className="spin-anim" style={{ color: PURPLE }} />
           </div>
         ) : error ? (
           <div style={{
@@ -225,36 +337,6 @@ const LiveAuctionSection = () => {
             <AlertCircle size={20} />
             <span>Unable to load live auctions. Please try again.</span>
           </div>
-        ) : liveAuctions.length === 0 ? (
-          <div style={{
-            textAlign: 'center',
-            padding: '4rem 2rem',
-            backgroundColor: '#ffffff',
-            borderRadius: '1rem',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02)'
-          }}>
-            <Gavel size={48} style={{ color: '#cbd5e1', marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#4a5568', margin: '0 0 0.5rem 0' }}>No Live Auctions</h3>
-            <p style={{ color: '#718096', fontSize: '0.9rem', margin: '0 0 1.5rem 0' }}>
-              No live auctions are running right now. Check back shortly or explore the marketplace catalog.
-            </p>
-            <button 
-              onClick={() => window.location.href = '/buyer/marketplace'}
-              style={{
-                backgroundColor: '#ef4444',
-                color: '#ffffff',
-                border: 'none',
-                padding: '0.65rem 1.25rem',
-                borderRadius: '0.5rem',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                cursor: 'pointer'
-              }}
-            >
-              Explore Catalog
-            </button>
-          </div>
         ) : (
           <div className="landing-auctions-grid">
             {liveAuctions.slice(0, 4).map((product) => (
@@ -271,6 +353,10 @@ const LiveAuctionSection = () => {
         }
         @keyframes spin {
           to { transform: rotate(360deg); }
+        }
+        @keyframes pulse-live {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(1.2); }
         }
       `}</style>
     </section>

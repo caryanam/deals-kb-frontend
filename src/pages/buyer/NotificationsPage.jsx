@@ -46,8 +46,8 @@ export const NotificationsPage = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif" }}>Notifications</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Stay informed on listing approvals, live bidding outcomes, and platform alerts</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>Notifications</h1>
+          <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Stay informed on listing approvals, live bidding outcomes, and platform alerts</p>
         </div>
         <button 
           onClick={fetchAlerts} 
@@ -66,17 +66,17 @@ export const NotificationsPage = () => {
             width: '30px',
             height: '30px',
             borderRadius: '50%',
-            borderLeftColor: '#2563eb',
+            borderLeftColor: '#6B1B71',
             animation: 'spin 1s linear infinite'
           }} />
-          <span style={{ color: '#64748b', fontSize: '0.85rem' }}>Loading alerts feed...</span>
+          <span style={{ color: '#8B8278', fontSize: '0.85rem' }}>Loading alerts feed...</span>
         </div>
       ) : notifications.length === 0 ? (
-        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#8B8278', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
           <Bell size={48} style={{ color: '#cbd5e1' }} />
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#334155' }}>Your notification feed is empty</h3>
-            <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '0.25rem' }}>We'll notify you here when important events happen.</p>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#4a1a50' }}>Your notification feed is empty</h3>
+            <p style={{ fontSize: '0.9rem', color: '#8B8278', marginTop: '0.25rem' }}>We'll notify you here when important events happen.</p>
           </div>
         </div>
       ) : (
@@ -87,8 +87,8 @@ export const NotificationsPage = () => {
               key={notif.notification_id || notif.id || idx}
               style={{
                 backgroundColor: notif.read ? '#ffffff' : '#f0f9ff',
-                border: '1px solid #e2e8f0',
-                borderColor: notif.read ? '#e2e8f0' : '#bfdbfe',
+                border: '1px solid #D8CFC1',
+                borderColor: notif.read ? '#D8CFC1' : '#D8CFC1',
                 borderRadius: '1rem',
                 padding: '1.25rem',
                 display: 'flex',
@@ -104,8 +104,8 @@ export const NotificationsPage = () => {
                   width: '36px',
                   height: '36px',
                   borderRadius: '50%',
-                  backgroundColor: notif.read ? '#f1f5f9' : '#eff6ff',
-                  color: notif.read ? '#64748b' : '#2563eb',
+                  backgroundColor: notif.read ? '#f1f5f9' : '#F5ECDD',
+                  color: notif.read ? '#8B8278' : '#6B1B71',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -117,13 +117,13 @@ export const NotificationsPage = () => {
                 <div>
                   <p style={{ 
                     fontSize: '0.95rem', 
-                    color: '#334155', 
+                    color: '#4a1a50', 
                     fontWeight: notif.read ? 500 : 700,
                     lineHeight: 1.45
                   }}>
                     {notif.message}
                   </p>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.35rem' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#8B8278', display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.35rem' }}>
                     <Clock size={12} /> {formatDate(notif.created_at) || 'Just now'}
                   </span>
                 </div>
@@ -136,8 +136,8 @@ export const NotificationsPage = () => {
                     onClick={() => handleInspectProduct(notif.product_id)}
                     style={{
                       border: '1px solid #cbd5e1',
-                      backgroundColor: '#ffffff',
-                      color: '#475569',
+                      backgroundColor: '#FAF6EA',
+                      color: '#8B8278',
                       borderRadius: '0.5rem',
                       padding: '0.4rem',
                       cursor: 'pointer',
@@ -153,9 +153,9 @@ export const NotificationsPage = () => {
                   <button
                     onClick={() => handleMarkRead(notif.notification_id || notif.id)}
                     style={{
-                      border: '1px solid #bfdbfe',
-                      backgroundColor: '#eff6ff',
-                      color: '#2563eb',
+                      border: '1px solid #D8CFC1',
+                      backgroundColor: '#F5ECDD',
+                      color: '#6B1B71',
                       borderRadius: '0.5rem',
                       padding: '0.4rem',
                       cursor: 'pointer',

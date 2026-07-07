@@ -74,7 +74,7 @@ export const SellerDashboard = () => {
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Greeting Banner */}
       <div style={{
-        background: 'linear-gradient(to right, #0b0f19, #1e293b)',
+        background: 'linear-gradient(to right, #1F1A1D, #2d0a32)',
         padding: '2.5rem',
         borderRadius: '1rem',
         color: '#ffffff',
@@ -90,7 +90,7 @@ export const SellerDashboard = () => {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', fontFamily: "'Outfit', sans-serif", marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
             Seller Workspace
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>
+          <p style={{ color: '#8B8278', fontSize: '0.95rem' }}>
             List your products, check verification statuses, and trigger live 2-minute bidding sessions.
           </p>
         </div>
@@ -128,17 +128,17 @@ export const SellerDashboard = () => {
         }}>
           <AlertTriangle size={20} style={{ flexShrink: 0 }} />
           <span>{error}</span>
-          <button onClick={loadSellerStats} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#2563eb', fontWeight: 700, cursor: 'pointer' }}>Retry</button>
+          <button onClick={loadSellerStats} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#6B1B71', fontWeight: 700, cursor: 'pointer' }}>Retry</button>
         </div>
       )}
 
       {user?.role === 'Dealer' && !dealerPlanActive && (
-        <div className="card" style={{ marginBottom: '2rem', border: '1px solid #bfdbfe', backgroundColor: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+        <div className="card" style={{ marginBottom: '2rem', border: '1px solid #D8CFC1', backgroundColor: '#F5ECDD', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
-            <ShieldCheck size={24} style={{ color: '#2563eb' }} />
+            <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#0f172a' }}>Dealer Monthly Plan</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#475569', fontSize: '0.9rem', fontWeight: 650 }}>₹500/month dealer access plan.</p>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Monthly Plan</h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>₹500/month dealer access plan.</p>
             </div>
           </div>
           <button type="button" onClick={handleActivateDealerPlan} disabled={payingDealerPlan} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
@@ -157,11 +157,11 @@ export const SellerDashboard = () => {
           onClick={() => navigate(`${basePath}/my-listings`)}
           style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer', transition: 'transform 0.15s ease' }}
         >
-          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', color: '#6B1B71', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <ClipboardList size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Total Listings</span>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Total Listings</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : stats.total}</h3>
           </div>
         </div>
@@ -176,7 +176,7 @@ export const SellerDashboard = () => {
             <Sparkles size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Pending Review</span>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Pending Review</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#d97706' }}>{loading ? '...' : stats.pending}</h3>
           </div>
         </div>
@@ -191,7 +191,7 @@ export const SellerDashboard = () => {
             <CheckCircle2 size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Approved</span>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Approved</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#10b981' }}>{loading ? '...' : stats.approved}</h3>
           </div>
         </div>
@@ -206,7 +206,7 @@ export const SellerDashboard = () => {
             <Gavel size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Bidding Live</span>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Bidding Live</span>
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#ef4444' }}>{loading ? '...' : stats.live}</h3>
           </div>
         </div>
@@ -217,12 +217,12 @@ export const SellerDashboard = () => {
           onClick={() => navigate(`${basePath}/my-listings?status=ended`)}
           style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', cursor: 'pointer', transition: 'transform 0.15s ease' }}
         >
-          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#f1f5f9', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#f1f5f9', color: '#8B8278', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Award size={24} />
           </div>
           <div>
-            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Ended</span>
-            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#475569' }}>{loading ? '...' : stats.ended}</h3>
+            <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Ended</span>
+            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#8B8278' }}>{loading ? '...' : stats.ended}</h3>
           </div>
         </div>
       </div>
@@ -232,13 +232,13 @@ export const SellerDashboard = () => {
         
         {/* Helper Instructions panel */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, borderBottom: '1px solid #e2e8f0', paddingBottom: '0.75rem' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, borderBottom: '1px solid #D8CFC1', paddingBottom: '0.75rem' }}>
             Seller Verification Guide
           </h2>
-          <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.6 }}>
+          <p style={{ color: '#8B8278', fontSize: '0.95rem', lineHeight: 1.6 }}>
             To keep our marketplace secure and maintain transparency, all listings uploaded must go through our verification system:
           </p>
-          <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem', color: '#475569' }}>
+          <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem', color: '#8B8278' }}>
             <li><strong>Listing submission:</strong> Select listing type (Car, Bike, Laptop, Mobile), complete specifications, upload media and legally required documents.</li>
             <li><strong>Admin review:</strong> Site managers check documentation completeness and details.</li>
             <li><strong>Approval/Rejection:</strong> Approved items are added to the upcoming roster. Rejected items will show specific review comments.</li>
@@ -255,13 +255,13 @@ export const SellerDashboard = () => {
 
         {/* Dashboard Side Panel */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.75rem' }}>
-            <Award size={18} style={{ color: '#2563eb' }} /> Concluded Sales
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid #D8CFC1', paddingBottom: '0.75rem' }}>
+            <Award size={18} style={{ color: '#6B1B71' }} /> Concluded Sales
           </h2>
           <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
             <Award size={48} style={{ color: '#cbd5e1', marginBottom: '0.5rem' }} />
-            <h4 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{stats.ended}</h4>
-            <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>Finished live bids transactions</p>
+            <h4 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1F1A1D' }}>{stats.ended}</h4>
+            <p style={{ fontSize: '0.8rem', color: '#8B8278', margin: 0 }}>Finished live bids transactions</p>
           </div>
         </div>
 

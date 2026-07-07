@@ -512,8 +512,8 @@ export const Topbar = ({ onToggleSidebar }) => {
     <>
       <header style={{
         height: '70px',
-        backgroundColor: '#ffffff',
-        borderBottom: '1px solid #e2e8f0',
+        backgroundColor: '#FAF6EA',
+        borderBottom: '1px solid #D8CFC1',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -530,14 +530,14 @@ export const Topbar = ({ onToggleSidebar }) => {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              color: '#475569',
+              color: '#8B8278',
               display: 'none', // Hidden on desktop
             }}
             className="mobile-toggle"
           >
             <Menu size={24} />
           </button>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#0b0f19' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#1F1A1D' }}>
             DealsKB C2C Portal
           </h2>
         </div>
@@ -554,7 +554,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: '#475569',
+                  color: '#8B8278',
                   position: 'relative',
                   padding: '0.35rem',
                   display: 'flex',
@@ -597,10 +597,10 @@ export const Topbar = ({ onToggleSidebar }) => {
                   right: '24px',
                   top: '84px',
                   width: 'min(720px, calc(100vw - 2rem))',
-                  backgroundColor: '#ffffff',
+                  backgroundColor: '#FAF6EA',
                   borderRadius: '1rem',
                   boxShadow: '0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.15)',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #D8CFC1',
                   overflow: 'hidden',
                   zIndex: 9000,
                   display: 'flex',
@@ -609,18 +609,18 @@ export const Topbar = ({ onToggleSidebar }) => {
                 }}>
                   {activeRequest && (
                     <>
-                      <div style={{ padding: '0.95rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#0f172a', color: '#ffffff', gap: '1rem' }}>
+                      <div style={{ padding: '0.95rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1F1A1D', color: '#ffffff', gap: '1rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
                           <button
                             type="button"
                             onClick={() => setActiveRequest(null)}
-                            style={{ background: 'none', border: 'none', color: '#bfdbfe', cursor: 'pointer', display: 'flex', padding: '0.15rem' }}
+                            style={{ background: 'none', border: 'none', color: '#D8CFC1', cursor: 'pointer', display: 'flex', padding: '0.15rem' }}
                             title="Back to chats"
                           >
                             <ArrowLeft size={20} />
                           </button>
                           <div style={{ minWidth: 0 }}>
-                            <span style={{ fontSize: '0.65rem', color: '#93c5fd', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
+                            <span style={{ fontSize: '0.65rem', color: '#D8CFC1', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
                               Purchase Request
                             </span>
                             <strong style={{ fontSize: '0.95rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
@@ -651,36 +651,36 @@ export const Topbar = ({ onToggleSidebar }) => {
                           </button>
                           <button
                             onClick={() => { setActiveRequest(null); setShowChats(false); }}
-                            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', padding: '0.2rem' }}
+                            style={{ background: 'none', border: 'none', color: '#8B8278', cursor: 'pointer', display: 'flex', padding: '0.2rem' }}
                           >
                             <X size={18} />
                           </button>
                         </div>
                       </div>
 
-                      <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#f8fafc', minHeight: '420px' }}>
-                        <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', backgroundColor: '#ffffff', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#475569' }}>
-                          <div><strong style={{ color: '#0f172a' }}>Buyer:</strong> {activeRequest.buyer_name || 'Buyer'}</div>
-                          <div><strong style={{ color: '#0f172a' }}>Winning bid:</strong> ₹{activeRequest.winning_bid_amount}</div>
-                          <div><strong style={{ color: '#0f172a' }}>Status:</strong> {activeRequest.status}</div>
-                          <div><strong style={{ color: '#0f172a' }}>Created:</strong> {formatChatDateTime(activeRequest.created_at) || 'Just now'}</div>
+                      <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#FAF6EA', minHeight: '420px' }}>
+                        <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
+                          <div><strong style={{ color: '#1F1A1D' }}>Buyer:</strong> {activeRequest.buyer_name || 'Buyer'}</div>
+                          <div><strong style={{ color: '#1F1A1D' }}>Winning bid:</strong> ₹{activeRequest.winning_bid_amount}</div>
+                          <div><strong style={{ color: '#1F1A1D' }}>Status:</strong> {activeRequest.status}</div>
+                          <div><strong style={{ color: '#1F1A1D' }}>Created:</strong> {formatChatDateTime(activeRequest.created_at) || 'Just now'}</div>
                         </div>
 
                         <div style={{ alignSelf: user?.role?.toLowerCase() === 'buyer' ? 'flex-end' : 'flex-start', maxWidth: '82%' }}>
-                          <div style={{ padding: '0.75rem 0.9rem', borderRadius: '0.85rem', borderBottomRightRadius: user?.role?.toLowerCase() === 'buyer' ? 0 : '0.85rem', borderBottomLeftRadius: user?.role?.toLowerCase() === 'buyer' ? '0.85rem' : 0, backgroundColor: user?.role?.toLowerCase() === 'buyer' ? '#2563eb' : '#ffffff', color: user?.role?.toLowerCase() === 'buyer' ? '#ffffff' : '#0f172a', border: user?.role?.toLowerCase() === 'buyer' ? 'none' : '1px solid #e2e8f0', lineHeight: 1.45, fontSize: '0.85rem' }}>
+                          <div style={{ padding: '0.75rem 0.9rem', borderRadius: '0.85rem', borderBottomRightRadius: user?.role?.toLowerCase() === 'buyer' ? 0 : '0.85rem', borderBottomLeftRadius: user?.role?.toLowerCase() === 'buyer' ? '0.85rem' : 0, backgroundColor: user?.role?.toLowerCase() === 'buyer' ? '#6B1B71' : '#ffffff', color: user?.role?.toLowerCase() === 'buyer' ? '#ffffff' : '#1F1A1D', border: user?.role?.toLowerCase() === 'buyer' ? 'none' : '1px solid #D8CFC1', lineHeight: 1.45, fontSize: '0.85rem' }}>
                             {activeRequest.buyer_message}
                           </div>
-                          <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '0.25rem', display: 'block', textAlign: user?.role?.toLowerCase() === 'buyer' ? 'right' : 'left' }}>
+                          <span style={{ fontSize: '0.65rem', color: '#8B8278', marginTop: '0.25rem', display: 'block', textAlign: user?.role?.toLowerCase() === 'buyer' ? 'right' : 'left' }}>
                             {formatChatDateTime(activeRequest.created_at)}
                           </span>
                         </div>
 
                         {activeRequest.seller_response_message && (
                           <div style={{ alignSelf: user?.role?.toLowerCase() === 'buyer' ? 'flex-start' : 'flex-end', maxWidth: '82%' }}>
-                            <div style={{ padding: '0.75rem 0.9rem', borderRadius: '0.85rem', borderBottomRightRadius: user?.role?.toLowerCase() === 'buyer' ? '0.85rem' : 0, borderBottomLeftRadius: user?.role?.toLowerCase() === 'buyer' ? 0 : '0.85rem', backgroundColor: user?.role?.toLowerCase() === 'buyer' ? '#ffffff' : '#2563eb', color: user?.role?.toLowerCase() === 'buyer' ? '#0f172a' : '#ffffff', border: user?.role?.toLowerCase() === 'buyer' ? '1px solid #e2e8f0' : 'none', lineHeight: 1.45, fontSize: '0.85rem' }}>
+                            <div style={{ padding: '0.75rem 0.9rem', borderRadius: '0.85rem', borderBottomRightRadius: user?.role?.toLowerCase() === 'buyer' ? '0.85rem' : 0, borderBottomLeftRadius: user?.role?.toLowerCase() === 'buyer' ? 0 : '0.85rem', backgroundColor: user?.role?.toLowerCase() === 'buyer' ? '#ffffff' : '#6B1B71', color: user?.role?.toLowerCase() === 'buyer' ? '#1F1A1D' : '#ffffff', border: user?.role?.toLowerCase() === 'buyer' ? '1px solid #D8CFC1' : 'none', lineHeight: 1.45, fontSize: '0.85rem' }}>
                               {activeRequest.seller_response_message}
                             </div>
-                            <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '0.25rem', display: 'block', textAlign: user?.role?.toLowerCase() === 'buyer' ? 'left' : 'right' }}>
+                            <span style={{ fontSize: '0.65rem', color: '#8B8278', marginTop: '0.25rem', display: 'block', textAlign: user?.role?.toLowerCase() === 'buyer' ? 'left' : 'right' }}>
                               {formatChatDateTime(activeRequest.responded_at || activeRequest.updated_at)}
                             </span>
                           </div>
@@ -702,18 +702,18 @@ export const Topbar = ({ onToggleSidebar }) => {
 
                   {activeChat && (
                     <>
-                      <div style={{ padding: '0.95rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#0f172a', color: '#ffffff', gap: '1rem' }}>
+                      <div style={{ padding: '0.95rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1F1A1D', color: '#ffffff', gap: '1rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
                           <button
                             type="button"
                             onClick={() => setActiveChat(null)}
-                            style={{ background: 'none', border: 'none', color: '#bfdbfe', cursor: 'pointer', display: 'flex', padding: '0.15rem' }}
+                            style={{ background: 'none', border: 'none', color: '#D8CFC1', cursor: 'pointer', display: 'flex', padding: '0.15rem' }}
                             title="Back to chats"
                           >
                             <ArrowLeft size={20} />
                           </button>
                           <div style={{ minWidth: 0 }}>
-                            <span style={{ fontSize: '0.65rem', color: '#93c5fd', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
+                            <span style={{ fontSize: '0.65rem', color: '#D8CFC1', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
                               Chat Conversation
                             </span>
                             <strong style={{ fontSize: '0.95rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
@@ -732,26 +732,26 @@ export const Topbar = ({ onToggleSidebar }) => {
                           </button>
                           <button
                             onClick={() => { setActiveChat(null); setShowChats(false); }}
-                            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', padding: '0.2rem' }}
+                            style={{ background: 'none', border: 'none', color: '#8B8278', cursor: 'pointer', display: 'flex', padding: '0.2rem' }}
                           >
                             <X size={18} />
                           </button>
                         </div>
                       </div>
 
-                      <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', backgroundColor: '#f8fafc', minHeight: '420px' }}>
-                        <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', backgroundColor: '#ffffff', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#475569' }}>
-                          <div><strong style={{ color: '#0f172a' }}>Listing:</strong> {getConversationTitle(activeChat)}</div>
-                          <div><strong style={{ color: '#0f172a' }}>Participant:</strong> {getConversationParticipant(activeChat)}</div>
-                          <div><strong style={{ color: '#0f172a' }}>Status:</strong> OPEN</div>
-                          <div><strong style={{ color: '#0f172a' }}>Updated:</strong> {formatChatDateTime(activeChat.updated_at || activeChat.created_at) || 'Just now'}</div>
+                      <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', backgroundColor: '#FAF6EA', minHeight: '420px' }}>
+                        <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
+                          <div><strong style={{ color: '#1F1A1D' }}>Listing:</strong> {getConversationTitle(activeChat)}</div>
+                          <div><strong style={{ color: '#1F1A1D' }}>Participant:</strong> {getConversationParticipant(activeChat)}</div>
+                          <div><strong style={{ color: '#1F1A1D' }}>Status:</strong> OPEN</div>
+                          <div><strong style={{ color: '#1F1A1D' }}>Updated:</strong> {formatChatDateTime(activeChat.updated_at || activeChat.created_at) || 'Just now'}</div>
                         </div>
                         {loadingMessages ? (
                           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                            <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: '#2563eb' }} />
+                            <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: '#6B1B71' }} />
                           </div>
                         ) : (!Array.isArray(messages) || messages.length === 0) ? (
-                          <div style={{ textAlign: 'center', color: '#64748b', fontSize: '0.8rem', padding: '2rem 1rem' }}>
+                          <div style={{ textAlign: 'center', color: '#8B8278', fontSize: '0.8rem', padding: '2rem 1rem' }}>
                             No messages yet. Send a message to start the conversation!
                           </div>
                         ) : (
@@ -759,12 +759,12 @@ export const Topbar = ({ onToggleSidebar }) => {
                             const isMe = user && msg && (msg.sender_id === user.user_id || msg.sender_id === user.id);
                             return (
                               <div key={msg?.id || index} style={{ alignSelf: isMe ? 'flex-end' : 'flex-start', maxWidth: '80%', display: 'flex', flexDirection: 'column', alignItems: isMe ? 'flex-end' : 'flex-start' }}>
-                                <div style={{ padding: '0.65rem 0.85rem', borderRadius: '0.75rem', borderBottomRightRadius: isMe ? 0 : '0.75rem', borderBottomLeftRadius: isMe ? '0.75rem' : 0, backgroundColor: isMe ? '#2563eb' : '#ffffff', color: isMe ? '#ffffff' : '#0f172a', fontSize: '0.85rem', fontWeight: 500, boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', border: isMe ? 'none' : '1px solid #e2e8f0', wordBreak: 'break-word', textAlign: 'left' }}>
+                                <div style={{ padding: '0.65rem 0.85rem', borderRadius: '0.75rem', borderBottomRightRadius: isMe ? 0 : '0.75rem', borderBottomLeftRadius: isMe ? '0.75rem' : 0, backgroundColor: isMe ? '#6B1B71' : '#ffffff', color: isMe ? '#ffffff' : '#1F1A1D', fontSize: '0.85rem', fontWeight: 500, boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', border: isMe ? 'none' : '1px solid #D8CFC1', wordBreak: 'break-word', textAlign: 'left' }}>
                                   {msg?.message || ''}
                                 </div>
-                                <span style={{ fontSize: '0.6rem', color: '#94a3b8', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                <span style={{ fontSize: '0.6rem', color: '#8B8278', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                   <span>{formatChatDateTime(msg?.created_at)}</span>
-                                  {isMe && <span title={msg?.is_read ? 'Read' : 'Sent'} style={{ color: msg?.is_read ? '#2563eb' : '#94a3b8', fontWeight: 900, letterSpacing: '-0.08em' }}>✓✓</span>}
+                                  {isMe && <span title={msg?.is_read ? 'Read' : 'Sent'} style={{ color: msg?.is_read ? '#6B1B71' : '#8B8278', fontWeight: 900, letterSpacing: '-0.08em' }}>✓✓</span>}
                                 </span>
                               </div>
                             );
@@ -773,9 +773,9 @@ export const Topbar = ({ onToggleSidebar }) => {
                         <div ref={messagesEndRef} />
                       </div>
 
-                      <form onSubmit={handleSendMessage} style={{ padding: '0.75rem', borderTop: '1px solid #cbd5e1', display: 'flex', gap: '0.5rem', backgroundColor: '#ffffff' }}>
-                        <input type="text" placeholder="Type your message..." value={newMessage} onChange={(e) => setNewMessage(e.target.value)} style={{ flex: 1, padding: '0.5rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '9999px', fontSize: '0.85rem', outline: 'none', backgroundColor: '#f8fafc' }} />
-                        <button type="submit" disabled={!newMessage.trim()} style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: newMessage.trim() ? '#2563eb' : '#eff6ff', color: newMessage.trim() ? '#ffffff' : '#94a3b8', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: newMessage.trim() ? 'pointer' : 'default', transition: 'all 0.15s ease' }}>
+                      <form onSubmit={handleSendMessage} style={{ padding: '0.75rem', borderTop: '1px solid #cbd5e1', display: 'flex', gap: '0.5rem', backgroundColor: '#FAF6EA' }}>
+                        <input type="text" placeholder="Type your message..." value={newMessage} onChange={(e) => setNewMessage(e.target.value)} style={{ flex: 1, padding: '0.5rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '9999px', fontSize: '0.85rem', outline: 'none', backgroundColor: '#FAF6EA' }} />
+                        <button type="submit" disabled={!newMessage.trim()} style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: newMessage.trim() ? '#6B1B71' : '#F5ECDD', color: newMessage.trim() ? '#ffffff' : '#8B8278', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: newMessage.trim() ? 'pointer' : 'default', transition: 'all 0.15s ease' }}>
                           <Send size={16} />
                         </button>
                       </form>
@@ -787,17 +787,17 @@ export const Topbar = ({ onToggleSidebar }) => {
                   {/* Dropdown Header */}
                   <div style={{
                     padding: '1rem 1.15rem',
-                    borderBottom: '1px solid #e2e8f0',
-                    backgroundColor: '#f8fafc',
+                    borderBottom: '1px solid #D8CFC1',
+                    backgroundColor: '#FAF6EA',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
                     <div>
-                      <span style={{ fontSize: '1rem', fontWeight: 900, color: '#0f172a', display: 'block' }}>
+                      <span style={{ fontSize: '1rem', fontWeight: 900, color: '#1F1A1D', display: 'block' }}>
                         Chats & Conversations
                       </span>
-                      <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700 }}>
+                      <span style={{ fontSize: '0.72rem', color: '#8B8278', fontWeight: 700 }}>
                         Purchase requests and active chats
                       </span>
                     </div>
@@ -806,7 +806,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                         type="button"
                         onClick={fetchChats}
                         disabled={loadingChats}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', display: 'flex', padding: '0.35rem' }}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278', display: 'flex', padding: '0.35rem' }}
                         title="Refresh chats"
                       >
                         <RefreshCw size={16} style={{ animation: loadingChats ? 'spin 1s linear infinite' : 'none' }} />
@@ -814,7 +814,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                       <button
                         type="button"
                         onClick={() => setShowChats(false)}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', display: 'flex', padding: '0.35rem' }}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278', display: 'flex', padding: '0.35rem' }}
                         title="Close chats"
                       >
                         <X size={18} />
@@ -825,7 +825,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                   {/* Chat List */}
                   <div style={{ overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', minHeight: '420px' }}>
                     {(!Array.isArray(conversations) || conversations.length === 0) && (!Array.isArray(chatRequests) || chatRequests.length === 0) ? (
-                      <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#64748b', fontSize: '0.85rem' }}>
+                      <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#8B8278', fontSize: '0.85rem' }}>
                         No conversations yet
                       </div>
                     ) : (
@@ -856,18 +856,18 @@ export const Topbar = ({ onToggleSidebar }) => {
                                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem', alignItems: 'flex-start' }}>
                                   <div style={{ minWidth: 0 }}>
                                     <span style={{ fontSize: '0.78rem', color: statusColor, fontWeight: 800 }}>Purchase Request</span>
-                                    <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0f172a', display: 'block', marginTop: '0.15rem', textDecoration: 'underline' }}>{req.listing_name}</span>
+                                    <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1F1A1D', display: 'block', marginTop: '0.15rem', textDecoration: 'underline' }}>{req.listing_name}</span>
                                   </div>
                                   <span style={{ fontSize: '0.65rem', color: statusColor, fontWeight: 900, border: `1px solid ${borderColor}`, borderRadius: '999px', padding: '0.15rem 0.45rem', flexShrink: 0 }}>
                                     {status || 'PENDING'}
                                   </span>
                                 </div>
-                                <span style={{ fontSize: '0.75rem', color: '#475569', fontWeight: 600 }}>
+                                <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>
                                   Buyer: {req.buyer_name} | Bid: ₹{req.winning_bid_amount}
                                 </span>
                                 <span style={{
                                   fontSize: '0.75rem',
-                                  color: '#334155',
+                                  color: '#4a1a50',
                                   lineHeight: 1.45,
                                   display: 'block',
                                   whiteSpace: 'normal'
@@ -877,7 +877,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                 {req.seller_response_message && (
                                   <span style={{
                                     fontSize: '0.75rem',
-                                    color: '#64748b',
+                                    color: '#8B8278',
                                     lineHeight: 1.45,
                                     display: 'block',
                                     whiteSpace: 'normal'
@@ -914,7 +914,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                           border: '1px solid #fecaca',
                                           borderRadius: '0.45rem',
                                           padding: '0.45rem',
-                                          backgroundColor: '#ffffff',
+                                          backgroundColor: '#FAF6EA',
                                           color: '#dc2626',
                                           fontWeight: 800,
                                           cursor: 'pointer'
@@ -933,7 +933,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                         border: 'none',
                                         borderRadius: '0.45rem',
                                         padding: '0.45rem',
-                                        backgroundColor: '#2563eb',
+                                        backgroundColor: '#6B1B71',
                                         color: '#ffffff',
                                         fontWeight: 800,
                                         cursor: 'pointer'
@@ -950,7 +950,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                       border: '1px solid #fecaca',
                                       borderRadius: '0.45rem',
                                       padding: '0.45rem 0.7rem',
-                                      backgroundColor: '#ffffff',
+                                      backgroundColor: '#FAF6EA',
                                       color: '#dc2626',
                                       fontWeight: 800,
                                       cursor: 'pointer'
@@ -979,7 +979,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                 cursor: 'pointer'
                               }}
                             >
-                              <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0f172a', textDecoration: 'underline' }}>{req.listing_name}</span>
+                              <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1F1A1D', textDecoration: 'underline' }}>{req.listing_name}</span>
                               <span style={{
                                 fontSize: '0.75rem',
                                 color: req.status === 'REJECTED' ? '#b91c1c' : req.status === 'ACCEPTED' ? '#166534' : '#b45309',
@@ -994,7 +994,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                               {req.seller_response_message && (
                                 <span style={{
                                   fontSize: '0.75rem',
-                                  color: '#64748b',
+                                  color: '#8B8278',
                                   lineHeight: 1.35,
                                   display: 'block',
                                   whiteSpace: 'normal'
@@ -1012,7 +1012,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                       border: 'none',
                                       borderRadius: '0.45rem',
                                       padding: '0.45rem',
-                                      backgroundColor: '#2563eb',
+                                      backgroundColor: '#6B1B71',
                                       color: '#ffffff',
                                       fontWeight: 800,
                                       cursor: 'pointer'
@@ -1029,7 +1029,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                     border: '1px solid #fecaca',
                                     borderRadius: '0.45rem',
                                     padding: '0.45rem 0.7rem',
-                                    backgroundColor: '#ffffff',
+                                    backgroundColor: '#FAF6EA',
                                     color: '#dc2626',
                                     fontWeight: 800,
                                     cursor: 'pointer'
@@ -1050,8 +1050,8 @@ export const Topbar = ({ onToggleSidebar }) => {
                               onClick={() => handleOpenChat(conv)}
                               style={{
                                 padding: '0.85rem 1rem',
-                                borderBottom: hasUnread ? '1px solid #bfdbfe' : '1px solid #f1f5f9',
-                                backgroundColor: hasUnread ? '#eff6ff' : '#ffffff',
+                                borderBottom: hasUnread ? '1px solid #D8CFC1' : '1px solid #f1f5f9',
+                                backgroundColor: hasUnread ? '#F5ECDD' : '#ffffff',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -1059,15 +1059,15 @@ export const Topbar = ({ onToggleSidebar }) => {
                                 position: 'relative',
                                 transition: 'background-color 0.15s ease'
                               }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
-                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = hasUnread ? '#eff6ff' : '#ffffff'}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FAF6EA'}
+                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = hasUnread ? '#F5ECDD' : '#ffffff'}
                             >
                               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
                                 <div style={{ minWidth: 0 }}>
-                                  <span style={{ fontSize: '0.72rem', color: hasUnread ? '#dc2626' : '#2563eb', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
+                                  <span style={{ fontSize: '0.72rem', color: hasUnread ? '#dc2626' : '#6B1B71', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
                                     Chat Conversation
                                   </span>
-                                  <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#0f172a', display: 'block', marginTop: '0.1rem', textDecoration: 'underline', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                  <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1F1A1D', display: 'block', marginTop: '0.1rem', textDecoration: 'underline', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                     {getConversationTitle(conv)}
                                   </span>
                                 </div>
@@ -1083,7 +1083,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                   }} />
                                 )}
                               </div>
-                              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
+                              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>
                                 Participant: {getConversationParticipant(conv)}
                               </span>
                               {hasUnread && (
@@ -1093,7 +1093,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                               )}
                               <span style={{
                                 fontSize: '0.75rem',
-                                color: hasUnread ? '#1e3a8a' : '#94a3b8',
+                                color: hasUnread ? '#1e3a8a' : '#8B8278',
                                 fontWeight: hasUnread ? 700 : 500,
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
@@ -1123,7 +1123,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: '#475569',
+                  color: '#8B8278',
                   position: 'relative',
                   padding: '0.35rem',
                   display: 'flex',
@@ -1166,10 +1166,10 @@ export const Topbar = ({ onToggleSidebar }) => {
                   right: 0,
                   top: '40px',
                   width: '320px',
-                  backgroundColor: '#ffffff',
+                  backgroundColor: '#FAF6EA',
                   borderRadius: '1rem',
                   boxShadow: '0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.15)',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #D8CFC1',
                   overflow: 'hidden',
                   zIndex: 100,
                   display: 'flex',
@@ -1179,20 +1179,20 @@ export const Topbar = ({ onToggleSidebar }) => {
                   {/* Dropdown Header */}
                   <div style={{
                     padding: '0.85rem 1rem',
-                    borderBottom: '1px solid #e2e8f0',
-                    backgroundColor: '#f8fafc',
+                    borderBottom: '1px solid #D8CFC1',
+                    backgroundColor: '#FAF6EA',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0f172a' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1F1A1D' }}>
                       Notifications ({unreadCount} unread)
                     </span>
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                       <button
                         onClick={fetchNotifs}
                         disabled={loadingNotifs}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', display: 'flex', padding: '0.2rem' }}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278', display: 'flex', padding: '0.2rem' }}
                         title="Refresh notifications"
                       >
                         <RefreshCw size={14} style={{ animation: loadingNotifs ? 'spin 1s linear infinite' : 'none' }} />
@@ -1219,7 +1219,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                   {/* Dropdown List */}
                   <div style={{ overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
                     {notifications.length === 0 ? (
-                      <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#64748b', fontSize: '0.8rem' }}>
+                      <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#8B8278', fontSize: '0.8rem' }}>
                         No notifications logs found.
                       </div>
                     ) : (
@@ -1234,7 +1234,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                           style={{
                             padding: '0.85rem 1rem',
                             borderBottom: '1px solid #f1f5f9',
-                            backgroundColor: notif.is_read ? '#ffffff' : '#eff6ff',
+                            backgroundColor: notif.is_read ? '#ffffff' : '#F5ECDD',
                             cursor: 'pointer',
                             display: 'flex',
                             justifyContent: 'space-between',
@@ -1242,8 +1242,8 @@ export const Topbar = ({ onToggleSidebar }) => {
                             position: 'relative',
                             transition: 'background-color 0.15s ease'
                           }}
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = notif.is_read ? '#ffffff' : '#eff6ff'}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FAF6EA'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = notif.is_read ? '#ffffff' : '#F5ECDD'}
                         >
                           {/* Unread indicator dot */}
                           {!notif.is_read && (
@@ -1255,20 +1255,20 @@ export const Topbar = ({ onToggleSidebar }) => {
                               width: '6px',
                               height: '6px',
                               borderRadius: '50%',
-                              backgroundColor: '#2563eb'
+                              backgroundColor: '#6B1B71'
                             }} />
                           )}
                           <div style={{ flex: 1, textAlign: 'left', paddingLeft: '0.25rem' }}>
                             <p style={{
                               margin: 0,
                               fontSize: '0.8rem',
-                              color: notif.is_read ? '#475569' : '#0f172a',
+                              color: notif.is_read ? '#8B8278' : '#1F1A1D',
                               fontWeight: notif.is_read ? 500 : 700,
                               lineHeight: 1.35
                             }}>
                               {notif.message}
                             </p>
-                            <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '0.25rem', display: 'inline-block' }}>
+                            <span style={{ fontSize: '0.65rem', color: '#8B8278', marginTop: '0.25rem', display: 'inline-block' }}>
                               {notif.created_at ? new Date(notif.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'}
                             </span>
                           </div>
@@ -1277,14 +1277,14 @@ export const Topbar = ({ onToggleSidebar }) => {
                             style={{
                               background: 'none',
                               border: 'none',
-                              color: '#94a3b8',
+                              color: '#8B8278',
                               cursor: 'pointer',
                               padding: '0.2rem',
                               alignSelf: 'flex-start',
                               display: 'flex'
                             }}
                             onMouseEnter={(e) => e.currentTarget.style.color = '#ef4444'}
-                            onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#8B8278'}
                             title="Delete notification"
                           >
                             <Trash2 size={14} />
@@ -1310,22 +1310,22 @@ export const Topbar = ({ onToggleSidebar }) => {
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                backgroundColor: '#eff6ff',
-                color: '#2563eb',
+                backgroundColor: '#F5ECDD',
+                color: '#6B1B71',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 700,
                 fontSize: '0.9rem',
-                border: '1.5px solid #2563eb'
+                border: '1.5px solid #6B1B71'
               }}>
                 {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }} className="user-text-wrapper">
-                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0f172a' }}>{user.name}</span>
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1F1A1D' }}>{user.name}</span>
                 <span style={{ 
                   fontSize: '0.75rem', 
-                  color: user.role?.toLowerCase() === 'admin' ? '#ef4444' : user.role?.toLowerCase() === 'seller' ? '#10b981' : '#2563eb',
+                  color: user.role?.toLowerCase() === 'admin' ? '#ef4444' : user.role?.toLowerCase() === 'seller' ? '#10b981' : '#6B1B71',
                   fontWeight: 700
                 }}>
                   {user.role}
@@ -1345,8 +1345,8 @@ export const Topbar = ({ onToggleSidebar }) => {
                   gap: '0.5rem',
                   padding: '0.5rem 1rem',
                   borderRadius: '0.5rem',
-                  border: '1px solid #e2e8f0',
-                  backgroundColor: '#ffffff',
+                  border: '1px solid #D8CFC1',
+                  backgroundColor: '#FAF6EA',
                   color: '#ef4444',
                   fontFamily: "'Outfit', sans-serif",
                   fontWeight: 600,
@@ -1360,7 +1360,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = '#ffffff';
-                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.borderColor = '#D8CFC1';
                 }}
               >
                 <LogOut size={16} />
@@ -1396,8 +1396,8 @@ export const Topbar = ({ onToggleSidebar }) => {
                 <button
                   onClick={() => setShowConfirmLogout(false)}
                   style={{
-                    backgroundColor: '#ffffff',
-                    color: '#475569',
+                    backgroundColor: '#FAF6EA',
+                    color: '#8B8278',
                     border: '1px solid #cbd5e1',
                     borderRadius: '0.25rem',
                     padding: '0.2rem',
@@ -1429,12 +1429,12 @@ export const Topbar = ({ onToggleSidebar }) => {
           fontFamily: "'Plus Jakarta Sans', sans-serif"
         }}>
           <div style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1.25rem',
             width: '100%',
             maxWidth: '500px',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid #D8CFC1',
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column'
@@ -1442,19 +1442,19 @@ export const Topbar = ({ onToggleSidebar }) => {
             {/* Modal Header */}
             <div style={{
               padding: '1.25rem 1.5rem',
-              borderBottom: '1px solid #e2e8f0',
+              borderBottom: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: '#f8fafc'
+              backgroundColor: '#FAF6EA'
             }}>
               <div>
                 <span className="badge badge-approved" style={{ fontSize: '0.65rem' }}>Personal Settings</span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.15rem 0 0 0', color: '#0f172a' }}>Update Profile</h3>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.15rem 0 0 0', color: '#1F1A1D' }}>Update Profile</h3>
               </div>
               <button 
                 onClick={() => setShowProfileModal(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278' }}
               >
                 <X size={20} />
               </button>
@@ -1503,7 +1503,7 @@ export const Topbar = ({ onToggleSidebar }) => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Full Name *</label>
                 <div style={{ position: 'relative' }}>
-                  <User size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                  <User size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="text"
                     className="form-control"
@@ -1520,7 +1520,7 @@ export const Topbar = ({ onToggleSidebar }) => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Email Address *</label>
                 <div style={{ position: 'relative' }}>
-                  <Mail size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                  <Mail size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="email"
                     className="form-control"
@@ -1537,7 +1537,7 @@ export const Topbar = ({ onToggleSidebar }) => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Phone / Mobile Number</label>
                 <div style={{ position: 'relative' }}>
-                  <Phone size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                  <Phone size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="text"
                     className="form-control"
@@ -1553,7 +1553,7 @@ export const Topbar = ({ onToggleSidebar }) => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">New Password (leave blank to keep unchanged)</label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                  <Lock size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="password"
                     className="form-control"
@@ -1569,7 +1569,7 @@ export const Topbar = ({ onToggleSidebar }) => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Confirm New Password</label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                  <Lock size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="password"
                     className="form-control"
@@ -1586,7 +1586,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                 display: 'flex',
                 gap: '1rem',
                 marginTop: '1rem',
-                borderTop: '1px solid #e2e8f0',
+                borderTop: '1px solid #D8CFC1',
                 paddingTop: '1.25rem'
               }}>
                 <button
@@ -1633,26 +1633,26 @@ export const Topbar = ({ onToggleSidebar }) => {
           fontFamily: "'Plus Jakarta Sans', sans-serif"
         }}>
           <div style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1rem',
             width: '100%',
             maxWidth: '400px',
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid #D8CFC1',
             overflow: 'hidden'
           }}>
             <div style={{ padding: '1.25rem 1.5rem' }}>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#1F1A1D' }}>
                 {confirmModal.title}
               </h4>
-              <p style={{ fontSize: '0.875rem', color: '#475569', marginTop: '0.5rem', lineHeight: 1.5, marginBlockEnd: 0 }}>
+              <p style={{ fontSize: '0.875rem', color: '#8B8278', marginTop: '0.5rem', lineHeight: 1.5, marginBlockEnd: 0 }}>
                 {confirmModal.message}
               </p>
             </div>
             <div style={{
               padding: '0.85rem 1.5rem',
-              backgroundColor: '#f8fafc',
-              borderTop: '1px solid #e2e8f0',
+              backgroundColor: '#FAF6EA',
+              borderTop: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '0.75rem'
@@ -1697,24 +1697,24 @@ export const Topbar = ({ onToggleSidebar }) => {
           <form
             onSubmit={handleSubmitChatReport}
             style={{
-              backgroundColor: '#ffffff',
+              backgroundColor: '#FAF6EA',
               borderRadius: '1rem',
               width: '100%',
               maxWidth: '430px',
               boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)',
-              border: '1px solid #e2e8f0',
+              border: '1px solid #D8CFC1',
               overflow: 'hidden'
             }}
           >
             <div style={{ padding: '1.25rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{reportContext ? 'Report Request' : 'Report Chat'}</h4>
-                <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.35rem 0 0' }}>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#1F1A1D' }}>{reportContext ? 'Report Request' : 'Report Chat'}</h4>
+                <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: '0.35rem 0 0' }}>
                   Admin will review this {reportContext ? 'request' : 'chat'} and the latest context.
                 </p>
               </div>
 
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.85rem', fontWeight: 800, color: '#334155' }}>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.85rem', fontWeight: 800, color: '#4a1a50' }}>
                 Issue Type
                 <select
                   className="form-control"
@@ -1729,7 +1729,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                 </select>
               </label>
 
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.85rem', fontWeight: 800, color: '#334155' }}>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.85rem', fontWeight: 800, color: '#4a1a50' }}>
                 Details
                 <textarea
                   className="form-control"
@@ -1744,8 +1744,8 @@ export const Topbar = ({ onToggleSidebar }) => {
 
             <div style={{
               padding: '0.85rem 1.5rem',
-              backgroundColor: '#f8fafc',
-              borderTop: '1px solid #e2e8f0',
+              backgroundColor: '#FAF6EA',
+              borderTop: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '0.75rem'
@@ -1791,16 +1791,16 @@ export const Topbar = ({ onToggleSidebar }) => {
           zIndex: 9999,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FAF6EA',
           borderRadius: '1rem',
           boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
           border: '1px solid #cbd5e1',
           overflow: 'hidden',
           fontFamily: "'Plus Jakarta Sans', sans-serif"
         }}>
-          <div style={{ padding: '0.95rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#0f172a', color: '#ffffff', gap: '1rem' }}>
+          <div style={{ padding: '0.95rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1F1A1D', color: '#ffffff', gap: '1rem' }}>
             <div style={{ minWidth: 0 }}>
-              <span style={{ fontSize: '0.65rem', color: '#93c5fd', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
+              <span style={{ fontSize: '0.65rem', color: '#D8CFC1', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
                 Purchase Request
               </span>
               <strong style={{ fontSize: '0.95rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
@@ -1842,38 +1842,38 @@ export const Topbar = ({ onToggleSidebar }) => {
               </button>
               <button
                 onClick={() => setActiveRequest(null)}
-                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', padding: '0.2rem' }}
+                style={{ background: 'none', border: 'none', color: '#8B8278', cursor: 'pointer', display: 'flex', padding: '0.2rem' }}
                 onMouseEnter={(e) => e.currentTarget.style.color = '#ffffff'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#8B8278'}
               >
                 <X size={18} />
               </button>
             </div>
           </div>
 
-          <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#f8fafc' }}>
-            <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', backgroundColor: '#ffffff', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#475569' }}>
-              <div><strong style={{ color: '#0f172a' }}>Buyer:</strong> {activeRequest.buyer_name || 'Buyer'}</div>
-              <div><strong style={{ color: '#0f172a' }}>Winning bid:</strong> ₹{activeRequest.winning_bid_amount}</div>
-              <div><strong style={{ color: '#0f172a' }}>Status:</strong> {activeRequest.status}</div>
-              <div><strong style={{ color: '#0f172a' }}>Created:</strong> {formatChatDateTime(activeRequest.created_at) || 'Just now'}</div>
+          <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#FAF6EA' }}>
+            <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
+              <div><strong style={{ color: '#1F1A1D' }}>Buyer:</strong> {activeRequest.buyer_name || 'Buyer'}</div>
+              <div><strong style={{ color: '#1F1A1D' }}>Winning bid:</strong> ₹{activeRequest.winning_bid_amount}</div>
+              <div><strong style={{ color: '#1F1A1D' }}>Status:</strong> {activeRequest.status}</div>
+              <div><strong style={{ color: '#1F1A1D' }}>Created:</strong> {formatChatDateTime(activeRequest.created_at) || 'Just now'}</div>
             </div>
 
             <div style={{ alignSelf: user?.role?.toLowerCase() === 'buyer' ? 'flex-end' : 'flex-start', maxWidth: '82%' }}>
-              <div style={{ padding: '0.75rem 0.9rem', borderRadius: '0.85rem', borderBottomRightRadius: user?.role?.toLowerCase() === 'buyer' ? 0 : '0.85rem', borderBottomLeftRadius: user?.role?.toLowerCase() === 'buyer' ? '0.85rem' : 0, backgroundColor: user?.role?.toLowerCase() === 'buyer' ? '#2563eb' : '#ffffff', color: user?.role?.toLowerCase() === 'buyer' ? '#ffffff' : '#0f172a', border: user?.role?.toLowerCase() === 'buyer' ? 'none' : '1px solid #e2e8f0', lineHeight: 1.45, fontSize: '0.85rem' }}>
+              <div style={{ padding: '0.75rem 0.9rem', borderRadius: '0.85rem', borderBottomRightRadius: user?.role?.toLowerCase() === 'buyer' ? 0 : '0.85rem', borderBottomLeftRadius: user?.role?.toLowerCase() === 'buyer' ? '0.85rem' : 0, backgroundColor: user?.role?.toLowerCase() === 'buyer' ? '#6B1B71' : '#ffffff', color: user?.role?.toLowerCase() === 'buyer' ? '#ffffff' : '#1F1A1D', border: user?.role?.toLowerCase() === 'buyer' ? 'none' : '1px solid #D8CFC1', lineHeight: 1.45, fontSize: '0.85rem' }}>
                 {activeRequest.buyer_message}
               </div>
-              <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '0.25rem', display: 'block', textAlign: user?.role?.toLowerCase() === 'buyer' ? 'right' : 'left' }}>
+              <span style={{ fontSize: '0.65rem', color: '#8B8278', marginTop: '0.25rem', display: 'block', textAlign: user?.role?.toLowerCase() === 'buyer' ? 'right' : 'left' }}>
                 {formatChatDateTime(activeRequest.created_at)}
               </span>
             </div>
 
             {activeRequest.seller_response_message && (
               <div style={{ alignSelf: user?.role?.toLowerCase() === 'buyer' ? 'flex-start' : 'flex-end', maxWidth: '82%' }}>
-                <div style={{ padding: '0.75rem 0.9rem', borderRadius: '0.85rem', borderBottomRightRadius: user?.role?.toLowerCase() === 'buyer' ? '0.85rem' : 0, borderBottomLeftRadius: user?.role?.toLowerCase() === 'buyer' ? 0 : '0.85rem', backgroundColor: user?.role?.toLowerCase() === 'buyer' ? '#ffffff' : '#2563eb', color: user?.role?.toLowerCase() === 'buyer' ? '#0f172a' : '#ffffff', border: user?.role?.toLowerCase() === 'buyer' ? '1px solid #e2e8f0' : 'none', lineHeight: 1.45, fontSize: '0.85rem' }}>
+                <div style={{ padding: '0.75rem 0.9rem', borderRadius: '0.85rem', borderBottomRightRadius: user?.role?.toLowerCase() === 'buyer' ? '0.85rem' : 0, borderBottomLeftRadius: user?.role?.toLowerCase() === 'buyer' ? 0 : '0.85rem', backgroundColor: user?.role?.toLowerCase() === 'buyer' ? '#ffffff' : '#6B1B71', color: user?.role?.toLowerCase() === 'buyer' ? '#1F1A1D' : '#ffffff', border: user?.role?.toLowerCase() === 'buyer' ? '1px solid #D8CFC1' : 'none', lineHeight: 1.45, fontSize: '0.85rem' }}>
                   {activeRequest.seller_response_message}
                 </div>
-                <span style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '0.25rem', display: 'block', textAlign: user?.role?.toLowerCase() === 'buyer' ? 'left' : 'right' }}>
+                <span style={{ fontSize: '0.65rem', color: '#8B8278', marginTop: '0.25rem', display: 'block', textAlign: user?.role?.toLowerCase() === 'buyer' ? 'left' : 'right' }}>
                   {formatChatDateTime(activeRequest.responded_at || activeRequest.updated_at)}
                 </span>
               </div>
@@ -1905,7 +1905,7 @@ export const Topbar = ({ onToggleSidebar }) => {
           zIndex: 9999,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FAF6EA',
           borderRadius: '1rem',
           boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
           border: '1px solid #cbd5e1',
@@ -1917,11 +1917,11 @@ export const Topbar = ({ onToggleSidebar }) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            backgroundColor: '#0f172a',
+            backgroundColor: '#1F1A1D',
             color: '#ffffff'
           }}>
             <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '1rem' }}>
-              <span style={{ fontSize: '0.65rem', color: '#93c5fd', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
+              <span style={{ fontSize: '0.65rem', color: '#D8CFC1', fontWeight: 900, textTransform: 'uppercase', display: 'block' }}>
                 Chat Conversation
               </span>
               <strong style={{ fontSize: '0.95rem' }}>
@@ -1952,9 +1952,9 @@ export const Topbar = ({ onToggleSidebar }) => {
               </button>
               <button
                 onClick={() => setActiveChat(null)}
-                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', padding: '0.2rem' }}
+                style={{ background: 'none', border: 'none', color: '#8B8278', cursor: 'pointer', display: 'flex', padding: '0.2rem' }}
                 onMouseEnter={(e) => e.currentTarget.style.color = '#ffffff'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#8B8278'}
               >
                 <X size={18} />
               </button>
@@ -1969,20 +1969,20 @@ export const Topbar = ({ onToggleSidebar }) => {
             display: 'flex',
             flexDirection: 'column',
             gap: '0.75rem',
-            backgroundColor: '#f8fafc'
+            backgroundColor: '#FAF6EA'
           }}>
-            <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', backgroundColor: '#ffffff', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#475569' }}>
-              <div><strong style={{ color: '#0f172a' }}>Listing:</strong> {getConversationTitle(activeChat)}</div>
-              <div><strong style={{ color: '#0f172a' }}>Participant:</strong> {getConversationParticipant(activeChat)}</div>
-              <div><strong style={{ color: '#0f172a' }}>Status:</strong> OPEN</div>
-              <div><strong style={{ color: '#0f172a' }}>Updated:</strong> {formatChatDateTime(activeChat.updated_at || activeChat.created_at) || 'Just now'}</div>
+            <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
+              <div><strong style={{ color: '#1F1A1D' }}>Listing:</strong> {getConversationTitle(activeChat)}</div>
+              <div><strong style={{ color: '#1F1A1D' }}>Participant:</strong> {getConversationParticipant(activeChat)}</div>
+              <div><strong style={{ color: '#1F1A1D' }}>Status:</strong> OPEN</div>
+              <div><strong style={{ color: '#1F1A1D' }}>Updated:</strong> {formatChatDateTime(activeChat.updated_at || activeChat.created_at) || 'Just now'}</div>
             </div>
             {loadingMessages ? (
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: '#2563eb' }} />
+                <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: '#6B1B71' }} />
               </div>
             ) : (!Array.isArray(messages) || messages.length === 0) ? (
-              <div style={{ textAlign: 'center', color: '#64748b', fontSize: '0.8rem', padding: '2rem 1rem' }}>
+              <div style={{ textAlign: 'center', color: '#8B8278', fontSize: '0.8rem', padding: '2rem 1rem' }}>
                 No messages yet. Send a message to start the conversation!
               </div>
             ) : (
@@ -2004,18 +2004,18 @@ export const Topbar = ({ onToggleSidebar }) => {
                       borderRadius: '0.75rem',
                       borderBottomRightRadius: isMe ? 0 : '0.75rem',
                       borderBottomLeftRadius: isMe ? '0.75rem' : 0,
-                      backgroundColor: isMe ? '#2563eb' : '#ffffff',
-                      color: isMe ? '#ffffff' : '#0f172a',
+                      backgroundColor: isMe ? '#6B1B71' : '#ffffff',
+                      color: isMe ? '#ffffff' : '#1F1A1D',
                       fontSize: '0.85rem',
                       fontWeight: 500,
                       boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
-                      border: isMe ? 'none' : '1px solid #e2e8f0',
+                      border: isMe ? 'none' : '1px solid #D8CFC1',
                       wordBreak: 'break-word',
                       textAlign: 'left'
                     }}>
                       {msg?.message || ''}
                     </div>
-                    <span style={{ fontSize: '0.6rem', color: '#94a3b8', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <span style={{ fontSize: '0.6rem', color: '#8B8278', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                       <span>
                         {formatChatDateTime(msg?.created_at)}
                       </span>
@@ -2023,7 +2023,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                         <span
                           title={msg?.is_read ? 'Read' : 'Sent'}
                           style={{
-                            color: msg?.is_read ? '#2563eb' : '#94a3b8',
+                            color: msg?.is_read ? '#6B1B71' : '#8B8278',
                             fontWeight: 900,
                             letterSpacing: '-0.08em'
                           }}
@@ -2047,7 +2047,7 @@ export const Topbar = ({ onToggleSidebar }) => {
               borderTop: '1px solid #cbd5e1',
               display: 'flex',
               gap: '0.5rem',
-              backgroundColor: '#ffffff'
+              backgroundColor: '#FAF6EA'
             }}
           >
             <input 
@@ -2062,7 +2062,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                 borderRadius: '9999px',
                 fontSize: '0.85rem',
                 outline: 'none',
-                backgroundColor: '#f8fafc'
+                backgroundColor: '#FAF6EA'
               }}
             />
             <button 
@@ -2072,8 +2072,8 @@ export const Topbar = ({ onToggleSidebar }) => {
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                backgroundColor: newMessage.trim() ? '#2563eb' : '#eff6ff',
-                color: newMessage.trim() ? '#ffffff' : '#94a3b8',
+                backgroundColor: newMessage.trim() ? '#6B1B71' : '#F5ECDD',
+                color: newMessage.trim() ? '#ffffff' : '#8B8278',
                 border: 'none',
                 display: 'flex',
                 alignItems: 'center',

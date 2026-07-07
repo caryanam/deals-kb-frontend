@@ -30,7 +30,7 @@ const HowItWorksSection = () => {
   ];
 
   return (
-    <section id="how-it-works" className="landing-section" style={{ backgroundColor: '#f8fafc' }}>
+    <section id="how-it-works" className="landing-section" style={{ backgroundColor: '#FAF6EA' }}>
       <div className="landing-container">
         
         {/* Title */}

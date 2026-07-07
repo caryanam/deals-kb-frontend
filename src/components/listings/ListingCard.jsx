@@ -38,15 +38,15 @@ export const ListingCard = ({ listing: product }) => {
     if (product.product_type === 'car' || product.product_type === 'bike') {
       return (
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', margin: '0.35rem 0', padding: '0.35rem 0', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#64748b', fontSize: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#8B8278', fontSize: '0.75rem' }}>
             <Calendar size={12} />
             <span>{specs.year || 'N/A'}</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#64748b', fontSize: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#8B8278', fontSize: '0.75rem' }}>
             <Fuel size={12} />
             <span>{specs.fuel_type || 'N/A'}</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#64748b', fontSize: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#8B8278', fontSize: '0.75rem' }}>
             <Gauge size={12} />
             <span>{specs.km_driven ? specs.km_driven.toLocaleString() + ' km' : 'N/A'}</span>
           </div>
@@ -57,16 +57,16 @@ export const ListingCard = ({ listing: product }) => {
       return (
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', margin: '0.35rem 0', padding: '0.35rem 0', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9' }}>
           {specs.processor && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#64748b', fontSize: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#8B8278', fontSize: '0.75rem' }}>
               <Cpu size={12} />
               <span>{specs.processor}</span>
             </div>
           )}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#64748b', fontSize: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#8B8278', fontSize: '0.75rem' }}>
             <Layers size={12} />
             <span>{specs.ram || 'N/A'} RAM</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#64748b', fontSize: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', color: '#8B8278', fontSize: '0.75rem' }}>
             <span>{specs.storage || 'N/A'} Disk</span>
           </div>
         </div>
@@ -107,7 +107,7 @@ export const ListingCard = ({ listing: product }) => {
           top: '0.5rem',
           right: '0.5rem',
           zIndex: 10,
-          backgroundColor: '#0f172a',
+          backgroundColor: '#1F1A1D',
           color: '#ffffff',
           padding: '0.2rem 0.5rem',
           borderRadius: '0.25rem',
@@ -122,10 +122,10 @@ export const ListingCard = ({ listing: product }) => {
       {/* Listing Body Info */}
       <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', flex: 1, gap: '0.35rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>
             {product.brand} &bull; {product.model} &bull; {product.condition}
           </span>
-          <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginTop: '0.15rem', color: '#0f172a', lineHeight: 1.3 }}>
+          <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginTop: '0.15rem', color: '#1F1A1D', lineHeight: 1.3 }}>
             {product.title}
           </h3>
         </div>
@@ -137,15 +137,15 @@ export const ListingCard = ({ listing: product }) => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '0.35rem' }}>
           {product.status === 'live' ? (
             <div>
-              <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 600 }}>Current Bid</span>
-              <p style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Current Bid</span>
+              <p style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>
                 {formatINR(product.current_bid || 0)}
               </p>
             </div>
           ) : (
             <div>
-              <span style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 600 }}>Status</span>
-              <p style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', margin: 0, textTransform: 'capitalize' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Status</span>
+              <p style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1F1A1D', margin: 0, textTransform: 'capitalize' }}>
                 {product.status || 'Pending'}
               </p>
             </div>

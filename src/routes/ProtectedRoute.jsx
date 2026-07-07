@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        backgroundColor: '#0b0f19',
+        backgroundColor: '#1F1A1D',
         color: '#ffffff',
         fontFamily: 'sans-serif'
       }}>
@@ -22,7 +22,7 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
           width: '50px',
           height: '50px',
           borderRadius: '50%',
-          borderLeftColor: '#2563eb',
+          borderLeftColor: '#6B1B71',
           animation: 'spin 1s linear infinite',
           marginBottom: '1rem'
         }} />

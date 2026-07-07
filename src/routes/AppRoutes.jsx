@@ -8,6 +8,13 @@ import LandingPage from '../pages/public/LandingPage';
 import LoginPage from '../pages/public/LoginPage';
 import RegisterPage from '../pages/public/RegisterPage';
 import ForgotPasswordPage from '../pages/public/ForgotPasswordPage';
+import PrivacyPolicyPage from '../pages/public/PrivacyPolicyPage';
+import TermsAndConditionsPage from '../pages/public/TermsAndConditionsPage';
+import RefundPolicyPage from '../pages/public/RefundPolicyPage';
+import FaqsPage from '../pages/public/FaqsPage';
+import BiddingPlansPage from '../pages/public/BiddingPlansPage';
+import BuyerGuidePage from '../pages/public/BuyerGuidePage';
+import SellerGuidePage from '../pages/public/SellerGuidePage';
 
 // Buyer Pages
 import BuyerDashboard from '../pages/buyer/BuyerDashboard';
@@ -45,6 +52,13 @@ export const AppRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+      <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
+      <Route path="/refund-policy" element={<RefundPolicyPage />} />
+      <Route path="/faqs" element={<FaqsPage />} />
+      <Route path="/bidding-plans" element={<BiddingPlansPage />} />
+      <Route path="/buyer-guide" element={<BuyerGuidePage />} />
+      <Route path="/seller-guide" element={<SellerGuidePage />} />
 
       {/* 2. Buyer Protected Routes */}
       <Route

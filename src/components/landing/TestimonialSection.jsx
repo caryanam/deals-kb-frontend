@@ -24,7 +24,7 @@ const TestimonialSection = () => {
   ];
 
   return (
-    <section id="testimonials" className="landing-section" style={{ backgroundColor: '#ffffff' }}>
+    <section id="testimonials" className="landing-section" style={{ backgroundColor: '#FAF6EA' }}>
       <div className="landing-container">
         
         {/* Title */}

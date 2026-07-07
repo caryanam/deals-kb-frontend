@@ -74,7 +74,7 @@ export const SellerAuctionPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <button 
           onClick={() => navigate(`${basePath}/my-listings`)} 
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: '#64748b', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: '#8B8278', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}
         >
           <ArrowLeft size={16} /> Back to My Listings
         </button>
@@ -99,11 +99,11 @@ export const SellerAuctionPage = () => {
             backgroundColor: isConnected ? '#10b981' : '#ef4444',
             display: 'inline-block'
           }} />
-          <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 700 }}>
+          <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700 }}>
             {isConnected ? 'Monitoring Feed Active' : 'Connecting Socket...'}
           </span>
           {!isConnected && (
-            <button onClick={reconnect} style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', padding: 0 }}>
+            <button onClick={reconnect} style={{ background: 'none', border: 'none', color: '#6B1B71', cursor: 'pointer', padding: 0 }}>
               <RefreshCw size={12} />
             </button>
           )}
@@ -136,7 +136,7 @@ export const SellerAuctionPage = () => {
                   {PRODUCT_TYPE_LABELS[product.product_type] || product.product_type}
                 </span>
                 <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: '0.15rem 0' }}>{product.title}</h3>
-                <p style={{ color: '#64748b', fontSize: '0.8rem', margin: 0 }}>
+                <p style={{ color: '#8B8278', fontSize: '0.8rem', margin: 0 }}>
                   Auction status: <strong style={{ textTransform: 'capitalize' }}>{product.status}</strong>
                 </p>
               </div>
@@ -146,11 +146,11 @@ export const SellerAuctionPage = () => {
           {/* Quick Metrics stats */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="card" style={{ textAlign: 'center', padding: '1.25rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Total Bids Received</span>
-              <h4 style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#2563eb' }}>{bidHistory.length}</h4>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Total Bids Received</span>
+              <h4 style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#6B1B71' }}>{bidHistory.length}</h4>
             </div>
             <div className="card" style={{ textAlign: 'center', padding: '1.25rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Active Bidders</span>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Active Bidders</span>
               <h4 style={{ fontSize: '2rem', fontWeight: 800, margin: '0.25rem 0', color: '#10b981' }}>{uniqueBiddersCount}</h4>
             </div>
           </div>
@@ -175,7 +175,7 @@ export const SellerAuctionPage = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           
           <div className="card" style={{
-            background: 'linear-gradient(to bottom, #0f172a, #1e293b)',
+            background: 'linear-gradient(to bottom, #1F1A1D, #2d0a32)',
             color: '#ffffff',
             padding: '2rem',
             textAlign: 'center',
@@ -186,7 +186,7 @@ export const SellerAuctionPage = () => {
             
             {/* Clock Timer */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
-              <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Timer Clock</span>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Timer Clock</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -196,7 +196,7 @@ export const SellerAuctionPage = () => {
                 borderRadius: '9999px',
                 border: '1px solid rgba(255, 255, 255, 0.1)'
               }}>
-                <Clock size={18} style={{ color: timer <= 10 ? '#ef4444' : '#3b82f6' }} />
+                <Clock size={18} style={{ color: timer <= 10 ? '#ef4444' : '#965284' }} />
                 <span style={{ fontSize: '1.5rem', fontWeight: 800, color: timer <= 10 ? '#ef4444' : '#ffffff' }}>
                   {formatTimer(timer)}
                 </span>
@@ -205,11 +205,11 @@ export const SellerAuctionPage = () => {
 
             {/* Current Price */}
             <div style={{ padding: '1rem', backgroundColor: 'rgba(255, 255, 255, 0.02)', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-              <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>Highest Offer</span>
+              <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Highest Offer</span>
               <h3 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#10b981', margin: '0.25rem 0' }}>
                 {formatCurrency(currentHighestBid)}
               </h3>
-              <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
+              <p style={{ fontSize: '0.8rem', color: '#8B8278', margin: 0 }}>
                 Lead Bidder: <strong style={{ color: '#ffffff' }}>{highestBidder || 'No bids placed'}</strong>
               </p>
             </div>
@@ -229,7 +229,7 @@ export const SellerAuctionPage = () => {
               }}>
                 <Trophy size={28} style={{ color: '#10b981' }} />
                 <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>Auction Concluded</h4>
-                <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
+                <p style={{ fontSize: '0.8rem', color: '#8B8278', margin: 0 }}>
                   Sold to: <strong style={{ color: '#ffffff' }}>{winner || highestBidder}</strong>
                 </p>
               </div>
@@ -244,8 +244,8 @@ export const SellerAuctionPage = () => {
 
           {/* Bid history log */}
           <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '1rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <BarChart2 size={16} style={{ color: '#2563eb' }} /> Live Bids Ticker
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '1rem', borderBottom: '1px solid #D8CFC1', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <BarChart2 size={16} style={{ color: '#6B1B71' }} /> Live Bids Ticker
             </h3>
 
             <div style={{
@@ -257,7 +257,7 @@ export const SellerAuctionPage = () => {
               paddingRight: '0.25rem'
             }}>
               {bidHistory.length === 0 ? (
-                <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.85rem' }}>
+                <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#8B8278', fontSize: '0.85rem' }}>
                   No bids placed yet. Bids will record here automatically.
                 </div>
               ) : (
@@ -269,21 +269,21 @@ export const SellerAuctionPage = () => {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       padding: '0.5rem 0.75rem',
-                      backgroundColor: index === 0 ? '#eff6ff' : '#f8fafc',
-                      border: index === 0 ? '1px solid #bfdbfe' : '1px solid #e2e8f0',
+                      backgroundColor: index === 0 ? '#F5ECDD' : '#FAF6EA',
+                      border: index === 0 ? '1px solid #D8CFC1' : '1px solid #D8CFC1',
                       borderRadius: '0.5rem'
                     }}
                   >
                     <div>
-                      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#334155' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#4a1a50' }}>
                         {bid.bidderName || bid.bidder_name}
                       </span>
-                      <p style={{ fontSize: '0.65rem', color: '#94a3b8', margin: 0 }}>{bid.time || 'Just now'}</p>
+                      <p style={{ fontSize: '0.65rem', color: '#8B8278', margin: 0 }}>{bid.time || 'Just now'}</p>
                     </div>
                     <span style={{
                       fontWeight: 800,
                       fontSize: '0.95rem',
-                      color: index === 0 ? '#10b981' : '#475569'
+                      color: index === 0 ? '#10b981' : '#8B8278'
                     }}>
                       {formatCurrency(bid.amount)}
                     </span>

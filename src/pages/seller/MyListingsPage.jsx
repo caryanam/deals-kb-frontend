@@ -91,8 +91,8 @@ export const MyListingsPage = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif" }}>My Product Listings</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Check approval stages, review admin rejection comments, and activate live auctions</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>My Product Listings</h1>
+          <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Check approval stages, review admin rejection comments, and activate live auctions</p>
         </div>
         <button 
           onClick={fetchListings} 
@@ -111,17 +111,17 @@ export const MyListingsPage = () => {
             width: '30px',
             height: '30px',
             borderRadius: '50%',
-            borderLeftColor: '#2563eb',
+            borderLeftColor: '#6B1B71',
             animation: 'spin 1s linear infinite'
           }} />
-          <span style={{ color: '#64748b', fontSize: '0.85rem' }}>Loading my listings...</span>
+          <span style={{ color: '#8B8278', fontSize: '0.85rem' }}>Loading my listings...</span>
         </div>
       ) : filteredListings.length === 0 ? (
-        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#8B8278', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
           <Gavel size={48} style={{ color: '#cbd5e1' }} />
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#334155' }}>No listings found matching this status</h3>
-            <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '0.25rem' }}>Create a listing or clear filters to see more.</p>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#4a1a50' }}>No listings found matching this status</h3>
+            <p style={{ fontSize: '0.9rem', color: '#8B8278', marginTop: '0.25rem' }}>Create a listing or clear filters to see more.</p>
           </div>
           <button 
             onClick={() => navigate(`${basePath}/create-listing`)} 
@@ -141,7 +141,7 @@ export const MyListingsPage = () => {
               gap: '1.5rem',
               alignItems: 'center',
               flexWrap: 'wrap',
-              border: product.status === 'rejected' ? '1px solid #fca5a5' : '1px solid #e2e8f0',
+              border: product.status === 'rejected' ? '1px solid #fca5a5' : '1px solid #D8CFC1',
               backgroundColor: product.status === 'rejected' ? '#fffafb' : '#ffffff'
             }}>
               
@@ -170,15 +170,15 @@ export const MyListingsPage = () => {
               {/* Specs */}
               <div style={{ flex: 1, minWidth: '220px', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#1F1A1D' }}>
                     {product.title}
                   </h3>
                   {getStatusBadge(product.status)}
                 </div>
-                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', color: '#8B8278' }}>
                   Category: <strong>{PRODUCT_TYPE_LABELS[product.product_type] || product.product_type}</strong> &bull; Brand: <strong>{product.brand}</strong> &bull; Model: <strong>{product.model}</strong>
                 </p>
-                <p style={{ margin: '0.15rem 0 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                <p style={{ margin: '0.15rem 0 0 0', fontSize: '0.85rem', color: '#8B8278' }}>
                   Condition: <strong>{product.condition}</strong>
                 </p>
 
@@ -234,7 +234,7 @@ export const MyListingsPage = () => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.35rem',
-                      backgroundColor: '#2563eb'
+                      backgroundColor: '#6B1B71'
                     }}
                   >
                     <PlayCircle size={16} /> Start Auction
@@ -284,7 +284,7 @@ export const MyListingsPage = () => {
                       gap: '0.35rem',
                       backgroundColor: '#f1f5f9',
                       borderColor: '#cbd5e1',
-                      color: '#475569'
+                      color: '#8B8278'
                     }}
                   >
                     <Edit size={14} /> Edit
@@ -310,26 +310,26 @@ export const MyListingsPage = () => {
           padding: '1.5rem'
         }}>
           <div style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1rem',
             width: '100%',
             maxWidth: '400px',
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid #D8CFC1',
             overflow: 'hidden'
           }}>
             <div style={{ padding: '1.25rem 1.5rem' }}>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, color: '#1F1A1D' }}>
                 {confirmModal.title}
               </h4>
-              <p style={{ fontSize: '0.875rem', color: '#475569', marginTop: '0.5rem', lineHeight: 1.5, marginBlockEnd: 0 }}>
+              <p style={{ fontSize: '0.875rem', color: '#8B8278', marginTop: '0.5rem', lineHeight: 1.5, marginBlockEnd: 0 }}>
                 {confirmModal.message}
               </p>
             </div>
             <div style={{
               padding: '0.85rem 1.5rem',
-              backgroundColor: '#f8fafc',
-              borderTop: '1px solid #e2e8f0',
+              backgroundColor: '#FAF6EA',
+              borderTop: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '0.75rem'
@@ -347,8 +347,8 @@ export const MyListingsPage = () => {
                 style={{
                   padding: '0.45rem 1rem',
                   fontSize: '0.8rem',
-                  backgroundColor: '#2563eb',
-                  borderColor: '#2563eb',
+                  backgroundColor: '#6B1B71',
+                  borderColor: '#6B1B71',
                   height: '36px'
                 }}
               >

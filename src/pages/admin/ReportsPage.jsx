@@ -22,9 +22,9 @@ const REPORT_TYPE_LABELS = {
 
 const STATUS_COLORS = {
   pending: { bg: '#fffbeb', text: '#d97706' },
-  under_review: { bg: '#eff6ff', text: '#2563eb' },
+  under_review: { bg: '#F5ECDD', text: '#6B1B71' },
   resolved: { bg: '#ecfdf5', text: '#10b981' },
-  rejected: { bg: '#f1f5f9', text: '#64748b' },
+  rejected: { bg: '#f1f5f9', text: '#8B8278' },
   action_taken: { bg: '#fef2f2', text: '#ef4444' }
 };
 
@@ -147,8 +147,8 @@ export const ReportsPage = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif" }}>Abuse Reports Log</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Review reported items, warn users, cancel auctions, and resolve violations</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>Abuse Reports Log</h1>
+          <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Review reported items, warn users, cancel auctions, and resolve violations</p>
         </div>
         <button 
           onClick={fetchReports} 
@@ -163,7 +163,7 @@ export const ReportsPage = () => {
       {/* Filter Roster */}
       <div className="card" style={{ padding: '1.25rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', minWidth: '160px' }}>
-          <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b' }}>Filter by Status</label>
+          <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8B8278' }}>Filter by Status</label>
           <select
             className="form-control"
             value={statusFilter}
@@ -179,7 +179,7 @@ export const ReportsPage = () => {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', minWidth: '200px' }}>
-          <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b' }}>Filter by Type</label>
+          <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8B8278' }}>Filter by Type</label>
           <select
             className="form-control"
             value={typeFilter}
@@ -193,7 +193,7 @@ export const ReportsPage = () => {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', minWidth: '180px' }}>
-          <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b' }}>Search Product ID</label>
+          <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8B8278' }}>Search Product ID</label>
           <input
             type="text"
             className="form-control"
@@ -219,17 +219,17 @@ export const ReportsPage = () => {
             width: '30px',
             height: '30px',
             borderRadius: '50%',
-            borderLeftColor: '#2563eb',
+            borderLeftColor: '#6B1B71',
             animation: 'spin 1s linear infinite'
           }} />
-          <span style={{ color: '#64748b', fontSize: '0.85rem' }}>Loading reports list...</span>
+          <span style={{ color: '#8B8278', fontSize: '0.85rem' }}>Loading reports list...</span>
         </div>
       ) : reports.length === 0 ? (
-        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#8B8278', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
           <ShieldAlert size={48} style={{ color: '#cbd5e1' }} />
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#334155' }}>No reports pending</h3>
-            <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '0.25rem' }}>No platform abuse or listing reports matched the filters.</p>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#4a1a50' }}>No reports pending</h3>
+            <p style={{ fontSize: '0.9rem', color: '#8B8278', marginTop: '0.25rem' }}>No platform abuse or listing reports matched the filters.</p>
           </div>
         </div>
       ) : (
@@ -238,44 +238,44 @@ export const ReportsPage = () => {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '900px' }}>
               <thead>
-                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Report ID</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Product ID</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Reporter Name</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Reporter Role</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Reported User ID</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Type</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Status</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Created At</th>
+                <tr style={{ backgroundColor: '#FAF6EA', borderBottom: '1px solid #D8CFC1' }}>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Report ID</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Product ID</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Reporter Name</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Reporter Role</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Reported User ID</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Type</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Status</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Created At</th>
                 </tr>
               </thead>
               <tbody>
                 {reports.map((rep) => {
-                  const statusInfo = STATUS_COLORS[rep.status] || { bg: '#f1f5f9', text: '#64748b' };
+                  const statusInfo = STATUS_COLORS[rep.status] || { bg: '#f1f5f9', text: '#8B8278' };
                   return (
                     <tr 
                       key={rep.id || rep.report_id} 
                       onClick={() => handleRowClick(rep.id || rep.report_id)}
-                      style={{ borderBottom: '1px solid #e2e8f0', cursor: 'pointer', transition: 'background-color 0.15s ease' }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                      style={{ borderBottom: '1px solid #D8CFC1', cursor: 'pointer', transition: 'background-color 0.15s ease' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FAF6EA'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
-                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>
+                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#6B1B71' }}>
                         #{rep.id || rep.report_id}
                       </td>
-                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#475569' }}>
+                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#8B8278' }}>
                         {rep.product_id || 'N/A'}
                       </td>
-                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.9rem', fontWeight: 600, color: '#334155' }}>
+                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.9rem', fontWeight: 600, color: '#4a1a50' }}>
                         {rep.reporter_name || rep.reporter?.name || 'Anonymous'}
                       </td>
-                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#64748b' }}>
+                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#8B8278' }}>
                         {rep.reporter_role || rep.reporter?.role || 'N/A'}
                       </td>
-                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#64748b' }}>
+                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#8B8278' }}>
                         {rep.reported_user_id || 'N/A'}
                       </td>
-                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
+                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#1F1A1D' }}>
                         {REPORT_TYPE_LABELS[rep.report_type] || rep.report_type}
                       </td>
                       <td style={{ padding: '1.25rem 1.5rem' }}>
@@ -289,7 +289,7 @@ export const ReportsPage = () => {
                           {rep.status?.replace('_', ' ')}
                         </span>
                       </td>
-                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#64748b' }}>
+                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#8B8278' }}>
                         {formatDate(rep.created_at) || 'N/A'}
                       </td>
                     </tr>
@@ -314,7 +314,7 @@ export const ReportsPage = () => {
           padding: '2rem'
         }}>
           <div style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FAF6EA',
             borderRadius: '1.25rem',
             width: '100%',
             maxWidth: '850px',
@@ -328,23 +328,23 @@ export const ReportsPage = () => {
             {/* Modal Header */}
             <div style={{
               padding: '1.25rem 1.5rem',
-              borderBottom: '1px solid #e2e8f0',
+              borderBottom: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: '#f8fafc'
+              backgroundColor: '#FAF6EA'
             }}>
               <div>
                 <span className="badge badge-rejected" style={{ fontSize: '0.65rem', backgroundColor: '#fee2e2', color: '#b91c1c' }}>
                   Moderation Details Case
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.15rem 0 0 0', color: '#0f172a' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.15rem 0 0 0', color: '#1F1A1D' }}>
                   Report #{selectedReportId} Details
                 </h3>
               </div>
               <button 
                 onClick={() => setSelectedReportId(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278' }}
               >
                 <X size={20} />
               </button>
@@ -357,10 +357,10 @@ export const ReportsPage = () => {
                   width: '30px',
                   height: '30px',
                   borderRadius: '50%',
-                  borderLeftColor: '#2563eb',
+                  borderLeftColor: '#6B1B71',
                   animation: 'spin 1s linear infinite'
                 }} />
-                <span style={{ color: '#64748b', fontSize: '0.85rem' }}>Loading report details...</span>
+                <span style={{ color: '#8B8278', fontSize: '0.85rem' }}>Loading report details...</span>
               </div>
             ) : (
               /* Modal Body */
@@ -373,27 +373,27 @@ export const ReportsPage = () => {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     
                     {/* Reason Card */}
-                    <div className="card" style={{ backgroundColor: '#f8fafc', padding: '1rem' }}>
-                      <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Reason Description</span>
-                      <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.9rem', color: '#0f172a', fontWeight: 600, lineHeight: 1.4 }}>
+                    <div className="card" style={{ backgroundColor: '#FAF6EA', padding: '1rem' }}>
+                      <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Reason Description</span>
+                      <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.9rem', color: '#1F1A1D', fontWeight: 600, lineHeight: 1.4 }}>
                         {reportDetails.reason}
                       </p>
                       
                       <div style={{ marginTop: '0.75rem', display: 'flex', gap: '1rem', fontSize: '0.8rem' }}>
                         <div>
-                          <span style={{ color: '#64748b', fontWeight: 600 }}>Type:</span>
+                          <span style={{ color: '#8B8278', fontWeight: 600 }}>Type:</span>
                           <span style={{ fontWeight: 700, marginLeft: '0.25rem' }}>{REPORT_TYPE_LABELS[reportDetails.report_type] || reportDetails.report_type}</span>
                         </div>
                         <div>
-                          <span style={{ color: '#64748b', fontWeight: 600 }}>Date:</span>
+                          <span style={{ color: '#8B8278', fontWeight: 600 }}>Date:</span>
                           <span style={{ fontWeight: 700, marginLeft: '0.25rem' }}>{formatDate(reportDetails.created_at)}</span>
                         </div>
                       </div>
 
                       {/* Evidence */}
                       {reportDetails.evidence && reportDetails.evidence.length > 0 && (
-                        <div style={{ marginTop: '0.75rem', borderTop: '1px solid #e2e8f0', paddingTop: '0.5rem' }}>
-                          <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>Evidence / Context</span>
+                        <div style={{ marginTop: '0.75rem', borderTop: '1px solid #D8CFC1', paddingTop: '0.5rem' }}>
+                          <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase', display: 'block', marginBottom: '0.35rem' }}>Evidence / Context</span>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                             {reportDetails.evidence.map((ev, i) => {
                               const isUrl = typeof ev === 'string' && (ev.startsWith('http://') || ev.startsWith('https://'));
@@ -405,7 +405,7 @@ export const ReportsPage = () => {
                                   rel="noopener noreferrer"
                                   style={{
                                     fontSize: '0.75rem',
-                                    color: '#2563eb',
+                                    color: '#6B1B71',
                                     textDecoration: 'underline',
                                     fontWeight: 600
                                   }}
@@ -417,9 +417,9 @@ export const ReportsPage = () => {
                                   key={i}
                                   style={{
                                     fontSize: '0.78rem',
-                                    color: '#334155',
+                                    color: '#4a1a50',
                                     backgroundColor: '#f1f5f9',
-                                    border: '1px solid #e2e8f0',
+                                    border: '1px solid #D8CFC1',
                                     borderRadius: '0.4rem',
                                     padding: '0.35rem 0.6rem',
                                     fontFamily: 'monospace',
@@ -439,21 +439,21 @@ export const ReportsPage = () => {
                     {/* Participant Details */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                       <div className="card" style={{ padding: '0.75rem 1rem' }}>
-                        <span style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Reporter User</span>
-                        <strong style={{ fontSize: '0.85rem', color: '#0f172a', display: 'block', marginTop: '0.15rem' }}>
+                        <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Reporter User</span>
+                        <strong style={{ fontSize: '0.85rem', color: '#1F1A1D', display: 'block', marginTop: '0.15rem' }}>
                           {reportDetails.reporter?.name || 'N/A'}
                         </strong>
-                        <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#8B8278', display: 'block' }}>
                           Role: {reportDetails.reporter?.role || 'N/A'} &bull; Email: {reportDetails.reporter?.email || 'N/A'}
                         </span>
                       </div>
 
                       <div className="card" style={{ padding: '0.75rem 1rem' }}>
-                        <span style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Reported User</span>
-                        <strong style={{ fontSize: '0.85rem', color: '#0f172a', display: 'block', marginTop: '0.15rem' }}>
+                        <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Reported User</span>
+                        <strong style={{ fontSize: '0.85rem', color: '#1F1A1D', display: 'block', marginTop: '0.15rem' }}>
                           {reportDetails.reported_user?.name || 'N/A'}
                         </strong>
-                        <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#8B8278', display: 'block' }}>
                           Role: {reportDetails.reported_user?.role || 'N/A'} &bull; Email: {reportDetails.reported_user?.email || 'N/A'}
                         </span>
                       </div>
@@ -462,9 +462,9 @@ export const ReportsPage = () => {
                     {/* Product Summary */}
                     {reportDetails.product && (
                       <div className="card" style={{ padding: '1rem' }}>
-                        <span style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Linked Product Details</span>
-                        <h4 style={{ fontSize: '0.95rem', fontWeight: 800, margin: '0.25rem 0', color: '#0f172a' }}>{reportDetails.product.title}</h4>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.8rem', color: '#475569', marginTop: '0.25rem' }}>
+                        <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Linked Product Details</span>
+                        <h4 style={{ fontSize: '0.95rem', fontWeight: 800, margin: '0.25rem 0', color: '#1F1A1D' }}>{reportDetails.product.title}</h4>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.8rem', color: '#8B8278', marginTop: '0.25rem' }}>
                           <div>Brand: <strong>{reportDetails.product.brand || 'N/A'}</strong></div>
                           <div>Model: <strong>{reportDetails.product.model || 'N/A'}</strong></div>
                           <div>Product Price: <strong>{formatINR(reportDetails.product.product_price || 0)}</strong></div>
@@ -491,9 +491,9 @@ export const ReportsPage = () => {
                     
                     {/* Bid History */}
                     <div className="card" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto' }}>
-                      <span style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Product Bid Logs</span>
+                      <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Product Bid Logs</span>
                       {!reportDetails.bid_history || reportDetails.bid_history.length === 0 ? (
-                        <div style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', color: '#94a3b8' }}>
+                        <div style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', color: '#8B8278' }}>
                           No bids registered.
                         </div>
                       ) : (
@@ -501,7 +501,7 @@ export const ReportsPage = () => {
                           {reportDetails.bid_history.map((bid, i) => (
                             <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.25rem' }}>
                               <span style={{ fontWeight: 600 }}>{bid.bidderName || bid.bidder_name || 'Anonymous'}</span>
-                              <strong style={{ color: '#2563eb' }}>{formatINR(bid.amount || 0)}</strong>
+                              <strong style={{ color: '#6B1B71' }}>{formatINR(bid.amount || 0)}</strong>
                             </div>
                           ))}
                         </div>
@@ -509,14 +509,14 @@ export const ReportsPage = () => {
                     </div>
 
                     {/* Moderation Controls Console */}
-                    <div className="card" style={{ padding: '1rem', border: '1.5px solid #2563eb', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      <span style={{ fontSize: '0.75rem', color: '#2563eb', fontWeight: 800, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <div className="card" style={{ padding: '1rem', border: '1.5px solid #6B1B71', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#6B1B71', fontWeight: 800, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                         <AlertTriangle size={14} /> Moderation Controls
                       </span>
                       
                       {/* Admin Note Input */}
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                        <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#475569' }}>Admin Note (Required for actions) *</label>
+                        <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#8B8278' }}>Admin Note (Required for actions) *</label>
                         <textarea
                           rows={3}
                           className="form-control"
@@ -528,7 +528,7 @@ export const ReportsPage = () => {
                       </div>
 
                       {/* Status Update Trigger row */}
-                      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', borderTop: '1px solid #e2e8f0', paddingTop: '0.75rem' }}>
+                      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', borderTop: '1px solid #D8CFC1', paddingTop: '0.75rem' }}>
                         <div style={{ flex: 1 }}>
                           <select
                             className="form-control"
@@ -554,8 +554,8 @@ export const ReportsPage = () => {
                       </div>
 
                       {/* Moderation Actions grid buttons */}
-                      <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '0.75rem' }}>
-                        <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '0.35rem' }}>Apply Moderation Action</label>
+                      <div style={{ borderTop: '1px solid #D8CFC1', paddingTop: '0.75rem' }}>
+                        <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#8B8278', display: 'block', marginBottom: '0.35rem' }}>Apply Moderation Action</label>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                           <button
                             onClick={() => handleApplyAction('warn_user')}
@@ -638,7 +638,7 @@ export const ReportsPage = () => {
             )}
 
             {/* Modal Footer */}
-            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', backgroundColor: '#f8fafc' }}>
+            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #D8CFC1', display: 'flex', justifyContent: 'flex-end', backgroundColor: '#FAF6EA' }}>
               <button 
                 onClick={() => setSelectedReportId(null)} 
                 className="btn btn-secondary" 

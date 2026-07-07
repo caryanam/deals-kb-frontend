@@ -42,7 +42,7 @@ export const triggerPayment = async (planId, onSuccess, onCancel) => {
         order_id: order.id,
         prefill: data.prefill || {},
         notes: order.notes || {},
-        theme: { color: '#2563eb' },
+        theme: { color: '#6B1B71' },
         handler: async (response) => {
           try {
             await verifyPayment({

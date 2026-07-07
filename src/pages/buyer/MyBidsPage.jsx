@@ -96,8 +96,8 @@ export const MyBidsPage = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0b0f19', fontFamily: "'Outfit', sans-serif" }}>My Bidding Logs</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Track listings you have placed bids on and check your winning results</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>My Bidding Logs</h1>
+          <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Track listings you have placed bids on and check your winning results</p>
         </div>
         <button 
           onClick={loadMyBids} 
@@ -110,17 +110,17 @@ export const MyBidsPage = () => {
       </div>
 
       {/* Tabs navigation */}
-      <div style={{ display: 'flex', gap: '0.25rem', borderBottom: '1px solid #e2e8f0', marginBottom: '1.5rem' }}>
+      <div style={{ display: 'flex', gap: '0.25rem', borderBottom: '1px solid #D8CFC1', marginBottom: '1.5rem' }}>
         <button
           onClick={() => handleTabChange('all')}
           style={{
             padding: '0.6rem 1.25rem',
             fontSize: '0.85rem',
             fontWeight: 700,
-            color: activeTab === 'all' ? '#2563eb' : '#64748b',
+            color: activeTab === 'all' ? '#6B1B71' : '#8B8278',
             background: 'none',
             border: 'none',
-            borderBottom: activeTab === 'all' ? '3px solid #2563eb' : '3px solid transparent',
+            borderBottom: activeTab === 'all' ? '3px solid #6B1B71' : '3px solid transparent',
             cursor: 'pointer',
             transition: 'all 0.15s ease'
           }}
@@ -133,10 +133,10 @@ export const MyBidsPage = () => {
             padding: '0.6rem 1.25rem',
             fontSize: '0.85rem',
             fontWeight: 700,
-            color: activeTab === 'won' ? '#2563eb' : '#64748b',
+            color: activeTab === 'won' ? '#6B1B71' : '#8B8278',
             background: 'none',
             border: 'none',
-            borderBottom: activeTab === 'won' ? '3px solid #2563eb' : '3px solid transparent',
+            borderBottom: activeTab === 'won' ? '3px solid #6B1B71' : '3px solid transparent',
             cursor: 'pointer',
             transition: 'all 0.15s ease'
           }}
@@ -152,19 +152,19 @@ export const MyBidsPage = () => {
             width: '30px',
             height: '30px',
             borderRadius: '50%',
-            borderLeftColor: '#2563eb',
+            borderLeftColor: '#6B1B71',
             animation: 'spin 1s linear infinite'
           }} />
-          <span style={{ color: '#64748b', fontSize: '0.85rem' }}>Retrieving bid registry...</span>
+          <span style={{ color: '#8B8278', fontSize: '0.85rem' }}>Retrieving bid registry...</span>
         </div>
       ) : filteredBids.length === 0 ? (
-        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center', color: '#8B8278', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
           <Landmark size={48} style={{ color: '#cbd5e1' }} />
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#334155' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#4a1a50' }}>
               {activeTab === 'won' ? 'No auction wins yet' : 'You have not placed any bids yet'}
             </h3>
-            <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '0.25rem' }}>
+            <p style={{ fontSize: '0.9rem', color: '#8B8278', marginTop: '0.25rem' }}>
               {activeTab === 'won' ? 'Place bids on live auctions to start winning.' : 'Browse active products in the marketplace and join the bidding rooms.'}
             </p>
           </div>
@@ -178,13 +178,13 @@ export const MyBidsPage = () => {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
               <thead>
-                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Product</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Type</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Status</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>My Bid</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Highest Bid / Winner</th>
-                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>Action</th>
+                <tr style={{ backgroundColor: '#FAF6EA', borderBottom: '1px solid #D8CFC1' }}>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Product</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Type</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Status</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>My Bid</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Highest Bid / Winner</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -194,12 +194,12 @@ export const MyBidsPage = () => {
                   const isWinner = isEnded && (product.winner_id === user.user_id || product.winner_id === user.id);
 
                   return (
-                    <tr key={bid.bid_id || bid.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                    <tr key={bid.bid_id || bid.id} style={{ borderBottom: '1px solid #D8CFC1' }}>
                       {/* Product details */}
                       <td style={{ padding: '1.25rem 1.5rem' }}>
                         <div>
-                          <strong style={{ display: 'block', fontSize: '0.95rem', color: '#0f172a' }}>{product.title}</strong>
-                          <span style={{ fontSize: '0.8rem', color: '#64748b', textTransform: 'capitalize' }}>
+                          <strong style={{ display: 'block', fontSize: '0.95rem', color: '#1F1A1D' }}>{product.title}</strong>
+                          <span style={{ fontSize: '0.8rem', color: '#8B8278', textTransform: 'capitalize' }}>
                             Status: {product.status}
                           </span>
                         </div>
@@ -224,7 +224,7 @@ export const MyBidsPage = () => {
                       </td>
 
                       {/* My Bid Column */}
-                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#2563eb' }}>
+                      <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#6B1B71' }}>
                         {formatINR(bid.amount)}
                       </td>
 
