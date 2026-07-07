@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, X, Lock, ExternalLink } from 'lucide-react';
+import { ChevronRight, X, Lock, ExternalLink, ImageOff } from 'lucide-react';
 import api from '../../api/axiosClient';
 import { formatCurrency, safeParseJSON } from '../../utils/helpers';
 
@@ -74,11 +74,11 @@ const CategorySection = () => {
       if (Array.isArray(items) && items.length > 0) {
         setCategoryProducts(items.slice(0, 4));
       } else {
-        setCategoryProducts(cat.fallbackItems);
+        setCategoryProducts([]);
       }
     } catch (err) {
-      console.warn('Using fallback category items:', err);
-      setCategoryProducts(cat.fallbackItems);
+      console.warn('Failed to fetch category items:', err);
+      setCategoryProducts([]);
     } finally {
       setLoading(false);
     }
@@ -190,82 +190,116 @@ const CategorySection = () => {
             </div>
 
             {/* Product Cards Grid (3-4 items) */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                gap: '1.25rem',
+            {categoryProducts.length === 0 ? (
+              <div style={{
+                textAlign: 'center',
+                padding: '3rem 1.5rem',
+                border: `1.5px dashed ${BORDER}`,
+                borderRadius: '1rem',
+                backgroundColor: '#ffffff',
                 marginBottom: '2rem',
-              }}
-            >
-              {categoryProducts.map((item, i) => {
-                const itemImg = item.img || (safeParseJSON(item.photos, [])[0]) || selectedCategory.img;
-                return (
-                  <div
-                    key={item.id || item.product_id || i}
-                    onClick={handleRequireLogin}
-                    style={{
-                      backgroundColor: '#ffffff',
-                      borderRadius: '0.85rem',
-                      border: `1px solid ${BORDER}`,
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                      position: 'relative',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                      e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(107, 27, 113, 0.15)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
-                  >
-                    <div style={{ height: '130px', overflow: 'hidden', position: 'relative' }}>
-                      <img src={itemImg} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '0.5rem',
-                          right: '0.5rem',
-                          backgroundColor: 'rgba(31, 26, 29, 0.75)',
-                          backdropFilter: 'blur(4px)',
-                          color: '#fff',
-                          padding: '0.2rem 0.5rem',
-                          borderRadius: '0.35rem',
-                          fontSize: '0.65rem',
-                          fontWeight: 700,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.25rem',
-                        }}
-                      >
-                        <Lock size={10} /> Sign in to Bid
-                      </div>
-                    </div>
-
-                    <div style={{ padding: '0.85rem' }}>
-                      <span style={{ fontSize: '0.7rem', color: GOLD, fontWeight: 700 }}>
-                        {item.brand || selectedCategory.title}
-                      </span>
-                      <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1F1A1D', margin: '0.2rem 0 0.5rem 0', lineHeight: 1.3 }}>
-                        {item.title}
-                      </h4>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
-                          <span style={{ fontSize: '0.65rem', color: '#8B8278', display: 'block' }}>Starting Price</span>
-                          <strong style={{ fontSize: '0.95rem', color: PURPLE, fontWeight: 800 }}>
-                            {formatCurrency(item.starting_price || item.price || 0)}
-                          </strong>
+                color: '#8B8278'
+              }}>
+                <ImageOff size={40} style={{ color: '#cbd5e1', marginBottom: '0.75rem' }} />
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#4a1a50', margin: '0 0 0.25rem 0' }}>No registered products found</h4>
+                <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: 0 }}>There are currently no approved products in this category.</p>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                  gap: '1.25rem',
+                  marginBottom: '2rem',
+                }}
+              >
+                {categoryProducts.map((item, i) => {
+                  const photosArray = safeParseJSON(item.photos, []);
+                  const itemImg = item.img || (photosArray.length > 0 ? photosArray[0] : null);
+                  return (
+                    <div
+                      key={item.id || item.product_id || i}
+                      onClick={handleRequireLogin}
+                      style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '0.85rem',
+                        border: `1px solid ${BORDER}`,
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                        position: 'relative',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-4px)';
+                        e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(107, 27, 113, 0.15)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      <div style={{ height: '130px', overflow: 'hidden', position: 'relative', backgroundColor: '#f1f5f9' }}>
+                        {itemImg ? (
+                          <img src={itemImg} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                          <div style={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.35rem',
+                            color: '#64748b',
+                            backgroundColor: '#f8fafc'
+                          }}>
+                            <ImageOff size={22} />
+                            <span style={{ fontSize: '0.68rem', fontWeight: 700 }}>No image uploaded</span>
+                          </div>
+                        )}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '0.5rem',
+                            right: '0.5rem',
+                            backgroundColor: 'rgba(31, 26, 29, 0.75)',
+                            backdropFilter: 'blur(4px)',
+                            color: '#fff',
+                            padding: '0.2rem 0.5rem',
+                            borderRadius: '0.35rem',
+                            fontSize: '0.65rem',
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                          }}
+                        >
+                          <Lock size={10} /> Sign in to Bid
                         </div>
-                        <ExternalLink size={14} style={{ color: PURPLE }} />
+                      </div>
+
+                      <div style={{ padding: '0.85rem' }}>
+                        <span style={{ fontSize: '0.7rem', color: GOLD, fontWeight: 700 }}>
+                          {item.brand || selectedCategory.title}
+                        </span>
+                        <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1F1A1D', margin: '0.2rem 0 0.5rem 0', lineHeight: 1.3 }}>
+                          {item.title}
+                        </h4>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div>
+                            <span style={{ fontSize: '0.65rem', color: '#8B8278', display: 'block' }}>Starting Price</span>
+                            <strong style={{ fontSize: '0.95rem', color: PURPLE, fontWeight: 800 }}>
+                              {formatCurrency(item.starting_price || item.price || 0)}
+                            </strong>
+                          </div>
+                          <ExternalLink size={14} style={{ color: PURPLE }} />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Bottom Button: Explore More from Marketplace → Login */}
             <div style={{ textAlign: 'center', paddingTop: '1rem', borderTop: `1px solid ${BORDER}` }}>

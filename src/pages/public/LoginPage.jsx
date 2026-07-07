@@ -72,11 +72,33 @@ export const LoginPage = () => {
       <div className="auth-overlay" />
 
       <div className="auth-content">
+        <div className="auth-left-panel">
+          <div className="auth-logo">
+            <Car className="auth-logo-icon" size={34} />
+            Deals<span>KB</span>
+          </div>
+          <p className="auth-tagline">BID IT. WIN IT. OWN IT.</p>
+          <h1>
+            Bid More. Win More.
+            <span>Own More.</span>
+          </h1>
+          <p>
+            Join live auctions for Cars, Bikes, Mobiles and Laptops. Start bidding
+            or listing products with a secure DealsKB account.
+          </p>
+          <div className="auth-feature-row">
+            <div>Live Bidding</div>
+            <div>Verified Listings</div>
+            <div>Secure Payments</div>
+            <div>Instant Updates</div>
+          </div>
+        </div>
+
         <div className="auth-card-wrapper">
           <div className="auth-card login-card">
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <Car size={36} style={{ color: '#ffffff' }} />
+                <Car size={36} style={{ color: '#fbbf24' }} />
                 <span style={{ fontSize: '1.75rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#ffffff', letterSpacing: 0 }}>
                   DealsKB
                 </span>

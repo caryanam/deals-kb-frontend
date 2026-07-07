@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Fuel, Gauge, Calendar, ShieldCheck, ArrowUpRight, Cpu, Layers } from 'lucide-react';
+import { Fuel, Gauge, Calendar, ShieldCheck, ArrowUpRight, Cpu, Layers, ImageOff } from 'lucide-react';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
 
 export const ListingCard = ({ listing: product }) => {
@@ -77,7 +77,7 @@ export const ListingCard = ({ listing: product }) => {
   const photosArray = safeParseJSON(product.photos, []);
   const coverPhoto = photosArray.length > 0
     ? photosArray[0]
-    : 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&auto=format&fit=crop&q=60';
+    : '';
 
   return (
     <div 
@@ -94,11 +94,28 @@ export const ListingCard = ({ listing: product }) => {
     >
       {/* Listing Cover Image */}
       <div style={{ position: 'relative', height: '170px', backgroundColor: '#f1f5f9' }}>
-        <img 
-          src={coverPhoto} 
-          alt={product.title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        />
+        {coverPhoto ? (
+          <img 
+            src={coverPhoto} 
+            alt={product.title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        ) : (
+          <div style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.45rem',
+            color: '#64748b',
+            backgroundColor: '#f8fafc'
+          }}>
+            <ImageOff size={30} />
+            <span style={{ fontSize: '0.82rem', fontWeight: 700 }}>No image uploaded</span>
+          </div>
+        )}
         <div style={{ position: 'absolute', top: '0.5rem', left: '0.5rem', zIndex: 10 }}>
           {getStatusBadge()}
         </div>

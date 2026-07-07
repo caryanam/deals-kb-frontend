@@ -63,10 +63,10 @@ export const RefundPolicyPage = () => (
     <Section title="2. Buyer Bidding Passes — Refund Policy">
       <P>Bidding passes grant 24-hour access to live auctions for a specific category (Cars, Bikes, Mobiles, or Laptops). Pass pricing:</P>
       <Ul items={[
-        'Mobile Pass: ₹21 / 24 hours',
-        'Laptop Pass: ₹51 / 24 hours',
-        'Bike Pass: ₹111 / 24 hours',
-        'Car Pass: ₹499 / 24 hours',
+        'Mobile Pass: ₹12.98 / 24 hours (incl. 18% GST)',
+        'Laptop Pass: ₹24.78 / 24 hours (incl. 18% GST)',
+        'Bike Pass: ₹60.18 / 24 hours (incl. 18% GST)',
+        'Car Pass: ₹119.18 / 24 hours (incl. 18% GST)',
       ]} />
       <P><strong>Non-refundable after activation:</strong> Once a bidding pass is activated and auction access is granted, no refund will be issued, regardless of whether bids were placed or the auction was won.</P>
       <P><strong>Eligible for refund (credit):</strong></P>
@@ -80,10 +80,10 @@ export const RefundPolicyPage = () => (
     <Section title="3. Seller Listing Fees — Refund Policy">
       <P>Sellers pay a one-time listing fee per product. Fee structure:</P>
       <Ul items={[
-        'Mobile Listing: ₹21',
-        'Laptop Listing: ₹51',
-        'Bike Listing: ₹99',
-        'Car Listing: ₹399',
+        'Mobile Listing: ₹11.80 (incl. 18% GST)',
+        'Laptop Listing: ₹23.60 (incl. 18% GST)',
+        'Bike Listing: ₹59 (incl. 18% GST)',
+        'Car Listing: ₹118 (incl. 18% GST)',
       ]} />
       <P><strong>Non-refundable after admin review begins:</strong> Once your listing has been submitted and the admin review process has started, the listing fee is non-refundable.</P>
       <P><strong>Eligible for refund:</strong></P>

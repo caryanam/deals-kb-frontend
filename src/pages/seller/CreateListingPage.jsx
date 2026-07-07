@@ -16,10 +16,17 @@ const CATEGORIES = [
 ];
 
 const LISTING_FEES = {
-  car: '₹399',
-  mobile: '₹21',
-  bike: '₹99',
-  laptop: '₹51'
+  car: '₹118',
+  mobile: '₹11.80',
+  bike: '₹59',
+  laptop: '₹23.60'
+};
+
+const TITLE_PLACEHOLDERS = {
+  car: 'e.g. Hyundai Creta 2020 – well maintained',
+  bike: 'e.g. Yamaha R15 2021 – minor scratches',
+  mobile: 'e.g. iPhone 13 128GB – good condition',
+  laptop: 'e.g. Dell Inspiron i5 – lightly used'
 };
 
 const CONDITIONS = ['Excellent', 'Good', 'Average', 'Needs Repair'];
@@ -356,8 +363,10 @@ export const CreateListingPage = () => {
         await updateProduct(editId, payload);
         toast.success('Product listing updated successfully!');
       } else {
-        const paymentResult = await triggerPayment(`seller_listing_${productType}`);
-        if (!paymentResult) return;
+        if (user?.role !== 'Dealer') {
+          const paymentResult = await triggerPayment(`seller_listing_${productType}`);
+          if (!paymentResult) return;
+        }
         await createProduct(payload);
         toast.success('Product listing created successfully!');
       }
@@ -422,15 +431,22 @@ export const CreateListingPage = () => {
                 </button>
               ))}
             </div>
-            <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', border: '1px solid #D8CFC1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-              <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Listing fee for selected category</span>
-              <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
-            </div>
+            {user?.role !== 'Dealer' && (
+              <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', border: '1px solid #D8CFC1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Listing fee for selected category</span>
+                <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
+              </div>
+            )}
           </section>
 
           <section>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Basic Details</h2>
-            <Input label="Title *" value={title} onChange={setTitle} placeholder="e.g. Honda City / iPhone 13 / Dell Laptop" />
+            <Input 
+              label="Title *" 
+              value={title} 
+              onChange={setTitle} 
+              placeholder={TITLE_PLACEHOLDERS[productType] || "Enter product title"}
+            />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '1rem' }}>
               {productType === 'car' ? (
                 <Select
@@ -629,10 +645,11 @@ export const CreateListingPage = () => {
   );
 };
 
-const Input = ({ label, value, onChange, placeholder, type = 'text' }) => (
+const Input = ({ label, value, onChange, placeholder, type = 'text', note }) => (
   <div className="form-group" style={{ marginBottom: 0 }}>
     <label className="form-label">{label}</label>
     <input type={type} className="form-control" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+    {note && <small style={{ color: '#8B8278', fontSize: '0.75rem', marginTop: '0.2rem', display: 'block' }}>{note}</small>}
   </div>
 );
 

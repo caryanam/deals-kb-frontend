@@ -2,16 +2,65 @@ import { createPaymentOrder, markPaymentFailed, verifyPayment } from '../api/pay
 import { getCurrentUser } from '../api/authApi';
 import { toast } from 'react-toastify';
 
+const RAZORPAY_CHECKOUT_SRC = 'https://checkout.razorpay.com/v1/checkout.js';
+
+const buildFailureReason = (response) => {
+  const error = response?.error || {};
+  return [
+    error.description || error.reason || 'Payment failed',
+    error.code ? `Code: ${error.code}` : '',
+    error.source ? `Source: ${error.source}` : '',
+    error.step ? `Step: ${error.step}` : ''
+  ].filter(Boolean).join(' | ');
+};
+
+const buildPrefill = (prefill = {}) => {
+  const cleanedContact = String(prefill.contact || '').replace(/\D/g, '').slice(-10);
+  const safePrefill = {
+    name: prefill.name || 'DealsKB User'
+  };
+
+  if (prefill.email) {
+    safePrefill.email = prefill.email;
+  }
+
+  if (/^[6-9]\d{9}$/.test(cleanedContact)) {
+    safePrefill.contact = cleanedContact;
+  }
+
+  return safePrefill;
+};
+
 export const loadRazorpay = () =>
   new Promise((resolve) => {
     if (window.Razorpay) {
       resolve(true);
       return;
     }
+
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+      resolve(false);
+      return;
+    }
+
+    document
+      .querySelectorAll(`script[src="${RAZORPAY_CHECKOUT_SRC}"]`)
+      .forEach((script) => script.remove());
+
     const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
+    let settled = false;
+    const finish = (loaded) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      if (!loaded) script.remove();
+      resolve(loaded);
+    };
+    const timeoutId = window.setTimeout(() => finish(false), 15000);
+    script.src = RAZORPAY_CHECKOUT_SRC;
+    script.async = true;
+    script.onload = () => finish(Boolean(window.Razorpay));
+    script.onerror = () => finish(false);
     document.body.appendChild(script);
   });
 
@@ -19,7 +68,7 @@ export const triggerPayment = async (planId, onSuccess, onCancel) => {
   try {
     const loaded = await loadRazorpay();
     if (!loaded) {
-      toast.error('Unable to load Razorpay Checkout.');
+      toast.error('Unable to load Razorpay Checkout. Please check your internet connection and try again.');
       return null;
     }
 
@@ -40,8 +89,12 @@ export const triggerPayment = async (planId, onSuccess, onCancel) => {
         name: 'DealsKB',
         description: planId?.startsWith('buyer_') ? 'Bidding Pass Activation' : 'Plan Activation',
         order_id: order.id,
-        prefill: data.prefill || {},
+        prefill: buildPrefill(data.prefill),
         notes: order.notes || {},
+        retry: {
+          enabled: true,
+          max_count: 1
+        },
         theme: { color: '#6B1B71' },
         handler: async (response) => {
           try {
@@ -74,9 +127,12 @@ export const triggerPayment = async (planId, onSuccess, onCancel) => {
         }
       });
       checkout.on('payment.failed', async (response) => {
-        const reason = response?.error?.description || 'Payment failed';
+        console.error('Razorpay payment.failed:', response);
+        const reason = buildFailureReason(response);
         await markPaymentFailed(order.id, reason).catch(() => null);
         toast.error(reason);
+        if (onCancel) onCancel();
+        resolve(null);
       });
       checkout.open();
     });

@@ -155,7 +155,7 @@ export const AdminDashboard = () => {
 
       {/* Listing counts */}
       <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#8B8278', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Inventory Overview</h2>
-      <div className="grid grid-cols-5" style={{ marginBottom: '2.5rem' }}>
+      <div className="grid grid-cols-3" style={{ marginBottom: '2.5rem' }}>
         
         {/* Pending approvals */}
         <div 

@@ -9,7 +9,7 @@ const steps = [
   { num: 1, title: 'Register as a Seller or Dealer on DealsKB', icon: '📝' },
   { num: 2, title: 'Create a new listing — enter details for your Car, Bike, Mobile, or Laptop', icon: '📋' },
   { num: 3, title: 'Upload product photos and verification documents', icon: '📸' },
-  { num: 4, title: 'Pay the listing fee (₹21–₹399 depending on category)', icon: '💳' },
+  { num: 4, title: 'Pay the listing fee (₹11.80–₹118 depending on category)', icon: '💳' },
   { num: 5, title: 'Wait for Admin approval and verification', icon: '⏳' },
   { num: 6, title: 'Your product goes live — buyers enter the auction room', icon: '🔴' },
   { num: 7, title: 'Auction ends with the highest bidder as the winner', icon: '🏆' },

@@ -229,7 +229,7 @@ export const CommunityRequestsPage = () => {
       }}>
         <Info size={20} style={{ color: '#6B1B71', flexShrink: 0 }} />
         <span>
-          <strong>Matching Rule:</strong> You'll be notified automatically when a product with the same category, brand, and model is approved by administrators.
+          <strong>About community:</strong> You'll be notified automatically when a product with the same category, brand, and model is approved by administrators.
         </span>
       </div>
 

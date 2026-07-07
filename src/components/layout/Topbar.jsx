@@ -1427,7 +1427,7 @@ export const Topbar = ({ onToggleSidebar }) => {
           }}>
             {/* Modal Header */}
             <div style={{
-              padding: '1.25rem 1.5rem',
+              padding: '1rem 1.25rem',
               borderBottom: '1px solid #D8CFC1',
               display: 'flex',
               justifyContent: 'space-between',
@@ -1435,19 +1435,19 @@ export const Topbar = ({ onToggleSidebar }) => {
               backgroundColor: '#FAF6EA'
             }}>
               <div>
-                <span className="badge badge-approved" style={{ fontSize: '0.65rem' }}>Personal Settings</span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.15rem 0 0 0', color: '#1F1A1D' }}>Update Profile</h3>
+                <span className="badge badge-approved" style={{ fontSize: '0.62rem', padding: '0.15rem 0.45rem' }}>Personal Settings</span>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0.15rem 0 0 0', color: '#1F1A1D' }}>Update Profile</h3>
               </div>
               <button 
                 onClick={() => setShowProfileModal(false)}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278' }}
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
             {/* Modal Body */}
-            <form onSubmit={handleUpdateProfile} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
+            <form onSubmit={handleUpdateProfile} style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               
               {successMsg && (
                 <div style={{
@@ -1456,13 +1456,13 @@ export const Topbar = ({ onToggleSidebar }) => {
                   gap: '0.5rem',
                   backgroundColor: '#d1fae5',
                   border: '1px solid #10b981',
-                  padding: '0.75rem',
+                  padding: '0.6rem 0.75rem',
                   borderRadius: '0.5rem',
                   color: '#065f46',
-                  fontSize: '0.85rem',
+                  fontSize: '0.8rem',
                   fontWeight: 700
                 }}>
-                  <Check size={16} />
+                  <Check size={14} />
                   <span>{successMsg}</span>
                 </div>
               )}
@@ -1474,29 +1474,29 @@ export const Topbar = ({ onToggleSidebar }) => {
                   gap: '0.5rem',
                   backgroundColor: '#fef2f2',
                   border: '1px solid #fca5a5',
-                  padding: '0.75rem',
+                  padding: '0.6rem 0.75rem',
                   borderRadius: '0.5rem',
                   color: '#b91c1c',
-                  fontSize: '0.85rem',
+                  fontSize: '0.8rem',
                   lineHeight: 1.4
                 }}>
-                  <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '0.1rem' }} />
+                  <AlertCircle size={14} style={{ flexShrink: 0, marginTop: '0.1rem' }} />
                   <span>{errorMsg}</span>
                 </div>
               )}
 
               {/* Name */}
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Full Name *</label>
+                <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: '0.2rem', fontWeight: 700 }}>Full Name *</label>
                 <div style={{ position: 'relative' }}>
-                  <User size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <User size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Enter name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    style={{ paddingLeft: '2.5rem' }}
+                    style={{ paddingLeft: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
                     required
                   />
                 </div>
@@ -1504,16 +1504,16 @@ export const Topbar = ({ onToggleSidebar }) => {
 
               {/* Email */}
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Email Address *</label>
+                <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: '0.2rem', fontWeight: 700 }}>Email Address *</label>
                 <div style={{ position: 'relative' }}>
-                  <Mail size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <Mail size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="email"
                     className="form-control"
                     placeholder="Enter email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    style={{ paddingLeft: '2.5rem' }}
+                    style={{ paddingLeft: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
                     required
                   />
                 </div>
@@ -1521,48 +1521,48 @@ export const Topbar = ({ onToggleSidebar }) => {
 
               {/* Phone Number */}
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Phone / Mobile Number</label>
+                <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: '0.2rem', fontWeight: 700 }}>Phone / Mobile Number</label>
                 <div style={{ position: 'relative' }}>
-                  <Phone size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <Phone size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Enter phone number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    style={{ paddingLeft: '2.5rem' }}
+                    style={{ paddingLeft: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
                   />
                 </div>
               </div>
 
               {/* Password */}
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">New Password (leave blank to keep unchanged)</label>
+                <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: '0.2rem', fontWeight: 700 }}>New Password (leave blank to keep unchanged)</label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <Lock size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="password"
                     className="form-control"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    style={{ paddingLeft: '2.5rem' }}
+                    style={{ paddingLeft: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
                   />
                 </div>
               </div>
 
               {/* Confirm Password */}
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Confirm New Password</label>
+                <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: '0.2rem', fontWeight: 700 }}>Confirm New Password</label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <Lock size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
                     type="password"
                     className="form-control"
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    style={{ paddingLeft: '2.5rem' }}
+                    style={{ paddingLeft: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
                   />
                 </div>
               </div>
@@ -1570,16 +1570,16 @@ export const Topbar = ({ onToggleSidebar }) => {
               {/* Footer Buttons */}
               <div style={{
                 display: 'flex',
-                gap: '1rem',
-                marginTop: '1rem',
+                gap: '0.75rem',
+                marginTop: '0.75rem',
                 borderTop: '1px solid #D8CFC1',
-                paddingTop: '1.25rem'
+                paddingTop: '1rem'
               }}>
                 <button
                   type="button"
                   onClick={() => setShowProfileModal(false)}
                   className="btn btn-secondary"
-                  style={{ flex: 1, height: '42px' }}
+                  style={{ flex: 1, height: '36px', fontSize: '0.85rem', fontWeight: 700 }}
                 >
                   Cancel
                 </button>
@@ -1587,12 +1587,12 @@ export const Topbar = ({ onToggleSidebar }) => {
                   type="submit"
                   className="btn btn-primary"
                   disabled={loading}
-                  style={{ flex: 2, height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}
+                  style={{ flex: 2, height: '36px', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}
                 >
                   {loading ? (
                     <>
-                      <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
-                      Saving changes...
+                      <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />
+                      Saving...
                     </>
                   ) : (
                     'Save Profile'

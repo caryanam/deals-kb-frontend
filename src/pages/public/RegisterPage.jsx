@@ -24,6 +24,8 @@ export const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
   const [validationError, setValidationError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
@@ -34,10 +36,19 @@ export const RegisterPage = () => {
     setAuthError(null);
   }, [token, user, navigate, setAuthError, getDashboardPath]);
 
+  useEffect(() => {
+    if (resendCooldown <= 0) return undefined;
+    const timer = setInterval(() => {
+      setResendCooldown((seconds) => Math.max(0, seconds - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
+
   const resetEmailVerification = () => {
     setOtp('');
     setOtpSent(false);
     setOtpVerified(false);
+    setResendCooldown(0);
     setSuccessMsg('');
   };
 
@@ -70,6 +81,7 @@ export const RegisterPage = () => {
       });
       setOtpSent(true);
       setOtpVerified(false);
+      setResendCooldown(30);
       toast.success('Verification OTP sent to your email!');
       setSuccessMsg('Verification code sent to your email. Please verify it before continuing.');
     } catch (err) {
@@ -79,6 +91,41 @@ export const RegisterPage = () => {
       toast.error(errMsg);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendCooldown > 0 || resendLoading || loading || otpVerified) return;
+    setValidationError('');
+    setSuccessMsg('');
+
+    const topError = validateTopFields();
+    if (topError) {
+      setValidationError(topError);
+      toast.error(topError);
+      return;
+    }
+
+    setResendLoading(true);
+    try {
+      await sendRegistrationOtp({
+        role,
+        name: name.trim(),
+        email: email.trim().toLowerCase()
+      });
+      setOtp('');
+      setOtpSent(true);
+      setOtpVerified(false);
+      setResendCooldown(30);
+      toast.success('New OTP sent to your email!');
+      setSuccessMsg('New verification code sent to your email.');
+    } catch (err) {
+      console.error('Failed to resend OTP:', err);
+      const errMsg = err.response?.data?.detail || err.response?.data?.message || 'Failed to resend verification OTP.';
+      setValidationError(errMsg);
+      toast.error(errMsg);
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -343,9 +390,39 @@ export const RegisterPage = () => {
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
                         disabled={loading || otpVerified}
-                        style={{ paddingLeft: '2.5rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.85rem', fontWeight: 700 }}
+                        style={{
+                          paddingLeft: '2.5rem',
+                          paddingRight: '7.25rem',
+                          paddingTop: '0.45rem',
+                          paddingBottom: '0.45rem',
+                          fontSize: '0.85rem',
+                          fontWeight: 700
+                        }}
                         required
                       />
+                      <button
+                        type="button"
+                        onClick={handleResendOtp}
+                        disabled={resendCooldown > 0 || resendLoading || loading || otpVerified}
+                        style={{
+                          position: 'absolute',
+                          right: '0.35rem',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          border: 'none',
+                          borderRadius: '0.45rem',
+                          backgroundColor: resendCooldown > 0 ? '#e5e7eb' : '#6B1B71',
+                          color: resendCooldown > 0 ? '#6b7280' : '#ffffff',
+                          fontSize: '0.72rem',
+                          fontWeight: 800,
+                          padding: '0.35rem 0.55rem',
+                          minWidth: '5.9rem',
+                          cursor: resendCooldown > 0 || resendLoading || loading || otpVerified ? 'not-allowed' : 'pointer',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {resendLoading ? 'Sending...' : resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend OTP'}
+                      </button>
                     </div>
                     <button
                       type="button"
@@ -361,7 +438,7 @@ export const RegisterPage = () => {
               )}
 
               <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label" htmlFor="phone-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Mobile Number *</label>
+                <label className="form-label" htmlFor="phone-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Mobile Number</label>
                 <div style={{ position: 'relative' }}>
                   <Phone size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
@@ -373,7 +450,6 @@ export const RegisterPage = () => {
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     disabled={fieldDisabledUntilOtp}
                     style={{ paddingLeft: '2.5rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.85rem' }}
-                    required
                   />
                 </div>
               </div>

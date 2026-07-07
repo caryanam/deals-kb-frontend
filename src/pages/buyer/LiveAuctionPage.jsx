@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, ArrowUpRight, Plus, RefreshCw, AlertCircle, PlayCircle } from 'lucide-react';
+import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, ArrowUpRight, Plus, RefreshCw, AlertCircle, PlayCircle, ImageOff } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { getProductById } from '../../api/productApi';
@@ -163,12 +163,27 @@ export const LiveAuctionPage = () => {
                     controls 
                     style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000000' }}
                   />
-                ) : (
+                ) : activeImage ? (
                   <img 
-                    src={activeImage || 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&auto=format&fit=crop&q=60'} 
+                    src={activeImage} 
                     alt={product.title} 
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
+                ) : (
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.75rem',
+                    color: '#64748b',
+                    backgroundColor: '#f8fafc'
+                  }}>
+                    <ImageOff size={48} />
+                    <span style={{ fontSize: '0.95rem', fontWeight: 800 }}>No image uploaded</span>
+                  </div>
                 )}
 
                 {/* Video toggle badge */}

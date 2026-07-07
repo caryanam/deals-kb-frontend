@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Gavel, AlertCircle, PlayCircle, RefreshCw, Trophy, Edit, Check, X } from 'lucide-react';
+import { Gavel, AlertCircle, PlayCircle, RefreshCw, Trophy, Edit, Check, X, ImageOff } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { getProducts, startAuction } from '../../api/productApi';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
@@ -156,13 +156,30 @@ export const MyListingsPage = () => {
               }}>
                 {(() => {
                   const photosArray = safeParseJSON(product.photos, []);
-                  const cover = photosArray.length > 0 ? photosArray[0] : 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&auto=format&fit=crop&q=60';
+                  if (photosArray.length > 0) {
+                    return (
+                      <img 
+                        src={photosArray[0]} 
+                        alt="" 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    );
+                  }
                   return (
-                    <img 
-                      src={cover} 
-                      alt="" 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                    <div style={{
+                      width: '100%',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.25rem',
+                      color: '#64748b',
+                      backgroundColor: '#f8fafc'
+                    }}>
+                      <ImageOff size={20} />
+                      <span style={{ fontSize: '0.62rem', fontWeight: 700, textAlign: 'center' }}>No image</span>
+                    </div>
                   );
                 })()}
               </div>

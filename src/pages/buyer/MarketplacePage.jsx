@@ -85,16 +85,6 @@ export const MarketplacePage = () => {
           <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Browse approved items, join live auctions, and place bids in real time</p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          {user?.role === 'Buyer' && (
-            <button
-              type="button"
-              onClick={() => setShowPlans(true)}
-              className="btn btn-primary"
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-            >
-              Explore Plans
-            </button>
-          )}
           <button 
             onClick={fetchListings} 
             className="btn btn-secondary" 

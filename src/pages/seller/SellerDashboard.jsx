@@ -22,7 +22,8 @@ export const SellerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dealerPlanActive, setDealerPlanActive] = useState(false);
-  const [payingDealerPlan, setPayingDealerPlan] = useState(false);
+  const [dealerCarPlanActive, setDealerCarPlanActive] = useState(false);
+  const [payingPlanId, setPayingPlanId] = useState(null);
 
   const loadSellerStats = async () => {
     if (!user) return;
@@ -30,11 +31,12 @@ export const SellerDashboard = () => {
       setLoading(true);
       setError(null);
       
-      // Load listings created by this seller
       const myListings = await getProducts({ mine: 'true' });
       if (user.role === 'Dealer') {
         const plans = await getMyPlans();
-        setDealerPlanActive(Boolean((plans || []).find((plan) => plan.plan_id === 'dealer_monthly' && plan.active)));
+        const activePlans = plans || [];
+        setDealerPlanActive(activePlans.some((plan) => plan.plan_id === 'dealer_monthly' && plan.active));
+        setDealerCarPlanActive(activePlans.some((plan) => plan.plan_id === 'dealer_car_monthly' && plan.active));
       }
       
       const counts = {
@@ -58,15 +60,16 @@ export const SellerDashboard = () => {
     loadSellerStats();
   }, [user]);
 
-  const handleActivateDealerPlan = async () => {
+  const handleActivatePlan = async (planId) => {
     try {
-      setPayingDealerPlan(true);
-      const freshUser = await triggerPayment('dealer_monthly');
+      setPayingPlanId(planId);
+      const freshUser = await triggerPayment(planId);
       if (freshUser) {
-        setDealerPlanActive(true);
+        if (planId === 'dealer_monthly') setDealerPlanActive(true);
+        if (planId === 'dealer_car_monthly') setDealerCarPlanActive(true);
       }
     } finally {
-      setPayingDealerPlan(false);
+      setPayingPlanId(null);
     }
   };
 
@@ -137,13 +140,29 @@ export const SellerDashboard = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Monthly Plan</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>₹500/month dealer access plan.</p>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Monthly Plan (Mobile/Laptop/Bike)</h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>₹1,000/month unlimited listings for Mobile, Laptop & Bike.</p>
             </div>
           </div>
-          <button type="button" onClick={handleActivateDealerPlan} disabled={payingDealerPlan} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
-            {payingDealerPlan ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Monthly Plan
+          <button type="button" onClick={() => handleActivatePlan('dealer_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
+            {payingPlanId === 'dealer_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
+            Activate Plan (₹1000)
+          </button>
+        </div>
+      )}
+
+      {user?.role === 'Dealer' && !dealerCarPlanActive && (
+        <div className="card" style={{ marginBottom: '2rem', border: '1px solid #D8CFC1', backgroundColor: '#F5ECDD', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
+            <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
+            <div>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Car Monthly Plan (Car)</h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>₹1,999/month unlimited listings for Cars.</p>
+            </div>
+          </div>
+          <button type="button" onClick={() => handleActivatePlan('dealer_car_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
+            {payingPlanId === 'dealer_car_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
+            Activate Car Plan (₹1999)
           </button>
         </div>
       )}

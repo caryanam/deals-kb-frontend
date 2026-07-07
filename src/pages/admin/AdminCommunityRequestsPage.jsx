@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Compass, Search, Filter, RefreshCw, Layers, Award } from 'lucide-react';
+import { Compass, Search, Filter, RefreshCw, Layers, Award, Users } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { adminGetCommunityRequests, adminUpdateCommunityRequestStatus } from '../../api/communityRequestsApi';
 import { formatCurrency } from '../../utils/helpers';

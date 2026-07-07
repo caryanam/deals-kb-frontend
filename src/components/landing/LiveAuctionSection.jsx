@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, Lock, AlertCircle, RefreshCw, Zap, ArrowRight } from 'lucide-react';
+import { Clock, Lock, AlertCircle, RefreshCw, Zap, ArrowRight, ImageOff } from 'lucide-react';
 import api from '../../api/axiosClient';
 import { formatCurrency, safeParseJSON } from '../../utils/helpers';
 
@@ -53,7 +53,7 @@ const LiveAuctionCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const parsedPhotos = safeParseJSON(product.photos, []);
-  const displayImage = parsedPhotos.length > 0 ? parsedPhotos[0] : 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=400';
+  const displayImage = product.img || (parsedPhotos.length > 0 ? parsedPhotos[0] : null);
 
   useEffect(() => {
     if (!product.auction_ends_at) {
@@ -95,18 +95,37 @@ const LiveAuctionCard = ({ product }) => {
         cursor: 'pointer'
       }}
     >
-      <div className="landing-category-img-container" style={{ position: 'relative', overflow: 'hidden', height: '200px' }}>
-        <img 
-          src={displayImage} 
-          alt={product.title} 
-          style={{
+      <div className="landing-category-img-container" style={{ position: 'relative', overflow: 'hidden', height: '200px', backgroundColor: '#f1f5f9' }}>
+        {displayImage ? (
+          <img 
+            src={displayImage} 
+            alt={product.title} 
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+              transform: isHovered ? 'scale(1.08)' : 'scale(1)'
+            }}
+          />
+        ) : (
+          <div style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.45rem',
+            color: '#64748b',
+            backgroundColor: '#f8fafc',
             transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-            transform: isHovered ? 'scale(1.08)' : 'scale(1)'
-          }}
-        />
+            transform: isHovered ? 'scale(1.04)' : 'scale(1)'
+          }}>
+            <ImageOff size={30} />
+            <span style={{ fontSize: '0.82rem', fontWeight: 700 }}>No image uploaded</span>
+          </div>
+        )}
         
         {/* LIVE flashing badge */}
         <div style={{
@@ -262,11 +281,11 @@ const LiveAuctionSection = () => {
       if (Array.isArray(data) && data.length > 0) {
         setLiveAuctions(data);
       } else {
-        setLiveAuctions(sampleAuctions);
+        setLiveAuctions([]);
       }
     } catch (err) {
-      console.warn('Using fallback public live list:', err);
-      setLiveAuctions(sampleAuctions);
+      console.warn('Failed to fetch public live list:', err);
+      setLiveAuctions([]);
     } finally {
       setLoading(false);
     }
@@ -336,6 +355,19 @@ const LiveAuctionSection = () => {
           }}>
             <AlertCircle size={20} />
             <span>Unable to load live auctions. Please try again.</span>
+          </div>
+        ) : liveAuctions.length === 0 ? (
+          <div style={{
+            textAlign: 'center',
+            padding: '3rem 1.5rem',
+            border: '1.5px dashed #fee2e2',
+            borderRadius: '1rem',
+            backgroundColor: '#ffffff',
+            color: '#8B8278'
+          }}>
+            <Clock size={40} style={{ color: '#fca5a5', marginBottom: '0.75rem' }} />
+            <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#c53030', margin: '0 0 0.25rem 0' }}>No active live auctions</h4>
+            <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: 0 }}>There are currently no auctions running in real-time. Check back soon!</p>
           </div>
         ) : (
           <div className="landing-auctions-grid">
