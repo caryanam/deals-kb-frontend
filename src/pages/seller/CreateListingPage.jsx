@@ -6,7 +6,16 @@ import { createProduct, getProductById, updateProduct } from '../../api/productA
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
 import { triggerPayment } from '../../utils/paymentHelper';
-import { CAR_BRANDS, CAR_BRAND_TO_MODELS, LAPTOP_BRANDS, LAPTOP_BRAND_TO_MODELS } from '../../data/carLaptopData';
+import {
+  BIKE_BRANDS,
+  BIKE_BRAND_TO_MODELS,
+  CAR_BRANDS,
+  CAR_BRAND_TO_MODELS,
+  LAPTOP_BRANDS,
+  LAPTOP_BRAND_TO_MODELS,
+  MOBILE_BRANDS,
+  MOBILE_BRAND_TO_MODELS
+} from '../../data/carLaptopData';
 
 const CATEGORIES = [
   { value: 'car', label: 'CAR' },
@@ -93,6 +102,33 @@ const sectionTitle = {
   mobile: 'Mobile Details'
 };
 
+const BRAND_MODEL_DATA = {
+  car: {
+    brands: CAR_BRANDS,
+    modelsByBrand: CAR_BRAND_TO_MODELS,
+    brandPlaceholder: 'Select Car Brand',
+    modelPlaceholder: 'Select Car Model'
+  },
+  bike: {
+    brands: BIKE_BRANDS,
+    modelsByBrand: BIKE_BRAND_TO_MODELS,
+    brandPlaceholder: 'Select Bike Brand',
+    modelPlaceholder: 'Select Bike Model'
+  },
+  mobile: {
+    brands: MOBILE_BRANDS,
+    modelsByBrand: MOBILE_BRAND_TO_MODELS,
+    brandPlaceholder: 'Select Mobile Brand',
+    modelPlaceholder: 'Select Mobile Model'
+  },
+  laptop: {
+    brands: LAPTOP_BRANDS,
+    modelsByBrand: LAPTOP_BRAND_TO_MODELS,
+    brandPlaceholder: 'Select Laptop Brand',
+    modelPlaceholder: 'Select Laptop Model'
+  }
+};
+
 export const CreateListingPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -122,6 +158,7 @@ export const CreateListingPage = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const brandModelData = BRAND_MODEL_DATA[productType];
 
   useEffect(() => {
     if (!editId) return;
@@ -448,47 +485,22 @@ export const CreateListingPage = () => {
               placeholder={TITLE_PLACEHOLDERS[productType] || "Enter product title"}
             />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '1rem' }}>
-              {productType === 'car' ? (
-                <Select
-                  label="Brand *"
-                  value={brand}
-                  onChange={handleBrandChange}
-                  options={CAR_BRANDS}
-                  placeholder="Select Car Brand"
-                />
-              ) : productType === 'laptop' ? (
-                <Select
-                  label="Brand *"
-                  value={brand}
-                  onChange={handleBrandChange}
-                  options={LAPTOP_BRANDS}
-                  placeholder="Select Laptop Brand"
-                />
-              ) : (
-                <Input label="Brand *" value={brand} onChange={setBrand} placeholder="e.g. Honda / Apple / Dell" />
-              )}
+              <Select
+                label="Brand *"
+                value={brand}
+                onChange={handleBrandChange}
+                options={brandModelData.brands}
+                placeholder={brandModelData.brandPlaceholder}
+              />
 
-              {productType === 'car' ? (
-                <Select
-                  label="Model *"
-                  value={model}
-                  onChange={setModel}
-                  options={CAR_BRAND_TO_MODELS[brand] || []}
-                  placeholder={brand ? "Select Car Model" : "Select Brand First"}
-                  disabled={!brand}
-                />
-              ) : productType === 'laptop' ? (
-                <Select
-                  label="Model *"
-                  value={model}
-                  onChange={setModel}
-                  options={LAPTOP_BRAND_TO_MODELS[brand] || []}
-                  placeholder={brand ? "Select Laptop Model" : "Select Brand First"}
-                  disabled={!brand}
-                />
-              ) : (
-                <Input label="Model *" value={model} onChange={setModel} placeholder="e.g. City / iPhone 13 / Inspiron" />
-              )}
+              <Select
+                label="Model *"
+                value={model}
+                onChange={setModel}
+                options={brandModelData.modelsByBrand[brand] || []}
+                placeholder={brand ? brandModelData.modelPlaceholder : 'Select Brand First'}
+                disabled={!brand}
+              />
             </div>
           </section>
 
