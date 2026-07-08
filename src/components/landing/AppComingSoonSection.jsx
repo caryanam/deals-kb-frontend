@@ -24,7 +24,7 @@ const AppComingSoonSection = () => {
         padding: '90px 24px',
         borderTop: `1px solid ${BORDER_COLOR}`,
         borderBottom: `1px solid ${BORDER_COLOR}`,
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        fontFamily: "'Inter', 'Poppins', sans-serif",
         overflow: 'hidden',
       }}
     >
@@ -100,7 +100,7 @@ const AppComingSoonSection = () => {
                   fontSize: '20px',
                   fontWeight: '700',
                   margin: '0 0 6px',
-                  fontFamily: "'Outfit', sans-serif",
+                  fontFamily: "'Inter', 'Poppins', sans-serif",
                 }}
               >
                 Mobile App
@@ -128,7 +128,7 @@ const AppComingSoonSection = () => {
               fontWeight: '800',
               color: DARK,
               margin: '0 0 20px',
-              fontFamily: "'Outfit', sans-serif",
+              fontFamily: "'Inter', 'Poppins', sans-serif",
               lineHeight: '1.15',
             }}
           >

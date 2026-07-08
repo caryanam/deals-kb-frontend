@@ -1,4 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800;900&display=swap");
+
+body {
+  font-family: "Inter", "Poppins", sans-serif;
+}
 
 /* Global view limits to avoid horizontal scrolls */
 html,
@@ -33,7 +37,7 @@ body,
 
 /* Landing Page Layout classes */
 .landing-page {
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", "Poppins", sans-serif;
   color: var(--landing-text-dark);
   background-color: #ffffff;
   width: 100%;
@@ -130,7 +134,7 @@ body,
   font-weight: 800;
   color: #ffffff;
   line-height: 1;
-  font-family: "Poppins", sans-serif;
+  font-family: "Bahnschrift", "Poppins", sans-serif;
   margin: 0;
 }
 
@@ -164,9 +168,15 @@ body,
   cursor: pointer;
 }
 
-.nav-link:hover,
+.nav-link:hover {
+  color: #c084fc;
+}
+
 .nav-link.active {
   color: #c084fc;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
 }
 
 /* Navbar Auth Actions */
@@ -265,27 +275,28 @@ body,
 }
 
 .hero-title {
-  font-family: "Poppins", sans-serif;
-  font-size: 56px;
-  line-height: 0.98;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 68px;
+  line-height: 1.05;
   font-weight: 900;
-  letter-spacing: -1.8px;
+  letter-spacing: -1px;
   color: #ffffff;
   margin: 0;
 }
 
 .hero-title .highlight {
-  color: #c084fc;
+  color: #c96cff;
 }
 
-.hero-subtitle {
-  max-width: 390px;
+.hero-description {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.6;
+  max-width: 430px;
+  color: rgba(255, 255, 255, 0.82);
   margin-top: 18px;
   margin-bottom: 0;
-  font-size: 13.5px;
-  line-height: 1.55;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.82);
 }
 
 .hero-actions {
@@ -736,5 +747,74 @@ body,
   
   .landing-section-title {
     font-size: 1.85rem;
+  }
+}
+
+/* Premium Typography Classes */
+.logo-text {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.logo-tagline {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.nav-link {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.header-btn {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.hero-kicker {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.hero-btn {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.stat-number {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.stat-label {
+  font-family: "Inter", "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 44px;
+    line-height: 1.1;
+  }
+
+  .hero-description {
+    font-size: 14px;
+  }
+
+  .nav-link {
+    font-size: 14px;
   }
 }

@@ -15,6 +15,11 @@ export const getProductById = async (productId) => {
   return response.data;
 };
 
+export const getPublicAuctionProduct = async (productId) => {
+  const response = await api.get(`/products/public/${productId}`);
+  return response.data;
+};
+
 export const reviewProduct = async (productId, data) => {
   const response = await api.patch(`/products/${productId}/review`, data);
   return response.data;
@@ -32,6 +37,11 @@ export const placeBid = async (productId, amount) => {
 
 export const getProductBids = async (productId) => {
   const response = await api.get(`/products/${productId}/bids`);
+  return response.data;
+};
+
+export const getPublicAuctionBids = async (productId) => {
+  const response = await api.get(`/products/public/${productId}/bids`);
   return response.data;
 };
 

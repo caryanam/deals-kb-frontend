@@ -34,7 +34,7 @@ export const SellerAuctionPage = () => {
   const [product, setProduct] = useState(null);
 
   const handleShareAuctionLink = async () => {
-    const liveUrl = `${window.location.origin}${basePath}/auction/${productId}`;
+    const liveUrl = `${window.location.origin}/auction/watch/${productId}`;
     try {
       await navigator.clipboard.writeText(liveUrl);
       toast.success('Live auction link copied.');

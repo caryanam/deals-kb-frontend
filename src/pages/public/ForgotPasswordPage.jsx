@@ -4,7 +4,7 @@ import { Car, Lock, Mail, Loader2, AlertCircle, ShieldCheck, Check, Eye, EyeOff 
 import { sendForgotPasswordOtp, verifyForgotPasswordOtp, resetPassword } from '../../api/authApi';
 import { toast } from 'react-toastify';
 import '../../styles/auth.css';
-import loginBg from '../../assets/login_bg.jpg';
+import loginBg from '../../assets/login_bg.png';
 
 export const ForgotPasswordPage = () => {
   const navigate = useNavigate();

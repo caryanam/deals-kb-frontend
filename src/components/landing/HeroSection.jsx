@@ -58,7 +58,7 @@ const HeroSection = () => {
         
         {/* Left side: Text, CTAs, Stats */}
         <div className="hero-left">
-          <div className="hero-eyebrow">WELCOME TO DEALSKB</div>
+          <div className="hero-kicker">WELCOME TO THE FUTURE OF AUCTIONS</div>
           
           <h1 className="hero-title">
             Bid More.<br />
@@ -66,61 +66,21 @@ const HeroSection = () => {
             Own More.
           </h1>
           
-          <p className="hero-subtitle">
+          <p className="hero-description">
             India’s trusted online auction marketplace for Cars, Bikes, Mobiles & Laptops. Join now and get the best deals at unbeatable prices.
           </p>
 
           <div className="hero-actions">
-            <button className="hero-primary-btn" onClick={() => navigate('/buyer/marketplace')}>
+            <button className="hero-primary-btn hero-btn" onClick={() => navigate('/buyer/marketplace')}>
               Explore Auctions
             </button>
-            <button className="hero-secondary-btn" onClick={handleScrollToHowItWorks}>
+            <button className="hero-secondary-btn hero-btn" onClick={handleScrollToHowItWorks}>
               How It Works
             </button>
           </div>
 
           {/* Stats Row */}
-          <div className="hero-stats">
-            <div className="hero-stat">
-              <div className="stat-icon">
-                <Users size={16} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-value">10K+</div>
-                <div className="stat-label">Happy Users</div>
-              </div>
-            </div>
-
-            <div className="hero-stat">
-              <div className="stat-icon">
-                <Gavel size={16} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-value">25K+</div>
-                <div className="stat-label">Live Auctions</div>
-              </div>
-            </div>
-
-            <div className="hero-stat">
-              <div className="stat-icon">
-                <ShoppingBag size={16} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-value">5K+</div>
-                <div className="stat-label">Products Sold</div>
-              </div>
-            </div>
-
-            <div className="hero-stat">
-              <div className="stat-icon">
-                <ShieldCheck size={16} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-value">100%</div>
-                <div className="stat-label">Secure & Safe</div>
-              </div>
-            </div>
-          </div>
+          
         </div>
 
 

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { checkRegistrationOtp, sendRegistrationOtp } from '../../api/authApi';
 import { useAuth } from '../../hooks/useAuth';
 import '../../styles/auth.css';
-import loginBg from '../../assets/login_bg.jpg';
+import loginBg from '../../assets/login_bg.png';
 
 const roleOptions = ['Buyer', 'Seller', 'Dealer'];
 

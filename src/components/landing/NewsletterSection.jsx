@@ -55,7 +55,7 @@ const NewsletterSection = () => {
           fontWeight: 800,
           color: '#ffffff',
           marginBottom: '1rem',
-          fontFamily: "'Outfit', sans-serif"
+          fontFamily: "'Inter', 'Poppins', sans-serif"
         }}>
           Never Miss an Auction Deal
         </h2>

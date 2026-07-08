@@ -15,6 +15,7 @@ import FaqsPage from '../pages/public/FaqsPage';
 import BiddingPlansPage from '../pages/public/BiddingPlansPage';
 import BuyerGuidePage from '../pages/public/BuyerGuidePage';
 import SellerGuidePage from '../pages/public/SellerGuidePage';
+import PublicAuctionWatchPage from '../pages/public/PublicAuctionWatchPage';
 
 // Buyer Pages
 import BuyerDashboard from '../pages/buyer/BuyerDashboard';
@@ -59,6 +60,7 @@ export const AppRoutes = () => {
       <Route path="/bidding-plans" element={<BiddingPlansPage />} />
       <Route path="/buyer-guide" element={<BuyerGuidePage />} />
       <Route path="/seller-guide" element={<SellerGuidePage />} />
+      <Route path="/auction/watch/:productId" element={<PublicAuctionWatchPage />} />
 
       {/* 2. Buyer Protected Routes */}
       <Route
