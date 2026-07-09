@@ -106,7 +106,34 @@ export const TermsAndConditionsPage = () => (
       <P>All payments are processed securely via Razorpay. DealsKB does not store payment card information. Transaction records are maintained for audit purposes. Disputes related to payments must be raised within 7 days of the transaction.</P>
     </Section>
 
-    <Section title="9. Prohibited Activities">
+    <Section title="9. Delivery / Service Policy">
+      <P>DealsKB is an online marketplace platform that connects Buyers and Sellers through listing and bidding services. DealsKB provides only the platform for listing products and conducting auctions/bidding. DealsKB is not responsible for:</P>
+      <Ul items={[
+        'Product quality, condition, or authenticity.',
+        'Delivery, shipping, transportation, or logistics.',
+        'Delays or disputes between Buyer and Seller.',
+        'Registration, ownership transfer, or legal documentation.',
+        'Any loss or damage arising after the auction is completed.',
+      ]} />
+      <P style={{ marginTop: '8px' }}>Sellers are solely responsible for delivering the product as agreed with the winning bidder.</P>
+    </Section>
+
+    <Section title="10. EMD Policy">
+      <P>Earnest Money Deposit (EMD) is mandatory to participate in auctions on DealsKB.</P>
+      <Ul items={[
+        'EMD is strictly non-refundable under any circumstances.',
+        'By participating in the auction, the bidder agrees to this policy before making the payment.',
+      ]} />
+    </Section>
+
+    <Section title="11. Listing Fee Policy">
+      <P>Listing Fee is charged for publishing listings on the DealsKB platform.</P>
+      <Ul items={[
+        'Listing Fee is non-refundable, regardless of whether the listing receives bids or is sold.',
+      ]} />
+    </Section>
+
+    <Section title="12. Prohibited Activities">
       <Ul items={[
         'Shill bidding or coordinating bids to manipulate auction outcomes',
         'Listing counterfeit, stolen, or misrepresented products',
@@ -117,19 +144,19 @@ export const TermsAndConditionsPage = () => (
       ]} />
     </Section>
 
-    <Section title="10. Limitation of Liability">
+    <Section title="13. Limitation of Liability">
       <P>DealsKB acts as a marketplace facilitator. We are not responsible for the condition, authenticity, or delivery of products. Disputes between buyers and sellers should be resolved directly; DealsKB may assist in mediation but bears no financial liability for transaction outcomes.</P>
     </Section>
 
-    <Section title="11. Changes to Terms">
+    <Section title="14. Changes to Terms">
       <P>DealsKB reserves the right to update these Terms at any time. Continued use of the platform after changes constitutes acceptance. We will notify registered users of material changes via email.</P>
     </Section>
 
-    <Section title="12. Governing Law">
+    <Section title="15. Governing Law">
       <P>These Terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Pune, Maharashtra.</P>
     </Section>
 
-    <Section title="13. Contact">
+    <Section title="16. Contact">
       <P>For queries about these Terms, contact: <strong>support@dealskb.com</strong> | Caryanamindia Pvt Ltd, Pune, Maharashtra, India.</P>
     </Section>
   </LegalLayout>

@@ -46,7 +46,7 @@ const HeroSection = () => {
               
               <div className="hero-actions hero-actions-desktop">
                 <button className="hero-primary-btn hero-btn" onClick={() => navigate('/buyer/marketplace')}>
-                  Explore Auctions
+                  Explore
                 </button>
                 <button className="hero-secondary-btn hero-btn" onClick={handleScrollToHowItWorks}>
                   How It Works
@@ -59,7 +59,7 @@ const HeroSection = () => {
 
       <div className="hero-actions-mobile">
         <button className="hero-primary-btn hero-btn" onClick={() => navigate('/buyer/marketplace')}>
-          Explore Auctions
+          Explore
         </button>
         <button className="hero-secondary-btn hero-btn" onClick={handleScrollToHowItWorks}>
           How It Works
