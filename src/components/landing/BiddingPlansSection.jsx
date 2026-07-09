@@ -7,17 +7,17 @@ const GOLD = '#B2772D';
 const BORDER = '#D8CFC1';
 
 const buyerPasses = [
-  { category: 'Mobile', icon: '📱', price: '₹12.98', duration: '24 hours', desc: 'Place unlimited bids on mobile auctions (incl. 18% GST)' },
-  { category: 'Laptop', icon: '💻', price: '₹24.78', duration: '24 hours', desc: 'Place unlimited bids on laptop auctions (incl. 18% GST)' },
-  { category: 'Bike', icon: '🏍️', price: '₹60.18', duration: '24 hours', desc: 'Place unlimited bids on bike auctions (incl. 18% GST)' },
-  { category: 'Car', icon: '🚗', price: '₹119.18', duration: '24 hours', desc: 'Place unlimited bids on car auctions (incl. 18% GST)' },
+  { category: 'Mobile', icon: '📱', price: '₹1', duration: '24 hours', desc: 'Place unlimited bids on mobile auctions (incl. 18% GST)' },
+  { category: 'Laptop', icon: '💻', price: '₹1', duration: '24 hours', desc: 'Place unlimited bids on laptop auctions (incl. 18% GST)' },
+  { category: 'Bike', icon: '🏍️', price: '₹1', duration: '24 hours', desc: 'Place unlimited bids on bike auctions (incl. 18% GST)' },
+  { category: 'Car', icon: '🚗', price: '₹1', duration: '24 hours', desc: 'Place unlimited bids on car auctions (incl. 18% GST)' },
 ];
 
 const sellerFees = [
-  { category: 'Mobile Listing', icon: '📱', price: '₹11.80', type: 'one-time (incl. 18% GST)' },
-  { category: 'Laptop Listing', icon: '💻', price: '₹23.60', type: 'one-time (incl. 18% GST)' },
-  { category: 'Bike Listing', icon: '🏍️', price: '₹59', type: 'one-time (incl. 18% GST)' },
-  { category: 'Car Listing', icon: '🚗', price: '₹118', type: 'one-time (incl. 18% GST)' },
+  { category: 'Mobile Listing', icon: '📱', price: '₹1', type: 'one-time (incl. 18% GST)' },
+  { category: 'Laptop Listing', icon: '💻', price: '₹1', type: 'one-time (incl. 18% GST)' },
+  { category: 'Bike Listing', icon: '🏍️', price: '₹1', type: 'one-time (incl. 18% GST)' },
+  { category: 'Car Listing', icon: '🚗', price: '₹1', type: 'one-time (incl. 18% GST)' },
 ];
 
 const GroupTitle = ({ children, sub }) => (
@@ -215,13 +215,13 @@ const BiddingPlansSection = () => {
             <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap', margin: '16px 0 20px' }}>
               <div>
                 <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', display: 'block', fontWeight: 800 }}>Mobile/Laptop/Bike</span>
-                <div style={{ fontSize: '32px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹1,180</div>
+                <div style={{ fontSize: '32px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹1</div>
                 <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)' }}>/ month (incl. GST)</span>
               </div>
               <div style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', height: '48px', alignSelf: 'center' }} />
               <div>
                 <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', display: 'block', fontWeight: 800 }}>Car Plan</span>
-                <div style={{ fontSize: '32px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹2,359</div>
+                <div style={{ fontSize: '32px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹1</div>
                 <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)' }}>/ month (incl. GST)</span>
               </div>
             </div>
@@ -233,7 +233,7 @@ const BiddingPlansSection = () => {
                 margin: '0 0 28px',
               }}
             >
-              Unlimited listings for Mobile, Laptop & Bike at ₹1,180/month, and Cars at ₹2,359/month.
+              Unlimited listings for Mobile, Laptop & Bike at ₹1/month, and Cars at ₹1/month.
               No per-listing charges. Perfect for high-volume dealers.
             </p>
             <ul

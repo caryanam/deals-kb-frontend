@@ -16,25 +16,25 @@ const FALLBACK_PLANS = {
   mobile: {
     plan_id: 'buyer_mobile_24h',
     name: 'Mobile Bidding Pass',
-    amount: 5100,
+    amount: 100,
     description: 'Unlimited mobile bidding for 24 hours.'
   },
   laptop: {
     plan_id: 'buyer_laptop_24h',
     name: 'Laptop Bidding Pass',
-    amount: 2100,
+    amount: 100,
     description: 'Unlimited laptop bidding for 24 hours.'
   },
   car: {
     plan_id: 'buyer_car_24h',
     name: 'Car Bidding Pass',
-    amount: 49900,
+    amount: 100,
     description: 'Unlimited car bidding for 24 hours.'
   },
   bike: {
     plan_id: 'buyer_bike_24h',
     name: 'Bike Bidding Pass',
-    amount: 11100,
+    amount: 100,
     description: 'Unlimited bike bidding for 24 hours.'
   }
 };

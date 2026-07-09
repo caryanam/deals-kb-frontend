@@ -80,7 +80,7 @@ export const TermsAndConditionsPage = () => (
     <Section title="5. Buyer Rules">
       <Ul items={[
         'Bidding passes are category-specific and valid for 24 hours from activation',
-        'Passes for Cars (₹119.18), Bikes (₹60.18), Laptops (₹24.78), and Mobiles (₹12.98) are non-transferable (prices incl. 18% GST)',
+        'Passes for Cars (₹1), Bikes (₹1), Laptops (₹1), and Mobiles (₹1) are non-transferable (prices incl. 18% GST)',
         'Winning a bid creates an obligation to complete the transaction with the seller',
         'Failure to complete a transaction after winning may result in account suspension',
         'Buyers are responsible for verifying product details before bidding',
@@ -89,8 +89,8 @@ export const TermsAndConditionsPage = () => (
 
     <Section title="6. Seller and Dealer Rules">
       <Ul items={[
-        'Sellers must pay a listing fee per product: Cars (₹118), Bikes (₹59), Laptops (₹23.60), Mobiles (₹11.80) (prices incl. 18% GST)',
-        'Dealers subscribe to a monthly plan: ₹1,180 for Mobile/Laptop/Bike or ₹2,359 for Cars (prices incl. 18% GST)',
+        'Sellers must pay a listing fee per product: Cars (₹1), Bikes (₹1), Laptops (₹1), Mobiles (₹1) (prices incl. 18% GST)',
+        'Dealers subscribe to a monthly plan: ₹1 for Mobile/Laptop/Bike or ₹1 for Cars (prices incl. 18% GST)',
         'All product information, photos, and documents must be accurate and authentic',
         'Sellers must not withdraw a product after auction start without valid reason',
         'Sellers must complete the handover to the winning buyer within the agreed timeframe',
