@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     q: 'What is the refund policy for bidding passes?',
-    a: 'Bidding passes are non-refundable once activated. However, if a seller cancels a listing before auction start, your pass amount may be credited back.',
+    a: 'Bidding passes are non-refundable once activated.',
   },
   {
     q: 'Is my payment information secure?',

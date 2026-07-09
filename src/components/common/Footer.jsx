@@ -78,7 +78,7 @@ const Footer = () => {
             <h4>Contact Us</h4>
             <p>
               <Phone size={15} />
-              <span>+91 98765 43210</span>
+              <span>+91 99232 24600</span>
             </p>
             <p>
               <Mail size={15} />

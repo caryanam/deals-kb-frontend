@@ -69,12 +69,12 @@ export const RefundPolicyPage = () => (
         'Car Pass: ₹119.18 / 24 hours (incl. 18% GST)',
       ]} />
       <P><strong>Non-refundable after activation:</strong> Once a bidding pass is activated and auction access is granted, no refund will be issued, regardless of whether bids were placed or the auction was won.</P>
-      <P><strong>Eligible for refund (credit):</strong></P>
+      {/* <P><strong>Eligible for refund (credit):</strong></P>
       <Ul items={[
         'If the auction you purchased the pass for is cancelled by the seller before auction start, your pass amount will be credited to your DealsKB wallet within 5–7 business days',
         'If a technical error on our platform prevents you from accessing an active auction despite a valid pass, contact support within 24 hours for review',
         'If DealsKB cancels an auction due to platform issues or admin action, affected pass holders will receive a full credit',
-      ]} />
+      ]} /> */}
     </Section>
 
     <Section title="3. Seller Listing Fees — Refund Policy">
@@ -86,12 +86,12 @@ export const RefundPolicyPage = () => (
         'Car Listing: ₹118 (incl. 18% GST)',
       ]} />
       <P><strong>Non-refundable after admin review begins:</strong> Once your listing has been submitted and the admin review process has started, the listing fee is non-refundable.</P>
-      <P><strong>Eligible for refund:</strong></P>
+      {/* <P><strong>Eligible for refund:</strong></P>
       <Ul items={[
         'If a listing is rejected by admin due to a platform-side error (not due to inaccurate product information), a full refund will be processed',
         'If you cancel a listing within 1 hour of submission and before admin review starts, a refund may be requested',
         'Refunds for valid cases are processed within 7–10 business days to the original payment method',
-      ]} />
+      ]} /> */}
       <P><strong>Not eligible for refund:</strong></P>
       <Ul items={[
         'Listings rejected due to inaccurate or fraudulent product information, missing documents, or policy violations',
@@ -102,11 +102,11 @@ export const RefundPolicyPage = () => (
     <Section title="4. Dealer Monthly Plan — Refund Policy">
       <P>Dealers subscribe to a monthly plan at ₹500/month for unlimited product listings.</P>
       <P><strong>Non-refundable:</strong> Monthly dealer plans are non-refundable once the billing period has started. You may cancel your plan at any time; the plan remains active until the end of the current billing period.</P>
-      <P><strong>Eligible for refund:</strong></P>
+      {/* <P><strong>Eligible for refund:</strong></P>
       <Ul items={[
         'If you were charged erroneously (e.g., double charge) due to a payment gateway error, contact support within 3 business days for resolution',
         'If DealsKB discontinues the Dealer Plan service with less than 7 days notice, a pro-rated refund will be issued',
-      ]} />
+      ]} /> */}
     </Section>
 
     <Section title="5. Delivery & Handover Policy">
@@ -114,7 +114,7 @@ export const RefundPolicyPage = () => (
       <P>DealsKB facilitates communication between the winning buyer and the seller. DealsKB is not liable for delays, damage during handover, or failure to deliver products. All disputes regarding product condition or delivery should be raised with the seller directly, with DealsKB available for mediation support.</P>
     </Section>
 
-    <Section title="6. Refund Process">
+    {/* <Section title="6. Refund Process">
       <P>To request a refund for an eligible case:</P>
       <Ul items={[
         'Email support@dealskb.com with subject line: "Refund Request – [Order ID]"',
@@ -122,10 +122,10 @@ export const RefundPolicyPage = () => (
         'Our team will review within 3 business days and respond with a decision',
         'Approved refunds are processed to the original payment method within 7–10 business days',
       ]} />
-    </Section>
+    </Section> */}
 
-    <Section title="7. Contact">
-      <P>For refund queries: <strong>support@dealskb.com</strong> | Caryanamindia Pvt Ltd, Pune, Maharashtra, India | Phone: +91 98765 43210</P>
+    <Section title="6. Contact">
+      <P>For refund queries: <strong>support@dealskb.com</strong> | Caryanamindia Pvt Ltd, Pune, Maharashtra, India | Phone: +91 99232 24600</P>
     </Section>
   </LegalLayout>
 );
