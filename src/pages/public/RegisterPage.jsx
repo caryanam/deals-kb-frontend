@@ -223,8 +223,8 @@ export const RegisterPage = () => {
           <div className="auth-card register-card">
             <div style={{ textAlign: 'center', marginBottom: '0.85rem' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
-                <Car size={26} style={{ color: '#ffffff' }} />
-                <span style={{ fontSize: '1.45rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#ffffff', letterSpacing: 0 }}>
+                <Car size={26} style={{ color: '#6B1B71' }} />
+                <span style={{ fontSize: '1.45rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#0f172a', letterSpacing: 0 }}>
                   Create Account
                 </span>
               </div>

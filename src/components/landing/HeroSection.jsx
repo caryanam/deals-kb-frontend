@@ -24,10 +24,10 @@ const HeroSection = () => {
         playsInline
         style={{
           position: 'absolute',
-          top: '72px',
+          top: 0,
           left: 0,
           width: '100%',
-          height: 'calc(100% - 72px)',
+          height: '100%',
           objectFit: 'cover',
           zIndex: 1,
         }}
@@ -35,18 +35,7 @@ const HeroSection = () => {
         <source src={landingVideo} type="video/mp4" />
       </video>
 
-      {/* Dark overlay for text readability */}
-      <div 
-        style={{
-          position: 'absolute',
-          top: '72px',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(to right, rgba(9, 13, 22, 0.45), rgba(9, 13, 22, 0))',
-          zIndex: 2,
-        }}
-      />
+
 
       {/* Integrated transparent Navbar */}
       <div style={{ position: 'relative', zIndex: 50 }}>

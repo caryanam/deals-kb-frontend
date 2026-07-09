@@ -76,8 +76,8 @@ export const LoginPage = () => {
           <div className="auth-card login-card">
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <Car size={36} style={{ color: '#ffffff' }} />
-                <span style={{ fontSize: '1.75rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#ffffff', letterSpacing: 0 }}>
+                <Car size={36} style={{ color: '#6B1B71' }} />
+                <span style={{ fontSize: '1.75rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#0f172a', letterSpacing: 0 }}>
                   DealsKB
                 </span>
               </div>
