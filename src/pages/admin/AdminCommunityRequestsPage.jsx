@@ -93,83 +93,110 @@ export const AdminCommunityRequestsPage = () => {
         </button>
       </div>
 
-      {/* Stats Summary cards */}
-      <div className="row g-3 mb-4">
+      {/* Stats Summary cards (4 tiles in a single row) */}
+      <div className="grid grid-cols-4" style={{ gap: '1rem', marginBottom: '2rem' }}>
         {[
           { label: 'Total Requests', value: requests.length, color: '#6B1B71' },
           { label: 'Active Demands', value: requests.filter(r => r.status === 'active').length, color: '#10b981' },
           { label: 'Matched Demands', value: requests.filter(r => r.status === 'matched').length, color: '#965284' },
-          { label: 'Total Interested Signups', value: requests.reduce((sum, r) => sum + (r.interested_count || 0), 0), color: '#ffc400' }
+          { label: 'Total Interested Signups', value: requests.reduce((sum, r) => sum + (r.interested_count || 0), 0), color: '#b2772d' }
         ].map((stat, i) => (
-          <div key={i} className="col-12 col-sm-6 col-md-3">
-            <div className="card" style={{ borderColor: '#D8CFC1', borderRadius: '0.75rem', padding: '1.25rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#8B8278', textTransform: 'uppercase' }}>{stat.label}</span>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#2d0a32', margin: '0.25rem 0 0 0', fontFamily: "'Outfit', sans-serif" }}>
-                {stat.value}
-              </h2>
-            </div>
+          <div key={i} className="card" style={{ borderColor: '#D8CFC1', borderRadius: '0.75rem', padding: '1.25rem', backgroundColor: '#ffffff', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#8B8278', textTransform: 'uppercase', letterSpacing: '0.03em' }}>{stat.label}</span>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: stat.color, margin: '0.25rem 0 0 0', fontFamily: "'Outfit', sans-serif" }}>
+              {stat.value}
+            </h2>
           </div>
         ))}
       </div>
+          {/* Filters and Search toolbar */}
+          <div className="card mb-4" style={{ borderColor: '#D8CFC1', borderRadius: '0.75rem', backgroundColor: '#ffffff' }}>
+            <div className="card-body" style={{ padding: '1.25rem' }}>
+              <div className="row g-3">
+                
+                {/* Search Input */}
+                <div className="col-12">
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Search Demands</label>
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type="text"
+                      placeholder="Search brand, model, requester..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="form-control"
+                      style={{ paddingLeft: '2.25rem', borderRadius: '0.5rem', fontSize: '0.85rem' }}
+                    />
+                    <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  </div>
+                </div>
 
-      {/* Filters and Search toolbar */}
-      <div className="card mb-4" style={{ borderColor: '#D8CFC1', borderRadius: '0.75rem' }}>
-        <div className="card-body" style={{ padding: '1.25rem' }}>
-          <div className="row g-3">
-            
-            {/* Search Input */}
-            <div className="col-12 col-md-4">
-              <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Search</label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="text"
-                  placeholder="Search brand, model, requester..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="form-control"
-                  style={{ paddingLeft: '2.25rem', borderRadius: '0.5rem', fontSize: '0.85rem' }}
-                />
-                <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                {/* Category Filter as Premium Pills */}
+                <div className="col-12 col-md-6">
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Product Type</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {['all', 'car', 'bike', 'mobile', 'laptop'].map((cat) => {
+                      const isActive = categoryFilter === cat;
+                      return (
+                        <button
+                          key={cat}
+                          type="button"
+                          onClick={() => setCategoryFilter(cat)}
+                          style={{
+                            padding: '0.45rem 1.1rem',
+                            borderRadius: '2rem',
+                            border: isActive ? '1px solid #6B1B71' : '1px solid #D8CFC1',
+                            backgroundColor: isActive ? '#6B1B71' : '#ffffff',
+                            color: isActive ? '#ffffff' : '#6B1B71',
+                            fontWeight: 700,
+                            fontSize: '0.8rem',
+                            cursor: 'pointer',
+                            textTransform: 'capitalize',
+                            transition: 'all 0.2s ease',
+                            outline: 'none'
+                          }}
+                        >
+                          {cat}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Status Filter as Premium Pills */}
+                <div className="col-12 col-md-6">
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Request Status</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {['all', 'active', 'matched', 'closed', 'disabled'].map((stat) => {
+                      const isActive = statusFilter === stat;
+                      return (
+                        <button
+                          key={stat}
+                          type="button"
+                          onClick={() => setStatusFilter(stat)}
+                          style={{
+                            padding: '0.45rem 1.1rem',
+                            borderRadius: '2rem',
+                            border: isActive ? '1px solid #6B1B71' : '1px solid #D8CFC1',
+                            backgroundColor: isActive ? '#6B1B71' : '#ffffff',
+                            color: isActive ? '#ffffff' : '#6B1B71',
+                            fontWeight: 700,
+                            fontSize: '0.8rem',
+                            cursor: 'pointer',
+                            textTransform: 'capitalize',
+                            transition: 'all 0.2s ease',
+                            outline: 'none'
+                          }}
+                        >
+                          {stat}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
               </div>
             </div>
-
-            {/* Category Filter */}
-            <div className="col-12 col-sm-6 col-md-4">
-              <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Product Type</label>
-              <select
-                className="form-select"
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                style={{ borderRadius: '0.5rem', fontSize: '0.85rem' }}
-              >
-                <option value="all">All Categories</option>
-                <option value="car">Car</option>
-                <option value="bike">Bike</option>
-                <option value="mobile">Mobile</option>
-                <option value="laptop">Laptop</option>
-              </select>
-            </div>
-
-            {/* Status Filter */}
-            <div className="col-12 col-sm-6 col-md-4">
-              <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Request Status</label>
-              <select
-                className="form-select"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                style={{ borderRadius: '0.5rem', fontSize: '0.85rem' }}
-              >
-                <option value="all">All Statuses</option>
-                <option value="active">Active</option>
-                <option value="matched">Matched</option>
-                <option value="closed">Closed</option>
-                <option value="disabled">Disabled</option>
-              </select>
-            </div>
-
           </div>
-        </div>
-      </div>
 
       {/* Main Table Card */}
       <div className="card" style={{ borderColor: '#D8CFC1', borderRadius: '1rem', overflow: 'hidden' }}>

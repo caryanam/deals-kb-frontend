@@ -279,11 +279,11 @@ export const RegisterPage = () => {
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  border: '1px solid #6B1B71',
                   borderRadius: '0.5rem',
                   overflow: 'hidden',
                   minHeight: '2.3rem',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                  backgroundColor: 'rgba(107, 27, 113, 0.05)'
                 }}>
                   {roleOptions.map((roleOption) => {
                     const selected = role === roleOption;
@@ -295,9 +295,9 @@ export const RegisterPage = () => {
                         disabled={loading || otpSent}
                         style={{
                           border: 'none',
-                          borderRight: roleOption === 'Dealer' ? 'none' : '1px solid rgba(255, 255, 255, 0.2)',
+                          borderRight: roleOption === 'Dealer' ? 'none' : '1px solid #6B1B71',
                           backgroundColor: selected ? '#6B1B71' : 'transparent',
-                          color: selected ? '#ffffff' : 'rgba(255, 255, 255, 0.75)',
+                          color: selected ? '#ffffff' : '#6B1B71',
                           fontWeight: 800,
                           fontSize: '0.8rem',
                           cursor: loading || otpSent ? 'not-allowed' : 'pointer',
@@ -527,7 +527,7 @@ export const RegisterPage = () => {
             }}>
               <span className="auth-muted-text">
                 Already have an account?{' '}
-                <Link to="/login" style={{ color: '#ffffff', fontWeight: 700 }}>
+                <Link to="/login" style={{ color: '#6B1B71', fontWeight: 700 }}>
                   Login
                 </Link>
               </span>

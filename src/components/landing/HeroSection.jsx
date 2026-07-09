@@ -15,67 +15,56 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="home" className="landing-hero-wrapper" style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: 1,
-        }}
-      >
-        <source src={landingVideo} type="video/mp4" />
-      </video>
+    <section id="home" className="landing-hero-wrapper">
+      <LandingNavbar />
 
+      <div className="hero-section">
+        <video autoPlay loop muted playsInline className="hero-bg-video">
+          <source src={landingVideo} type="video/mp4" />
+        </video>
 
-
-      {/* Integrated transparent Navbar */}
-      <div style={{ position: 'relative', zIndex: 50 }}>
-        <LandingNavbar />
-      </div>
-
-      {/* Main Hero content container */}
-      <div className="hero-container" style={{ position: 'relative', zIndex: 10 }}>
-        
-        {/* Left side: Text, CTAs, Stats */}
-        <div className="hero-left">
-          <div className="hero-kicker">WELCOME TO THE FUTURE OF AUCTIONS</div>
-          
-          <h1 className="hero-title">
-            Bid More.<br />
-            <span className="highlight">Win More.</span><br />
-            Own More.
-          </h1>
-          
-          <p className="hero-description">
-            India’s trusted online auction marketplace for Cars, Bikes, Mobiles & Laptops. Join now and get the best deals at unbeatable prices.
-          </p>
-
-          <div className="hero-actions">
-            <button className="hero-primary-btn hero-btn" onClick={() => navigate('/buyer/marketplace')}>
-              Explore Auctions
-            </button>
-            <button className="hero-secondary-btn hero-btn" onClick={handleScrollToHowItWorks}>
-              How It Works
-            </button>
+        <div className="hero-container">
+          <div className="hero-left">
+            <div className="hero-kicker">एक नवीन पहाट | एक नई शुरुआत</div>
+            
+            <div className="hero-main-content">
+              <h1 className="hero-title hero-title-desktop">
+                Bid More.<br />
+                <span className="highlight">Win More.</span><br />
+                Own More.
+              </h1>
+              
+              <h1 className="hero-title hero-title-mobile">
+                Bid More . <span className="highlight">Win More</span> . Own More
+              </h1>
+              
+              <p className="hero-description">
+                DealsKB is built on {" "}
+                <span className="highlight-kb">Khareedo Becho</span>{" "}
+                a trusted auction platform where sellers list with confidence and buyers win the best deals on Cars, Bikes, Mobiles & Laptops.
+              </p>
+              
+              <div className="hero-actions hero-actions-desktop">
+                <button className="hero-primary-btn hero-btn" onClick={() => navigate('/buyer/marketplace')}>
+                  Explore Auctions
+                </button>
+                <button className="hero-secondary-btn hero-btn" onClick={handleScrollToHowItWorks}>
+                  How It Works
+                </button>
+              </div>
+            </div>
           </div>
-
-          {/* Stats Row */}
-          
         </div>
-
-
-
       </div>
 
+      <div className="hero-actions-mobile">
+        <button className="hero-primary-btn hero-btn" onClick={() => navigate('/buyer/marketplace')}>
+          Explore Auctions
+        </button>
+        <button className="hero-secondary-btn hero-btn" onClick={handleScrollToHowItWorks}>
+          How It Works
+        </button>
+      </div>
     </section>
   );
 };

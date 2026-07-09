@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, Landmark, ShieldCheck, RefreshCw, DollarSign } from 'lucide-react';
+import { BarChart3, TrendingUp, Landmark, ShieldCheck, RefreshCw, IndianRupee } from 'lucide-react';
 import { getAdminAnalytics } from '../../api/adminApi';
 import { formatCurrency } from '../../utils/helpers';
 
@@ -62,7 +62,7 @@ export const AnalyticsPage = () => {
             <div className="card">
               <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Gross Merchandise Volume (GMV)</span>
               <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#0284c7', display: 'flex', alignItems: 'center', gap: '0.25rem', margin: '0.25rem 0' }}>
-                <DollarSign size={24} /> {formatCurrency(data?.gmv || 0)}
+                <IndianRupee size={24} /> {formatCurrency(data?.gmv || 0)}
               </h3>
               <p style={{ fontSize: '0.8rem', color: '#8B8278', margin: 0 }}>Aggregate concluded auction sales values</p>
             </div>

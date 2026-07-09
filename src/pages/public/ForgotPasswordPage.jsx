@@ -261,7 +261,7 @@ export const ForgotPasswordPage = () => {
               type="submit"
               className="btn btn-primary"
               disabled={loading}
-              style={{ width: '100%', padding: '0.8rem', backgroundColor: '#ef4444', borderColor: '#ef4444' }}
+              style={{ width: '100%', padding: '0.8rem' }}
             >
               {loading ? (
                 <>
@@ -310,7 +310,7 @@ export const ForgotPasswordPage = () => {
                 type="submit"
                 className="btn btn-primary"
                 disabled={loading}
-                style={{ flex: 2, padding: '0.8rem', backgroundColor: '#ef4444', borderColor: '#ef4444' }}
+                style={{ flex: 2, padding: '0.8rem' }}
               >
                 {loading ? (
                   <>
@@ -330,7 +330,7 @@ export const ForgotPasswordPage = () => {
               style={{
                 border: 'none',
                 background: 'transparent',
-                color: resendCooldown > 0 ? '#8B8278' : '#ef4444',
+                color: resendCooldown > 0 ? '#8B8278' : '#6B1B71',
                 fontWeight: 800,
                 cursor: resendCooldown > 0 || loading || resendLoading ? 'not-allowed' : 'pointer',
                 padding: '0.2rem',
@@ -430,21 +430,32 @@ export const ForgotPasswordPage = () => {
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading}
-              style={{ width: '100%', padding: '0.8rem', backgroundColor: '#ef4444', borderColor: '#ef4444' }}
-            >
-              {loading ? (
-                <>
-                  <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
-                  Resetting...
-                </>
-              ) : (
-                'Save New Password'
-              )}
-            </button>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                disabled={loading}
+                onClick={() => { setStep(2); setSuccessMsg(''); }}
+                style={{ flex: 1, padding: '0.8rem' }}
+              >
+                Back
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading}
+                style={{ flex: 2, padding: '0.8rem' }}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
+                    Resetting...
+                  </>
+                ) : (
+                  'Save New Password'
+                )}
+              </button>
+            </div>
           </form>
         )}
 
@@ -482,7 +493,7 @@ export const ForgotPasswordPage = () => {
             textAlign: 'center',
             fontSize: '0.85rem'
           }}>
-            <Link to="/login" style={{ color: '#ffffff', fontWeight: 600 }}>← Cancel &amp; Back to Login</Link>
+            <Link to="/login" style={{ color: '#6B1B71', fontWeight: 600 }}>← Cancel &amp; Back to Login</Link>
           </div>
         )}
         </div>

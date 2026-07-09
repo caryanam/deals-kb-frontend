@@ -59,3 +59,23 @@ export const updateProduct = async (productId, data) => {
   const response = await api.put(`/products/${productId}`, data);
   return response.data;
 };
+
+export const getRelistData = async (productId) => {
+  const response = await api.get(`/products/${productId}/relist-data`);
+  return response.data;
+};
+
+export const createRelistOrder = async (productId) => {
+  const response = await api.post(`/products/${productId}/relist/create-order`);
+  return response.data;
+};
+
+export const submitRelistAfterPayment = async (productId, data) => {
+  const response = await api.post(`/products/${productId}/relist/submit`, data);
+  return response.data;
+};
+
+export const markRelistPaymentFailed = async (productId, data) => {
+  const response = await api.post(`/products/${productId}/relist/payment-failed`, data);
+  return response.data;
+};

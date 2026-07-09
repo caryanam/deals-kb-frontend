@@ -268,7 +268,25 @@ export const PendingListingsPage = () => {
                 {pendingList.map((listing) => (
                   <tr key={listing.product_id} style={{ borderBottom: '1px solid #D8CFC1' }}>
                     <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.95rem', fontWeight: 700, color: '#1F1A1D' }}>
-                      {listing.title}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span>{listing.title}</span>
+                        {listing.is_relisted && (
+                          <span 
+                            title={`Relisted from Listing ID: ${listing.parent_product_id}`}
+                            style={{
+                              backgroundColor: '#faf5ff',
+                              color: '#6B1B71',
+                              border: '1px solid #d8b4fe',
+                              borderRadius: '0.25rem',
+                              padding: '0.1rem 0.4rem',
+                              fontSize: '0.7rem',
+                              fontWeight: 700
+                            }}
+                          >
+                            Relisted
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase' }}>
                       {PRODUCT_TYPE_LABELS[listing.product_type] || listing.product_type}
@@ -329,7 +347,22 @@ export const PendingListingsPage = () => {
               backgroundColor: '#FAF6EA'
             }}>
               <div>
-                <span className="badge badge-pending">Inspection Queue</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span className="badge badge-pending">Inspection Queue</span>
+                  {selectedListing.is_relisted && (
+                    <span style={{
+                      backgroundColor: '#faf5ff',
+                      color: '#6B1B71',
+                      border: '1px solid #d8b4fe',
+                      borderRadius: '0.25rem',
+                      padding: '0.1rem 0.4rem',
+                      fontSize: '0.7rem',
+                      fontWeight: 700
+                    }}>
+                      Relisted from #{selectedListing.parent_product_id}
+                    </span>
+                  )}
+                </div>
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0.25rem 0 0 0' }}>
                   Inspect: {selectedListing.title}
                 </h2>

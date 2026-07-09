@@ -54,10 +54,10 @@ const LandingNavbar = () => {
       <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="landing-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
         <img src={logoImg} alt="DealsKB Logo" style={{ height: '42px', width: 'auto', objectFit: 'contain' }} />
         <div className="logo-text-block">
-          <h1 className="logo-text" style={{ color: '#ffffff', fontSize: '24px', fontWeight: 800, fontFamily: "'Inter', 'Poppins', sans-serif", margin: 0, display: 'flex', alignItems: 'center', letterSpacing: '-0.5px' }}>
-            Deals<span style={{ color: '#c084fc' }}>KB</span>
+          <h1 className="logo-text" style={{ color: '#1F1A1D', fontSize: '24px', fontWeight: 800, fontFamily: "'Inter', 'Poppins', sans-serif", margin: 0, display: 'flex', alignItems: 'center', letterSpacing: '-0.5px' }}>
+            Deals<span style={{ color: '#6B1B71' }}>KB</span>
           </h1>
-          <span className="logo-tagline" style={{ fontSize: '10px', fontWeight: 700, fontFamily: "'Inter', 'Poppins', sans-serif", color: 'rgba(255,255,255,0.7)', letterSpacing: '0.2px' }}>Bid It. Win It. Own It.</span>
+          <span className="logo-tagline" style={{ fontSize: '10px', fontWeight: 700, fontFamily: "'Inter', 'Poppins', sans-serif", color: '#8B8278', letterSpacing: '0.2px' }}>Bid It. Win It. Own It.</span>
         </div>
       </Link>
 
@@ -87,7 +87,7 @@ const LandingNavbar = () => {
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          color: '#ffffff',
+          color: '#6B1B71',
           padding: '0.25rem',
           display: 'none'
         }}

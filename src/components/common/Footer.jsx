@@ -51,8 +51,7 @@ const Footer = () => {
             </Link>
             <p className="footer-tagline">BID IT. WIN IT. OWN IT.</p>
             <p className="footer-description">
-              DealsKB is India's trusted online auction marketplace for Cars, Bikes,
-              Mobiles and Laptops. Join secure bidding rooms and unlock premium deals.
+              DealsKB is built on Khareedo Becho, a trusted auction platform where sellers list with confidence and buyers win the best deals on Cars, Bikes, Mobiles & Laptops.
             </p>
           </div>
 

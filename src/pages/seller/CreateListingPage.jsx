@@ -95,6 +95,19 @@ const initialSpecs = {
   warrantyAvailable: 'No'
 };
 
+const isPhotoSlotRequired = (type, slot) => {
+  if (type === 'car') {
+    return ['Front image', 'Back image', 'Dashboard', 'Speedometer', 'Engine'].includes(slot);
+  }
+  if (type === 'laptop') {
+    return ['Front image', 'Back image', 'Barcode image', 'Specification image'].includes(slot);
+  }
+  if (type === 'mobile') {
+    return ['Front image', 'Back image', 'Specification image'].includes(slot);
+  }
+  return false;
+};
+
 const sectionTitle = {
   car: 'Car Details',
   bike: 'Bike Details',
@@ -447,16 +460,6 @@ export const CreateListingPage = () => {
         </div>
       )}
 
-      {errorMsg && (
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', backgroundColor: '#fef2f2', border: '1px solid #fca5a5', padding: '1rem', borderRadius: '0.75rem', color: '#b91c1c', lineHeight: 1.4, marginBottom: '1rem' }}>
-          <AlertTriangle size={20} style={{ flexShrink: 0 }} />
-          <div>
-            <strong>Validation Error</strong>
-            <p style={{ margin: '0.2rem 0 0' }}>{errorMsg}</p>
-          </div>
-        </div>
-      )}
-
       <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.15fr) minmax(320px, 0.85fr)', gap: '1.5rem' }}>
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <section>
@@ -574,6 +577,7 @@ export const CreateListingPage = () => {
                   key={slot}
                   label={slot}
                   value={photoSlots[slot]}
+                  required={isPhotoSlotRequired(productType, slot)}
                   onUpload={(e) => handlePhotoUpload(e, slot)}
                   onRemove={() => {
                     setPhotoSlots((current) => {
@@ -624,11 +628,17 @@ export const CreateListingPage = () => {
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <button type="button" onClick={() => navigate(`${basePath}/my-listings`)} className="btn btn-secondary" style={{ flex: 1, height: '52px' }}>
+          <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.85rem', flexWrap: 'wrap' }}>
+            {errorMsg && (
+              <div style={{ flex: '2 1 280px', minHeight: '52px', display: 'flex', alignItems: 'center', gap: '0.65rem', backgroundColor: '#fef2f2', border: '1px solid #fca5a5', padding: '0.7rem 0.85rem', borderRadius: '0.85rem', color: '#dc2626', lineHeight: 1.3, fontWeight: 800, fontSize: '0.86rem' }}>
+                <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+                <span>{errorMsg}</span>
+              </div>
+            )}
+            <button type="button" onClick={() => navigate(`${basePath}/my-listings`)} className="btn btn-secondary" style={{ flex: '1 1 120px', height: '52px' }}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary" disabled={loading} style={{ flex: 2, height: '52px', backgroundColor: '#111827', borderColor: '#111827', fontWeight: 900 }}>
+            <button type="submit" className="btn btn-primary" disabled={loading} style={{ flex: '1.4 1 180px', height: '52px', backgroundColor: '#111827', borderColor: '#111827', fontWeight: 900 }}>
               {loading ? (
                 <>
                   <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
@@ -744,12 +754,14 @@ const Segmented = ({ label, options, value, onChange }) => (
   </div>
 );
 
-const PhotoSlot = ({ label, value, onUpload, onRemove }) => (
+const PhotoSlot = ({ label, value, onUpload, onRemove, required }) => (
   <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '0.75rem', minHeight: '112px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.65rem' }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
       <Camera size={20} style={{ color: '#4a1a50', flexShrink: 0 }} />
       <div style={{ minWidth: 0 }}>
-        <span style={{ fontWeight: 850, color: '#111827', fontSize: '0.9rem', lineHeight: 1.25 }}>{label}</span>
+        <span style={{ fontWeight: 850, color: '#111827', fontSize: '0.9rem', lineHeight: 1.25 }}>
+          {label} {required && <span style={{ color: '#ef4444' }}>*</span>}
+        </span>
         {(label === 'Front image' || label === 'Back image') && (
           <p style={{ margin: '0.15rem 0 0', color: '#8B8278', fontSize: '0.72rem', fontWeight: 700, lineHeight: 1.25 }}>
             Note: number plate should be hidden.

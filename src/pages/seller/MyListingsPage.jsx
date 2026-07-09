@@ -69,6 +69,18 @@ export const MyListingsPage = () => {
     });
   };
 
+  const handleRelistClick = (productId) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Relist in Marketplace',
+      message: 'Do you want to relist this product? You can edit details before payment.',
+      onConfirm: () => {
+        setConfirmModal(prev => ({ ...prev, isOpen: false }));
+        navigate(`${basePath}/relist/${productId}`);
+      }
+    });
+  };
+
   const getStatusBadge = (status) => {
     switch (status) {
       case 'live':
@@ -240,6 +252,22 @@ export const MyListingsPage = () => {
 
               {/* Actions panel */}
               <div style={{ display: 'flex', gap: '0.75rem', flexShrink: 0, alignItems: 'center' }}>
+                {(product.status?.toLowerCase() === 'ended' || product.status?.toLowerCase() === 'unsold' || product.status?.toLowerCase() === 'no_winner' || product.status?.toLowerCase() === 'auction_ended_no_bid') && (!product.winner_id) && (
+                  <button
+                    onClick={() => handleRelistClick(product.product_id)}
+                    className="btn btn-primary"
+                    style={{
+                      padding: '0.5rem 1.25rem',
+                      fontSize: '0.85rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.35rem'
+                    }}
+                  >
+                    Relist in Marketplace →
+                  </button>
+                )}
+
                 {product.status === 'approved' && (
                   <button
                     onClick={() => handleStartAuction(product.product_id)}

@@ -31,6 +31,7 @@ import SellerDashboard from '../pages/seller/SellerDashboard';
 import CreateListingPage from '../pages/seller/CreateListingPage';
 import MyListingsPage from '../pages/seller/MyListingsPage';
 import SellerAuctionPage from '../pages/seller/SellerAuctionPage';
+import RelistListing from '../pages/seller/RelistListing';
 
 // Admin Pages
 import AdminDashboard from '../pages/admin/AdminDashboard';
@@ -97,6 +98,7 @@ export const AppRoutes = () => {
         <Route path="auction/:id" element={<SellerAuctionPage />} />
         <Route path="payments" element={<PaymentsPage />} />
         <Route path="reports" element={<MyReportsPage />} />
+        <Route path="relist/:listingId" element={<RelistListing />} />
       </Route>
 
       {/* 4. Dealer Protected Routes */}
@@ -114,6 +116,7 @@ export const AppRoutes = () => {
         <Route path="auction/:id" element={<SellerAuctionPage />} />
         <Route path="payments" element={<PaymentsPage />} />
         <Route path="reports" element={<MyReportsPage />} />
+        <Route path="relist/:listingId" element={<RelistListing />} />
       </Route>
 
       {/* 5. Admin Protected Routes */}

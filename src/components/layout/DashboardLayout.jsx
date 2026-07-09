@@ -39,42 +39,38 @@ export const DashboardLayout = () => {
   };
 
   return (
-    <div className="dashboard-layout">
+    <div className="dashboard-shell">
       {/* Mobile Backdrop */}
       <div 
         className={`mobile-backdrop ${isSidebarOpen ? 'backdrop-open' : ''}`}
         onClick={closeSidebar}
       />
 
-      {/* Left Sidebar */}
-      <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <img src={logoImg} alt="DealsKB Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
-          <span style={{ letterSpacing: '-0.03em', fontWeight: 800 }}>DealsKB</span>
+      <div className="dashboard-scroll-page">
+        <div className="dashboard-main-area">
+          {/* Left Sidebar */}
+          <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+            <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <img src={logoImg} alt="DealsKB Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
+              <span style={{ letterSpacing: '-0.03em', fontWeight: 800 }}>DealsKB</span>
+            </div>
+            
+            <nav className="sidebar-menu">
+              {renderSidebar()}
+            </nav>
+          </aside>
+
+          {/* Right Content Area */}
+          <section className="dashboard-right">
+            <Topbar onToggleSidebar={toggleSidebar} />
+            
+            <main className="dashboard-content">
+              <Outlet />
+            </main>
+          </section>
         </div>
-        
-        <nav className="sidebar-menu">
-          {renderSidebar()}
-        </nav>
 
-        <div className="sidebar-footer">
-          &copy; 2026 DealsKB Platform.
-        </div>
-      </aside>
-
-      {/* Right Content Area */}
-      <div className="dashboard-right">
-        <Topbar onToggleSidebar={toggleSidebar} />
-        
-        <main className="dashboard-main">
-          <div className="dashboard-page-content">
-            <Outlet />
-          </div>
-        </main>
-
-        <footer>
-          <Footer />
-        </footer>
+        <Footer />
       </div>
     </div>
   );

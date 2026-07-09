@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, UserCheck, ShieldCheck, ClipboardList, CheckCircle2, Gavel, Award, ArrowRight, Activity, DollarSign, RefreshCw, XCircle, Filter } from 'lucide-react';
+import { Users, UserCheck, ShieldCheck, ClipboardList, CheckCircle2, Gavel, Award, ArrowRight, Activity, IndianRupee, RefreshCw, XCircle, Filter } from 'lucide-react';
 import { getAdminAnalytics } from '../../api/adminApi';
 import { getProducts } from '../../api/productApi';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
@@ -239,7 +239,7 @@ export const AdminDashboard = () => {
         {/* GMV Card */}
         <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#e0f2fe', color: '#0369a1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <DollarSign size={24} />
+            <IndianRupee size={24} />
           </div>
           <div>
             <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Platform GMV</span>
