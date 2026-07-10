@@ -19,8 +19,8 @@ const HowItWorksSection = () => {
     },
     {
       num: '4',
-      title: 'Bid Real-Time',
-      desc: 'Buyers place live incremental bids. Sockets sync values instantly, extending the countdown if bids arrive late.'
+      title: 'Buy-Sell Real-Time',
+      desc: 'Buyers place live incremental prices. Sockets sync values instantly, extending the countdown if buy arrive late.'
     },
     {
       num: '5',

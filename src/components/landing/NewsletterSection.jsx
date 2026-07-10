@@ -57,7 +57,7 @@ const NewsletterSection = () => {
           marginBottom: '1rem',
           fontFamily: "'Inter', 'Poppins', sans-serif"
         }}>
-          Never Miss an Auction Deal
+          Never Miss an Deal
         </h2>
         <p style={{
           color: '#8B8278',

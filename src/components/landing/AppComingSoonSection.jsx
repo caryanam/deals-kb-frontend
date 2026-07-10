@@ -10,10 +10,10 @@ const BG_COLOR = '#FAF6EA';
 const BORDER_COLOR = '#D8CFC1';
 
 const features = [
-  'Real-time auction tracking & live bid updates',
+  'Real-time sell tracking & live buy updates',
   'Explore verified cars, bikes, mobiles & laptops',
-  'One-tap bidding pass activation',
-  'Push notifications & outbid alerts',
+  'One-tap buying pass activation',
+  'Push notifications  alerts',
 ];
 
 const AppComingSoonSection = () => {
@@ -132,7 +132,7 @@ const AppComingSoonSection = () => {
               lineHeight: '1.15',
             }}
           >
-            Manage Your Bids <br />
+            Manage Your Sell <br />
             <span
               style={{
                 background: `linear-gradient(135deg, ${PURPLE} 0%, ${GOLD} 100%)`,
@@ -154,7 +154,7 @@ const AppComingSoonSection = () => {
               maxWidth: '580px',
             }}
           >
-            Download our mobile app and stay updated on your live auction status, place instant bids on cars, bikes, mobiles &amp; laptops, and manage all your bidding passes directly from your smartphone.
+            Download our mobile app and stay updated on your live sell status, place instant buy on cars, bikes, mobiles &amp; laptops, and manage all your buying passes directly from your smartphone.
           </p>
 
           {/* Checkmark Features */}

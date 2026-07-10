@@ -15,21 +15,21 @@ const WhyChooseSection = () => {
       color: '#F5ECDD',
       iconColor: '#6B1B71',
       title: 'Instant Sockets Sync',
-      desc: 'WebSocket integration pushes every single bid, timestamp, and winner to active users within milliseconds.'
+      desc: 'WebSocket integration pushes every single price, timestamp, and winner to active users within milliseconds.'
     },
     {
       icon: Sparkles,
       color: '#faf5ff',
       iconColor: '#7c3aed',
       title: 'Modern Bidding Passes',
-      desc: 'Unlock unlimited bids for 24 hours at minimal costs. Bid on cars, mobile phones, laptops, and bikes.'
+      desc: 'Unlock unlimited bids for 24 hours at minimal costs. Prices on cars, mobile phones, laptops, and bikes.'
     },
     {
       icon: Heart,
       color: '#fff1f2',
       iconColor: '#db2777',
       title: 'Seamless Direct Chat',
-      desc: 'No middleman fees. Chat directly with the winning bidder or listing owner to coordinate transaction closing.'
+      desc: 'No middleman fees. Chat directly with the winning buyer or listing owner to coordinate transaction closing.'
     },
     {
       icon: RefreshCcw,

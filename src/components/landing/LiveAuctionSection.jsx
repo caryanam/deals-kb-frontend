@@ -304,11 +304,11 @@ const LiveAuctionSection = () => {
           <div style={{ textAlign: 'left' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem', fontWeight: 800, marginBottom: '0.5rem' }}>
               <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
-              REAL-TIME AUCTION ROOMS
+              REAL-TIME SELL ROOMS
             </div>
-            <h2 className="landing-section-title" style={{ textAlign: 'left', margin: 0 }}>Live Auctions</h2>
+            <h2 className="landing-section-title" style={{ textAlign: 'left', margin: 0 }}>Live Sell</h2>
             <p className="landing-section-subtitle" style={{ textAlign: 'left', margin: '0.4rem 0 0 0', maxWidth: '560px' }}>
-              Focused 2-minute bidding windows. Hover over any auction card to expose active real-time bids and countdown timers.
+              Focused 2-minute sell windows. Hover over any sell card to expose active real-time buyers and countdown timers.
             </p>
           </div>
           <button 
@@ -330,7 +330,7 @@ const LiveAuctionSection = () => {
             }}
             disabled={loading}
           >
-            <RefreshCw size={13} className={loading ? 'spin-anim' : ''} /> Refresh Bids
+            <RefreshCw size={13} className={loading ? 'spin-anim' : ''} /> Refresh products
           </button>
         </div>
 
@@ -354,7 +354,7 @@ const LiveAuctionSection = () => {
             fontWeight: 600
           }}>
             <AlertCircle size={20} />
-            <span>Unable to load live auctions. Please try again.</span>
+            <span>Unable to load live sell. Please try again.</span>
           </div>
         ) : liveAuctions.length === 0 ? (
           <div style={{
@@ -366,7 +366,7 @@ const LiveAuctionSection = () => {
             color: '#8B8278'
           }}>
             <Clock size={40} style={{ color: '#fca5a5', marginBottom: '0.75rem' }} />
-            <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#c53030', margin: '0 0 0.25rem 0' }}>No active live auctions</h4>
+            <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#c53030', margin: '0 0 0.25rem 0' }}>No active live sell</h4>
             <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: 0 }}>There are currently no auctions running in real-time. Check back soon!</p>
           </div>
         ) : (

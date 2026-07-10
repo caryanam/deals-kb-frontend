@@ -29,8 +29,8 @@ const HeroSection = () => {
             
             <div className="hero-main-content">
               <h1 className="hero-title hero-title-desktop">
-                Bid More.<br />
-                <span className="highlight">Win More.</span><br />
+                Buy More.<br />
+                <span className="highlight">Sell More.</span><br />
                 Own More.
               </h1>
               
@@ -41,7 +41,7 @@ const HeroSection = () => {
               <p className="hero-description">
                 DealsKB is built on {" "}
                 <span className="highlight-kb">Khareedo Becho</span>{" "}
-                a trusted auction platform where sellers list with confidence and buyers win the best deals on Cars, Bikes, Mobiles & Laptops.
+                a trusted buy/sell platform where sellers list with confidence and buyers win the best deals on Cars, Bikes, Mobiles & Laptops.
               </p>
               
               <div className="hero-actions hero-actions-desktop">
