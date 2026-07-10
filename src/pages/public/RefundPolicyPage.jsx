@@ -53,79 +53,44 @@ const InfoBox = ({ children }) => (
 export const RefundPolicyPage = () => (
   <LegalLayout title="Refund Policy" lastUpdated="July 2026">
     <InfoBox>
-      Please read this Refund Policy carefully before making any purchase on DealsKB. By using our platform, you agree to the refund terms outlined below for bidding passes, listing fees, and dealer plans.
+      Please read this Refund Policy carefully before making any payment on DealsKB. By using our platform, you agree that subscription fees, listing fees, platform access charges, and related service charges are non-refundable once paid, except where required by applicable law.
     </InfoBox>
 
-    <Section title="1. Overview">
-      <P>DealsKB (operated by Caryanamindia Pvt Ltd) offers three types of paid features: Buyer Bidding Passes, Seller Listing Fees, and Dealer Monthly Plans. Each has a distinct refund policy as described below.</P>
+    <Section title="1. Platform Service Charges">
+      <P>DealsKB may charge subscription fees, listing fees, platform access charges, or service fees for providing access to platform features. These charges are collected only for the use of DealsKB services and are not related to gambling, betting, wagering, lottery, prize money, or chance-based activity.</P>
+      <P>Payment of any subscription or access fee only enables the user to use relevant platform services. It does not guarantee that a listed product will be sold, that a buyer or seller will complete a transaction, or that a user will receive confirmed offers or successful deal closure.</P>
     </Section>
 
-    <Section title="2. Buyer Bidding Passes — Refund Policy">
-      <P>Bidding passes grant 24-hour access to live auctions for a specific category (Cars, Bikes, Mobiles, or Laptops). Pass pricing:</P>
-      <Ul items={[
-        'Mobile Pass: ₹12.98 / 24 hours (incl. 18% GST)',
-        'Laptop Pass: ₹24.78 / 24 hours (incl. 18% GST)',
-        'Bike Pass: ₹60.18 / 24 hours (incl. 18% GST)',
-        'Car Pass: ₹119.18 / 24 hours (incl. 18% GST)',
-      ]} />
-      <P><strong>Non-refundable after activation:</strong> Once a bidding pass is activated and auction access is granted, no refund will be issued, regardless of whether bids were placed or the auction was won.</P>
-      {/* <P><strong>Eligible for refund (credit):</strong></P>
-      <Ul items={[
-        'If the auction you purchased the pass for is cancelled by the seller before auction start, your pass amount will be credited to your DealsKB wallet within 5–7 business days',
-        'If a technical error on our platform prevents you from accessing an active auction despite a valid pass, contact support within 24 hours for review',
-        'If DealsKB cancels an auction due to platform issues or admin action, affected pass holders will receive a full credit',
-      ]} /> */}
+    <Section title="2. Strict No Refund Policy">
+      <P>All subscription fees, listing fees, platform access charges, and service fees paid to DealsKB are strictly non-refundable. Once payment is made, no cancellation, reversal, adjustment, or refund will be provided by DealsKB for activated or non-activated services.</P>
+      <P>DealsKB does not guarantee that a listed product will be sold, that a buyer or seller will complete a transaction, that a user will receive responses or offers, or that any platform use will result in a successful deal. Accordingly, no refund will be given on the ground that a product was not sold, a deal was not completed, a user changed their mind, or the platform did not meet business expectations.</P>
     </Section>
 
-    <Section title="3. Seller Listing Fees — Refund Policy">
-      <P>Sellers pay a one-time listing fee per product. Fee structure:</P>
+    <Section title="3. No Refund Scenarios">
       <Ul items={[
-        'Mobile Listing: ₹11.80 (incl. 18% GST)',
-        'Laptop Listing: ₹23.60 (incl. 18% GST)',
-        'Bike Listing: ₹59 (incl. 18% GST)',
-        'Car Listing: ₹118 (incl. 18% GST)',
-      ]} />
-      <P><strong>Non-refundable after admin review begins:</strong> Once your listing has been submitted and the admin review process has started, the listing fee is non-refundable.</P>
-      {/* <P><strong>Eligible for refund:</strong></P>
-      <Ul items={[
-        'If a listing is rejected by admin due to a platform-side error (not due to inaccurate product information), a full refund will be processed',
-        'If you cancel a listing within 1 hour of submission and before admin review starts, a refund may be requested',
-        'Refunds for valid cases are processed within 7–10 business days to the original payment method',
-      ]} /> */}
-      <P><strong>Not eligible for refund:</strong></P>
-      <Ul items={[
-        'Listings rejected due to inaccurate or fraudulent product information, missing documents, or policy violations',
-        'Listings that went live and received bids, even if the seller wishes to withdraw',
+        'No refund if a product is not sold',
+        'No refund if a buyer or seller does not complete a transaction',
+        'No refund if the user changes their mind after making payment',
+        'No refund if the user does not use the subscription, listing, or platform access after payment',
+        'No refund for dissatisfaction with response volume, lead quality, offer quality, or transaction outcome',
       ]} />
     </Section>
 
-    <Section title="4. Dealer Monthly Plan — Refund Policy">
-      <P>Dealers subscribe to a monthly plan at ₹500/month for unlimited product listings.</P>
-      <P><strong>Non-refundable:</strong> Monthly dealer plans are non-refundable once the billing period has started. You may cancel your plan at any time; the plan remains active until the end of the current billing period.</P>
-      {/* <P><strong>Eligible for refund:</strong></P>
-      <Ul items={[
-        'If you were charged erroneously (e.g., double charge) due to a payment gateway error, contact support within 3 business days for resolution',
-        'If DealsKB discontinues the Dealer Plan service with less than 7 days notice, a pro-rated refund will be issued',
-      ]} /> */}
+    <Section title="4. Legal Exception">
+      <P>If any refund is required under applicable law or by a binding order of a competent authority, DealsKB will process such refund strictly to the extent legally required and to the original payment method, subject to verification and applicable processing timelines.</P>
     </Section>
 
-    <Section title="5. Delivery & Handover Policy">
-      <P>DealsKB is a marketplace platform and does not handle physical delivery of products (Cars, Bikes, Mobiles, or Laptops). The buyer and seller are responsible for agreeing on and completing the handover directly after auction completion.</P>
-      <P>DealsKB facilitates communication between the winning buyer and the seller. DealsKB is not liable for delays, damage during handover, or failure to deliver products. All disputes regarding product condition or delivery should be raised with the seller directly, with DealsKB available for mediation support.</P>
+    <Section title="5. No Gambling, Betting, Wagering, or Chance-Based Activity">
+      <P>DealsKB is not a gambling, betting, wagering, lottery, casino, prize-based, or chance-based platform. DealsKB is a subscription-based online marketplace that allows users to list, discover, buy, and sell genuine products.</P>
+      <P>Any price offer, interest request, or negotiation feature available on DealsKB is used only for product discovery, communication, and price discussion between buyers and sellers. It does not involve betting, wagering, prize money, lottery, or winning based on chance.</P>
     </Section>
 
-    {/* <Section title="6. Refund Process">
-      <P>To request a refund for an eligible case:</P>
-      <Ul items={[
-        'Email support@dealskb.com with subject line: "Refund Request – [Order ID]"',
-        'Include your registered email, transaction ID, and reason for refund request',
-        'Our team will review within 3 business days and respond with a decision',
-        'Approved refunds are processed to the original payment method within 7–10 business days',
-      ]} />
-    </Section> */}
+    <Section title="6. User Responsibility">
+      <P>Users are solely responsible for verifying product details, ownership, documents, condition, price, and transaction terms before completing any deal. DealsKB only provides a technology platform and does not become a party to the final sale transaction between buyer and seller.</P>
+    </Section>
 
-    <Section title="6. Contact">
-      <P>For refund queries: <strong>support@dealskb.com</strong> | Caryanamindia Pvt Ltd, Pune, Maharashtra, India | Phone: +91 99232 24600</P>
+    <Section title="7. Contact">
+      <P>For questions regarding this policy, contact <strong>support@dealskb.com</strong> with your registered details and payment reference. Caryanamindia Pvt Ltd, Pune, Maharashtra, India.</P>
     </Section>
   </LegalLayout>
 );

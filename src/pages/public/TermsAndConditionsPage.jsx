@@ -47,105 +47,90 @@ const Ul = ({ items }) => (
 export const TermsAndConditionsPage = () => (
   <LegalLayout title="Terms & Conditions" lastUpdated="July 2026">
     <Section title="1. Acceptance of Terms">
-      <P>By accessing or using DealsKB (operated by Caryanamindia Pvt Ltd), you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our platform. These terms apply to all users — Buyers, Sellers, and Dealers — participating in auctions for Cars, Bikes, Mobiles, and Laptops.</P>
+      <P>By accessing or using DealsKB (operated by Caryanamindia Pvt Ltd), you agree to be bound by these Terms and Conditions. If you do not agree, please do not use the platform. These terms apply to all users, including Buyers, Sellers, and Dealers using DealsKB for supported product categories.</P>
     </Section>
 
-    <Section title="2. Platform Overview">
-      <P>DealsKB is an online auction marketplace. Sellers and Dealers list products which are verified by our Admin team. Buyers activate category-specific bidding passes to participate in live auctions. The highest bid at auction close wins the product.</P>
+    <Section title="2. Nature of Platform">
+      <P>DealsKB is a subscription-based online marketplace that enables users to list, discover, buy, and sell genuine products. Users may browse products, show interest, submit price offers, receive responses, negotiate, and connect with buyers or sellers for lawful product transactions.</P>
+      <P>Any price offer, interest request, or negotiation feature available on DealsKB is only a product discovery and communication mechanism between buyers and sellers. It does not involve gambling, betting, wagering, lottery, casino activity, prize money, or any chance-based activity.</P>
     </Section>
 
     <Section title="3. User Eligibility and Registration">
       <Ul items={[
         'You must be at least 18 years of age to register',
-        'You must provide accurate registration information (name, mobile, email)',
-        'One account per user — multiple accounts are not permitted',
-        'Sellers and Dealers must provide valid business or identity documents when required',
+        'You must provide accurate registration information, including any details requested by DealsKB',
+        'One account per user is generally permitted unless otherwise approved by DealsKB in writing',
+        'Sellers and Dealers must provide valid business, identity, or product ownership documents when required',
         'DealsKB reserves the right to suspend or terminate accounts for policy violations',
       ]} />
     </Section>
 
-    <Section title="4. Auction Rules">
-      <P>All auctions on DealsKB operate under the following rules:</P>
-      <Ul items={[
-        'Buyers must activate a valid bidding pass for the relevant category before entering an auction',
-        'Bids are binding — once placed, a bid cannot be withdrawn',
-        'The highest bid at auction end determines the winner',
-        'Shill bidding (fake bids by sellers to inflate prices) is strictly prohibited',
-        'DealsKB Admin monitors all auctions for suspicious activity',
-        'Auction times are final; extensions may occur only in the event of a last-minute bid as per platform rules',
-        'DealsKB reserves the right to cancel any auction if fraud or policy violations are detected',
-      ]} />
+    <Section title="4. Subscription and Platform Charges">
+      <P>DealsKB may charge subscription fees, listing fees, platform access fees, or service charges for enabling users to access and use platform features. These charges are collected only for platform services and are not connected with gambling, betting, lottery, prize money, or any chance-based activity.</P>
+      <P>Payment of a subscription, listing, or access fee only grants access to the relevant platform features. It does not guarantee that a product will be sold, purchased, converted into a confirmed lead, or completed as a final transaction.</P>
     </Section>
 
-    <Section title="5. Buyer Rules">
+    <Section title="5. Buyer and Seller Responsibility">
       <Ul items={[
-        'Bidding passes are category-specific and valid for 24 hours from activation',
-        'Passes for Cars (₹1), Bikes (₹1), Laptops (₹1), and Mobiles (₹1) are non-transferable (prices incl. 18% GST)',
-        'Winning a bid creates an obligation to complete the transaction with the seller',
-        'Failure to complete a transaction after winning may result in account suspension',
-        'Buyers are responsible for verifying product details before bidding',
+        'Sellers are responsible for the correctness of product details, ownership details, documents, condition, pricing, and legality of the listed product',
+        'Buyers are responsible for independently verifying product condition, ownership, documents, pricing, and transaction terms before making any payment or confirming a purchase',
+        'Users must ensure that all products listed or purchased through DealsKB are legal, genuine, and lawfully owned',
+        'DealsKB only provides a technology platform and does not become a party to the final sale or purchase transaction between buyer and seller',
       ]} />
     </Section>
 
     <Section title="6. Seller and Dealer Rules">
       <Ul items={[
-        'Sellers must pay a listing fee per product: Cars (₹1), Bikes (₹1), Laptops (₹1), Mobiles (₹1) (prices incl. 18% GST)',
-        'Dealers subscribe to a monthly plan: ₹1 for Mobile/Laptop/Bike or ₹1 for Cars (prices incl. 18% GST)',
-        'All product information, photos, and documents must be accurate and authentic',
-        'Sellers must not withdraw a product after auction start without valid reason',
-        'Sellers must complete the handover to the winning buyer within the agreed timeframe',
-        'Fraudulent listings will result in permanent account ban and potential legal action',
+        'Sellers and Dealers must upload accurate product information, genuine photographs, and valid supporting documents where required',
+        'Sellers and Dealers must respond honestly to buyer interest, price offers, and product-related queries',
+        'Fraudulent listings, misleading descriptions, false ownership claims, or illegal products may result in suspension, permanent removal, and legal action',
+        'DealsKB may request additional verification documents before allowing a listing to remain active on the platform',
       ]} />
     </Section>
 
     <Section title="7. Admin Verification">
-      <P>All product listings undergo admin review before going live. Admin may request additional documents. DealsKB does not guarantee approval of any listing. Approved listings reflect verification of provided documents only — buyers are encouraged to conduct independent due diligence.</P>
+      <P>DealsKB may review product listings and supporting documents before making them visible on the platform. DealsKB may request additional information, reject incomplete submissions, or remove listings that appear misleading, unlawful, or non-compliant. Any review performed by DealsKB is limited to platform-level checks and does not replace a buyer&apos;s or seller&apos;s own verification duties.</P>
     </Section>
 
     <Section title="8. Payments">
-      <P>All payments are processed securely via Razorpay. DealsKB does not store payment card information. Transaction records are maintained for audit purposes. Disputes related to payments must be raised within 7 days of the transaction.</P>
+      <P>All payments on DealsKB are processed through authorized payment service providers. DealsKB does not guarantee uninterrupted payment services and does not store full payment card details. Transaction records may be maintained for compliance, reconciliation, customer support, and audit purposes.</P>
     </Section>
 
-    <Section title="9. Delivery / Service Policy">
-      <P>DealsKB is an online marketplace platform that connects Buyers and Sellers through listing and bidding services. DealsKB provides only the platform for listing products and conducting auctions/bidding. DealsKB is not responsible for:</P>
-      <Ul items={[
-        'Product quality, condition, or authenticity.',
-        'Delivery, shipping, transportation, or logistics.',
-        'Delays or disputes between Buyer and Seller.',
-        'Registration, ownership transfer, or legal documentation.',
-        'Any loss or damage arising after the auction is completed.',
-      ]} />
-      <P style={{ marginTop: '8px' }}>Sellers are solely responsible for delivering the product as agreed with the winning bidder.</P>
+    <Section title="9. No Gambling, Betting, Wagering, or Chance-Based Activity">
+      <P>DealsKB is not a gambling, betting, wagering, lottery, casino, prize-based, or chance-based platform. DealsKB is a subscription-based online marketplace that allows users to list, discover, buy, and sell genuine products.</P>
+      <P>Any price offer, interest request, or negotiation feature available on DealsKB is used only for product discovery, communication, and price discussion between buyers and sellers. It does not involve betting, wagering, prize money, lottery, or winning based on chance.</P>
+      <P>Users are strictly prohibited from using the platform for gambling, betting, fake price offers, fraudulent listings, illegal products, or any unlawful activity.</P>
     </Section>
 
-    <Section title="10. EMD Policy">
-      <P>Earnest Money Deposit (EMD) is mandatory to participate in auctions on DealsKB.</P>
+    <Section title="10. Delivery and Final Transaction Responsibility">
+      <P>DealsKB only provides a technology platform to help users discover products and connect with each other. DealsKB is not responsible for:</P>
       <Ul items={[
-        'EMD is strictly non-refundable under any circumstances.',
-        'By participating in the auction, the bidder agrees to this policy before making the payment.',
+        'Product quality, condition, suitability, or authenticity',
+        'Physical delivery, shipping, transportation, or logistics',
+        'Ownership transfer formalities, registration, invoices, tax obligations, or local compliance requirements',
+        'Delay, non-performance, or disputes between buyers and sellers',
+        'Any loss or damage arising after users proceed with an off-platform or final transaction',
+      ]} />
+      <P style={{ marginTop: '8px' }}>The final transaction is solely between the buyer and the seller. Users must verify all deal terms before proceeding.</P>
+    </Section>
+
+    <Section title="11. Prohibited Activities">
+      <Ul items={[
+        'Gambling, betting, wagering, lottery, casino activities, or any chance-based use of the platform',
+        'Fake price offers, fraudulent listings, fake identities, manipulated product information, or misleading descriptions',
+        'Listing counterfeit, stolen, prohibited, or illegal products',
+        'Manipulation of product offers, user communications, or platform visibility',
+        'Harassment, abuse, threats, impersonation, or misuse of any messaging or contact features',
+        'Attempting to scrape, hack, interfere with, or disrupt DealsKB services or infrastructure',
       ]} />
     </Section>
 
-    <Section title="11. Listing Fee Policy">
-      <P>Listing Fee is charged for publishing listings on the DealsKB platform.</P>
-      <Ul items={[
-        'Listing Fee is non-refundable, regardless of whether the listing receives bids or is sold.',
-      ]} />
-    </Section>
-
-    <Section title="12. Prohibited Activities">
-      <Ul items={[
-        'Shill bidding or coordinating bids to manipulate auction outcomes',
-        'Listing counterfeit, stolen, or misrepresented products',
-        'Creating multiple buyer accounts to gain unfair bidding advantages',
-        'Harassing other users via the platform messaging system',
-        'Circumventing platform fees by conducting transactions off-platform',
-        'Attempting to hack, scrape, or disrupt platform services',
-      ]} />
+    <Section title="12. Disclaimer">
+      <P>DealsKB does not operate any gambling, betting, wagering, lottery, casino, prize-based, or chance-based activity. All price offers, interest requests, or product-related communications made on the platform relate only to genuine products listed for sale and are used only for product discovery, communication, and price discussion between buyers and sellers.</P>
     </Section>
 
     <Section title="13. Limitation of Liability">
-      <P>DealsKB acts as a marketplace facilitator. We are not responsible for the condition, authenticity, or delivery of products. Disputes between buyers and sellers should be resolved directly; DealsKB may assist in mediation but bears no financial liability for transaction outcomes.</P>
+      <P>DealsKB acts only as a marketplace facilitator and technology service provider. To the fullest extent permitted by law, DealsKB shall not be liable for product defects, false representations by users, payment disputes between users, failed negotiations, delivery issues, ownership disputes, or transaction losses resulting from dealings between buyers and sellers.</P>
     </Section>
 
     <Section title="14. Changes to Terms">

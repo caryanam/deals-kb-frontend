@@ -7,10 +7,10 @@ const GOLD = '#B2772D';
 const BORDER = '#D8CFC1';
 
 const buyerPasses = [
-  { category: 'Mobile', icon: '📱', price: '₹1', duration: '24 hours', desc: 'Place unlimited bids on mobile auctions (incl. 18% GST)' },
-  { category: 'Laptop', icon: '💻', price: '₹1', duration: '24 hours', desc: 'Place unlimited bids on laptop auctions (incl. 18% GST)' },
-  { category: 'Bike', icon: '🏍️', price: '₹1', duration: '24 hours', desc: 'Place unlimited bids on bike auctions (incl. 18% GST)' },
-  { category: 'Car', icon: '🚗', price: '₹1', duration: '24 hours', desc: 'Place unlimited bids on car auctions (incl. 18% GST)' },
+  { category: 'Mobile', icon: '📱', price: '₹1', duration: '24 hours', desc: 'Place unlimited buy on mobile auctions (incl. 18% GST)' },
+  { category: 'Laptop', icon: '💻', price: '₹1', duration: '24 hours', desc: 'Place unlimited buy on laptop auctions (incl. 18% GST)' },
+  { category: 'Bike', icon: '🏍️', price: '₹1', duration: '24 hours', desc: 'Place unlimited buy on bike auctions (incl. 18% GST)' },
+  { category: 'Car', icon: '🚗', price: '₹1', duration: '24 hours', desc: 'Place unlimited buy on car auctions (incl. 18% GST)' },
 ];
 
 const sellerFees = [
@@ -156,7 +156,7 @@ const BiddingPlansSection = () => {
 
         {/* Buyer Passes */}
         <GroupTitle sub="Activate a pass and bid unlimited for 24 hours in that category.">
-          🛒 Buyer Bidding Passes
+          🛒 Buyer Passes
         </GroupTitle>
         <div
           style={{

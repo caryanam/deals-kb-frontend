@@ -30,7 +30,7 @@ const ResourceNavbar = () => (
       <Link to="/bidding-plans" style={{ color: '#8B8278', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}
         onMouseEnter={e => e.target.style.color = '#fff'}
         onMouseLeave={e => e.target.style.color = '#8B8278'}>
-        Bidding Plans
+         Plans
       </Link>
       <Link to="/buyer-guide" style={{ color: '#8B8278', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}
         onMouseEnter={e => e.target.style.color = '#fff'}

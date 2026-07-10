@@ -11,9 +11,9 @@ const steps = [
   { num: 3, title: 'Upload product photos and verification documents', icon: '📸' },
   { num: 4, title: 'Pay the listing fee (₹11.80–₹118 depending on category)', icon: '💳' },
   { num: 5, title: 'Wait for Admin approval and verification', icon: '⏳' },
-  { num: 6, title: 'Your product goes live — buyers enter the auction room', icon: '🔴' },
-  { num: 7, title: 'Auction ends with the highest bidder as the winner', icon: '🏆' },
-  { num: 8, title: 'Connect with the winning buyer and complete the handover', icon: '🤝' },
+  { num: 6, title: 'Your sell goes live — buyers enter the sell room', icon: '🔴' },
+  { num: 7, title: 'Sell ends with the highest bidder as the Buyer', icon: '🏆' },
+  { num: 8, title: 'Connect with the buyer and complete the handover', icon: '🤝' },
 ];
 
 const SellerGuideSection = () => {

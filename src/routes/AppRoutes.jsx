@@ -11,6 +11,8 @@ import ForgotPasswordPage from '../pages/public/ForgotPasswordPage';
 import PrivacyPolicyPage from '../pages/public/PrivacyPolicyPage';
 import TermsAndConditionsPage from '../pages/public/TermsAndConditionsPage';
 import RefundPolicyPage from '../pages/public/RefundPolicyPage';
+import EmdPolicyPage from '../pages/public/EmdPolicyPage';
+import DeliveryServicePolicyPage from '../pages/public/DeliveryServicePolicyPage';
 import FaqsPage from '../pages/public/FaqsPage';
 import BiddingPlansPage from '../pages/public/BiddingPlansPage';
 import BuyerGuidePage from '../pages/public/BuyerGuidePage';
@@ -57,6 +59,8 @@ export const AppRoutes = () => {
       <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
       <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
       <Route path="/refund-policy" element={<RefundPolicyPage />} />
+      <Route path="/emd-policy" element={<EmdPolicyPage />} />
+      <Route path="/delivery-service-policy" element={<DeliveryServicePolicyPage />} />
       <Route path="/faqs" element={<FaqsPage />} />
       <Route path="/bidding-plans" element={<BiddingPlansPage />} />
       <Route path="/buyer-guide" element={<BuyerGuidePage />} />

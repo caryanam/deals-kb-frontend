@@ -1,4 +1,4 @@
-/* DealsKB Footer Stylesheet — Vahan Finserv Layout & Exact Spacing */
+/* DealsKB Footer Styles */
 
 .deals-footer {
   background-color: #090d16;
@@ -16,17 +16,12 @@
   margin: 0 auto;
 }
 
-/* Top Section (4 Columns) */
-.footer-top {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  align-items: flex-start;
+.footer-brand-wrap {
+  margin-bottom: 32px;
 }
 
-/* Column 1: Brand */
 .footer-brand {
-  max-width: 310px;
+  max-width: 420px;
   text-align: left;
 }
 
@@ -55,20 +50,26 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
   margin-top: 0;
 }
 
 .footer-description {
-  max-width: 300px;
-  line-height: 1.55;
-  font-size: 0.85rem;
+  max-width: 420px;
+  line-height: 1.6;
+  font-size: 0.88rem;
   color: #8B8278;
   margin-bottom: 0;
   margin-top: 0;
 }
 
-/* Columns 2, 3 & 4 Headings and Links */
+.footer-top {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px;
+  align-items: flex-start;
+}
+
 .footer-column,
 .footer-contact {
   text-align: left;
@@ -91,31 +92,31 @@
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 500;
-  transition: color 0.15s ease, padding-left 0.15s ease;
+  transition: color 0.15s ease, transform 0.15s ease;
 }
 
 .footer-column a:hover {
-  color: #ffffff;
-  padding-left: 2px;
+  color: #c084fc;
+  transform: translateX(2px);
 }
 
-/* Contact Items */
 .footer-contact p {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   margin-bottom: 14px;
   margin-top: 0;
   font-size: 0.85rem;
   color: #8B8278;
+  line-height: 1.5;
 }
 
 .footer-contact p svg {
-  color: #ffffff;
+  color: #c084fc;
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
-/* Horizontal Divider */
 .footer-divider {
   height: 1px;
   width: 100%;
@@ -125,11 +126,11 @@
   margin-bottom: 26px;
 }
 
-/* Bottom Row (3 Columns) */
 .footer-bottom {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
+  gap: 20px;
   font-size: 0.78rem;
 }
 
@@ -137,7 +138,6 @@
   text-align: left;
   color: #8B8278;
   font-weight: 600;
-  white-space: nowrap;
 }
 
 .footer-developed span {
@@ -145,40 +145,30 @@
 }
 
 .footer-copy {
-  text-align: center;
+  text-align: right;
   color: #8B8278;
   margin: 0;
   font-weight: 500;
-  white-space: nowrap;
 }
 
-.footer-legal {
-  display: flex;
-  justify-content: flex-end;
-  gap: 24px;
-}
-
-.footer-legal a {
-  color: #8B8278;
-  text-decoration: none;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: color 0.15s ease;
-}
-
-.footer-legal a:hover {
-  color: #ffffff;
-}
-
-/* Responsive Rules */
 @media (max-width: 1024px) {
   .footer-container {
     width: calc(100% - 48px);
   }
 
   .footer-top {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 36px 24px;
+  }
+
+  .footer-bottom {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .footer-developed,
+  .footer-copy {
+    text-align: left;
   }
 }
 
@@ -187,25 +177,22 @@
     width: calc(100% - 32px);
   }
 
+  .footer-brand-wrap {
+    margin-bottom: 28px;
+  }
+
   .footer-top {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 28px;
   }
 
   .footer-bottom {
     grid-template-columns: 1fr;
     gap: 14px;
-    text-align: center;
   }
 
   .footer-developed,
   .footer-copy {
-    text-align: center;
-  }
-
-  .footer-legal {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 16px;
+    text-align: left;
   }
 }

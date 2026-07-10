@@ -8,9 +8,9 @@ const steps = [
   { num: 1, title: 'Register as a Buyer on DealsKB', icon: '📝' },
   { num: 2, title: 'Browse the marketplace — explore Cars, Bikes, Mobiles, Laptops', icon: '🔍' },
   { num: 3, title: 'Select a product listing that interests you', icon: '🎯' },
-  { num: 4, title: 'Activate a 24-hour Bidding Pass for that category', icon: '🎫' },
-  { num: 5, title: 'Enter the live auction room and place unlimited bids', icon: '⚡' },
-  { num: 6, title: 'Win by having the highest bid when the auction ends', icon: '🏆' },
+  { num: 4, title: 'Activate a 24-hour Pass for that category', icon: '🎫' },
+  { num: 5, title: 'Enter the live sells and place unlimited buy', icon: '⚡' },
+  { num: 6, title: 'Place highest buy price and the sell ends', icon: '🏆' },
   { num: 7, title: 'Connect with the seller and complete the handover', icon: '🤝' },
 ];
 

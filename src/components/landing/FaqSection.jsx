@@ -7,12 +7,12 @@ const BORDER = '#D8CFC1';
 
 const faqs = [
   {
-    q: 'How does bidding work on DealsKB?',
-    a: 'Register as a buyer, activate a 24-hour bidding pass for the category you want (car, bike, mobile, or laptop), and place unlimited bids during live auctions. The highest bid at auction end wins.',
+    q: 'How does Dealskb work?',
+    a: 'Register as a buyer, activate a 24-hour pass for the category you want (car, bike, mobile, or laptop), and place unlimited buy access during live sells. The highest buy price at sell end wins.',
   },
   {
-    q: 'What is a Buyer Bidding Pass?',
-    a: 'A bidding pass grants you 24 hours of unlimited bidding access for a specific product category. Passes are priced at ₹1 for mobiles, ₹1 for laptops, ₹1 for bikes, and ₹1 for cars (inclusive of 18% GST).',
+    q: 'What is a Buyer Pass?',
+    a: 'A bidding pass grans you 24 hours of unlimited access for a specific product category. Passes are priced at ₹1 for mobiles, ₹1 for laptops, ₹1 for bikes, and ₹1 for cars (inclusive of 18% GST).',
   },
   {
     q: 'How much does it cost to list a product as a seller?',
@@ -27,12 +27,12 @@ const faqs = [
     a: 'After a seller submits a listing with photos and documents, our admin team reviews it for authenticity. Once verified, it goes live for bidding.',
   },
   {
-    q: 'What happens after I win a bid?',
+    q: 'What happens after I buy ?',
     a: 'After winning, DealsKB connects you with the seller. You complete the payment and product handover directly. Our platform facilitates secure communication throughout.',
   },
   {
-    q: 'What is the refund policy for bidding passes?',
-    a: 'Bidding passes are non-refundable once activated.',
+    q: 'What is the refund policy for buyer passes?',
+    a: 'Buyer passes are non-refundable once activated.',
   },
   {
     q: 'Is my payment information secure?',

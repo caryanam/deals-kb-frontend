@@ -57,7 +57,9 @@ const LandingNavbar = () => {
           <h1 className="logo-text" style={{ color: '#1F1A1D', fontSize: '24px', fontWeight: 800, fontFamily: "'Inter', 'Poppins', sans-serif", margin: 0, display: 'flex', alignItems: 'center', letterSpacing: '-0.5px' }}>
             Deals<span style={{ color: '#6B1B71' }}>KB</span>
           </h1>
-          <span className="logo-tagline" style={{ fontSize: '10px', fontWeight: 700, fontFamily: "'Inter', 'Poppins', sans-serif", color: '#8B8278', letterSpacing: '0.2px' }}>Bid It. Win It. Own It.</span>
+          <span className="logo-tagline" style={{ fontSize: '10px', fontWeight: 700, fontFamily: "'Inter', 'Poppins', sans-serif", color: '#8B8278', letterSpacing: '0.2px' }}>Discover More.
+Choose More.
+Own More.</span>
         </div>
       </Link>
 
