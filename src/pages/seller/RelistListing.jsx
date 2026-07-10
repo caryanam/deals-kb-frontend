@@ -442,17 +442,19 @@ export const RelistListing = () => {
       }
 
       const orderRes = await createRelistOrder(listingId);
-      const orderId = orderRes.orderId;
-      const paymentSessionId = orderRes.paymentSessionId;
+      const orderId = orderRes.orderId || orderRes.order_id;
+      const paymentSessionId = orderRes.paymentSessionId || orderRes.payment_session_id;
+      const modeValue = orderRes.cashfree_mode || orderRes.cashfreeMode;
       const cashfreeFactory = window.Cashfree || globalThis.Cashfree;
-      if (typeof cashfreeFactory !== 'function' || !paymentSessionId) {
+      if (typeof cashfreeFactory !== 'function' || !paymentSessionId || !orderId) {
+        console.error('Cashfree relist order payload missing checkout fields:', orderRes);
         toast.error('Cashfree checkout could not be initialized.');
         setLoading(false);
         return;
       }
 
       const cashfree = cashfreeFactory({
-        mode: orderRes.cashfree_mode === 'production' ? 'production' : 'sandbox'
+        mode: modeValue === 'production' ? 'production' : 'sandbox'
       });
 
       const result = await cashfree.checkout({
@@ -892,3 +894,4 @@ const UploadedBadge = ({ label, onRemove }) => (
 );
 
 export default RelistListing;
+

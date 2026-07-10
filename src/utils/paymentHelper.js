@@ -70,7 +70,6 @@ export const loadCashfree = () =>
     document.body.appendChild(script);
   });
 
-export const loadRazorpay = loadCashfree;
 
 export const triggerPayment = async (planId, onSuccess, onCancel) => {
   try {
@@ -81,11 +80,13 @@ export const triggerPayment = async (planId, onSuccess, onCancel) => {
     }
 
     const data = await createPaymentOrder(planId);
-    const paymentSessionId = data.payment_session_id;
-    const orderId = data.order_id;
-    const mode = data.cashfree_mode === 'production' ? 'production' : 'sandbox';
+    const paymentSessionId = data.payment_session_id || data.paymentSessionId || data?.payment?.cashfree_payment_session_id || data?.payment?.cashfreePaymentSessionId;
+    const orderId = data.order_id || data.orderId || data?.payment?.cashfree_order_id || data?.payment?.cashfreeOrderId;
+    const modeValue = data.cashfree_mode || data.cashfreeMode || data?.payment?.cashfree_mode;
+    const mode = modeValue === 'production' ? 'production' : 'sandbox';
 
     if (!paymentSessionId || !orderId) {
+      console.error('Cashfree order payload missing checkout fields:', data);
       toast.error('Cashfree order session could not be created.');
       return null;
     }
@@ -137,3 +138,6 @@ export const triggerPayment = async (planId, onSuccess, onCancel) => {
     return null;
   }
 };
+
+
+
