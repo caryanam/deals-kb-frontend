@@ -12,7 +12,24 @@ const ScrollToHash = () => {
         setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
       }
     } else {
-      window.scrollTo(0, 0);
+      const resetScroll = () => {
+        window.scrollTo(0, 0);
+        if (document.documentElement) {
+          document.documentElement.scrollTop = 0;
+        }
+        if (document.body) {
+          document.body.scrollTop = 0;
+        }
+        const scrollContainers = document.querySelectorAll('.dashboard-scroll-page, .landing-page, [style*="overflow-y: auto"], [style*="overflow-y: scroll"]');
+        scrollContainers.forEach((el) => {
+          el.scrollTop = 0;
+        });
+      };
+
+      resetScroll();
+      setTimeout(resetScroll, 50);
+      setTimeout(resetScroll, 150);
+      setTimeout(resetScroll, 300);
     }
   }, [pathname, hash]);
 
