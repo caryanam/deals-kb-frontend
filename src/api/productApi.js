@@ -1,7 +1,8 @@
 import api from "./axiosClient";
 
 export const createProduct = async (data) => {
-  const response = await api.post("/products", data);
+  const config = data instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
+  const response = await api.post("/products", data, config);
   return response.data;
 };
 
@@ -56,7 +57,8 @@ export const getWinnerContact = async (productId) => {
 };
 
 export const updateProduct = async (productId, data) => {
-  const response = await api.put(`/products/${productId}`, data);
+  const config = data instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
+  const response = await api.put(`/products/${productId}`, data, config);
   return response.data;
 };
 
@@ -71,7 +73,8 @@ export const createRelistOrder = async (productId) => {
 };
 
 export const submitRelistAfterPayment = async (productId, data) => {
-  const response = await api.post(`/products/${productId}/relist/submit`, data);
+  const config = data instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
+  const response = await api.post(`/products/${productId}/relist/submit`, data, config);
   return response.data;
 };
 

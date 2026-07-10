@@ -173,6 +173,18 @@ export const CreateListingPage = () => {
   const [successMsg, setSuccessMsg] = useState('');
   const brandModelData = BRAND_MODEL_DATA[productType];
 
+  const dataURLtoFile = (dataurl, filename) => {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  };
+
   useEffect(() => {
     if (!editId) return;
 
@@ -192,7 +204,18 @@ export const CreateListingPage = () => {
         setProductPrice(product.product_price || '');
         setExpectedPrice(product.expected_price || '');
         setDescription(product.description || '');
-        setPhotos(safeParseJSON(product.photos, []));
+        
+        const loadedPhotos = safeParseJSON(product.photos, []);
+        setPhotos(loadedPhotos);
+        const slots = PHOTO_SLOTS[product.product_type || 'car'] || [];
+        const nextSlots = {};
+        slots.forEach((slotLabel, index) => {
+          if (loadedPhotos[index]) {
+            nextSlots[slotLabel] = loadedPhotos[index];
+          }
+        });
+        setPhotoSlots(nextSlots);
+
         setVideo(product.video || null);
         setSpecs({
           ...initialSpecs,
@@ -258,14 +281,19 @@ export const CreateListingPage = () => {
     if (!file) return;
 
     try {
-      const value = await compressImage(file, 1024, 1024, 0.7).catch(() => fileToBase64(file));
+      const compressedDataUrl = await compressImage(file, 1024, 1024, 0.7);
+      const processedFile = dataURLtoFile(compressedDataUrl, file.name);
       setPhotoSlots((current) => {
-        const next = { ...current, [slotLabel]: value };
+        const next = { ...current, [slotLabel]: processedFile };
         setPhotos(Object.values(next).filter(Boolean));
         return next;
       });
     } catch {
-      setErrorMsg('Failed to process image files.');
+      setPhotoSlots((current) => {
+        const next = { ...current, [slotLabel]: file };
+        setPhotos(Object.values(next).filter(Boolean));
+        return next;
+      });
     } finally {
       e.target.value = '';
     }
@@ -277,12 +305,15 @@ export const CreateListingPage = () => {
     if (!file) return;
 
     try {
-      const value = file.type.startsWith('image/')
-        ? await compressImage(file, 1024, 1024, 0.7).catch(() => fileToBase64(file))
-        : await fileToBase64(file);
-      setter(value);
+      if (file.type.startsWith('image/')) {
+        const compressedDataUrl = await compressImage(file, 1024, 1024, 0.7);
+        const processedFile = dataURLtoFile(compressedDataUrl, file.name);
+        setter(processedFile);
+      } else {
+        setter(file);
+      }
     } catch {
-      setErrorMsg('Failed to process document file.');
+      setter(file);
     } finally {
       e.target.value = '';
     }
@@ -295,23 +326,24 @@ export const CreateListingPage = () => {
       setErrorMsg('Please upload a valid video file.');
       return;
     }
-
-    try {
-      setLoading(true);
-      setVideo(await fileToBase64(file));
-    } catch {
-      setErrorMsg('Failed to process video file.');
-    } finally {
-      setLoading(false);
-      e.target.value = '';
-    }
+    setVideo(file);
+    e.target.value = '';
   };
 
   const buildPayload = () => {
+    const formData = new FormData();
+    formData.append('title', title.trim());
+    formData.append('product_type', productType);
+    formData.append('brand', brand.trim());
+    formData.append('model', model.trim());
+    formData.append('condition', condition);
+    formData.append('description', description.trim());
+    formData.append('product_price', Number(productPrice));
+    formData.append('expected_price', Number(expectedPrice));
+
     const specifications = {
       warranty_available: specs.warrantyAvailable
     };
-    const documents = {};
 
     const finalMake = (productType === 'car' || productType === 'bike') ? brand : make;
     if (finalMake.trim()) specifications.make = finalMake.trim();
@@ -325,8 +357,8 @@ export const CreateListingPage = () => {
         ownership: specs.ownership,
         accidental: specs.accidental
       });
-      documents.rc_copy = rcCopy;
-      documents.insurance_copy = insuranceCopy;
+      if (rcCopy) formData.append('rc_copy', rcCopy);
+      if (insuranceCopy) formData.append('insurance_copy', insuranceCopy);
     }
 
     if (productType === 'laptop') {
@@ -335,8 +367,8 @@ export const CreateListingPage = () => {
         ram: specs.ram.trim(),
         storage: specs.storage.trim()
       });
-      documents.aadhaar_card = aadhaarCard;
-      documents.pan_card = panCard;
+      if (aadhaarCard) formData.append('aadhaar_card', aadhaarCard);
+      if (panCard) formData.append('pan_card', panCard);
       if (specs.batteryBackup.trim()) specifications.battery_backup = specs.batteryBackup.trim();
       if (specs.graphics.trim()) specifications.graphics = specs.graphics.trim();
       if (specs.batteryHealth.trim()) specifications.battery_health = specs.batteryHealth.trim();
@@ -347,25 +379,24 @@ export const CreateListingPage = () => {
         ram: specs.ram.trim(),
         storage: specs.storage.trim()
       });
-      documents.aadhaar_card = aadhaarCard;
-      documents.pan_card = panCard;
+      if (aadhaarCard) formData.append('aadhaar_card', aadhaarCard);
+      if (panCard) formData.append('pan_card', panCard);
       if (specs.imeiNumber.trim()) specifications.imei_number = specs.imeiNumber.trim();
     }
 
-    return {
-      title: title.trim(),
-      product_type: productType,
-      brand: brand.trim(),
-      model: model.trim(),
-      condition,
-      description: description.trim(),
-      product_price: Number(productPrice),
-      expected_price: Number(expectedPrice),
-      photos,
-      video: video || null,
-      specifications,
-      documents
-    };
+    formData.append('specifications', JSON.stringify(specifications));
+
+    Object.values(photoSlots).forEach((val) => {
+      if (val) {
+        formData.append('photos', val);
+      }
+    });
+
+    if (video) {
+      formData.append('video', video);
+    }
+
+    return formData;
   };
 
   const validateForm = () => {
@@ -754,36 +785,53 @@ const Segmented = ({ label, options, value, onChange }) => (
   </div>
 );
 
-const PhotoSlot = ({ label, value, onUpload, onRemove, required }) => (
-  <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '0.75rem', minHeight: '112px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.65rem' }}>
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
-      <Camera size={20} style={{ color: '#4a1a50', flexShrink: 0 }} />
-      <div style={{ minWidth: 0 }}>
-        <span style={{ fontWeight: 850, color: '#111827', fontSize: '0.9rem', lineHeight: 1.25 }}>
-          {label} {required && <span style={{ color: '#ef4444' }}>*</span>}
-        </span>
-        {(label === 'Front image' || label === 'Back image') && (
-          <p style={{ margin: '0.15rem 0 0', color: '#8B8278', fontSize: '0.72rem', fontWeight: 700, lineHeight: 1.25 }}>
-            Note: number plate should be hidden.
-          </p>
-        )}
+const PhotoSlot = ({ label, value, onUpload, onRemove, required }) => {
+  const previewUrl = React.useMemo(() => {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    if (value instanceof File) return URL.createObjectURL(value);
+    return '';
+  }, [value]);
+
+  React.useEffect(() => {
+    return () => {
+      if (value instanceof File && previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [value, previewUrl]);
+
+  return (
+    <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '0.75rem', minHeight: '112px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.65rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
+        <Camera size={20} style={{ color: '#4a1a50', flexShrink: 0 }} />
+        <div style={{ minWidth: 0 }}>
+          <span style={{ fontWeight: 850, color: '#111827', fontSize: '0.9rem', lineHeight: 1.25 }}>
+            {label} {required && <span style={{ color: '#ef4444' }}>*</span>}
+          </span>
+          {(label === 'Front image' || label === 'Back image') && (
+            <p style={{ margin: '0.15rem 0 0', color: '#8B8278', fontSize: '0.72rem', fontWeight: 700, lineHeight: 1.25 }}>
+              Note: number plate should be hidden.
+            </p>
+          )}
+        </div>
       </div>
+      {previewUrl ? (
+        <div style={{ height: '72px', borderRadius: '0.65rem', overflow: 'hidden', position: 'relative', border: '1px solid #d1fae5' }}>
+          <img src={previewUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <button type="button" onClick={onRemove} style={{ position: 'absolute', top: 5, right: 5, border: 'none', background: '#ef4444', color: '#ffffff', borderRadius: '50%', width: 22, height: 22, display: 'grid', placeItems: 'center', cursor: 'pointer' }}>
+            <X size={13} />
+          </button>
+        </div>
+      ) : (
+        <label style={{ border: '1px dashed #cbd5e1', borderRadius: '0.65rem', minHeight: '58px', display: 'grid', placeItems: 'center', color: '#6B1B71', fontWeight: 900, cursor: 'pointer', position: 'relative', backgroundColor: '#FAF6EA' }}>
+          Upload
+          <input type="file" accept="image/*" onChange={onUpload} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
+        </label>
+      )}
     </div>
-    {value ? (
-      <div style={{ height: '72px', borderRadius: '0.65rem', overflow: 'hidden', position: 'relative', border: '1px solid #d1fae5' }}>
-        <img src={value} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        <button type="button" onClick={onRemove} style={{ position: 'absolute', top: 5, right: 5, border: 'none', background: '#ef4444', color: '#ffffff', borderRadius: '50%', width: 22, height: 22, display: 'grid', placeItems: 'center', cursor: 'pointer' }}>
-          <X size={13} />
-        </button>
-      </div>
-    ) : (
-      <label style={{ border: '1px dashed #cbd5e1', borderRadius: '0.65rem', minHeight: '58px', display: 'grid', placeItems: 'center', color: '#6B1B71', fontWeight: 900, cursor: 'pointer', position: 'relative', backgroundColor: '#FAF6EA' }}>
-        Upload
-        <input type="file" accept="image/*" onChange={onUpload} style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} />
-      </label>
-    )}
-  </div>
-);
+  );
+};
 
 const UploadRow = ({ label, file, onUpload, onRemove }) => (
   <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '1rem', display: 'flex', alignItems: 'center', gap: '0.85rem', justifyContent: 'space-between' }}>
