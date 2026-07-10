@@ -43,7 +43,7 @@ const WhyChooseSection = () => {
       color: '#f0fdfa',
       iconColor: '#0d9488',
       title: 'Secure Payments',
-      desc: 'Protected Razorpay gateways keep user information and order transactions completely secure and transparent.'
+      desc: 'Protected Cashfree payment infrastructure keeps user information and order transactions secure and transparent.'
     }
   ];
 

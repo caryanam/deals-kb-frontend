@@ -5,7 +5,8 @@ import { toast } from 'react-toastify';
 import { checkRegistrationOtp, sendRegistrationOtp } from '../../api/authApi';
 import { useAuth } from '../../hooks/useAuth';
 import '../../styles/auth.css';
-import loginBg from '../../assets/login_bg.png';
+import loginBg from '../../assets/login_bg.mp4';
+import logoImg from '../../assets/logo.png';
 
 const roleOptions = ['Buyer', 'Seller', 'Dealer'];
 
@@ -215,7 +216,9 @@ export const RegisterPage = () => {
 
   return (
     <div className="auth-page register-auth">
-      <img src={loginBg} className="auth-bg-img" alt="DealsKB Auction Background" />
+      <video className="auth-bg-img" autoPlay muted loop playsInline preload="auto">
+        <source src={loginBg} type="video/mp4" />
+      </video>
       <div className="auth-overlay" />
 
       <div className="auth-content">
@@ -223,7 +226,7 @@ export const RegisterPage = () => {
           <div className="auth-card register-card">
             <div style={{ textAlign: 'center', marginBottom: '0.85rem' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
-                <Car size={26} style={{ color: '#6B1B71' }} />
+                <img src={logoImg} alt="DealsKB Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
                 <span style={{ fontSize: '1.45rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#0f172a', letterSpacing: 0 }}>
                   Create Account
                 </span>
@@ -314,7 +317,7 @@ export const RegisterPage = () => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label" htmlFor="name-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Full Name *</label>
                 <div style={{ position: 'relative' }}>
-                  <User size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <User size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                   <input
                     type="text"
                     id="name-input"
@@ -336,7 +339,7 @@ export const RegisterPage = () => {
                 <label className="form-label" htmlFor="email-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Email Address *</label>
                 <div style={{ display: 'flex', gap: '0.4rem' }}>
                   <div style={{ position: 'relative', flex: 1 }}>
-                    <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                    <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                     <input
                       type="email"
                       id="email-input"
@@ -381,7 +384,7 @@ export const RegisterPage = () => {
                   <label className="form-label" htmlFor="otp-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Email Verification OTP *</label>
                   <div style={{ display: 'flex', gap: '0.4rem' }}>
                     <div style={{ position: 'relative', flex: 1 }}>
-                      <ShieldCheck size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                      <ShieldCheck size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                       <input
                         type="text"
                         id="otp-input"
@@ -440,7 +443,7 @@ export const RegisterPage = () => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label" htmlFor="phone-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Mobile Number</label>
                 <div style={{ position: 'relative' }}>
-                  <Phone size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <Phone size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                   <input
                     type="tel"
                     id="phone-input"
@@ -457,7 +460,7 @@ export const RegisterPage = () => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label" htmlFor="password-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Password *</label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     id="password-input"
@@ -480,7 +483,7 @@ export const RegisterPage = () => {
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
-                      color: '#8B8278',
+                      color: '#000000',
                       display: 'flex',
                       alignItems: 'center',
                       padding: 0

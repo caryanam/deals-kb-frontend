@@ -4,7 +4,8 @@ import { Car, Lock, Mail, Loader2, AlertCircle, ShieldCheck, Check, Eye, EyeOff 
 import { sendForgotPasswordOtp, verifyForgotPasswordOtp, resetPassword } from '../../api/authApi';
 import { toast } from 'react-toastify';
 import '../../styles/auth.css';
-import loginBg from '../../assets/login_bg.png';
+import loginBg from '../../assets/login_bg.mp4';
+import logoImg from '../../assets/logo.png';
 
 export const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -177,7 +178,9 @@ export const ForgotPasswordPage = () => {
 
   return (
     <div className="auth-page forgot-auth">
-      <img src={loginBg} className="auth-bg-img" alt="DealsKB Auction Background" />
+      <video className="auth-bg-img" autoPlay muted loop playsInline preload="auto">
+        <source src={loginBg} type="video/mp4" />
+      </video>
       <div className="auth-overlay" />
 
       <div className="auth-content">
@@ -185,7 +188,7 @@ export const ForgotPasswordPage = () => {
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-              <Car size={36} style={{ color: '#6B1B71' }} />
+              <img src={logoImg} alt="DealsKB Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
               <span style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#0f172a', letterSpacing: '-0.03em' }}>
                 Reset Password
               </span>
@@ -242,7 +245,7 @@ export const ForgotPasswordPage = () => {
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="identifier-input">Mobile or Email</label>
               <div style={{ position: 'relative' }}>
-                <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                 <input
                   type="text"
                   id="identifier-input"
@@ -281,7 +284,7 @@ export const ForgotPasswordPage = () => {
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="otp-input">Verification Code (OTP)</label>
               <div style={{ position: 'relative' }}>
-                <ShieldCheck size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                <ShieldCheck size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                 <input
                   type="text"
                   id="otp-input"
@@ -357,7 +360,7 @@ export const ForgotPasswordPage = () => {
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="password-input">New Password (Min 6 chars)</label>
               <div style={{ position: 'relative' }}>
-                <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password-input"
@@ -380,7 +383,7 @@ export const ForgotPasswordPage = () => {
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    color: '#8B8278',
+                    color: '#000000',
                     display: 'flex',
                     alignItems: 'center',
                     padding: 0
@@ -395,7 +398,7 @@ export const ForgotPasswordPage = () => {
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="confirm-input">Confirm New Password</label>
               <div style={{ position: 'relative' }}>
-                <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="confirm-input"
@@ -418,7 +421,7 @@ export const ForgotPasswordPage = () => {
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    color: '#8B8278',
+                    color: '#000000',
                     display: 'flex',
                     alignItems: 'center',
                     padding: 0

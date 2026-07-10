@@ -176,7 +176,7 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
             })}
           </div>
           <p style={{ margin: '0.65rem 0 0', color: '#8B8278', fontSize: '0.78rem', textAlign: 'center', fontWeight: 700 }}>
-            Secure payment powered by Razorpay
+            Secure payment powered by Cashfree
           </p>
         </div>
       </div>

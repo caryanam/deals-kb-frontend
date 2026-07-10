@@ -428,7 +428,7 @@ body,
 
 .landing-category-img-container {
   height: 160px;
-  background-color: #f1f5f9;
+  background-color: #FAF6EA;
   width: 100%;
 }
 
@@ -928,4 +928,17 @@ body,
   .nav-link {
     font-size: 14px;
   }
+}
+
+/* Scroll Reveal Animations */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-reveal-active {
+  opacity: 1;
+  transform: translateY(0);
 }

@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight, X, Lock, ExternalLink, ImageOff } from 'lucide-react';
 import api from '../../api/axiosClient';
 import { formatCurrency, safeParseJSON } from '../../utils/helpers';
+import carImg from '../../assets/car.png';
+import bikeImg from '../../assets/bike.png';
+import mobileImg from '../../assets/mobile.png';
+import laptopImg from '../../assets/laptop.png';
 
 const PURPLE = '#6B1B71';
 const GOLD = '#B2772D';
@@ -13,7 +17,7 @@ const categories = [
     type: 'car',
     title: 'Cars',
     desc: 'Browse premium sedans, SUVs, and luxury hatchbacks in live bidding rooms.',
-    img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=80',
+    img: carImg,
     fallbackItems: [
       { id: 'c1', title: '2022 Honda City ZX i-VTEC', price: 850000, brand: 'Honda', model: 'City', img: 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=400' },
       { id: 'c2', title: '2021 Hyundai Creta SX (O)', price: 1120000, brand: 'Hyundai', model: 'Creta', img: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400' },
@@ -25,7 +29,7 @@ const categories = [
     type: 'bike',
     title: 'Bikes',
     desc: 'Find sports bikes, cruisers, and commuter motorbikes at unbeatable rates.',
-    img: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=500&auto=format&fit=crop&q=80',
+    img: bikeImg,
     fallbackItems: [
       { id: 'b1', title: '2023 Royal Enfield Classic 350', price: 175000, brand: 'Royal Enfield', model: 'Classic 350', img: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=400' },
       { id: 'b2', title: '2022 Yamaha YZF R15 V4', price: 142000, brand: 'Yamaha', model: 'R15 V4', img: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400' },
@@ -37,7 +41,7 @@ const categories = [
     type: 'mobile',
     title: 'Mobiles',
     desc: 'Upgrade your phone with top-tier smartphones, iPhones, and Android flagships.',
-    img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop&q=80',
+    img: mobileImg,
     fallbackItems: [
       { id: 'm1', title: 'Apple iPhone 14 Pro Max 256GB', price: 78000, brand: 'Apple', model: 'iPhone 14 Pro Max', img: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400' },
       { id: 'm2', title: 'Samsung Galaxy S23 Ultra 5G', price: 72000, brand: 'Samsung', model: 'S23 Ultra', img: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400' },
@@ -49,7 +53,7 @@ const categories = [
     type: 'laptop',
     title: 'Laptops',
     desc: 'Boost your productivity with verified laptops, MacBooks, and gaming rigs.',
-    img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&auto=format&fit=crop&q=80',
+    img: laptopImg,
     fallbackItems: [
       { id: 'l1', title: 'Apple MacBook Pro M2 16"', price: 125000, brand: 'Apple', model: 'MacBook Pro M2', img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400' },
       { id: 'l2', title: 'ASUS ROG Zephyrus G14 Gaming', price: 89000, brand: 'ASUS', model: 'ROG G14', img: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400' },

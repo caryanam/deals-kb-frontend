@@ -25,7 +25,11 @@
 }
 
 .auth-overlay {
-  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.12); /* Subtle black tint overlay for readability */
+  z-index: 1;
+  pointer-events: none;
 }
 
 .auth-content {
@@ -57,7 +61,7 @@
   width: 100%;
   max-width: 500px;
   background: #ffffff;
-  border: 2px solid #cbd5e1;
+  border: 4px solid #ffffff;
   border-radius: 24px;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(20px);
@@ -82,20 +86,30 @@
 }
 
 .auth-card .form-label {
-  color: #0f172a;
+  color: #6B1B71 !important;
   font-size: 0.8rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
 }
 
 .auth-card .form-control {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  color: #0f172a;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.25) !important;
+  color: #000000 !important;
   padding-top: 0.55rem;
   padding-bottom: 0.55rem;
   font-size: 0.88rem;
   border-radius: 0.6rem;
+}
+
+.auth-card .form-control::placeholder {
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.auth-card .form-control:focus {
+  background: rgba(255, 255, 255, 0.38) !important;
+  border-color: #6B1B71 !important;
+  outline: none;
 }
 
 .auth-card a {
@@ -143,9 +157,44 @@
   }
 }
 
-@media (max-width: 640px) {
-  .auth-page.register-auth {
-    overflow-y: auto;
+@keyframes mobileCardFadeIn {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(30px);
+  }
+  1% {
+    opacity: 0;
+    visibility: visible;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mobileOverlayFadeIn {
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.12);
+  }
+}
+
+.auth-glow-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #000000 !important;
+  text-shadow: none !important;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .auth-bg-img {
+    object-position: 10% center !important;
   }
 
   .auth-content {
@@ -157,5 +206,16 @@
   .auth-card {
     padding: 22px 18px;
     border-radius: 18px;
+    animation: mobileCardFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 3s both;
+  }
+
+  .auth-overlay {
+    animation: mobileOverlayFadeIn 1.2s ease-out 3.5s both;
+  }
+
+  .auth-glow-text {
+    color: #000000 !important;
+    text-shadow: none !important;
   }
 }
+

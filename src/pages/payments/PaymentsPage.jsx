@@ -74,6 +74,7 @@ const PaymentsPage = () => {
                   <tbody>
                     {payments.map((payment) => {
                       const statusLabel = payment.status === 'paid' ? 'Paid' : payment.status === 'failed' ? 'Failed' : 'Not completed';
+                      const gatewayOrderId = payment.cashfree_order_id || payment.razorpay_order_id || '-';
                       return (
                         <tr key={payment.payment_id} style={{ borderTop: '1px solid #f1f5f9' }}>
                           <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: '#1F1A1D' }}>{payment.plan_name}</td>
@@ -90,7 +91,7 @@ const PaymentsPage = () => {
                               {statusLabel}
                             </span>
                           </td>
-                          <td style={{ padding: '0.85rem 1rem', color: '#8B8278' }}>{payment.razorpay_order_id}</td>
+                          <td style={{ padding: '0.85rem 1rem', color: '#8B8278' }}>{gatewayOrderId}</td>
                           <td style={{ padding: '0.85rem 1rem', color: '#8B8278' }}>{payment.created_at ? new Date(payment.created_at).toLocaleString() : ''}</td>
                         </tr>
                       );

@@ -25,9 +25,9 @@ export const verifyPayment = async (payload) => {
   return response.data;
 };
 
-export const markPaymentFailed = async (razorpayOrderId, reason = "Payment cancelled or failed") => {
+export const markPaymentFailed = async (orderId, reason = "Payment cancelled or failed") => {
   const response = await api.post("/payments/mark-failed", {
-    razorpay_order_id: razorpayOrderId,
+    order_id: orderId,
     reason
   });
   return response.data;

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { getRelistData, createRelistOrder, submitRelistAfterPayment, markRelistPaymentFailed } from '../../api/productApi';
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
-import { loadRazorpay } from '../../utils/paymentHelper';
+import { loadCashfree } from '../../utils/paymentHelper';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -27,6 +27,15 @@ const CATEGORIES = [
 const CONDITIONS = ['Excellent', 'Good', 'Average', 'Needs Repair'];
 const FUEL_TYPES = ['Petrol', 'Diesel', 'Cng', 'Electric', 'Hybrid'];
 const OWNERSHIP_OPTIONS = ['1st', '2nd', '3rd', '4th+'];
+const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+const buildCashfreeFailureReason = (result) => {
+  const error = result?.error || {};
+  return [
+    error.message || error.description || error.reason || 'Payment cancelled or failed',
+    error.code ? `Code: ${error.code}` : ''
+  ].filter(Boolean).join(' | ');
+};
 
 const PHOTO_SLOTS = {
   car: [
@@ -425,79 +434,82 @@ export const RelistListing = () => {
     setLoading(true);
 
     try {
-      const loaded = await loadRazorpay();
+      const loaded = await loadCashfree();
       if (!loaded) {
-        toast.error('Unable to load Razorpay Checkout. Please check your internet connection and try again.');
+        toast.error('Unable to load Cashfree Checkout. Please check your internet connection and try again.');
         setLoading(false);
         return;
       }
 
       const orderRes = await createRelistOrder(listingId);
       const orderId = orderRes.orderId;
-      const razorpayKey = orderRes.key_id;
+      const paymentSessionId = orderRes.paymentSessionId;
+      const cashfreeFactory = window.Cashfree || globalThis.Cashfree;
+      if (typeof cashfreeFactory !== 'function' || !paymentSessionId) {
+        toast.error('Cashfree checkout could not be initialized.');
+        setLoading(false);
+        return;
+      }
 
-      const checkout = new window.Razorpay({
-        key: razorpayKey,
-        amount: orderRes.amount,
-        currency: orderRes.currency,
-        name: 'DealsKB',
-        description: `Relisting Fee - ${formData.category}`,
-        order_id: orderId,
-        prefill: {
-          name: user?.name || '',
-          email: user?.email || '',
-          contact: user?.mobile_number || ''
-        },
-        theme: { color: '#6B1B71' },
-        handler: async (response) => {
-          try {
-            setLoading(true);
-            await submitRelistAfterPayment(listingId, {
-              ...formData,
-              razorpayOrderId: response.razorpay_order_id,
-              razorpayPaymentId: response.razorpay_payment_id,
-              razorpaySignature: response.razorpay_signature
-            });
-            toast.success('Payment successful. Listing submitted for admin approval.');
-            navigate(`${basePath}/my-listings`);
-          } catch (err) {
-            console.error('Relist submit error:', err);
-            toast.error(err.response?.data?.detail || 'Payment verification or submit failed.');
-            setLoading(false);
-          }
-        },
-        modal: {
-          ondismiss: async () => {
-            try {
-              await markRelistPaymentFailed(listingId, {
-                razorpayOrderId: orderId,
-                reason: 'PAYMENT_CANCELLED'
-              });
-            } catch (err) {
-              console.error('Failed to log payment cancellation:', err);
-            }
-            toast.info('Payment cancelled. Listing was not submitted.');
-            navigate(`${basePath}/my-listings`);
-          }
-        }
+      const cashfree = cashfreeFactory({
+        mode: orderRes.cashfree_mode === 'production' ? 'production' : 'sandbox'
       });
 
-      checkout.on('payment.failed', async (response) => {
-        console.error('Razorpay payment.failed:', response);
-        const reason = response?.error?.description || 'Payment cancelled or failed';
+      const result = await cashfree.checkout({
+        paymentSessionId,
+        redirectTarget: '_modal'
+      });
+
+      if (result?.error) {
+        const reason = buildCashfreeFailureReason(result);
         try {
           await markRelistPaymentFailed(listingId, {
-            razorpayOrderId: orderId,
+            cashfreeOrderId: orderId,
             reason
           });
         } catch (err) {
           console.error('Failed to log payment failure:', err);
         }
         toast.error(reason);
-        navigate(`${basePath}/my-listings`);
-      });
+        setLoading(false);
+        return;
+      }
 
-      checkout.open();
+      let submitted = false;
+      let lastSubmitError = null;
+      for (let attempt = 0; attempt < 5; attempt += 1) {
+        try {
+          await submitRelistAfterPayment(listingId, {
+            ...formData,
+            cashfreeOrderId: orderId
+          });
+          submitted = true;
+          break;
+        } catch (err) {
+          lastSubmitError = err;
+          const detail = err.response?.data?.detail || '';
+          const retriable = /payment not completed/i.test(detail) || /ACTIVE/i.test(detail);
+          if (!retriable || attempt === 4) {
+            break;
+          }
+          await sleep(1500);
+        }
+      }
+
+      if (!submitted) {
+        try {
+          await markRelistPaymentFailed(listingId, {
+            cashfreeOrderId: orderId,
+            reason: lastSubmitError?.response?.data?.detail || 'Payment verification or submit failed'
+          });
+        } catch (err) {
+          console.error('Failed to mark relist payment as failed:', err);
+        }
+        throw lastSubmitError || new Error('Payment verification or submit failed.');
+      }
+
+      toast.success('Payment successful. Listing submitted for admin approval.');
+      navigate(`${basePath}/my-listings`);
     } catch (err) {
       console.error('Relisting initialization failed:', err);
       toast.error(err.response?.data?.detail || 'Failed to initialize payment process.');

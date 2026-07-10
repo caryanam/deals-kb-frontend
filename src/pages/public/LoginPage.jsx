@@ -4,7 +4,8 @@ import { Car, Lock, Mail, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react
 import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import '../../styles/auth.css';
-import loginBg from '../../assets/login_bg.png';
+import loginBg from '../../assets/login_bg.mp4';
+import logoImg from '../../assets/logo.png';
 
 export const LoginPage = () => {
   const { login, authError, setAuthError } = useAuth();
@@ -68,7 +69,9 @@ export const LoginPage = () => {
 
   return (
     <div className="auth-page login-auth">
-      <img src={loginBg} className="auth-bg-img" alt="DealsKB Auction Background" />
+      <video className="auth-bg-img" autoPlay muted loop playsInline preload="auto">
+        <source src={loginBg} type="video/mp4" />
+      </video>
       <div className="auth-overlay" />
 
       <div className="auth-content">
@@ -76,12 +79,12 @@ export const LoginPage = () => {
           <div className="auth-card login-card">
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <Car size={36} style={{ color: '#6B1B71' }} />
+                <img src={logoImg} alt="DealsKB Logo" style={{ height: '42px', width: 'auto', objectFit: 'contain' }} />
                 <span style={{ fontSize: '1.75rem', fontWeight: 800, fontFamily: "'Outfit', sans-serif", color: '#0f172a', letterSpacing: 0 }}>
                   DealsKB
                 </span>
               </div>
-              <p className="auth-muted-text" style={{ fontSize: '0.9rem', fontWeight: 500 }}>
+              <p className="auth-glow-text">
                 Log in to manage listings and bid on live auctions
               </p>
             </div>
@@ -112,7 +115,7 @@ export const LoginPage = () => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label" htmlFor="login-identifier-input">Mobile Number or Email</label>
                 <div style={{ position: 'relative' }}>
-                  <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                   <input
                     type="text"
                     id="login-identifier-input"
@@ -130,7 +133,7 @@ export const LoginPage = () => {
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label" htmlFor="password-input">Password</label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+                  <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     id="password-input"
@@ -153,7 +156,7 @@ export const LoginPage = () => {
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
-                      color: '#8B8278',
+                      color: '#000000',
                       display: 'flex',
                       alignItems: 'center',
                       padding: 0
@@ -193,15 +196,14 @@ export const LoginPage = () => {
               alignItems: 'center',
               marginTop: '2rem',
               paddingTop: '1.25rem',
-              fontSize: '0.85rem'
+              fontSize: '0.85rem',
+              flexWrap: 'nowrap',
+              gap: '0.5rem'
             }}>
-              <Link to="/" className="auth-muted-text" style={{ fontWeight: 700 }}>Back to Home</Link>
-              <span className="auth-muted-text">
-                New?{' '}
-                <Link to="/register" style={{ fontWeight: 800 }}>
-                  Create Account
-                </Link>
-              </span>
+              <Link to="/" style={{ color: '#000000', fontWeight: 700, whiteSpace: 'nowrap', textDecoration: 'none' }}>Back to Home</Link>
+              <Link to="/register" style={{ color: '#6B1B71', fontWeight: 800, whiteSpace: 'nowrap', textDecoration: 'none' }}>
+                Create Account
+              </Link>
             </div>
           </div>
         </div>

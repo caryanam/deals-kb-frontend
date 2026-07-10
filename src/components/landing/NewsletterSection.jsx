@@ -30,25 +30,11 @@ const NewsletterSection = () => {
     <section className="landing-section" style={{
       background: 'radial-gradient(ellipse at center, #2d0a32 0%, #1F1A1D 100%)',
       color: '#ffffff',
-      borderBottom: '1px solid #2d0a32'
+      borderBottom: '1px solid #2d0a32',
+      padding: '2.5rem 2rem'
     }}>
       <div className="landing-container" style={{ maxWidth: '800px', textAlign: 'center' }}>
         
-        {/* Shield Icon */}
-        <div style={{
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-          backgroundColor: 'rgba(107, 27, 113, 0.15)',
-          color: '#965284',
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '1.5rem'
-        }}>
-          <Mail size={24} />
-        </div>
-
         {/* Text */}
         <h2 style={{
           fontSize: '2.25rem',
@@ -63,7 +49,7 @@ const NewsletterSection = () => {
           color: '#8B8278',
           fontSize: '1rem',
           lineHeight: 1.6,
-          marginBottom: '2.5rem',
+          marginBottom: '1.5rem',
           maxWidth: '560px',
           marginLeft: 'auto',
           marginRight: 'auto'

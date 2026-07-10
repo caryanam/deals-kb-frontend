@@ -2,38 +2,44 @@ import { createPaymentOrder, markPaymentFailed, verifyPayment } from '../api/pay
 import { getCurrentUser } from '../api/authApi';
 import { toast } from 'react-toastify';
 
-const RAZORPAY_CHECKOUT_SRC = 'https://checkout.razorpay.com/v1/checkout.js';
+const CASHFREE_CHECKOUT_SRC = 'https://sdk.cashfree.com/js/v3/cashfree.js';
 
-const buildFailureReason = (response) => {
-  const error = response?.error || {};
+const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+const getCashfreeFactory = () => window.Cashfree || globalThis.Cashfree;
+
+const buildFailureReason = (result) => {
+  const error = result?.error || {};
   return [
-    error.description || error.reason || 'Payment failed',
+    error.message || error.description || error.reason || 'Payment failed',
     error.code ? `Code: ${error.code}` : '',
-    error.source ? `Source: ${error.source}` : '',
-    error.step ? `Step: ${error.step}` : ''
+    error.type ? `Type: ${error.type}` : ''
   ].filter(Boolean).join(' | ');
 };
 
-const buildPrefill = (prefill = {}) => {
-  const cleanedContact = String(prefill.contact || '').replace(/\D/g, '').slice(-10);
-  const safePrefill = {
-    name: prefill.name || 'DealsKB User'
-  };
+const verifyCashfreeOrder = async (orderId, attempts = 5) => {
+  let lastError = null;
 
-  if (prefill.email) {
-    safePrefill.email = prefill.email;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      return await verifyPayment({ cashfree_order_id: orderId });
+    } catch (err) {
+      lastError = err;
+      const detail = err.response?.data?.detail || '';
+      const retriable = /payment not completed/i.test(detail) || /ACTIVE/i.test(detail);
+      if (!retriable || attempt === attempts - 1) {
+        break;
+      }
+      await sleep(1500);
+    }
   }
 
-  if (/^[6-9]\d{9}$/.test(cleanedContact)) {
-    safePrefill.contact = cleanedContact;
-  }
-
-  return safePrefill;
+  throw lastError || new Error('Payment verification failed');
 };
 
-export const loadRazorpay = () =>
+export const loadCashfree = () =>
   new Promise((resolve) => {
-    if (window.Razorpay) {
+    if (getCashfreeFactory()) {
       resolve(true);
       return;
     }
@@ -44,7 +50,7 @@ export const loadRazorpay = () =>
     }
 
     document
-      .querySelectorAll(`script[src="${RAZORPAY_CHECKOUT_SRC}"]`)
+      .querySelectorAll(`script[src="${CASHFREE_CHECKOUT_SRC}"]`)
       .forEach((script) => script.remove());
 
     const script = document.createElement('script');
@@ -57,88 +63,77 @@ export const loadRazorpay = () =>
       resolve(loaded);
     };
     const timeoutId = window.setTimeout(() => finish(false), 15000);
-    script.src = RAZORPAY_CHECKOUT_SRC;
+    script.src = CASHFREE_CHECKOUT_SRC;
     script.async = true;
-    script.onload = () => finish(Boolean(window.Razorpay));
+    script.onload = () => finish(Boolean(getCashfreeFactory()));
     script.onerror = () => finish(false);
     document.body.appendChild(script);
   });
 
+export const loadRazorpay = loadCashfree;
+
 export const triggerPayment = async (planId, onSuccess, onCancel) => {
   try {
-    const loaded = await loadRazorpay();
+    const loaded = await loadCashfree();
     if (!loaded) {
-      toast.error('Unable to load Razorpay Checkout. Please check your internet connection and try again.');
+      toast.error('Unable to load Cashfree Checkout. Please check your internet connection and try again.');
       return null;
     }
 
     const data = await createPaymentOrder(planId);
-    const order = data.order;
-    const razorpayKey = data.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID;
+    const paymentSessionId = data.payment_session_id;
+    const orderId = data.order_id;
+    const mode = data.cashfree_mode === 'production' ? 'production' : 'sandbox';
 
-    if (!razorpayKey) {
-      toast.error('Razorpay key is not configured.');
+    if (!paymentSessionId || !orderId) {
+      toast.error('Cashfree order session could not be created.');
       return null;
     }
 
-    return new Promise((resolve) => {
-      const checkout = new window.Razorpay({
-        key: razorpayKey,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'DealsKB',
-        description: planId?.startsWith('buyer_') ? 'Bidding Pass Activation' : 'Plan Activation',
-        order_id: order.id,
-        prefill: buildPrefill(data.prefill),
-        notes: order.notes || {},
-        retry: {
-          enabled: true,
-          max_count: 1
-        },
-        theme: { color: '#6B1B71' },
-        handler: async (response) => {
-          try {
-            await verifyPayment({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature
-            });
-            
-            const freshUser = await getCurrentUser();
-            sessionStorage.setItem('user', JSON.stringify(freshUser));
-            
-            toast.success('Payment verified successfully.');
-            if (onSuccess) onSuccess(freshUser);
-            resolve(freshUser);
-          } catch (err) {
-            console.error('Payment verification failed:', err);
-            await markPaymentFailed(order.id, 'Payment verification failed').catch(() => null);
-            toast.error(err.response?.data?.detail || 'Payment verification failed.');
-            resolve(null);
-          }
-        },
-        modal: {
-          ondismiss: async () => {
-            await markPaymentFailed(order.id, 'Payment cancelled by user').catch(() => null);
-            toast.info('Payment cancelled.');
-            if (onCancel) onCancel();
-            resolve(null);
-          }
-        }
-      });
-      checkout.on('payment.failed', async (response) => {
-        console.error('Razorpay payment.failed:', response);
-        const reason = buildFailureReason(response);
-        await markPaymentFailed(order.id, reason).catch(() => null);
-        toast.error(reason);
-        if (onCancel) onCancel();
-        resolve(null);
-      });
-      checkout.open();
+    const cashfreeFactory = getCashfreeFactory();
+    if (typeof cashfreeFactory !== 'function') {
+      toast.error('Cashfree SDK is not available.');
+      return null;
+    }
+
+    const cashfree = cashfreeFactory({ mode });
+    const result = await cashfree.checkout({
+      paymentSessionId,
+      redirectTarget: '_modal'
     });
+
+    if (result?.error) {
+      const reason = buildFailureReason(result);
+      await markPaymentFailed(orderId, reason).catch(() => null);
+      toast.error(reason);
+      if (onCancel) onCancel();
+      return null;
+    }
+
+    try {
+      await verifyCashfreeOrder(orderId);
+
+      const freshUser = await getCurrentUser();
+      sessionStorage.setItem('user', JSON.stringify(freshUser));
+
+      toast.success('Payment verified successfully.');
+      if (onSuccess) onSuccess(freshUser);
+      return freshUser;
+    } catch (err) {
+      console.error('Cashfree payment verification failed:', err);
+      const detail = err.response?.data?.detail || 'Payment verification failed.';
+      await markPaymentFailed(orderId, detail).catch(() => null);
+      if (/payment not completed/i.test(detail)) {
+        toast.info('Payment cancelled or not completed.');
+      } else {
+        toast.error(detail);
+      }
+      if (onCancel) onCancel();
+      return null;
+    }
   } catch (err) {
     console.error('Failed to start payment:', err);
-    toast.error(err.response?.data?.detail || 'Failed to initialize payment.');
+    toast.error(err.response?.data?.detail || 'Failed to initialize Cashfree payment.');
     return null;
   }
 };

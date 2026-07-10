@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HeroSection from "../../components/landing/HeroSection";
 import CategorySection from "../../components/landing/CategorySection";
 import LiveAuctionSection from "../../components/landing/LiveAuctionSection";
@@ -10,15 +10,59 @@ import Footer from "../../components/common/Footer";
 import "../../styles/landing.css";
 
 const LandingPage = () => {
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1, // Trigger when 10% of the section is visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('scroll-reveal-active');
+          // Stop observing once animated
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    const sections = document.querySelectorAll('.scroll-reveal');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
+
   return (
     <div className="landing-page">
       <HeroSection />
-      <CategorySection />
-      <LiveAuctionSection />
-      <HowItWorksSection />
-      <AboutSection />
-      <AppComingSoonSection />
-      <NewsletterSection />
+      
+      <div className="scroll-reveal">
+        <CategorySection />
+      </div>
+      
+      <div className="scroll-reveal">
+        <LiveAuctionSection />
+      </div>
+      
+      <div className="scroll-reveal">
+        <HowItWorksSection />
+      </div>
+      
+      <div className="scroll-reveal">
+        <AboutSection />
+      </div>
+      
+      <div className="scroll-reveal">
+        <AppComingSoonSection />
+      </div>
+      
+      <div className="scroll-reveal">
+        <NewsletterSection />
+      </div>
+      
       <Footer />
     </div>
   );
