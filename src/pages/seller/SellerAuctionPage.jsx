@@ -232,6 +232,21 @@ export const SellerAuctionPage = () => {
                 <p style={{ fontSize: '0.8rem', color: '#8B8278', margin: 0 }}>
                   Sold to: <strong style={{ color: '#ffffff' }}>{winner || highestBidder}</strong>
                 </p>
+                <button
+                  onClick={() => navigate('/seller/dashboard')}
+                  className="btn btn-primary"
+                  style={{
+                    marginTop: '0.75rem',
+                    width: '100%',
+                    backgroundColor: '#6B1B71',
+                    borderColor: '#6B1B71',
+                    fontWeight: 800,
+                    borderRadius: '0.5rem',
+                    color: '#ffffff'
+                  }}
+                >
+                  Go to Dashboard to Chat
+                </button>
               </div>
             )}
 

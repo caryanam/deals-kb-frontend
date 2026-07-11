@@ -371,6 +371,23 @@ export const LiveAuctionPage = () => {
                     {winner || highestBidder || 'No winning bids registered'}
                   </strong>
                 </p>
+                {highestBidderId === user?.user_id && (
+                  <button
+                    onClick={() => navigate(`/buyer/listings/${productId}`)}
+                    className="btn btn-primary"
+                    style={{
+                      marginTop: '0.75rem',
+                      width: '100%',
+                      backgroundColor: '#6B1B71',
+                      borderColor: '#6B1B71',
+                      fontWeight: 800,
+                      borderRadius: '0.5rem',
+                      color: '#ffffff'
+                    }}
+                  >
+                    Chat with Seller
+                  </button>
+                )}
               </div>
             ) : (
               <form onSubmit={handleBidSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

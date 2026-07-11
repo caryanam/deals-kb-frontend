@@ -47,12 +47,21 @@ export const useAuctionSocket = (productId) => {
   }, [syncAuctionData]);
 
   useEffect(() => {
-    if (!productId) return undefined;
+    if (!productId || isConnected) return undefined;
     const interval = setInterval(() => {
       syncAuctionData(true);
-    }, 1000);
+    }, 2000);
     return () => clearInterval(interval);
-  }, [productId, syncAuctionData]);
+  }, [productId, isConnected, syncAuctionData]);
+
+  // Local real-time smooth timer decrement
+  useEffect(() => {
+    if (auctionStatus !== 'live') return undefined;
+    const tick = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(tick);
+  }, [auctionStatus]);
 
   // Connect to real WebSocket
   const connect = useCallback(() => {
