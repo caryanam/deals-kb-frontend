@@ -4,7 +4,7 @@ import { PlusCircle, ClipboardList, CheckCircle2, Gavel, Award, Sparkles, Messag
 import { useAuth } from '../../hooks/useAuth';
 import { getProducts } from '../../api/productApi';
 import { getMyPlans } from '../../api/paymentApi';
-import { triggerPayment } from '../../utils/paymentHelper';
+// import { triggerPayment } from '../../utils/paymentHelper';
 
 export const SellerDashboard = () => {
   const { user } = useAuth();
@@ -63,11 +63,13 @@ export const SellerDashboard = () => {
   const handleActivatePlan = async (planId) => {
     try {
       setPayingPlanId(planId);
-      const freshUser = await triggerPayment(planId);
-      if (freshUser) {
-        if (planId === 'dealer_monthly') setDealerPlanActive(true);
-        if (planId === 'dealer_car_monthly') setDealerCarPlanActive(true);
-      }
+      // Temporary no-payment mode:
+      // const freshUser = await triggerPayment(planId);
+      // if (freshUser) {
+      //   if (planId === 'dealer_monthly') setDealerPlanActive(true);
+      //   if (planId === 'dealer_car_monthly') setDealerCarPlanActive(true);
+      // }
+      toast.info('Payment gateway is temporarily disabled. You can continue listing products without activating a plan.');
     } finally {
       setPayingPlanId(null);
     }

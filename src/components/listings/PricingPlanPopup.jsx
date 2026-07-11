@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { X, ShieldCheck, Loader2, CheckCircle2 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { triggerPayment } from '../../utils/paymentHelper';
+// import { triggerPayment } from '../../utils/paymentHelper';
 import { formatCurrency, PRODUCT_TYPE_LABELS } from '../../utils/helpers';
 import { getMyPlans } from '../../api/paymentApi';
 
@@ -84,14 +84,18 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
     }
     try {
       setActivatingPlanId(plan.plan_id);
-      const freshUser = await triggerPayment(plan.plan_id || CATEGORY_PLAN_IDS[plan.product_type]);
-      if (freshUser) {
-        toast.success('Bidding pass activated successfully.');
-        onActivated?.(freshUser, plan);
-        const data = await getMyPlans().catch(() => []);
-        setPlanStatuses(Array.isArray(data) ? data : []);
-        onClose?.();
-      }
+      // Temporary no-payment mode:
+      // const freshUser = await triggerPayment(plan.plan_id || CATEGORY_PLAN_IDS[plan.product_type]);
+      // if (freshUser) {
+      //   toast.success('Bidding pass activated successfully.');
+      //   onActivated?.(freshUser, plan);
+      //   const data = await getMyPlans().catch(() => []);
+      //   setPlanStatuses(Array.isArray(data) ? data : []);
+      //   onClose?.();
+      // }
+      toast.info('Bidding passes are temporarily not required. You can continue without payment.');
+      onActivated?.(null, plan);
+      onClose?.();
     } finally {
       setActivatingPlanId('');
     }

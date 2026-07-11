@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { createProduct, getProductById, updateProduct } from '../../api/productApi';
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
-import { triggerPayment } from '../../utils/paymentHelper';
+// import { triggerPayment } from '../../utils/paymentHelper';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -444,10 +444,11 @@ export const CreateListingPage = () => {
         await updateProduct(editId, payload);
         toast.success('Product listing updated successfully!');
       } else {
-        if (user?.role !== 'Dealer') {
-          const paymentResult = await triggerPayment(`seller_listing_${productType}`);
-          if (!paymentResult) return;
-        }
+        // Temporary no-payment mode:
+        // if (user?.role !== 'Dealer') {
+        //   const paymentResult = await triggerPayment(`seller_listing_${productType}`);
+        //   if (!paymentResult) return;
+        // }
         await createProduct(payload);
         toast.success('Product listing created successfully!');
       }
@@ -786,20 +787,28 @@ const Segmented = ({ label, options, value, onChange }) => (
 );
 
 const PhotoSlot = ({ label, value, onUpload, onRemove, required }) => {
-  const previewUrl = React.useMemo(() => {
-    if (!value) return '';
-    if (typeof value === 'string') return value;
-    if (value instanceof File) return URL.createObjectURL(value);
-    return '';
-  }, [value]);
+  const [previewUrl, setPreviewUrl] = React.useState('');
 
   React.useEffect(() => {
-    return () => {
-      if (value instanceof File && previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [value, previewUrl]);
+    if (!value) {
+      setPreviewUrl('');
+      return undefined;
+    }
+
+    if (typeof value === 'string') {
+      setPreviewUrl(value);
+      return undefined;
+    }
+
+    if (value instanceof File) {
+      const objectUrl = URL.createObjectURL(value);
+      setPreviewUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+
+    setPreviewUrl('');
+    return undefined;
+  }, [value]);
 
   return (
     <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '0.75rem', minHeight: '112px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.65rem' }}>

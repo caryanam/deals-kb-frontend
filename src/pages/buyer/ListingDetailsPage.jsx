@@ -9,7 +9,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
 import { toast } from 'react-toastify';
 import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
-import { getMyPlans } from '../../api/paymentApi';
+// import { getMyPlans } from '../../api/paymentApi';
 
 export const ListingDetailsPage = () => {
   const { id: productId } = useParams();
@@ -210,22 +210,23 @@ export const ListingDetailsPage = () => {
 
   const handleJoinAuction = async () => {
     if (product && product.status === 'live') {
-      if (user?.role === 'Buyer') {
-        try {
-          const plans = await getMyPlans();
-          const activePlan = (plans || []).find((plan) => plan.product_type === product.product_type && plan.active);
-          if (!activePlan) {
-            const required = (plans || []).find((plan) => plan.product_type === product.product_type && plan.role === 'Buyer');
-            setRequiredPlan(required || null);
-            setShowPlans(true);
-            return;
-          }
-        } catch (err) {
-          console.warn('Failed to check bidding pass:', err);
-          setShowPlans(true);
-          return;
-        }
-      }
+      // Temporary no-payment mode:
+      // if (user?.role === 'Buyer') {
+      //   try {
+      //     const plans = await getMyPlans();
+      //     const activePlan = (plans || []).find((plan) => plan.product_type === product.product_type && plan.active);
+      //     if (!activePlan) {
+      //       const required = (plans || []).find((plan) => plan.product_type === product.product_type && plan.role === 'Buyer');
+      //       setRequiredPlan(required || null);
+      //       setShowPlans(true);
+      //       return;
+      //     }
+      //   } catch (err) {
+      //     console.warn('Failed to check bidding pass:', err);
+      //     setShowPlans(true);
+      //     return;
+      //   }
+      // }
       navigate(`/buyer/auction/${product.product_id}`);
     }
   };

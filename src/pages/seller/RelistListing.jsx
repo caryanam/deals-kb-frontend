@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AlertTriangle, Camera, CheckCircle2, FileText, Film, Loader2, Upload, X } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { getRelistData, createRelistOrder, submitRelistAfterPayment, markRelistPaymentFailed } from '../../api/productApi';
+import { getRelistData, submitRelistAfterPayment } from '../../api/productApi';
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
-import { loadCashfree } from '../../utils/paymentHelper';
+// import { loadCashfree } from '../../utils/paymentHelper';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -453,85 +453,17 @@ export const RelistListing = () => {
     setLoading(true);
 
     try {
-      const loaded = await loadCashfree();
-      if (!loaded) {
-        toast.error('Unable to load Cashfree Checkout. Please check your internet connection and try again.');
-        setLoading(false);
-        return;
-      }
-
-      const orderRes = await createRelistOrder(listingId);
-      const orderId = orderRes.orderId || orderRes.order_id;
-      const paymentSessionId = orderRes.paymentSessionId || orderRes.payment_session_id;
-      const modeValue = orderRes.cashfree_mode || orderRes.cashfreeMode;
-      const cashfreeFactory = window.Cashfree || globalThis.Cashfree;
-      if (typeof cashfreeFactory !== 'function' || !paymentSessionId || !orderId) {
-        console.error('Cashfree relist order payload missing checkout fields:', orderRes);
-        toast.error('Cashfree checkout could not be initialized.');
-        setLoading(false);
-        return;
-      }
-
-      const cashfree = cashfreeFactory({
-        mode: modeValue === 'production' ? 'production' : 'sandbox'
-      });
-
-      const result = await cashfree.checkout({
-        paymentSessionId,
-        redirectTarget: '_modal'
-      });
-
-      if (result?.error) {
-        const reason = buildCashfreeFailureReason(result);
-        try {
-          await markRelistPaymentFailed(listingId, {
-            cashfreeOrderId: orderId,
-            reason
-          });
-        } catch (err) {
-          console.error('Failed to log payment failure:', err);
-        }
-        toast.error(reason);
-        setLoading(false);
-        return;
-      }
-
-      let submitted = false;
-      let lastSubmitError = null;
-      for (let attempt = 0; attempt < 5; attempt += 1) {
-        try {
-          formData.set('cashfreeOrderId', orderId);
-          await submitRelistAfterPayment(listingId, formData);
-          submitted = true;
-          break;
-        } catch (err) {
-          lastSubmitError = err;
-          const detail = err.response?.data?.detail || '';
-          const retriable = /payment not completed/i.test(detail) || /ACTIVE/i.test(detail);
-          if (!retriable || attempt === 4) {
-            break;
-          }
-          await sleep(1500);
-        }
-      }
-
-      if (!submitted) {
-        try {
-          await markRelistPaymentFailed(listingId, {
-            cashfreeOrderId: orderId,
-            reason: lastSubmitError?.response?.data?.detail || 'Payment verification or submit failed'
-          });
-        } catch (err) {
-          console.error('Failed to mark relist payment as failed:', err);
-        }
-        throw lastSubmitError || new Error('Payment verification or submit failed.');
-      }
-
-      toast.success('Payment successful. Listing submitted for admin approval.');
+      // Temporary no-payment mode:
+      // const loaded = await loadCashfree();
+      // const orderRes = await createRelistOrder(listingId);
+      // ...Cashfree checkout intentionally bypassed for now.
+      await submitRelistAfterPayment(listingId, formData);
+      toast.success('Listing submitted for admin approval.');
       navigate(`${basePath}/my-listings`);
     } catch (err) {
-      console.error('Relisting initialization failed:', err);
-      toast.error(err.response?.data?.detail || 'Failed to initialize payment process.');
+      console.error('Relisting submit failed:', err);
+      toast.error(err.response?.data?.detail || 'Failed to submit relisted listing.');
+    } finally {
       setLoading(false);
     }
   };
@@ -847,20 +779,28 @@ const Segmented = ({ label, options, value, onChange }) => (
 );
 
 const PhotoSlot = ({ label, value, onUpload, onRemove, required }) => {
-  const previewUrl = React.useMemo(() => {
-    if (!value) return '';
-    if (typeof value === 'string') return value;
-    if (value instanceof File) return URL.createObjectURL(value);
-    return '';
-  }, [value]);
+  const [previewUrl, setPreviewUrl] = React.useState('');
 
   React.useEffect(() => {
-    return () => {
-      if (value instanceof File && previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [value, previewUrl]);
+    if (!value) {
+      setPreviewUrl('');
+      return undefined;
+    }
+
+    if (typeof value === 'string') {
+      setPreviewUrl(value);
+      return undefined;
+    }
+
+    if (value instanceof File) {
+      const objectUrl = URL.createObjectURL(value);
+      setPreviewUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+
+    setPreviewUrl('');
+    return undefined;
+  }, [value]);
 
   return (
     <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.85rem', padding: '0.75rem', minHeight: '112px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.65rem' }}>
