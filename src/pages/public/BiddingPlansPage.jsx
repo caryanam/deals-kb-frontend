@@ -47,7 +47,7 @@ const ResourceNavbar = () => (
 );
 
 const BiddingPlansPage = () => (
-  <div style={{ minHeight: '100vh', background: '#fff', fontFamily: "'Plus Jakarta Sans', sans-serif", overflowY: 'auto' }}>
+  <div style={{ minHeight: '100vh', background: '#fff', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
     <ResourceNavbar />
     <BiddingPlansSection />
     <Footer />

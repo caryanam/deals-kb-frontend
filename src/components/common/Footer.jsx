@@ -31,7 +31,15 @@ const HashLink = ({ to, children }) => {
   );
 };
 
-const Footer = () => {
+const FooterPolicyLink = ({ to, children }) => {
+  return (
+    <Link to={to}>
+      {children}
+    </Link>
+  );
+};
+
+const Footer = ({ logoutOnNavigate = false }) => {
   return (
     <footer className="deals-footer">
       <div className="footer-container">
@@ -63,19 +71,20 @@ Own More.</p>
 
           <div className="footer-column">
             <h4>Resources</h4>
-            <Link to="/faqs">FAQs</Link>
-            <Link to="/bidding-plans">Subscription Plans</Link>
-            <Link to="/buyer-guide">Buyer Guide</Link>
-            <Link to="/seller-guide">Seller Guide</Link>
+            <FooterPolicyLink to="/faqs" logoutOnNavigate={logoutOnNavigate}>FAQs</FooterPolicyLink>
+            <FooterPolicyLink to="/bidding-plans" logoutOnNavigate={logoutOnNavigate}>Subscription Plans</FooterPolicyLink>
+            <FooterPolicyLink to="/buyer-guide" logoutOnNavigate={logoutOnNavigate}>Buyer Guide</FooterPolicyLink>
+            <FooterPolicyLink to="/seller-guide" logoutOnNavigate={logoutOnNavigate}>Seller Guide</FooterPolicyLink>
+            <FooterPolicyLink to="/delete-account" logoutOnNavigate={logoutOnNavigate}>Delete My Account</FooterPolicyLink>
           </div>
 
           <div className="footer-column">
             <h4>Policies</h4>
-            <Link to="/privacy-policy">Privacy Policy</Link>
-            <Link to="/terms-and-conditions">Terms &amp; Conditions</Link>
-            <Link to="/refund-policy">Refund / Cancellation Policy</Link>
-            <Link to="/emd-policy">EMD Policy</Link>
-            <Link to="/delivery-service-policy">Delivery Service Policy</Link>
+            <FooterPolicyLink to="/privacy-policy" logoutOnNavigate={logoutOnNavigate}>Privacy Policy</FooterPolicyLink>
+            <FooterPolicyLink to="/terms-and-conditions" logoutOnNavigate={logoutOnNavigate}>Terms &amp; Conditions</FooterPolicyLink>
+            <FooterPolicyLink to="/refund-policy" logoutOnNavigate={logoutOnNavigate}>Refund / Cancellation Policy</FooterPolicyLink>
+            <FooterPolicyLink to="/emd-policy" logoutOnNavigate={logoutOnNavigate}>EMD Policy</FooterPolicyLink>
+            <FooterPolicyLink to="/delivery-service-policy" logoutOnNavigate={logoutOnNavigate}>Delivery Service Policy</FooterPolicyLink>
           </div>
 
           <div className="footer-contact">
@@ -104,6 +113,15 @@ Own More.</p>
 
           <div className="footer-copy">
             &copy; 2026 DealsKB. All rights reserved by Caryanamindia Pvt Ltd
+            <div style={{ marginTop: '0.4rem', display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+              <FooterPolicyLink to="/privacy-policy" logoutOnNavigate={logoutOnNavigate}>Privacy Policy</FooterPolicyLink>
+              <span>|</span>
+              <FooterPolicyLink to="/terms-and-conditions" logoutOnNavigate={logoutOnNavigate}>Terms &amp; Conditions</FooterPolicyLink>
+              <span>|</span>
+              <FooterPolicyLink to="/refund-policy" logoutOnNavigate={logoutOnNavigate}>Refund Policy</FooterPolicyLink>
+              <span>|</span>
+              <FooterPolicyLink to="/delete-account" logoutOnNavigate={logoutOnNavigate}>Delete My Account</FooterPolicyLink>
+            </div>
           </div>
         </div>
       </div>

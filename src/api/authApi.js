@@ -54,3 +54,13 @@ export const resetPassword = async (data) => {
   const response = await api.post("/auth/forgot-password/reset", data);
   return response.data;
 };
+
+export const verifyDeleteAccount = async (data) => {
+  const response = await api.post("/auth/delete-account/verify", data);
+  return response.data;
+};
+
+export const confirmDeleteAccount = async (data) => {
+  const response = await api.delete("/auth/delete-account/confirm", { data });
+  return response.data;
+};

@@ -42,6 +42,8 @@ import UsersPage from '../pages/admin/UsersPage';
 import AnalyticsPage from '../pages/admin/AnalyticsPage';
 import ReportsPage from '../pages/admin/ReportsPage';
 import AdminCommunityRequestsPage from '../pages/admin/AdminCommunityRequestsPage';
+import AdminProductsPage from '../pages/admin/AdminProductsPage';
+import DeleteAccountPage from '../pages/public/DeleteAccountPage';
 
 // Common
 import MyReportsPage from '../pages/buyer/MyReportsPage';
@@ -66,6 +68,7 @@ export const AppRoutes = () => {
       <Route path="/buyer-guide" element={<BuyerGuidePage />} />
       <Route path="/seller-guide" element={<SellerGuidePage />} />
       <Route path="/auction/watch/:productId" element={<PublicAuctionWatchPage />} />
+      <Route path="/delete-account" element={<DeleteAccountPage />} />
 
       {/* 2. Buyer Protected Routes */}
       <Route
@@ -134,6 +137,7 @@ export const AppRoutes = () => {
       >
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="listings/pending" element={<PendingListingsPage />} />
+        <Route path="products" element={<AdminProductsPage />} />
         <Route path="users" element={<UsersPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="reports" element={<ReportsPage />} />

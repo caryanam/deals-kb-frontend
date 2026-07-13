@@ -86,14 +86,23 @@ export const AdminDashboard = () => {
             Manage user rosters, inspect and verify product specifications, and review real-time platform metrics.
           </p>
         </div>
-        <button 
-          onClick={loadDashboardData}
-          disabled={loading}
-          className="btn btn-secondary"
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.2)' }}
-        >
-          <RefreshCw size={16} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} /> Refresh Data
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button 
+            onClick={() => navigate('/admin/products?filter=live')}
+            className="btn btn-primary"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#10b981', borderColor: '#10b981', color: '#ffffff', fontWeight: 800 }}
+          >
+            <Gavel size={16} /> Live Auctions
+          </button>
+          <button 
+            onClick={loadDashboardData}
+            disabled={loading}
+            className="btn btn-secondary"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.2)' }}
+          >
+            <RefreshCw size={16} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} /> Refresh Data
+          </button>
+        </div>
       </div>
 
       {error && (

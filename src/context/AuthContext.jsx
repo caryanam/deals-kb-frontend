@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
 
-  // Restore session from sessionStorage on initialization (tab-isolated)
   useEffect(() => {
     const restoreSession = async () => {
       try {
@@ -19,8 +18,7 @@ export const AuthProvider = ({ children }) => {
         if (storedToken && storedUser) {
           setToken(storedToken);
           setUser(JSON.parse(storedUser));
-          
-          // Verify token freshness against backend /auth/me
+
           try {
             const freshUser = await getCurrentUser();
             sessionStorage.setItem('user', JSON.stringify(freshUser));
@@ -52,11 +50,10 @@ export const AuthProvider = ({ children }) => {
         ? { email: normalizedIdentifier.toLowerCase(), password }
         : { mobile_number: normalizedIdentifier, password };
 
-      // Clear any stale session data before logging in
       sessionStorage.clear();
 
       const data = await loginUser(loginPayload);
-      
+
       const tokenVal = data.access_token;
       const userVal = data.user;
 
@@ -91,10 +88,8 @@ export const AuthProvider = ({ children }) => {
         payload.mobile_number = phoneNumber.trim();
       }
       const data = await verifyRegistrationOtp(payload);
-      
-      // If register returns access_token directly, trigger auto-login
+
       if (data.access_token && data.user) {
-        // Clear any stale session data before storing new credentials
         sessionStorage.clear();
         sessionStorage.setItem('access_token', data.access_token);
         sessionStorage.setItem('user', JSON.stringify(data.user));
@@ -111,23 +106,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = async () => {
+  const logout = async (redirectPath = '/login') => {
     setIsLoading(true);
     try {
-      // Invalidate on backend
       await logoutUser();
     } catch (err) {
       console.warn('Backend logout call failed or was un-authenticated. Wiping locally anyway.', err);
     } finally {
-      // Clear entire session storage for this tab
       sessionStorage.clear();
       setUser(null);
       setToken(null);
       setAuthError(null);
       setIsLoading(false);
-      
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
+
+      if (redirectPath && window.location.pathname !== redirectPath) {
+        window.location.href = redirectPath;
       }
     }
   };

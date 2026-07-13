@@ -47,7 +47,7 @@ const ResourceNavbar = () => (
 );
 
 const SellerGuidePage = () => (
-  <div style={{ minHeight: '100vh', background: '#FAF6EA', fontFamily: "'Plus Jakarta Sans', sans-serif", overflowY: 'auto' }}>
+  <div style={{ minHeight: '100vh', background: '#FAF6EA', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
     <ResourceNavbar />
     <SellerGuideSection />
     <Footer />

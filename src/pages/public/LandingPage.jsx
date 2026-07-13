@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import HeroSection from "../../components/landing/HeroSection";
 import CategorySection from "../../components/landing/CategorySection";
 import LiveAuctionSection from "../../components/landing/LiveAuctionSection";
@@ -10,6 +11,27 @@ import Footer from "../../components/common/Footer";
 import "../../styles/landing.css";
 
 const LandingPage = () => {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) {
+      return;
+    }
+
+    const sectionId = hash.substring(1);
+
+    requestAnimationFrame(() => {
+      const section = document.getElementById(sectionId);
+
+      if (section) {
+        section.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    });
+  }, [hash]);
+
   useEffect(() => {
     const observerOptions = {
       root: null,

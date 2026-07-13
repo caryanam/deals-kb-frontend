@@ -1,8 +1,5 @@
 import axios from "axios";
 
-// ── One-time migration: move legacy localStorage token to sessionStorage ──────
-// Users who were logged in before the sessionStorage migration will have
-// their token in localStorage. Move it once so they don't get logged out.
 (function migrateAuthSession() {
   const legacyToken = localStorage.getItem("access_token");
   const legacyUser = localStorage.getItem("user");
@@ -10,7 +7,6 @@ import axios from "axios";
     sessionStorage.setItem("access_token", legacyToken);
     if (legacyUser) sessionStorage.setItem("user", legacyUser);
   }
-  // Remove from localStorage so subsequent tabs do NOT auto-inherit the session
   localStorage.removeItem("access_token");
   localStorage.removeItem("user");
 })();
@@ -22,8 +18,23 @@ const api = axios.create({
   },
 });
 
+const PUBLIC_AUTH_BYPASS_PATHS = [
+  "/auth/delete-account/verify",
+  "/auth/delete-account/confirm",
+  "/auth/forgot-password/send-otp",
+  "/auth/forgot-password/verify-otp",
+  "/auth/forgot-password/reset",
+  "/auth/send-registration-otp",
+  "/auth/check-registration-otp",
+  "/auth/verify-registration-otp",
+];
+
+const shouldBypassUnauthorizedRedirect = (error) => {
+  const requestUrl = error?.config?.url || "";
+  return PUBLIC_AUTH_BYPASS_PATHS.some((path) => requestUrl.includes(path));
+};
+
 api.interceptors.request.use((config) => {
-  // Read token from sessionStorage (tab-isolated)
   const token = sessionStorage.getItem("access_token");
 
   if (token) {
@@ -36,10 +47,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !shouldBypassUnauthorizedRedirect(error)) {
       sessionStorage.removeItem("access_token");
       sessionStorage.removeItem("user");
-      // Force page refresh and redirect to /login
       if (window.location.pathname !== "/login") {
         window.location.href = "/login";
       }
