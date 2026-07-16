@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Sparkles, ArrowRight, AlertCircle, RefreshCw } from 'lucide-react';
 import { getProducts } from '../../api/productApi';
 import { formatCurrency, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 const TopDealsSection = () => {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ const TopDealsSection = () => {
           <div className="landing-category-grid">
             {deals.slice(0, 4).map((product) => {
               const parsedPhotos = safeParseJSON(product.photos, []);
-              const displayImage = parsedPhotos.length > 0 ? parsedPhotos[0] : 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=400';
+              const displayImage = parsedPhotos.length > 0 ? normalizeImageUrl(parsedPhotos[0]) : 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=400';
               
               return (
                 <div 
@@ -105,7 +106,7 @@ const TopDealsSection = () => {
                   style={{ cursor: 'pointer' }}
                 >
                   <div className="landing-category-img-container">
-                    <img src={displayImage} alt={product.title} />
+                    <img src={displayImage} alt={product.title} onError={handleImageError} />
                   </div>
                   <div className="landing-category-info">
                     <span style={{

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Clock, Lock, AlertCircle, RefreshCw, Zap, ArrowRight, ImageOff } from 'lucide-react';
 import api from '../../api/axiosClient';
 import { formatCurrency, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 const PURPLE = '#6B1B71';
 const PURPLE_HOVER = '#7A2181';
@@ -53,7 +54,7 @@ const LiveAuctionCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const parsedPhotos = safeParseJSON(product.photos, []);
-  const displayImage = product.img || (parsedPhotos.length > 0 ? parsedPhotos[0] : null);
+  const displayImage = product.img || (parsedPhotos.length > 0 ? normalizeImageUrl(parsedPhotos[0]) : null);
 
   useEffect(() => {
     if (!product.auction_ends_at) {
@@ -107,6 +108,7 @@ const LiveAuctionCard = ({ product }) => {
               transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
               transform: isHovered ? 'scale(1.08)' : 'scale(1)'
             }}
+            onError={handleImageError}
           />
         ) : (
           <div style={{

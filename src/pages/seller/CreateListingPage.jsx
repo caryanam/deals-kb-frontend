@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { createProduct, getProductById, updateProduct } from '../../api/productApi';
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl } from '../../utils/imageUtils';
 // import { triggerPayment } from '../../utils/paymentHelper';
 import {
   BIKE_BRANDS,
@@ -205,7 +206,7 @@ export const CreateListingPage = () => {
         setExpectedPrice(product.expected_price || '');
         setDescription(product.description || '');
         
-        const loadedPhotos = safeParseJSON(product.photos, []);
+        const loadedPhotos = safeParseJSON(product.photos, []).map(normalizeImageUrl);
         setPhotos(loadedPhotos);
         const slots = PHOTO_SLOTS[product.product_type || 'car'] || [];
         const nextSlots = {};
@@ -216,7 +217,7 @@ export const CreateListingPage = () => {
         });
         setPhotoSlots(nextSlots);
 
-        setVideo(product.video || null);
+        setVideo(normalizeImageUrl(product.video) || null);
         setSpecs({
           ...initialSpecs,
           year: parsedSpecs.year || '',

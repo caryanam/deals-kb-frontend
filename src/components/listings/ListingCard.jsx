@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Fuel, Gauge, Calendar, ShieldCheck, ArrowUpRight, Cpu, Layers, ImageOff } from 'lucide-react';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 export const ListingCard = ({ listing: product }) => {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ export const ListingCard = ({ listing: product }) => {
 
   const photosArray = safeParseJSON(product.photos, []);
   const coverPhoto = photosArray.length > 0
-    ? photosArray[0]
+    ? normalizeImageUrl(photosArray[0])
     : '';
 
   return (
@@ -99,6 +100,7 @@ export const ListingCard = ({ listing: product }) => {
             src={coverPhoto} 
             alt={product.title}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            onError={handleImageError}
           />
         ) : (
           <div style={{

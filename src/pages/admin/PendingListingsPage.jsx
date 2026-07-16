@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ClipboardList, Eye, Check, X, AlertTriangle, FileText, Film, RefreshCw } from 'lucide-react';
 import { getProducts, reviewProduct } from '../../api/productApi';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
 
 export const PendingListingsPage = () => {
@@ -385,7 +386,7 @@ export const PendingListingsPage = () => {
                   {safeParseJSON(selectedListing.photos, []).map((img, idx) => (
                     <div 
                       key={idx} 
-                      onClick={() => setPreviewMedia({ type: 'image', src: img, title: `Product Photo ${idx + 1}` })}
+                      onClick={() => setPreviewMedia({ type: 'image', src: normalizeImageUrl(img), title: `Product Photo ${idx + 1}` })}
                       style={{
                         width: '180px',
                         height: '130px',
@@ -399,7 +400,7 @@ export const PendingListingsPage = () => {
                       onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
                       onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                     >
-                      <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={normalizeImageUrl(img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={handleImageError} />
                     </div>
                   ))}
                 </div>
@@ -410,7 +411,7 @@ export const PendingListingsPage = () => {
                 <div style={{ padding: '1rem', border: '1px dashed #cbd5e1', borderRadius: '0.75rem', backgroundColor: '#FAF6EA' }}>
                   <strong style={{ fontSize: '0.85rem', color: '#4a1a50', display: 'block', marginBottom: '0.5rem' }}>Video Walkthrough:</strong>
                   <div 
-                    onClick={() => setPreviewMedia({ type: 'video', src: selectedListing.video, title: 'Listing Video Walkthrough' })}
+                    onClick={() => setPreviewMedia({ type: 'video', src: normalizeImageUrl(selectedListing.video), title: 'Listing Video Walkthrough' })}
                     style={{
                       width: '240px',
                       height: '135px',
@@ -427,7 +428,7 @@ export const PendingListingsPage = () => {
                   >
                     <Film size={28} style={{ color: '#ffffff', zIndex: 2 }} />
                     <span style={{ fontSize: '0.7rem', color: '#ffffff', position: 'absolute', bottom: '8px', zIndex: 2, fontWeight: 700 }}>Play Walkthrough Video</span>
-                    <video src={selectedListing.video} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5, position: 'absolute', inset: 0 }} muted />
+                    <video src={normalizeImageUrl(selectedListing.video)} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5, position: 'absolute', inset: 0 }} muted />
                   </div>
                 </div>
               )}
@@ -453,13 +454,14 @@ export const PendingListingsPage = () => {
                             key={key} 
                             type="button"
                             onClick={() => {
+                              const normalizedVal = normalizeImageUrl(val);
                               if (isPdf) {
-                                setPreviewMedia({ type: 'pdf', src: val, title: docTitle });
+                                setPreviewMedia({ type: 'pdf', src: normalizedVal, title: docTitle });
                               } else if (isImg) {
-                                setPreviewMedia({ type: 'image', src: val, title: docTitle });
+                                setPreviewMedia({ type: 'image', src: normalizedVal, title: docTitle });
                               } else {
                                 // Fallback open in new tab
-                                window.open(val, '_blank');
+                                window.open(normalizedVal, '_blank');
                               }
                             }}
                             style={{
@@ -619,6 +621,7 @@ export const PendingListingsPage = () => {
                   src={previewMedia.src} 
                   alt="" 
                   style={{ maxWidth: '100%', maxHeight: '60vh', objectFit: 'contain', borderRadius: '0.5rem' }} 
+                  onError={handleImageError}
                 />
               )}
               {previewMedia.type === 'video' && (

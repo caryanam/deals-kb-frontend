@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { getProductById } from '../../api/productApi';
 import { formatCurrency, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
 import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
 
 const formatTimer = (seconds = 0) => {
@@ -49,7 +50,7 @@ export const LiveAuctionPage = () => {
       try {
         const details = await getProductById(productId);
         setProduct(details);
-        const photosArray = safeParseJSON(details.photos, []);
+        const photosArray = normalizePhotosArray(details.photos, []);
         if (photosArray.length > 0) {
           setActiveImage(photosArray[0]);
         }
@@ -161,7 +162,7 @@ export const LiveAuctionPage = () => {
               <div style={{ height: '260px', backgroundColor: '#f1f5f9', position: 'relative' }}>
                 {mediaMode === 'video' && product.video ? (
                   <video 
-                    src={product.video} 
+                    src={normalizeImageUrl(product.video)} 
                     controls 
                     style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000000' }}
                   />
@@ -170,6 +171,7 @@ export const LiveAuctionPage = () => {
                     src={activeImage} 
                     alt={product.title} 
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={handleImageError}
                   />
                 ) : (
                   <div style={{

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Gavel, Clock, Trophy, RefreshCw, BarChart2, Share2 } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -6,6 +6,7 @@ import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { useAuth } from '../../hooks/useAuth';
 import { getProductById } from '../../api/productApi';
 import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 const formatTimer = (seconds = 0) => {
   const safeSeconds = Math.max(0, Number(seconds) || 0);
@@ -121,12 +122,13 @@ export const SellerAuctionPage = () => {
               <div style={{ width: '80px', height: '60px', borderRadius: '0.35rem', overflow: 'hidden', flexShrink: 0 }}>
                 {(() => {
                   const photosArray = safeParseJSON(product.photos, []);
-                  const cover = photosArray.length > 0 ? photosArray[0] : 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&auto=format&fit=crop&q=60';
+                  const cover = photosArray.length > 0 ? normalizeImageUrl(photosArray[0]) : 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&auto=format&fit=crop&q=60';
                   return (
                     <img 
                       src={cover} 
                       alt="" 
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                      onError={handleImageError}
                     />
                   );
                 })()}

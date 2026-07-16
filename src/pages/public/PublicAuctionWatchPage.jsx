@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, BarChart2, Clock, Eye, RefreshCw, Trophy } from 'lucide-react';
 import { getPublicAuctionBids, getPublicAuctionProduct } from '../../api/productApi';
 import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8000/api/ws/auction';
 
@@ -131,7 +132,7 @@ export const PublicAuctionWatchPage = () => {
 
   const coverPhoto = useMemo(() => {
     const photos = safeParseJSON(product?.photos, []);
-    return Array.isArray(photos) && photos.length > 0 ? photos[0] : '';
+    return Array.isArray(photos) && photos.length > 0 ? normalizeImageUrl(photos[0]) : '';
   }, [product?.photos]);
 
   const highestBid = product?.current_bid || bids[0]?.amount || 0;
@@ -179,7 +180,7 @@ export const PublicAuctionWatchPage = () => {
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 18, overflow: 'hidden', boxShadow: '0 18px 50px rgba(15, 23, 42, 0.08)' }}>
             <div style={{ aspectRatio: '16 / 9', background: 'linear-gradient(135deg, #111827, #4c1d95)', display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
               {coverPhoto ? (
-                <img src={coverPhoto} alt={product?.title || 'Auction item'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={coverPhoto} alt={product?.title || 'Auction item'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={handleImageError} />
               ) : (
                 <div style={{ textAlign: 'center', color: '#e2e8f0' }}>
                   <Eye size={42} />

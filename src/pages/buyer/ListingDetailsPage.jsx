@@ -7,6 +7,7 @@ import { createChatRequest } from '../../api/chatRequestApi';
 import { createReport } from '../../api/reportApi';
 import { useAuth } from '../../hooks/useAuth';
 import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
 import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
 // import { getMyPlans } from '../../api/paymentApi';
@@ -179,7 +180,7 @@ export const ListingDetailsPage = () => {
       const details = await getProductById(productId);
       setProduct(details);
       
-      const photosArray = safeParseJSON(details.photos, []);
+      const photosArray = normalizePhotosArray(details.photos, []);
       if (photosArray.length > 0) {
         setActiveImage(photosArray[0]);
       }
@@ -418,7 +419,7 @@ export const ListingDetailsPage = () => {
     );
   }
 
-  const gallery = safeParseJSON(product.photos, []);
+  const gallery = normalizePhotosArray(product.photos, []);
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -455,7 +456,7 @@ export const ListingDetailsPage = () => {
           }}>
             {mediaMode === 'video' && product.video ? (
               <video 
-                src={product.video} 
+                src={normalizeImageUrl(product.video)} 
                 controls 
                 style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#000000' }}
               />
@@ -464,6 +465,7 @@ export const ListingDetailsPage = () => {
                 src={activeImage} 
                 alt={product.title} 
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={handleImageError}
               />
             ) : (
               <div style={{
@@ -500,7 +502,7 @@ export const ListingDetailsPage = () => {
                   flexShrink: 0
                 }}
               >
-                <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={handleImageError} />
               </button>
             ))}
 
@@ -799,7 +801,7 @@ export const ListingDetailsPage = () => {
           {product.video && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
               <PlayCircle size={20} style={{ color: '#6B1B71' }} />
-              <a href={product.video} target="_blank" rel="noopener noreferrer" style={{ color: '#6B1B71', fontWeight: 700, fontSize: '0.9rem' }}>
+              <a href={normalizeImageUrl(product.video)} target="_blank" rel="noopener noreferrer" style={{ color: '#6B1B71', fontWeight: 700, fontSize: '0.9rem' }}>
                 Open Video Walkthrough
               </a>
             </div>

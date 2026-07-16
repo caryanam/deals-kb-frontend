@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight, X, Lock, ExternalLink, ImageOff } from 'lucide-react';
 import api from '../../api/axiosClient';
 import { formatCurrency, safeParseJSON } from '../../utils/helpers';
+import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 import carImg from '../../assets/car.png';
 import bikeImg from '../../assets/bike.png';
 import mobileImg from '../../assets/mobile.png';
@@ -219,7 +220,7 @@ const CategorySection = () => {
               >
                 {categoryProducts.map((item, i) => {
                   const photosArray = safeParseJSON(item.photos, []);
-                  const itemImg = item.img || (photosArray.length > 0 ? photosArray[0] : null);
+                  const itemImg = item.img || (photosArray.length > 0 ? normalizeImageUrl(photosArray[0]) : null);
                   return (
                     <div
                       key={item.id || item.product_id || i}
@@ -244,7 +245,7 @@ const CategorySection = () => {
                     >
                       <div style={{ height: '130px', overflow: 'hidden', position: 'relative', backgroundColor: '#f1f5f9' }}>
                         {itemImg ? (
-                          <img src={itemImg} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          <img src={itemImg} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={handleImageError} />
                         ) : (
                           <div style={{
                             width: '100%',
