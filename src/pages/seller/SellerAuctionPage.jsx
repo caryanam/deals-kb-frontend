@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { useAuth } from '../../hooks/useAuth';
 import { getProductById } from '../../api/productApi';
-import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, formatRelativeTime } from '../../utils/helpers';
 import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 const formatTimer = (seconds = 0) => {
@@ -33,6 +33,15 @@ export const SellerAuctionPage = () => {
   } = useAuctionSocket(productId);
 
   const [product, setProduct] = useState(null);
+
+  // Trigger periodic updates for relative times
+  const [timeTick, setTimeTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeTick(prev => prev + 1);
+    }, 10000); // refresh every 10s
+    return () => clearInterval(interval);
+  }, []);
 
   const handleShareAuctionLink = async () => {
     const liveUrl = `${window.location.origin}/auction/watch/${productId}`;
@@ -139,7 +148,7 @@ export const SellerAuctionPage = () => {
                 </span>
                 <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: '0.15rem 0' }}>{product.title}</h3>
                 <p style={{ color: '#8B8278', fontSize: '0.8rem', margin: 0 }}>
-                  Auction status: <strong style={{ textTransform: 'capitalize' }}>{product.status}</strong>
+                  Auction status: <strong style={{ textTransform: 'capitalize' }}>{auctionStatus}</strong>
                 </p>
               </div>
             </div>
@@ -295,7 +304,7 @@ export const SellerAuctionPage = () => {
                       <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#4a1a50' }}>
                         {bid.bidderName || bid.bidder_name}
                       </span>
-                      <p style={{ fontSize: '0.65rem', color: '#8B8278', margin: 0 }}>{bid.time || 'Just now'}</p>
+                      <p style={{ fontSize: '0.65rem', color: '#8B8278', margin: 0 }}>{formatRelativeTime(bid.created_at || bid.time)}</p>
                     </div>
                     <span style={{
                       fontWeight: 800,

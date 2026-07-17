@@ -4,9 +4,8 @@ import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, ArrowUpRight, Plus, Ref
 import { useAuth } from '../../hooks/useAuth';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { getProductById } from '../../api/productApi';
-import { formatCurrency, safeParseJSON } from '../../utils/helpers';
+import { formatCurrency, safeParseJSON, formatRelativeTime } from '../../utils/helpers';
 import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
-import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
 
 const formatTimer = (seconds = 0) => {
   const safeSeconds = Math.max(0, Number(seconds) || 0);
@@ -14,7 +13,27 @@ const formatTimer = (seconds = 0) => {
   const remainingSeconds = safeSeconds % 60;
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
-import BiddingPassBanner from '../../components/listings/BiddingPassBanner';
+
+const INCREMENTS = {
+  mobile: 50,
+  laptop: 100,
+  bike: 500,
+  car: 1000
+};
+
+const QUICK_INCREMENTS = {
+  mobile: [50, 100, 200],
+  laptop: [100, 200, 500],
+  bike: [500, 1000, 2000],
+  car: [1000, 2000, 5000]
+};
+
+const formatQuickIncrementLabel = (val) => {
+  if (val >= 1000) {
+    return `₹${val / 1000}k`;
+  }
+  return `₹${val}`;
+};
 
 export const LiveAuctionPage = () => {
   const { auctionId: productId } = useParams();
@@ -41,8 +60,15 @@ export const LiveAuctionPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [mediaMode, setMediaMode] = useState('image'); // 'image' or 'video'
   const [activeImage, setActiveImage] = useState('');
-  const [showPlans, setShowPlans] = useState(false);
-  const [requiredPlan, setRequiredPlan] = useState(null);
+
+  // Trigger periodic updates for relative times
+  const [timeTick, setTimeTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeTick(prev => prev + 1);
+    }, 10000); // refresh every 10s
+    return () => clearInterval(interval);
+  }, []);
 
   // Load static product headers
   useEffect(() => {
@@ -63,8 +89,9 @@ export const LiveAuctionPage = () => {
 
   // Set default bid increments on bid updates
   useEffect(() => {
+    const inc = INCREMENTS[product?.product_type] || 100;
     if (currentHighestBid) {
-      setBidAmount(currentHighestBid + 500);
+      setBidAmount(currentHighestBid + inc);
     } else if (product?.expected_price) {
       setBidAmount(product.expected_price);
     }
@@ -87,8 +114,9 @@ export const LiveAuctionPage = () => {
         return;
       }
     } else {
-      if (parsedAmount < currentHighestBid + 100) {
-        setLocalError(`Your bid must exceed the current highest bid by at least ₹100 (Minimum bid: ${formatCurrency(currentHighestBid + 100)}).`);
+      const inc = INCREMENTS[product?.product_type] || 100;
+      if (parsedAmount < currentHighestBid + inc) {
+        setLocalError(`Your bid must exceed the current highest bid by at least ${formatCurrency(inc)} (Minimum bid: ${formatCurrency(currentHighestBid + inc)}).`);
         return;
       }
     }
@@ -118,6 +146,9 @@ export const LiveAuctionPage = () => {
     const base = currentHighestBid || (product?.expected_price || 0);
     setBidAmount(base + increment);
   };
+
+  const typeKey = product?.product_type?.toLowerCase()?.trim();
+  const incVal = INCREMENTS[typeKey] || 100;
 
   const isBiddingDisabled = submitting || auctionStatus !== 'live' || timer <= 0 || product?.is_cancelled || auctionStatus === 'cancelled';
 
@@ -257,7 +288,6 @@ export const LiveAuctionPage = () => {
 
         {/* Right column: Bidding Room console */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {user?.role === 'Buyer' && <BiddingPassBanner productType={product?.product_type || 'mobile'} />}
           
           {/* Main Console Board */}
           <div className="card" style={{
@@ -375,7 +405,7 @@ export const LiveAuctionPage = () => {
                     {winner || highestBidder || 'No winning bids registered'}
                   </strong>
                 </p>
-                {highestBidderId === user?.user_id && (
+                {(highestBidderId === user?.user_id || highestBidderId === user?.id) && (
                   <button
                     onClick={() => navigate(`/buyer/listings/${productId}`)}
                     className="btn btn-primary"
@@ -426,73 +456,29 @@ export const LiveAuctionPage = () => {
                   </button>
                 </div>
 
-                {/* Quick Increment Buttons */}
-                <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                {/* Quick Increment Button */}
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
                   <button
                     type="button"
-                    onClick={() => handleQuickIncrement(500)}
+                    onClick={() => handleQuickIncrement(incVal)}
                     disabled={isBiddingDisabled}
                     style={{
-                      flex: 1,
+                      width: '100%',
                       backgroundColor: 'rgba(255, 255, 255, 0.05)',
                       border: '1px solid rgba(255, 255, 255, 0.1)',
                       color: '#ffffff',
-                      padding: '0.5rem',
+                      padding: '0.65rem',
                       borderRadius: '0.5rem',
                       cursor: 'pointer',
-                      fontSize: '0.8rem',
+                      fontSize: '0.85rem',
                       fontWeight: 700,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.15rem'
+                      gap: '0.2rem'
                     }}
                   >
-                    <Plus size={12} /> ₹500
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickIncrement(1000)}
-                    disabled={isBiddingDisabled}
-                    style={{
-                      flex: 1,
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      color: '#ffffff',
-                      padding: '0.5rem',
-                      borderRadius: '0.5rem',
-                      cursor: 'pointer',
-                      fontSize: '0.8rem',
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.15rem'
-                    }}
-                  >
-                    <Plus size={12} /> ₹1k
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickIncrement(2000)}
-                    disabled={isBiddingDisabled}
-                    style={{
-                      flex: 1,
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      color: '#ffffff',
-                      padding: '0.5rem',
-                      borderRadius: '0.5rem',
-                      cursor: 'pointer',
-                      fontSize: '0.8rem',
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.15rem'
-                    }}
-                  >
-                    <Plus size={12} /> ₹2k
+                    <Plus size={14} /> {formatQuickIncrementLabel(incVal)}
                   </button>
                 </div>
               </form>
@@ -549,7 +535,7 @@ export const LiveAuctionPage = () => {
                           Highest
                         </span>
                       )}
-                      <p style={{ fontSize: '0.7rem', color: '#8B8278', margin: 0 }}>{bid.time || 'Just now'}</p>
+                      <p style={{ fontSize: '0.7rem', color: '#8B8278', margin: 0 }}>{formatRelativeTime(bid.created_at || bid.time)}</p>
                     </div>
                     <span style={{
                       fontWeight: 800,
@@ -567,13 +553,6 @@ export const LiveAuctionPage = () => {
         </div>
 
       </div>
-
-      <PricingPlanPopup
-        isOpen={showPlans}
-        productType={product?.product_type || requiredPlan?.product_type || 'mobile'}
-        requiredPlan={requiredPlan}
-        onClose={() => setShowPlans(false)}
-      />
     </div>
   );
 };

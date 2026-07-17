@@ -73,12 +73,12 @@ export const AdminCommunityRequestsPage = () => {
   };
 
   return (
-    <div className="container-fluid" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", padding: '1.5rem' }}>
+    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: '1.5rem' }}>
       
       {/* Header section */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1F1A1D', margin: 0, fontFamily: "'Outfit', sans-serif" }}>Community Demand Demands</h1>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1F1A1D', margin: 0, fontFamily: "'Outfit', sans-serif" }}>Community Demands</h1>
           <p style={{ color: '#8B8278', fontSize: '0.9rem', margin: '0.25rem 0 0 0' }}>
             Monitor public buyer demand posts, interest volumes, and change status to match approved items.
           </p>
@@ -94,7 +94,7 @@ export const AdminCommunityRequestsPage = () => {
       </div>
 
       {/* Stats Summary cards (4 tiles in a single row) */}
-      <div className="grid grid-cols-4" style={{ gap: '1rem', marginBottom: '2rem' }}>
+      <div className="grid grid-cols-4" style={{ gap: '1rem' }}>
         {[
           { label: 'Total Requests', value: requests.length, color: '#6B1B71' },
           { label: 'Active Demands', value: requests.filter(r => r.status === 'active').length, color: '#10b981' },
@@ -109,94 +109,91 @@ export const AdminCommunityRequestsPage = () => {
           </div>
         ))}
       </div>
-          {/* Filters and Search toolbar */}
-          <div className="card mb-4" style={{ borderColor: '#D8CFC1', borderRadius: '0.75rem', backgroundColor: '#ffffff' }}>
-            <div className="card-body" style={{ padding: '1.25rem' }}>
-              <div className="row g-3">
-                
-                {/* Search Input */}
-                <div className="col-12">
-                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Search Demands</label>
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type="text"
-                      placeholder="Search brand, model, requester..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="form-control"
-                      style={{ paddingLeft: '2.25rem', borderRadius: '0.5rem', fontSize: '0.85rem' }}
-                    />
-                    <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
-                  </div>
-                </div>
 
-                {/* Category Filter as Premium Pills */}
-                <div className="col-12 col-md-6">
-                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Product Type</label>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {['all', 'car', 'bike', 'mobile', 'laptop'].map((cat) => {
-                      const isActive = categoryFilter === cat;
-                      return (
-                        <button
-                          key={cat}
-                          type="button"
-                          onClick={() => setCategoryFilter(cat)}
-                          style={{
-                            padding: '0.45rem 1.1rem',
-                            borderRadius: '2rem',
-                            border: isActive ? '1px solid #6B1B71' : '1px solid #D8CFC1',
-                            backgroundColor: isActive ? '#6B1B71' : '#ffffff',
-                            color: isActive ? '#ffffff' : '#6B1B71',
-                            fontWeight: 700,
-                            fontSize: '0.8rem',
-                            cursor: 'pointer',
-                            textTransform: 'capitalize',
-                            transition: 'all 0.2s ease',
-                            outline: 'none'
-                          }}
-                        >
-                          {cat}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+      {/* Filters and Search toolbar */}
+      <div className="card" style={{ borderColor: '#D8CFC1', borderRadius: '0.75rem', backgroundColor: '#ffffff', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {/* Search Input */}
+        <div>
+          <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Search Demands</label>
+          <div style={{ position: 'relative' }}>
+            <input
+              type="text"
+              placeholder="Search brand, model, requester..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="form-control"
+              style={{ paddingLeft: '2.25rem', borderRadius: '0.5rem', fontSize: '0.85rem' }}
+            />
+            <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
+          </div>
+        </div>
 
-                {/* Status Filter as Premium Pills */}
-                <div className="col-12 col-md-6">
-                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Request Status</label>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {['all', 'active', 'matched', 'closed', 'disabled'].map((stat) => {
-                      const isActive = statusFilter === stat;
-                      return (
-                        <button
-                          key={stat}
-                          type="button"
-                          onClick={() => setStatusFilter(stat)}
-                          style={{
-                            padding: '0.45rem 1.1rem',
-                            borderRadius: '2rem',
-                            border: isActive ? '1px solid #6B1B71' : '1px solid #D8CFC1',
-                            backgroundColor: isActive ? '#6B1B71' : '#ffffff',
-                            color: isActive ? '#ffffff' : '#6B1B71',
-                            fontWeight: 700,
-                            fontSize: '0.8rem',
-                            cursor: 'pointer',
-                            textTransform: 'capitalize',
-                            transition: 'all 0.2s ease',
-                            outline: 'none'
-                          }}
-                        >
-                          {stat}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-              </div>
+        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+          {/* Category Filter as Premium Pills */}
+          <div>
+            <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Product Type</label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {['all', 'car', 'bike', 'mobile', 'laptop'].map((cat) => {
+                const isActive = categoryFilter === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setCategoryFilter(cat)}
+                    style={{
+                      padding: '0.45rem 1.1rem',
+                      borderRadius: '2rem',
+                      border: isActive ? '1px solid #6B1B71' : '1px solid #D8CFC1',
+                      backgroundColor: isActive ? '#6B1B71' : '#ffffff',
+                      color: isActive ? '#ffffff' : '#6B1B71',
+                      fontWeight: 700,
+                      fontSize: '0.8rem',
+                      cursor: 'pointer',
+                      textTransform: 'capitalize',
+                      transition: 'all 0.2s ease',
+                      outline: 'none'
+                    }}
+                  >
+                    {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  </button>
+                );
+              })}
             </div>
           </div>
+
+          {/* Status Filter as Premium Pills */}
+          <div>
+            <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#8B8278', marginBottom: '0.35rem', display: 'block' }}>Request Status</label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {['all', 'active', 'matched', 'closed', 'disabled'].map((stat) => {
+                const isActive = statusFilter === stat;
+                return (
+                  <button
+                    key={stat}
+                    type="button"
+                    onClick={() => setStatusFilter(stat)}
+                    style={{
+                      padding: '0.45rem 1.1rem',
+                      borderRadius: '2rem',
+                      border: isActive ? '1px solid #6B1B71' : '1px solid #D8CFC1',
+                      backgroundColor: isActive ? '#6B1B71' : '#ffffff',
+                      color: isActive ? '#ffffff' : '#6B1B71',
+                      fontWeight: 700,
+                      fontSize: '0.8rem',
+                      cursor: 'pointer',
+                      textTransform: 'capitalize',
+                      transition: 'all 0.2s ease',
+                      outline: 'none'
+                    }}
+                  >
+                    {stat === 'all' ? 'All' : stat.charAt(0).toUpperCase() + stat.slice(1)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Main Table Card */}
       <div className="card" style={{ borderColor: '#D8CFC1', borderRadius: '1rem', overflow: 'hidden' }}>

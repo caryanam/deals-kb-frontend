@@ -445,8 +445,9 @@ export const PendingListingsPage = () => {
                     <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>Attached Verification Documents (Click to preview)</span>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                       {Object.entries(docs).map(([key, val]) => {
-                        const isPdf = val && (val.includes('application/pdf') || val.includes('.pdf'));
-                        const isImg = val && (val.includes('image/') || val.includes('.jpg') || val.includes('.png') || val.includes('.jpeg'));
+                        const valStr = String(val || '').toLowerCase();
+                        const isPdf = valStr.includes('application/pdf') || valStr.includes('.pdf');
+                        const isImg = valStr.includes('image/') || valStr.includes('.jpg') || valStr.includes('.png') || valStr.includes('.jpeg') || valStr.includes('.webp');
                         const docTitle = key.replace('_', ' ').toUpperCase();
                         
                         return (
@@ -456,11 +457,10 @@ export const PendingListingsPage = () => {
                             onClick={() => {
                               const normalizedVal = normalizeImageUrl(val);
                               if (isPdf) {
-                                setPreviewMedia({ type: 'pdf', src: normalizedVal, title: docTitle });
+                                window.open(normalizedVal, '_blank');
                               } else if (isImg) {
                                 setPreviewMedia({ type: 'image', src: normalizedVal, title: docTitle });
                               } else {
-                                // Fallback open in new tab
                                 window.open(normalizedVal, '_blank');
                               }
                             }}

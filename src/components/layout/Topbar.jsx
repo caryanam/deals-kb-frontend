@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, LogOut, User, Check, X, Phone, Lock, Mail, AlertCircle, Loader2, Bell, Trash2, CheckCircle2, RefreshCw, MessageSquare, Send, ArrowLeft } from 'lucide-react';
+import { Menu, LogOut, User, Check, X, Phone, Lock, Mail, AlertCircle, Loader2, Bell, Trash2, CheckCircle2, RefreshCw, MessageSquare, Send, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../hooks/useAuth';
 import { updateProfile } from '../../api/userApi';
 import { getNotifications, markNotificationAsRead, deleteNotification, clearAllNotifications } from '../../api/notificationApi';
@@ -23,24 +24,19 @@ export const Topbar = ({ onToggleSidebar }) => {
   const [phone, setPhone] = useState(user?.phone_number || user?.mobile_number || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
   // Notifications states
-  const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [loadingNotifs, setLoadingNotifs] = useState(false);
 
   // Chat feature states
-  const [conversations, setConversations] = useState([]);
   const [showChats, setShowChats] = useState(false);
-  const [loadingChats, setLoadingChats] = useState(false);
   const [activeChat, setActiveChat] = useState(null);
-  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [loadingMessages, setLoadingMessages] = useState(false);
-  const [chatRequests, setChatRequests] = useState([]);
   const [activeRequest, setActiveRequest] = useState(null);
   const [respondingRequestId, setRespondingRequestId] = useState('');
   const [showChatReportModal, setShowChatReportModal] = useState(false);
@@ -48,6 +44,47 @@ export const Topbar = ({ onToggleSidebar }) => {
   const [chatReportReason, setChatReportReason] = useState('');
   const [submittingChatReport, setSubmittingChatReport] = useState(false);
   const [reportContext, setReportContext] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  // Notifications query
+  const { data: notificationsData = [], isFetching: loadingNotifs } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: getNotifications,
+    enabled: !!user
+  });
+  const notifications = Array.isArray(notificationsData) ? notificationsData : [];
+
+  // Conversations query
+  const { data: conversationsData = [], isLoading: loadingConversations } = useQuery({
+    queryKey: ['conversations'],
+    queryFn: getConversations,
+    enabled: !!user && ['buyer', 'seller', 'dealer'].includes(user.role?.toLowerCase())
+  });
+  const conversations = Array.isArray(conversationsData) 
+    ? conversationsData 
+    : (conversationsData?.conversations || conversationsData?.data || []);
+
+  // Chat Requests query
+  const { data: chatRequestsData = [], isLoading: loadingChatRequests } = useQuery({
+    queryKey: ['chatRequests', user?.role],
+    queryFn: () => user.role?.toLowerCase() === 'buyer' ? getBuyerChatRequests() : getSellerChatRequests(),
+    enabled: !!user && ['buyer', 'seller', 'dealer'].includes(user.role?.toLowerCase())
+  });
+  const chatRequests = Array.isArray(chatRequestsData)
+    ? chatRequestsData
+    : (chatRequestsData?.requests || chatRequestsData?.data || []);
+
+  const loadingChats = loadingConversations || loadingChatRequests;
+
+  // Active Chat Messages query
+  const activeChatId = activeChat ? (activeChat.conversation_id || activeChat.id) : null;
+  const { data: messagesData = [], isLoading: loadingMessages } = useQuery({
+    queryKey: ['messages', activeChatId],
+    queryFn: () => getMessages(activeChatId),
+    enabled: !!activeChatId
+  });
+  const messages = Array.isArray(messagesData) ? messagesData : (messagesData?.messages || messagesData?.data || []);
 
   // Custom confirmation modal state
   const [confirmModal, setConfirmModal] = useState({
@@ -129,37 +166,100 @@ export const Topbar = ({ onToggleSidebar }) => {
     }
   };
 
-  // Notification Operations
-  const fetchNotifs = async () => {
-    if (!user) return;
-    try {
-      setLoadingNotifs(true);
-      const data = await getNotifications();
-      setNotifications(data || []);
-    } catch (err) {
-      console.warn('Failed to load notifications:', err);
-    } finally {
-      setLoadingNotifs(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      fetchNotifs();
-    }
-  }, [user]);
-
-  const unreadCount = notifications.filter(n => !n.is_read).length;
-
-  const handleMarkAsRead = async (id) => {
-    try {
-      await markNotificationAsRead(id);
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+  // Mutation operations
+  const markReadMutation = useMutation({
+    mutationFn: markNotificationAsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('Notification marked as read');
-    } catch (err) {
+    },
+    onError: (err) => {
       console.error('Failed to mark notification read:', err);
       toast.error('Failed to mark notification as read');
     }
+  });
+
+  const deleteNotifMutation = useMutation({
+    mutationFn: deleteNotification,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      toast.success('Notification cleared successfully');
+    },
+    onError: (err) => {
+      console.error('Failed to delete notification:', err);
+      toast.error('Failed to delete notification.');
+    }
+  });
+
+  const clearAllNotifsMutation = useMutation({
+    mutationFn: clearAllNotifications,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      toast.success('All notifications cleared');
+    },
+    onError: (err) => {
+      console.error('Failed to clear notifications:', err);
+      toast.error('Failed to clear notifications.');
+    }
+  });
+
+  const respondMutation = useMutation({
+    mutationFn: ({ requestId, action }) => respondToChatRequest(requestId, action),
+    onSuccess: async (result, variables) => {
+      toast.success(variables.action === 'accept' ? 'Request accepted. Chat is now open.' : 'Request rejected. Buyer has been notified.');
+      queryClient.invalidateQueries({ queryKey: ['chatRequests'] });
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+      if (variables.action === 'accept') {
+        const chatId = result?.conversation_id || result?.conversation?.conversation_id;
+        if (chatId) {
+          const data = await queryClient.fetchQuery({
+            queryKey: ['conversations'],
+            queryFn: getConversations
+          });
+          const list = Array.isArray(data) ? data : (data?.conversations || data?.data || []);
+          const found = list.find(c => (c.id || c.conversation_id) === chatId);
+          if (found) {
+            handleOpenChat(found);
+          } else {
+            localStorage.setItem('open_chat_id', chatId);
+            window.dispatchEvent(new CustomEvent('dealskb:open-chat', { detail: { chatId } }));
+          }
+        }
+      }
+    },
+    onError: (err) => {
+      console.error("Failed to respond to request:", err);
+      toast.error(err.response?.data?.detail || err.response?.data?.message || 'Failed to respond to request.');
+    }
+  });
+
+  const sendMessageMutation = useMutation({
+    mutationFn: ({ cid, text }) => sendMessage(cid, text),
+    onSuccess: (sent, variables) => {
+      queryClient.setQueryData(['messages', variables.cid], (prev) => {
+        const list = Array.isArray(prev) ? prev : (prev?.messages || prev?.data || []);
+        return [...list, {
+          id: sent.id || 'm_' + Date.now(),
+          sender_id: user.user_id || user.id,
+          sender_name: user.name,
+          message: variables.text,
+          is_read: false,
+          created_at: new Date().toISOString()
+        }];
+      });
+      queryClient.invalidateQueries({ queryKey: ['messages', variables.cid] });
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+    },
+    onError: (err) => {
+      console.error("Failed to send message:", err);
+      toast.error("Failed to send message.");
+    }
+  });
+
+  const unreadCount = notifications.filter(n => !n.is_read).length;
+
+  const handleMarkAsRead = (id) => {
+    markReadMutation.mutate(id);
   };
 
   const handleDeleteNotif = (e, id) => {
@@ -169,14 +269,7 @@ export const Topbar = ({ onToggleSidebar }) => {
       title: 'Clear Notification',
       message: 'Are you sure you want to clear this notification?',
       onConfirm: async () => {
-        try {
-          await deleteNotification(id);
-          setNotifications(prev => prev.filter(n => n.id !== id));
-          toast.success('Notification cleared successfully');
-        } catch (err) {
-          console.error('Failed to delete notification:', err);
-          toast.error('Failed to delete notification.');
-        }
+        deleteNotifMutation.mutate(id);
         setConfirmModal(prev => ({ ...prev, isOpen: false }));
       }
     });
@@ -189,65 +282,24 @@ export const Topbar = ({ onToggleSidebar }) => {
       title: 'Clear All Notifications',
       message: 'Are you sure you want to clear all notifications from your logs?',
       onConfirm: async () => {
-        try {
-          await clearAllNotifications();
-          setNotifications([]);
-          toast.success('All notifications cleared');
-        } catch (err) {
-          console.error('Failed to clear notifications:', err);
-          toast.error('Failed to clear notifications.');
-        }
+        clearAllNotifsMutation.mutate();
         setConfirmModal(prev => ({ ...prev, isOpen: false }));
       }
     });
   };
 
-  const fetchChats = async () => {
-    if (!user || !['buyer', 'seller', 'dealer'].includes(user.role?.toLowerCase())) return;
-    try {
-      setLoadingChats(true);
-      const [data, requestData] = await Promise.all([
-        getConversations(),
-        user.role?.toLowerCase() === 'buyer' ? getBuyerChatRequests() : getSellerChatRequests()
-      ]);
-      const list = Array.isArray(data) ? data : (data?.conversations || data?.data || []);
-      const requestList = Array.isArray(requestData) ? requestData : (requestData?.requests || requestData?.data || []);
-      setConversations(list);
-      setChatRequests(requestList);
-    } catch (err) {
-      console.error("Failed to load chat channels:", err);
-    } finally {
-      setLoadingChats(false);
-    }
+  const fetchNotifs = () => {
+    queryClient.invalidateQueries({ queryKey: ['notifications'] });
   };
 
-  const handleRespondToRequest = async (e, requestId, action) => {
+  const fetchChats = () => {
+    queryClient.invalidateQueries({ queryKey: ['conversations'] });
+    queryClient.invalidateQueries({ queryKey: ['chatRequests'] });
+  };
+
+  const handleRespondToRequest = (e, requestId, action) => {
     e.stopPropagation();
-    try {
-      setRespondingRequestId(requestId);
-      const result = await respondToChatRequest(requestId, action);
-      toast.success(action === 'accept' ? 'Request accepted. Chat is now open.' : 'Request rejected. Buyer has been notified.');
-      await fetchChats();
-      if (action === 'accept') {
-        const chatId = result?.conversation_id || result?.conversation?.conversation_id;
-        if (chatId) {
-          const data = await getConversations();
-          const list = Array.isArray(data) ? data : (data?.conversations || data?.data || []);
-          const found = list.find(c => (c.id || c.conversation_id) === chatId);
-          if (found) {
-            await handleOpenChat(found);
-          } else {
-            localStorage.setItem('open_chat_id', chatId);
-            window.dispatchEvent(new CustomEvent('dealskb:open-chat', { detail: { chatId } }));
-          }
-        }
-      }
-    } catch (err) {
-      console.error("Failed to respond to request:", err);
-      toast.error(err.response?.data?.detail || err.response?.data?.message || 'Failed to respond to request.');
-    } finally {
-      setRespondingRequestId('');
-    }
+    respondMutation.mutate({ requestId, action });
   };
 
   const handleChatIconClick = () => {
@@ -262,19 +314,13 @@ export const Topbar = ({ onToggleSidebar }) => {
     setActiveChat(conv);
     setActiveRequest(null);
     setShowChats(true);
-    setLoadingMessages(true);
     const cid = conv.conversation_id || conv.id;
     try {
-      const data = await getMessages(cid);
-      const list = Array.isArray(data) ? data : (data?.messages || data?.data || []);
-      setMessages(list);
       await markConversationRead(cid);
-      // Refresh chat list to clear badge
-      fetchChats();
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+      queryClient.invalidateQueries({ queryKey: ['messages', cid] });
     } catch (err) {
       console.error("Failed to open conversation channel:", err);
-    } finally {
-      setLoadingMessages(false);
     }
   };
 
@@ -285,11 +331,14 @@ export const Topbar = ({ onToggleSidebar }) => {
       return;
     }
     try {
-      const data = await getConversations();
+      const data = await queryClient.fetchQuery({
+        queryKey: ['conversations'],
+        queryFn: getConversations
+      });
       const list = Array.isArray(data) ? data : (data?.conversations || data?.data || []);
       const found = list.find(c => (c.id || c.conversation_id) === chatId);
       if (found) {
-        await handleOpenChat(found);
+        handleOpenChat(found);
       } else {
         localStorage.setItem('open_chat_id', chatId);
         window.dispatchEvent(new CustomEvent('dealskb:open-chat', { detail: { chatId } }));
@@ -300,15 +349,15 @@ export const Topbar = ({ onToggleSidebar }) => {
     }
   };
 
-  const handleOpenAcceptedRequestChat = async (e, req) => {
+  const handleOpenAcceptedRequestChat = (e, req) => {
     e.stopPropagation();
-    await openAcceptedRequestChat(req);
+    openAcceptedRequestChat(req);
   };
 
-  const handleOpenRequest = async (req) => {
+  const handleOpenRequest = (req) => {
     const status = String(req?.status || '').toUpperCase();
     if (status === 'ACCEPTED') {
-      await openAcceptedRequestChat(req);
+      openAcceptedRequestChat(req);
       return;
     }
     setActiveChat(null);
@@ -316,30 +365,13 @@ export const Topbar = ({ onToggleSidebar }) => {
     setShowChats(true);
   };
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !activeChat) return;
-
     const cid = activeChat.conversation_id || activeChat.id;
     const text = newMessage.trim();
     setNewMessage('');
-
-    try {
-      const sent = await sendMessage(cid, text);
-      
-      // Append locally
-      setMessages(prev => [...(Array.isArray(prev) ? prev : []), {
-        id: sent.id || 'm_' + Date.now(),
-        sender_id: user.user_id || user.id,
-        sender_name: user.name,
-        message: text,
-        is_read: false,
-        created_at: new Date().toISOString()
-      }]);
-    } catch (err) {
-      console.error("Failed to send message:", err);
-      toast.error("Failed to send message.");
-    }
+    sendMessageMutation.mutate({ cid, text });
   };
 
   const getChatReportedUserId = () => {
@@ -396,29 +428,47 @@ export const Topbar = ({ onToggleSidebar }) => {
     setShowChatReportModal(true);
   };
 
-  // Load conversations once after login. Manual refresh is available in the chats panel.
-  useEffect(() => {
-    if (!user || !['buyer', 'seller', 'dealer'].includes(user.role?.toLowerCase())) return;
-    fetchChats();
-  }, [user]);
-
   // External chat triggering without polling.
   useEffect(() => {
     const checkExternalChatOpen = async (event) => {
+      const openRequestId = event?.detail?.requestId || localStorage.getItem('open_chat_request_id');
+      if (openRequestId) {
+        localStorage.removeItem('open_chat_request_id');
+        try {
+          const requestsData = await queryClient.fetchQuery({
+            queryKey: ['chatRequests', user?.role],
+            queryFn: () => user.role?.toLowerCase() === 'buyer' ? getBuyerChatRequests() : getSellerChatRequests()
+          });
+          const requestsList = Array.isArray(requestsData) ? requestsData : (requestsData?.requests || requestsData?.data || []);
+          const foundRequest = requestsList.find((request) => request?.request_id === openRequestId);
+          if (foundRequest) {
+            setActiveChat(null);
+            setActiveRequest(foundRequest);
+            setShowChats(true);
+            return;
+          }
+        } catch (err) {
+          console.error('Failed to auto-open chat request:', err);
+        }
+      }
+
       const openChatId = event?.detail?.chatId || localStorage.getItem('open_chat_id');
       if (openChatId) {
         localStorage.removeItem('open_chat_id');
         try {
-          const data = await getConversations();
+          const data = await queryClient.fetchQuery({
+            queryKey: ['conversations'],
+            queryFn: getConversations
+          });
           const list = Array.isArray(data) ? data : (data?.conversations || data?.data || []);
-          setConversations(list);
           const found = list.find(c => (c.id || c.conversation_id) === openChatId);
           if (found) {
+            setActiveRequest(null);
             setActiveChat(found);
-            const dataMsgs = await getMessages(openChatId);
-            const listMsgs = Array.isArray(dataMsgs) ? dataMsgs : (dataMsgs?.messages || dataMsgs?.data || []);
-            setMessages(listMsgs);
+            setShowChats(true);
             await markConversationRead(openChatId);
+            queryClient.invalidateQueries({ queryKey: ['conversations'] });
+            queryClient.invalidateQueries({ queryKey: ['messages', openChatId] });
           }
         } catch (err) {
           console.error("Failed to auto-open conversation:", err);
@@ -431,14 +481,19 @@ export const Topbar = ({ onToggleSidebar }) => {
       if (event.key === 'open_chat_id') {
         checkExternalChatOpen({ detail: { chatId: event.newValue } });
       }
+      if (event.key === 'open_chat_request_id') {
+        checkExternalChatOpen({ detail: { requestId: event.newValue } });
+      }
     };
     window.addEventListener('dealskb:open-chat', checkExternalChatOpen);
+    window.addEventListener('dealskb:open-chat-request', checkExternalChatOpen);
     window.addEventListener('storage', handleStorage);
     return () => {
       window.removeEventListener('dealskb:open-chat', checkExternalChatOpen);
+      window.removeEventListener('dealskb:open-chat-request', checkExternalChatOpen);
       window.removeEventListener('storage', handleStorage);
     };
-  }, []);
+  }, [queryClient, user?.role]);
 
   const unreadChatsCount = Array.isArray(conversations) ? conversations.reduce((acc, c) => acc + (c.unread_count || 0), 0) : 0;
   const pendingRequestCount = Array.isArray(chatRequests)
@@ -449,16 +504,27 @@ export const Topbar = ({ onToggleSidebar }) => {
   const formatChatDateTime = (value) => {
     if (!value) return '';
     try {
-      const d = new Date(value);
-      return isNaN(d.getTime())
-        ? ''
-        : d.toLocaleString([], {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          });
+      let d = new Date(value);
+      if (isNaN(d.getTime())) return '';
+
+      // Auto-detect double timezone conversion
+      const now = new Date();
+      if (d.getTime() > now.getTime() + 60000) {
+        // Strip timezone designator to force parsing as local time
+        const cleanValue = String(value).replace('Z', '').replace(/\+\d{2}:\d{2}$/, '').replace(/-\d{2}:\d{2}$/, '');
+        const localDate = new Date(cleanValue);
+        if (!isNaN(localDate.getTime())) {
+          d = localDate;
+        }
+      }
+
+      return d.toLocaleString([], {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     } catch (e) {
       return '';
     }
@@ -591,7 +657,8 @@ export const Topbar = ({ onToggleSidebar }) => {
                   zIndex: 9000,
                   display: 'flex',
                   flexDirection: 'column',
-                  maxHeight: 'calc(100vh - 110px)'
+                  height: 'calc(100vh - 110px)',
+                  maxHeight: '680px'
                 }}>
                   {activeRequest && (
                     <>
@@ -644,10 +711,10 @@ export const Topbar = ({ onToggleSidebar }) => {
                         </div>
                       </div>
 
-                      <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#FAF6EA', minHeight: '420px' }}>
+                      <div style={{ padding: '1rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#FAF6EA' }}>
                         <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
                           <div><strong style={{ color: '#1F1A1D' }}>Buyer:</strong> {activeRequest.buyer_name || 'Buyer'}</div>
-                          <div><strong style={{ color: '#1F1A1D' }}>Winning bid:</strong> ₹{activeRequest.winning_bid_amount}</div>
+                          <div><strong style={{ color: '#1F1A1D' }}>Winning bid:</strong> â‚¹{activeRequest.winning_bid_amount}</div>
                           <div><strong style={{ color: '#1F1A1D' }}>Status:</strong> {activeRequest.status}</div>
                           <div><strong style={{ color: '#1F1A1D' }}>Created:</strong> {formatChatDateTime(activeRequest.created_at) || 'Just now'}</div>
                         </div>
@@ -725,7 +792,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                         </div>
                       </div>
 
-                      <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', backgroundColor: '#FAF6EA', minHeight: '420px' }}>
+                      <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', backgroundColor: '#FAF6EA' }}>
                         <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
                           <div><strong style={{ color: '#1F1A1D' }}>Listing:</strong> {getConversationTitle(activeChat)}</div>
                           <div><strong style={{ color: '#1F1A1D' }}>Participant:</strong> {getConversationParticipant(activeChat)}</div>
@@ -750,7 +817,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                 </div>
                                 <span style={{ fontSize: '0.6rem', color: '#8B8278', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                   <span>{formatChatDateTime(msg?.created_at)}</span>
-                                  {isMe && <span title={msg?.is_read ? 'Read' : 'Sent'} style={{ color: msg?.is_read ? '#6B1B71' : '#8B8278', fontWeight: 900, letterSpacing: '-0.08em' }}>✓✓</span>}
+                                  {isMe && <span title={msg?.is_read ? 'Read' : 'Sent'} style={{ color: msg?.is_read ? '#6B1B71' : '#8B8278', fontWeight: 900, letterSpacing: '-0.08em' }}>âœ“âœ“</span>}
                                 </span>
                               </div>
                             );
@@ -761,7 +828,8 @@ export const Topbar = ({ onToggleSidebar }) => {
 
                       <form onSubmit={handleSendMessage} style={{ padding: '0.75rem', borderTop: '1px solid #cbd5e1', display: 'flex', gap: '0.5rem', backgroundColor: '#FAF6EA' }}>
                         <input type="text" placeholder="Type your message..." value={newMessage} onChange={(e) => setNewMessage(e.target.value)} style={{ flex: 1, padding: '0.5rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '9999px', fontSize: '0.85rem', outline: 'none', backgroundColor: '#FAF6EA' }} />
-                        <button type="submit" disabled={!newMessage.trim()} style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: newMessage.trim() ? '#6B1B71' : '#F5ECDD', color: newMessage.trim() ? '#ffffff' : '#8B8278', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: newMessage.trim() ? 'pointer' : 'default', transition: 'all 0.15s ease' }}>
+                        <input type="submit" style={{ display: 'none' }} />
+                        <button type="button" onClick={handleSendMessage} disabled={!newMessage.trim()} style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: newMessage.trim() ? '#6B1B71' : '#F5ECDD', color: newMessage.trim() ? '#ffffff' : '#8B8278', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: newMessage.trim() ? 'pointer' : 'default', transition: 'all 0.15s ease', padding: 0 }}>
                           <Send size={16} />
                         </button>
                       </form>
@@ -809,7 +877,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                   </div>
 
                   {/* Chat List */}
-                  <div style={{ overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', minHeight: '420px' }}>
+                  <div style={{ overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
                     {(!Array.isArray(conversations) || conversations.length === 0) && (!Array.isArray(chatRequests) || chatRequests.length === 0) ? (
                       <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#8B8278', fontSize: '0.85rem' }}>
                         No conversations yet
@@ -849,7 +917,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                   </span>
                                 </div>
                                 <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>
-                                  Buyer: {req.buyer_name} | Bid: ₹{req.winning_bid_amount}
+                                  Buyer: {req.buyer_name} | Bid: â‚¹{req.winning_bid_amount}
                                 </span>
                                 <span style={{
                                   fontSize: '0.75rem',
@@ -871,7 +939,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                     {req.seller_response_message}
                                   </span>
                                 )}
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                                   {isPending && (
                                     <>
                                       <button
@@ -988,7 +1056,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                   {req.seller_response_message}
                                 </span>
                               )}
-                              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+                              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', paddingBottom: '0.1rem' }}>
                                 {req.status === 'ACCEPTED' && (
                                   <button
                                     type="button"
@@ -1209,9 +1277,9 @@ export const Topbar = ({ onToggleSidebar }) => {
                         No notifications logs found.
                       </div>
                     ) : (
-                      notifications.map((notif) => (
+                      notifications.map((notif, idx) => (
                         <div
-                          key={notif.id}
+                          key={notif.notification_id || notif.id || idx}
                           onClick={() => {
                             if (!notif.is_read) {
                               handleMarkAsRead(notif.id);
@@ -1541,13 +1609,21 @@ export const Topbar = ({ onToggleSidebar }) => {
                 <div style={{ position: 'relative' }}>
                   <Lock size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     className="form-control"
-                    placeholder="••••••••"
+                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    style={{ paddingLeft: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
+                    style={{ paddingLeft: '2.3rem', paddingRight: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(v => !v)}
+                    style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278', padding: 0, display: 'flex', alignItems: 'center' }}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
                 </div>
               </div>
 
@@ -1557,13 +1633,21 @@ export const Topbar = ({ onToggleSidebar }) => {
                 <div style={{ position: 'relative' }}>
                   <Lock size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#8B8278' }} />
                   <input
-                    type="password"
+                    type={showConfirmPassword ? 'text' : 'password'}
                     className="form-control"
-                    placeholder="••••••••"
+                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    style={{ paddingLeft: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
+                    style={{ paddingLeft: '2.3rem', paddingRight: '2.3rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.82rem', height: '36px' }}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(v => !v)}
+                    style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278', padding: 0, display: 'flex', alignItems: 'center' }}
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
                 </div>
               </div>
 
@@ -1840,7 +1924,7 @@ export const Topbar = ({ onToggleSidebar }) => {
           <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#FAF6EA' }}>
             <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
               <div><strong style={{ color: '#1F1A1D' }}>Buyer:</strong> {activeRequest.buyer_name || 'Buyer'}</div>
-              <div><strong style={{ color: '#1F1A1D' }}>Winning bid:</strong> ₹{activeRequest.winning_bid_amount}</div>
+              <div><strong style={{ color: '#1F1A1D' }}>Winning bid:</strong> â‚¹{activeRequest.winning_bid_amount}</div>
               <div><strong style={{ color: '#1F1A1D' }}>Status:</strong> {activeRequest.status}</div>
               <div><strong style={{ color: '#1F1A1D' }}>Created:</strong> {formatChatDateTime(activeRequest.created_at) || 'Just now'}</div>
             </div>
@@ -2014,7 +2098,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                             letterSpacing: '-0.08em'
                           }}
                         >
-                          ✓✓
+                          âœ“âœ“
                         </span>
                       )}
                     </span>
@@ -2051,8 +2135,10 @@ export const Topbar = ({ onToggleSidebar }) => {
                 backgroundColor: '#FAF6EA'
               }}
             />
+            <input type="submit" style={{ display: 'none' }} />
             <button 
-              type="submit"
+              type="button"
+              onClick={handleSendMessage}
               disabled={!newMessage.trim()}
               style={{
                 width: '36px',
@@ -2065,7 +2151,8 @@ export const Topbar = ({ onToggleSidebar }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: newMessage.trim() ? 'pointer' : 'default',
-                transition: 'all 0.15s ease'
+                transition: 'all 0.15s ease',
+                padding: 0
               }}
             >
               <Send size={16} />
@@ -2078,3 +2165,4 @@ export const Topbar = ({ onToggleSidebar }) => {
 };
 
 export default Topbar;
+

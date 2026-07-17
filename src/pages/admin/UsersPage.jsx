@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 export const UsersPage = () => {
   const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [roleFilter, setRoleFilter] = useState('all');
 
   // Modal / Popup states
   const [selectedUser, setSelectedUser] = useState(null);
@@ -60,6 +61,10 @@ export const UsersPage = () => {
 
   // Exclude Admin users from the directory roster
   const nonAdminUsers = usersList.filter(u => u.role?.toLowerCase() !== 'admin');
+  // Apply role filter
+  const displayedUsers = roleFilter === 'all'
+    ? nonAdminUsers
+    : nonAdminUsers.filter(u => u.role?.toLowerCase() === roleFilter);
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -77,6 +82,38 @@ export const UsersPage = () => {
         >
           <RefreshCw size={16} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} /> Refresh
         </button>
+      </div>
+
+      {/* Role Filter Pills */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+        {['all', 'Buyer', 'Seller', 'Dealer'].map((role) => {
+          const isActive = roleFilter === role;
+          const label = role === 'all' ? 'All' : role + 's';
+          return (
+            <button
+              key={role}
+              type="button"
+              onClick={() => setRoleFilter(role)}
+              style={{
+                padding: '0.45rem 1.2rem',
+                borderRadius: '9999px',
+                border: isActive ? '1px solid #6B1B71' : '1px solid #D8CFC1',
+                backgroundColor: isActive ? '#6B1B71' : '#ffffff',
+                color: isActive ? '#ffffff' : '#6B1B71',
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                outline: 'none'
+              }}
+            >
+              {label}
+              <span style={{ marginLeft: '0.4rem', opacity: 0.75, fontSize: '0.75rem' }}>
+                ({role === 'all' ? nonAdminUsers.length : nonAdminUsers.filter(u => u.role === role).length})
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {loading ? (
@@ -115,7 +152,7 @@ export const UsersPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {nonAdminUsers.map((usr, idx) => (
+                {displayedUsers.map((usr, idx) => (
                   <tr key={usr.user_id || usr.id || idx} style={{ borderBottom: '1px solid #D8CFC1' }}>
                     <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.95rem', fontWeight: 700 }}>
                       <button 
@@ -145,12 +182,12 @@ export const UsersPage = () => {
                       <span style={{
                         fontSize: '0.75rem',
                         fontWeight: 800,
-                        color: usr.role === 'Seller' ? '#10b981' : '#6B1B71',
+                        color: usr.role === 'Seller' ? '#10b981' : usr.role === 'Dealer' ? '#2563eb' : '#6B1B71',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.25rem'
                       }}>
-                        {usr.role === 'Seller' ? <ShieldCheck size={14} /> : <UserCheck size={14} />}
+                        {usr.role === 'Seller' ? <ShieldCheck size={14} /> : usr.role === 'Dealer' ? <ShieldCheck size={14} /> : <UserCheck size={14} />}
                         {usr.role}
                       </span>
                     </td>

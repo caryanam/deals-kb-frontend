@@ -78,6 +78,9 @@ const isPhotoSlotRequired = (type, slot) => {
   if (type === 'car') {
     return ['Front image', 'Back image', 'Dashboard', 'Speedometer', 'Engine'].includes(slot);
   }
+  if (type === 'bike') {
+    return ['Front image', 'Back image', 'Dashboard', 'Engine'].includes(slot);
+  }
   if (type === 'laptop') {
     return ['Front image', 'Back image', 'Barcode image', 'Specification image'].includes(slot);
   }
@@ -404,6 +407,13 @@ export const RelistListing = () => {
       if (!photoSlots['Dashboard']) return 'Dashboard image of the car is mandatory.';
       if (!photoSlots['Speedometer']) return 'Speedometer image of the car is mandatory.';
       if (!photoSlots['Engine']) return 'Engine image of the car is mandatory.';
+    }
+
+    if (productType === 'bike') {
+      if (!photoSlots['Front image']) return 'Front image of the bike is mandatory.';
+      if (!photoSlots['Back image']) return 'Back image of the bike is mandatory.';
+      if (!photoSlots['Dashboard']) return 'Dashboard image of the bike is mandatory.';
+      if (!photoSlots['Engine']) return 'Engine image of the bike is mandatory.';
     }
 
     if (productType === 'laptop') {

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Fuel, Calendar, Gauge, ShieldCheck, AlertCircle, PlayCircle, CheckCircle, Cpu, Layers, HardDrive, FileText, Trophy, ArrowRight, MessageSquare, X, ImageOff } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProductById, getSellerContact, getWinnerContact, getProductBids } from '../../api/productApi';
 import { createConversation } from '../../api/chatApi';
 import { createChatRequest } from '../../api/chatRequestApi';
@@ -9,7 +10,6 @@ import { useAuth } from '../../hooks/useAuth';
 import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
 import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
-import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
 // import { getMyPlans } from '../../api/paymentApi';
 
 export const ListingDetailsPage = () => {
@@ -17,11 +17,36 @@ export const ListingDetailsPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState('');
+  const { data: product, isLoading: loading, error: errorProduct } = useQuery({
+    queryKey: ['product', productId],
+    queryFn: () => getProductById(productId),
+    enabled: !!productId
+  });
+
+  const { data: bidHistoryList = [] } = useQuery({
+    queryKey: ['productBids', productId],
+    queryFn: () => getProductBids(productId),
+    enabled: !!productId
+  });
+
+  const errorMsg = errorProduct ? (errorProduct.response?.data?.detail || errorProduct.response?.data?.message || 'Unable to load product details. Please try again.') : '';
+
   const [activeImage, setActiveImage] = useState('');
   const [mediaMode, setMediaMode] = useState('image'); // 'image' or 'video'
+
+  const photosArray = useMemo(() => {
+    return product ? normalizePhotosArray(product.photos, []) : [];
+  }, [product]);
+
+  useEffect(() => {
+    if (photosArray.length > 0 && !activeImage) {
+      setActiveImage(photosArray[0]);
+    }
+  }, [photosArray, activeImage]);
+
+  useEffect(() => {
+    setActiveImage('');
+  }, [productId]);
 
   // Seller contact states (Buyer View)
   const [sellerContact, setSellerContact] = useState(null);
@@ -33,9 +58,6 @@ export const ListingDetailsPage = () => {
   const [winnerContactError, setWinnerContactError] = useState('');
   const [loadingWinnerContact, setLoadingWinnerContact] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
-  const [bidHistoryList, setBidHistoryList] = useState([]);
-  const [showPlans, setShowPlans] = useState(false);
-  const [requiredPlan, setRequiredPlan] = useState(null);
 
   // Report states
   const [showReportModal, setShowReportModal] = useState(false);
@@ -173,37 +195,10 @@ export const ListingDetailsPage = () => {
     }
   };
 
-  const loadProductData = async () => {
-    try {
-      setLoading(true);
-      setErrorMsg('');
-      const details = await getProductById(productId);
-      setProduct(details);
-      
-      const photosArray = normalizePhotosArray(details.photos, []);
-      if (photosArray.length > 0) {
-        setActiveImage(photosArray[0]);
-      }
-
-      // Fetch bids history log
-      try {
-        const bids = await getProductBids(productId);
-        setBidHistoryList(bids || []);
-      } catch (err) {
-        console.warn('Failed to load bids list:', err);
-      }
-    } catch (err) {
-      console.error('Failed to load product details:', err);
-      const msg = err.response?.data?.detail || err.response?.data?.message || 'Unable to load product details. Please try again.';
-      setErrorMsg(msg);
-    } finally {
-      setLoading(false);
-    }
+  const loadProductData = () => {
+    queryClient.invalidateQueries({ queryKey: ['product', productId] });
+    queryClient.invalidateQueries({ queryKey: ['productBids', productId] });
   };
-
-  useEffect(() => {
-    loadProductData();
-  }, [productId]);
 
   const handleBack = () => {
     navigate('/buyer/marketplace');
@@ -991,14 +986,6 @@ export const ListingDetailsPage = () => {
           100% { transform: rotate(360deg); }
         }
       `}</style>
-
-      <PricingPlanPopup
-        isOpen={showPlans}
-        productType={product?.product_type || requiredPlan?.product_type || 'mobile'}
-        requiredPlan={requiredPlan}
-        onClose={() => setShowPlans(false)}
-        onActivated={() => navigate(`/buyer/auction/${product.product_id}`)}
-      />
     </div>
   );
 };

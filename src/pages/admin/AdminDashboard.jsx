@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, UserCheck, ShieldCheck, ClipboardList, CheckCircle2, Gavel, Award, ArrowRight, Activity, IndianRupee, RefreshCw, XCircle, Filter } from 'lucide-react';
+import { Users, UserCheck, ShieldCheck, Store, ClipboardList, CheckCircle2, Gavel, Award, ArrowRight, Activity, IndianRupee, RefreshCw, XCircle, Filter } from 'lucide-react';
 import { getAdminAnalytics } from '../../api/adminApi';
 import { getProducts } from '../../api/productApi';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
@@ -126,16 +126,18 @@ export const AdminDashboard = () => {
 
       {/* Roster counts */}
       <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#8B8278', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>User Overview</h2>
-      <div className="grid grid-cols-3" style={{ marginBottom: '2.5rem' }}>
+      <div className="grid grid-cols-4" style={{ marginBottom: '2.5rem' }}>
         
-        {/* Total Users */}
+        {/* Total Users (excludes admins) */}
         <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', color: '#6B1B71', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Users size={24} />
           </div>
           <div>
             <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Total Users</span>
-            <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : analytics?.total_users}</h3>
+            <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>
+              {loading ? '...' : ((analytics?.total_buyers || 0) + (analytics?.total_sellers || 0) + (analytics?.total_dealers || 0))}
+            </h3>
           </div>
         </div>
 
@@ -158,6 +160,17 @@ export const AdminDashboard = () => {
           <div>
             <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Platform Sellers</span>
             <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : analytics?.total_sellers}</h3>
+          </div>
+        </div>
+
+        {/* Dealers */}
+        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '0.75rem', backgroundColor: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Store size={24} />
+          </div>
+          <div>
+            <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Platform Dealers</span>
+            <h3 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>{loading ? '...' : (analytics?.total_dealers || 0)}</h3>
           </div>
         </div>
       </div>

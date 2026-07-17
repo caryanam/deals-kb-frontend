@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { CreditCard, LayoutDashboard, ShoppingBag, Landmark, ShieldAlert, Users } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Landmark, ShieldAlert, Users } from 'lucide-react';
 
 export const BuyerSidebar = ({ onClose }) => {
   const location = useLocation();
@@ -11,7 +11,6 @@ export const BuyerSidebar = ({ onClose }) => {
     { name: 'Marketplace', path: '/buyer/marketplace', icon: ShoppingBag },
     { name: 'Explore Community', path: '/buyer/community-requests', icon: Users },
     { name: 'My Bids', path: '/buyer/my-bids', icon: Landmark },
-    { name: 'Payments', path: '/buyer/payments', icon: CreditCard },
     { name: 'My Reports', path: '/buyer/reports', icon: ShieldAlert }
   ];
 

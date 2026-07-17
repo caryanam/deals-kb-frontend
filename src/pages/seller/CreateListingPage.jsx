@@ -100,6 +100,9 @@ const isPhotoSlotRequired = (type, slot) => {
   if (type === 'car') {
     return ['Front image', 'Back image', 'Dashboard', 'Speedometer', 'Engine'].includes(slot);
   }
+  if (type === 'bike') {
+    return ['Front image', 'Back image', 'Dashboard', 'Engine'].includes(slot);
+  }
   if (type === 'laptop') {
     return ['Front image', 'Back image', 'Barcode image', 'Specification image'].includes(slot);
   }
@@ -405,6 +408,12 @@ export const CreateListingPage = () => {
     if (!productPrice || Number(productPrice) <= 0) return 'Product price must be greater than 0.';
     if (!expectedPrice || Number(expectedPrice) <= 0) return 'Expected price must be greater than 0.';
     if (!video) return 'Video walkthrough is required.';
+
+    const requiredSlots = (PHOTO_SLOTS[productType] || []).filter(slot => isPhotoSlotRequired(productType, slot));
+    const missingSlots = requiredSlots.filter(slot => !photoSlots[slot]);
+    if (missingSlots.length > 0) {
+      return `Please upload required photos: ${missingSlots.join(', ')}.`;
+    }
 
     if (productType === 'car' || productType === 'bike') {
       if (!specs.ownership || !specs.accidental) return 'Please select ownership and accidental status.';

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Gavel, Landmark, Bell, Trophy, ArrowRight, Clock, AlertCircle, RefreshCw } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../hooks/useAuth';
 import { getProducts } from '../../api/productApi';
 import { getMyBids, getMyWins } from '../../api/userApi';
@@ -9,46 +10,49 @@ import { getNotifications } from '../../api/notificationApi';
 export const BuyerDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const [availableCount, setAvailableCount] = useState(0);
-  const [liveCount, setLiveCount] = useState(0);
-  const [myBidsCount, setMyBidsCount] = useState(0);
-  const [myWinsCount, setMyWinsCount] = useState(0);
-  const [recentNotifications, setRecentNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data: products = [], isLoading: loadingProducts, error: errorProducts } = useQuery({
+    queryKey: ['products', { status_filter: 'live_or_upcoming' }],
+    queryFn: () => getProducts({ status_filter: 'live_or_upcoming' })
+  });
 
-  const loadDashboardData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  const { data: bids = [], isLoading: loadingBids, error: errorBids } = useQuery({
+    queryKey: ['myBids'],
+    queryFn: getMyBids,
+    enabled: !!user
+  });
 
-      // Load products (live or upcoming)
-      const products = await getProducts({ status_filter: 'live_or_upcoming' });
-      setAvailableCount(products.length);
-      setLiveCount(products.filter(p => p.status === 'live').length);
+  const { data: wins = [], isLoading: loadingWins, error: errorWins } = useQuery({
+    queryKey: ['myWins'],
+    queryFn: getMyWins,
+    enabled: !!user
+  });
 
-      // Load my bids & wins
-      const bids = await getMyBids();
-      setMyBidsCount(bids.length);
+  const { data: notificationsData = [], isLoading: loadingNotifications, error: errorNotifications } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: getNotifications,
+    enabled: !!user
+  });
 
-      const wins = await getMyWins();
-      setMyWinsCount(wins.length);
+  const loading = loadingProducts || loadingBids || loadingWins || loadingNotifications;
+  const errorObj = errorProducts || errorBids || errorWins || errorNotifications;
+  const error = errorObj ? (errorObj.response?.data?.detail || errorObj.response?.data?.message || 'Failed to retrieve dashboard parameters.') : null;
 
-      // Load my notifications
-      const notifs = await getNotifications();
-      setRecentNotifications(notifs.slice(0, 3));
-    } catch (err) {
-      console.error('Failed to load buyer dashboard metrics:', err);
-      setError(err.response?.data?.detail || err.response?.data?.message || 'Failed to retrieve dashboard parameters.');
-    } finally {
-      setLoading(false);
-    }
+  const availableCount = products.length;
+  const liveCount = products.filter(p => p.status === 'live').length;
+  const myBidsCount = bids.length;
+  const myWinsCount = wins.length;
+  
+  const notifications = Array.isArray(notificationsData) ? notificationsData : [];
+  const recentNotifications = notifications.slice(0, 3);
+
+  const loadDashboardData = () => {
+    queryClient.invalidateQueries({ queryKey: ['products'] });
+    queryClient.invalidateQueries({ queryKey: ['myBids'] });
+    queryClient.invalidateQueries({ queryKey: ['myWins'] });
+    queryClient.invalidateQueries({ queryKey: ['notifications'] });
   };
-
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>

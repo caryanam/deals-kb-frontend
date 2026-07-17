@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Landmark, ArrowUpRight, Trophy, Eye, RefreshCw } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../hooks/useAuth';
 import { getMyBids } from '../../api/userApi';
 import { getProductById } from '../../api/productApi';
@@ -10,12 +11,10 @@ import { toast } from 'react-toastify';
 export const MyBidsPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useState(new URLSearchParams(window.location.search));
 
   const activeTab = searchParams.get('tab') || 'all';
-
-  const [bidsList, setBidsList] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   // Sync tab from URL changes
   useEffect(() => {
@@ -26,17 +25,18 @@ export const MyBidsPage = () => {
     return () => window.removeEventListener('popstate', handleUrlChange);
   }, []);
 
-  const loadMyBids = async () => {
-    if (!user) return;
-    try {
-      setLoading(true);
+  const { data: bidsList = [], isLoading: loading } = useQuery({
+    queryKey: ['myEnrichedBids', user?.user_id || user?.id],
+    queryFn: async () => {
       const bidsData = await getMyBids();
-      
-      // Enrich bid history objects with product stats
       const enriched = await Promise.all(
         bidsData.map(async (bid) => {
           try {
-            const product = await getProductById(bid.product_id);
+            const product = await queryClient.fetchQuery({
+              queryKey: ['product', bid.product_id],
+              queryFn: () => getProductById(bid.product_id),
+              staleTime: 60000
+            });
             return {
               ...bid,
               product
@@ -44,24 +44,19 @@ export const MyBidsPage = () => {
           } catch (err) {
             return {
               ...bid,
-              product: { title: 'Unknown Product', expected_price: 0, product_type: 'unknown' }
+              product: { title: 'Unknown Product', expected_price: 0, product_type: 'unknown', status: 'unknown' }
             };
           }
         })
       );
-      
-      setBidsList(enriched);
-    } catch (err) {
-      console.error('Failed to load my bidding history:', err);
-      toast.error('Failed to load bidding history logs.');
-    } finally {
-      setLoading(false);
-    }
-  };
+      return enriched;
+    },
+    enabled: !!user
+  });
 
-  useEffect(() => {
-    loadMyBids();
-  }, [user]);
+  const loadMyBids = () => {
+    queryClient.invalidateQueries({ queryKey: ['myEnrichedBids'] });
+  };
 
   const handleAction = (bid) => {
     if (bid.product.status === 'live') {

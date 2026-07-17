@@ -85,7 +85,6 @@ export const AppRoutes = () => {
         <Route path="auction/:auctionId" element={<LiveAuctionPage />} />
         <Route path="my-bids" element={<MyBidsPage />} />
         <Route path="notifications" element={<NotificationsPage />} />
-        <Route path="payments" element={<PaymentsPage />} />
         <Route path="reports" element={<MyReportsPage />} />
         <Route path="community-requests" element={<CommunityRequestsPage />} />
       </Route>

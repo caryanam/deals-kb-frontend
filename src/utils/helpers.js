@@ -96,3 +96,26 @@ export const compressImage = (file, maxWidth = 1024, maxHeight = 1024, quality =
     reader.onerror = (err) => reject(err);
   });
 };
+
+export const formatRelativeTime = (timeInput) => {
+  if (!timeInput) return 'Just now';
+  try {
+    const date = new Date(timeInput);
+    if (isNaN(date.getTime())) {
+      return timeInput;
+    }
+    const diffMs = Date.now() - date.getTime();
+    const diffSec = Math.floor(diffMs / 1000);
+    if (diffSec < 5) return 'Just now';
+    if (diffSec < 60) return `${diffSec}s ago`;
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin === 1) return '1m ago';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffHrs = Math.floor(diffMin / 60);
+    if (diffHrs === 1) return '1h ago';
+    if (diffHrs < 24) return `${diffHrs}h ago`;
+    return date.toLocaleDateString();
+  } catch (e) {
+    return timeInput;
+  }
+};

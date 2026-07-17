@@ -13,7 +13,8 @@ export const useAuctionSocket = (productId) => {
   const [highestBidder, setHighestBidder] = useState('');
   const [highestBidderId, setHighestBidderId] = useState('');
   const [bidHistory, setBidHistory] = useState([]);
-  const [timer, setTimer] = useState(120);
+  const [timer, setTimer] = useState(0);
+  const timerRef = useRef(0); // mirror of timer for stable tick closure
   const [winner, setWinner] = useState(null);
   const [error, setError] = useState(null);
 
@@ -54,14 +55,48 @@ export const useAuctionSocket = (productId) => {
     return () => clearInterval(interval);
   }, [productId, isConnected, syncAuctionData]);
 
-  // Local real-time smooth timer decrement
+  const parseDiffInSeconds = (end, start) => {
+    if (!end) return 0;
+    try {
+      const endTime = typeof end === 'number' 
+        ? (end > 10000000000 ? end : end * 1000) 
+        : new Date(end).getTime();
+      const startTime = start 
+        ? (typeof start === 'number' ? (start > 10000000000 ? start : start * 1000) : new Date(start).getTime()) 
+        : Date.now();
+      return Math.max(0, Math.round((endTime - startTime) / 1000));
+    } catch (e) {
+      console.warn("Failed to parse timer diff:", e);
+      return 0;
+    }
+  };
+
+  // When timer hits zero, retry syncing with backend every 2s until auction status is updated
   useEffect(() => {
-    if (auctionStatus !== 'live') return undefined;
+    if (timer > 0 || auctionStatus !== 'live') return undefined;
+
+    // Run immediately
+    syncAuctionData(true);
+
+    // Set retry interval
+    const interval = setInterval(() => {
+      syncAuctionData(true);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [timer, auctionStatus, syncAuctionData]);
+
+  // Local real-time smooth timer decrement — runs once on mount, never restarts
+  useEffect(() => {
     const tick = setInterval(() => {
-      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+      setTimer((prev) => {
+        const next = prev > 0 ? prev - 1 : 0;
+        timerRef.current = next;
+        return next;
+      });
     }, 1000);
     return () => clearInterval(tick);
-  }, [auctionStatus]);
+  }, []); // deliberately empty — tick is a stable clock, never restarted
 
   // Connect to real WebSocket
   const connect = useCallback(() => {
@@ -100,47 +135,88 @@ export const useAuctionSocket = (productId) => {
               if (data.current_bid !== undefined) setCurrentHighestBid(data.current_bid);
               if (data.highest_bidder_name) setHighestBidder(data.highest_bidder_name);
               if (data.highest_bidder_id) setHighestBidderId(data.highest_bidder_id);
-              if (data.timer !== undefined) setTimer(data.timer);
               if (data.winner_name) setWinner(data.winner_name);
               if (data.bids) setBidHistory(data.bids);
+              // Timer: prefer time_left, then derive from auction_end - server_time, then fall back to legacy timer field
+              if (data.time_left !== undefined) {
+                setTimer(Math.max(0, Math.round(data.time_left)));
+              } else if (data.auction_end && data.server_time) {
+                setTimer(parseDiffInSeconds(data.auction_end, data.server_time));
+              } else if (data.timer !== undefined) {
+                setTimer(Math.max(0, Math.round(data.timer)));
+              }
               break;
 
             case 'auction_started':
               setAuctionStatus('live');
-              setTimer(120);
+              // Trust backend for the starting timer — never assume 120
+              if (data.time_left !== undefined) {
+                setTimer(Math.max(0, Math.round(data.time_left)));
+              } else if (data.auction_end && data.server_time) {
+                setTimer(parseDiffInSeconds(data.auction_end, data.server_time));
+              } else if (data.duration !== undefined) {
+                setTimer(Math.max(0, Math.round(data.duration)));
+              }
+              // If none provided, keep current timer as-is — do NOT reset to 120
               break;
 
             case 'timer_tick':
+              // Always trust backend authoritative time
               if (data.time_left !== undefined) {
-                setTimer(data.time_left);
+                setTimer(Math.max(0, Math.round(data.time_left)));
+              } else if (data.auction_end && data.server_time) {
+                setTimer(parseDiffInSeconds(data.auction_end, data.server_time));
               } else if (data.timer !== undefined) {
-                setTimer(data.timer);
+                setTimer(Math.max(0, Math.round(data.timer)));
               }
               break;
 
-            case 'new_bid':
+            case 'new_bid': {
               // Update bid params dynamically
-              setCurrentHighestBid(data.amount);
-              setHighestBidder(data.bidderName || data.bidder_name);
-              setHighestBidderId(data.bidderId || data.bidder_id);
+              const bidAmount = data.current_bid !== undefined 
+                ? data.current_bid 
+                : (data.bid?.amount !== undefined ? data.bid.amount : (data.amount || 0));
+
+              const bidderName = data.highest_bidder_name 
+                || data.bid?.bidder_name 
+                || data.bidderName 
+                || data.bidder_name 
+                || '';
+
+              const bidderId = data.highest_bidder_id 
+                || data.bid?.bidder_id 
+                || data.bidderId 
+                || data.bidder_id 
+                || '';
+
+              setCurrentHighestBid(bidAmount);
+              setHighestBidder(bidderName);
+              setHighestBidderId(bidderId);
+
+              // Timer: only update if backend explicitly sends a new time — NEVER reset to 120
               if (data.time_left !== undefined) {
-                setTimer(data.time_left);
-              } else {
-                setTimer(120); // Fallback reset
+                setTimer(Math.max(0, Math.round(data.time_left)));
+              } else if (data.auction_end && data.server_time) {
+                setTimer(parseDiffInSeconds(data.auction_end, data.server_time));
               }
-              
+
               // Append bid to logs
               const newBid = {
-                id: data.id || 'b_' + Date.now(),
-                bidderName: data.bidderName || data.bidder_name,
-                amount: data.amount,
-                time: data.time || new Date().toLocaleTimeString()
+                id: data.bid?.bid_id || data.bid?.id || data.id || 'b_' + Date.now(),
+                bidder_name: bidderName,
+                bidderName: bidderName,
+                amount: bidAmount,
+                created_at: data.bid?.created_at || new Date().toISOString(),
+                time: data.bid?.created_at 
+                  ? new Date(data.bid.created_at).toLocaleTimeString() 
+                  : (data.time || new Date().toLocaleTimeString())
               };
               setBidHistory(prev => {
-                if (prev.some(b => b.amount === data.amount)) return prev;
+                if (prev.some(b => b.amount === newBid.amount && (b.bidder_name === newBid.bidder_name || b.bidderName === newBid.bidderName))) return prev;
                 return [newBid, ...prev];
               });
               break;
+            }
 
             case 'auction_ended':
               setAuctionStatus('ended');
@@ -202,14 +278,14 @@ export const useAuctionSocket = (productId) => {
       }
 
       const res = await placeBidApi(productId, amount);
-      
-      // Update local states immediately to keep UI ultra responsive
+
+      // Update local bid state immediately for responsiveness
+      // Do NOT touch the timer here — the backend's new_bid / timer_tick WS event will correct it
       setCurrentHighestBid(amount);
       if (user) {
         setHighestBidder(user.name);
         setHighestBidderId(user.user_id);
       }
-      setTimer(120);
 
       return res;
     } catch (err) {

@@ -1,44 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, Check, Clock, Eye } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getNotifications, markNotificationAsRead } from '../../api/notificationApi';
 import { formatDate } from '../../utils/helpers';
 
 export const NotificationsPage = () => {
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const fetchAlerts = async () => {
-    try {
-      setLoading(true);
-      const data = await getNotifications();
-      setNotifications(data || []);
-    } catch (err) {
-      console.error('Failed to fetch notifications:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: notificationsData = [], isLoading: loading } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: getNotifications
+  });
+  const notifications = Array.isArray(notificationsData) ? notificationsData : [];
 
-  useEffect(() => {
-    fetchAlerts();
-  }, []);
-
-  const handleMarkRead = async (id) => {
-    try {
-      await markNotificationAsRead(id);
-      // Reload alerts
-      fetchAlerts();
-    } catch (err) {
+  const markReadMutation = useMutation({
+    mutationFn: markNotificationAsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+    onError: (err) => {
       console.error('Failed to mark notification read:', err);
     }
+  });
+
+  const handleMarkRead = (id) => {
+    markReadMutation.mutate(id);
   };
 
   const handleInspectProduct = (productId) => {
     if (productId) {
       navigate(`/buyer/listings/${productId}`);
     }
+  };
+
+  const fetchAlerts = () => {
+    queryClient.invalidateQueries({ queryKey: ['notifications'] });
   };
 
   return (

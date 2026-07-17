@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, RefreshCw, AlertCircle } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getProducts } from '../../api/productApi';
 import ListingCard from '../../components/listings/ListingCard';
 import { useAuth } from '../../hooks/useAuth';
@@ -10,13 +11,9 @@ import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
 export const MarketplacePage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
   const initialStatus = searchParams.get('status');
-
-  const [listings, setListings] = useState([]);
-  const [filteredListings, setFilteredListings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // Search and filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,34 +21,25 @@ export const MarketplacePage = () => {
   const [selectedStatus, setSelectedStatus] = useState(initialStatus || 'live_or_upcoming');
   const [showPlans, setShowPlans] = useState(false);
 
-  const fetchListings = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Build parameters according to backend spec
-      const params = {};
-      if (selectedType !== 'all') {
-        params.product_type = selectedType;
-      }
-      if (selectedStatus !== 'all') {
-        params.status_filter = selectedStatus;
-      }
-
-      const data = await getProducts(params);
-      setListings(data || []);
-      setFilteredListings(data || []);
-    } catch (err) {
-      console.error('Error fetching marketplace listings:', err);
-      setError(err.response?.data?.detail || err.response?.data?.message || 'Unable to load products. Please try again.');
-    } finally {
-      setLoading(false);
+  // Build parameters according to backend spec
+  const params = useMemo(() => {
+    const p = {};
+    if (selectedType !== 'all') {
+      p.product_type = selectedType;
     }
-  };
-
-  useEffect(() => {
-    fetchListings();
+    if (selectedStatus !== 'all') {
+      p.status_filter = selectedStatus;
+    }
+    return p;
   }, [selectedType, selectedStatus]);
+
+  const { data: listingsData = [], isLoading: loading, error: errorObj } = useQuery({
+    queryKey: ['products', params],
+    queryFn: () => getProducts(params)
+  });
+  const listings = Array.isArray(listingsData) ? listingsData : [];
+
+  const error = errorObj ? (errorObj.response?.data?.detail || errorObj.response?.data?.message || 'Unable to load products. Please try again.') : null;
 
   useEffect(() => {
     if (initialStatus) {
@@ -60,21 +48,23 @@ export const MarketplacePage = () => {
   }, [initialStatus]);
 
   // Frontend local search filters
-  useEffect(() => {
+  const filteredListings = useMemo(() => {
     let result = listings;
-
     if (searchTerm.trim() !== '') {
       const term = searchTerm.toLowerCase();
       result = result.filter(
         l => 
-          l.title.toLowerCase().includes(term) ||
-          l.brand.toLowerCase().includes(term) ||
-          l.model.toLowerCase().includes(term)
+          l.title?.toLowerCase().includes(term) ||
+          l.brand?.toLowerCase().includes(term) ||
+          l.model?.toLowerCase().includes(term)
       );
     }
-
-    setFilteredListings(result);
+    return result;
   }, [searchTerm, listings]);
+
+  const fetchListings = () => {
+    queryClient.invalidateQueries({ queryKey: ['products'] });
+  };
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
