@@ -23,7 +23,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../hooks/useAuth';
 import { getProducts, getProductById, getProductBids, startAuction } from '../../api/productApi';
 import { getSellerChatRequests } from '../../api/chatRequestApi';
-import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials } from '../../utils/helpers';
+import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
 import { toast } from 'react-toastify';
 
 const formatDateTime = (value) => {
@@ -526,7 +526,14 @@ export const MyListingsPage = () => {
                     }}>
                       <Trophy size={14} />
                       <span>
-                        Sold to {product.winner_name ? <span className="bidder-avatar-chip bidder-avatar-chip--compact" style={{ margin: '0 0.3rem', verticalAlign: 'middle' }}>{getNameInitials(product.winner_name)}</span> : <strong>No winner</strong>} for <strong>{formatINR(product.current_bid || 0)}</strong>
+                        Sold to {product.winner_name ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', verticalAlign: 'middle' }}>
+                            <span className="bidder-avatar-chip bidder-avatar-chip--compact" style={{ margin: 0 }}>{getNameInitials(product.winner_name)}</span>
+                            <strong style={{ fontWeight: 800 }}>{product.winner_name}</strong>
+                          </span>
+                        ) : (
+                          <strong>No winner</strong>
+                        )} for <strong>{formatINR(product.current_bid || 0)}</strong>
                       </span>
                     </div>
                   )}
@@ -901,8 +908,11 @@ export const MyListingsPage = () => {
                           alignItems: 'flex-start'
                         }}>
                           <div style={{ minWidth: 0 }}>
-                            <div className="bidder-avatar-row">
+                            <div className="bidder-avatar-row" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                               <span className="bidder-avatar-chip bidder-avatar-chip--compact">{getNameInitials(bid.bidder_name || 'Bidder')}</span>
+                              <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1F1A1D' }}>
+                                {getBidderDisplayName(bid.bidder_name, null, null)}
+                              </span>
                             </div>
                             <span style={{ display: 'block', fontSize: '0.76rem', color: '#8B8278', marginTop: '0.18rem' }}>{formatDateTime(bid.created_at)}</span>
                             {index === 0 && (

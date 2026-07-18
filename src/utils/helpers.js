@@ -131,3 +131,22 @@ export const formatRelativeTime = (timeInput) => {
     return timeInput;
   }
 };
+
+export const getBidderDisplayName = (bidderName, bidderId, currentUser) => {
+  const name = String(bidderName || '').trim();
+  if (!name) return 'Anonymous';
+  
+  // If currentUser exists and bidderId matches, show full name
+  if (currentUser && bidderId && currentUser.user_id === bidderId) {
+    return name;
+  }
+  
+  // Otherwise, extract initials of the name
+  const parts = name.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'Anonymous';
+  if (parts.length === 1) {
+    return `${parts[0][0].toUpperCase()}.`;
+  }
+  
+  return parts.map(p => `${p[0].toUpperCase()}.`).join(' ');
+};

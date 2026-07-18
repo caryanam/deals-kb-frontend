@@ -4,7 +4,7 @@ import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, RefreshCw, AlertCircle,
 import { useAuth } from '../../hooks/useAuth';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { getProductById } from '../../api/productApi';
-import { formatCurrency, safeParseJSON, formatRelativeTime, getNameInitials } from '../../utils/helpers';
+import { formatCurrency, safeParseJSON, formatRelativeTime, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
 import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
 
 const formatTimer = (seconds = 0) => {
@@ -332,8 +332,18 @@ export const LiveAuctionPage = () => {
               <h3 style={{ fontSize: '3rem', fontWeight: 900, color: '#10b981', margin: '0.25rem 0', letterSpacing: '-0.03em' }}>
                 {formatCurrency(currentHighestBid || 0)}
               </h3>
-              <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: 0 }}>
-                Highest Bidder:{' '}<span className="bidder-avatar-row">{highestBidder ? <span className="bidder-avatar-chip">{getNameInitials(highestBidder)}</span> : <strong style={{ color: '#ffffff' }}>No bids placed</strong>}</span>
+              <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: 0, display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}>
+                Highest Bidder:{' '}
+                {highestBidder ? (
+                  <span className="bidder-avatar-row" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <span className="bidder-avatar-chip">{getNameInitials(highestBidder)}</span>
+                    <span style={{ fontWeight: 800, color: '#ffffff', fontSize: '0.85rem' }}>
+                      {getBidderDisplayName(highestBidder, highestBidderId, user)}
+                    </span>
+                  </span>
+                ) : (
+                  <strong style={{ color: '#ffffff' }}>No bids placed</strong>
+                )}
               </p>
             </div>
 
@@ -374,8 +384,13 @@ export const LiveAuctionPage = () => {
                 <p style={{ fontSize: '0.9rem', color: '#8B8278', margin: 0 }}>
                   Winner:{' '}
                   {winner || highestBidder ? (
-                    <span className="bidder-avatar-chip" style={{ fontSize: '0.9rem', minWidth: '2.35rem', height: '2.35rem' }}>
-                      {winner ? getNameInitials(winner) : getNameInitials(highestBidder)}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', verticalAlign: 'middle' }}>
+                      <span className="bidder-avatar-chip" style={{ fontSize: '0.85rem', minWidth: '2.2rem', height: '2.2rem', margin: 0 }}>
+                        {getNameInitials(winner || highestBidder)}
+                      </span>
+                      <strong style={{ color: '#ffffff', fontSize: '0.95rem' }}>
+                        {getBidderDisplayName(winner || highestBidder, highestBidderId, user)}
+                      </strong>
                     </span>
                   ) : (
                     <strong style={{ color: '#ffffff', fontSize: '1.1rem' }}>No winning bids registered</strong>
@@ -464,9 +479,12 @@ export const LiveAuctionPage = () => {
                     }}
                   >
                     <div>
-                      <div className="bidder-avatar-row">
+                      <div className="bidder-avatar-row" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                         <span className="bidder-avatar-chip bidder-avatar-chip--compact">
                           {getNameInitials(bid.bidderName || bid.bidder_name)}
+                        </span>
+                        <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1F1A1D' }}>
+                          {getBidderDisplayName(bid.bidderName || bid.bidder_name, bid.bidderId || bid.bidder_id, user)}
                         </span>
                         {index === 0 && (
                         <span style={{
