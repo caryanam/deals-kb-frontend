@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, RefreshCw, AlertCircle } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -67,14 +67,14 @@ export const MarketplacePage = () => {
   };
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="dashboard-page" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Page Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="responsive-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>Product Marketplace</h1>
           <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Browse approved items, join live auctions, and place bids in real time</p>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <div className="responsive-page-actions" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <button 
             onClick={fetchListings} 
             className="btn btn-secondary" 
@@ -109,7 +109,7 @@ export const MarketplacePage = () => {
 
       {/* Search and Filters Card */}
       <div className="card" style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <div className="responsive-filter-row" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           
           {/* Search bar */}
           <div style={{ flex: 2, minWidth: '280px', position: 'relative' }}>
@@ -217,3 +217,4 @@ export const MarketplacePage = () => {
 };
 
 export default MarketplacePage;
+

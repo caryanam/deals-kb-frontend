@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Gavel, Landmark, Bell, Trophy, ArrowRight, Clock, AlertCircle, RefreshCw } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -55,9 +55,9 @@ export const BuyerDashboard = () => {
   };
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="dashboard-page" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Welcome Banner */}
-      <div style={{
+      <div className="responsive-banner" style={{
         background: 'linear-gradient(to right, #1F1A1D, #2d0a32)',
         padding: '2.5rem',
         borderRadius: '1rem',
@@ -78,7 +78,7 @@ export const BuyerDashboard = () => {
             Browse the marketplace, place live bids on verified products, and track your wins.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div className="responsive-banner-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <button 
             onClick={loadDashboardData}
             disabled={loading}
@@ -117,7 +117,7 @@ export const BuyerDashboard = () => {
       )}
 
       {/* Metrics Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2.5rem' }}>
+      <div className="responsive-stats-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2.5rem' }}>
         
         {/* Total listings */}
         <div 
@@ -181,7 +181,7 @@ export const BuyerDashboard = () => {
       </div>
 
       {/* Main Content Layout splits */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }} className="grid-cols-2">
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }} className="grid-cols-2 responsive-main-split">
         {/* Marketplace Shortcut info */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', borderBottom: '1px solid #D8CFC1', paddingBottom: '0.75rem' }}>
@@ -245,3 +245,4 @@ export const BuyerDashboard = () => {
 };
 
 export default BuyerDashboard;
+

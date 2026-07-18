@@ -562,7 +562,7 @@ export const Topbar = ({ onToggleSidebar }) => {
 
   return (
     <>
-      <header style={{
+      <header className="dashboard-topbar" style={{
         height: '70px',
         backgroundColor: '#FAF6EA',
         borderBottom: '1px solid #D8CFC1',
@@ -589,7 +589,7 @@ export const Topbar = ({ onToggleSidebar }) => {
           >
             <Menu size={24} />
           </button>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#1F1A1D' }}>
+          <h2 className="dashboard-topbar-title" style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', color: '#1F1A1D' }}>
             DealsKB C2C Portal
           </h2>
         </div>
@@ -2165,4 +2165,5 @@ export const Topbar = ({ onToggleSidebar }) => {
 };
 
 export default Topbar;
+
 

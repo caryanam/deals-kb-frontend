@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AlertTriangle, Camera, CheckCircle2, FileText, Film, Loader2, Upload, X } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -480,7 +480,7 @@ export const RelistListing = () => {
   };
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", padding: '1.5rem 0' }}>
+    <div className="dashboard-page listing-form-page" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", padding: '1.5rem 0' }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         
         <div style={{ marginBottom: '2rem' }}>
@@ -499,7 +499,7 @@ export const RelistListing = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '1.5rem' }}>
+        <form className="responsive-listing-form responsive-listing-form--relist" onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '1.5rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             
             <section className="card">
@@ -523,7 +523,7 @@ export const RelistListing = () => {
 
               <Input label="Listing Title *" value={title} onChange={setTitle} placeholder={TITLE_PLACEHOLDERS[productType]} />
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="responsive-fields-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <Select label="Brand *" value={brand} onChange={handleBrandChange} options={brandModelData?.brands || []} placeholder={brandModelData?.brandPlaceholder || ''} />
                 <Select label="Model *" value={model} onChange={setModel} options={brandModelData?.modelsByBrand?.[brand] || []} placeholder={brand ? (brandModelData?.modelPlaceholder || '') : 'Select Brand First'} disabled={!brand} />
               </div>
@@ -533,7 +533,7 @@ export const RelistListing = () => {
               <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>{sectionTitle[productType]}</h2>
               {(productType === 'car' || productType === 'bike') && (
                 <>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+                  <div className="responsive-fields-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
                     <Input label="Manufacturing Year" type="number" value={specs.year} onChange={(v) => updateSpec('year', v)} placeholder="e.g. 2020" />
                     <Input label="Kilometer Driven" type="number" value={specs.kmDriven} onChange={(v) => updateSpec('kmDriven', v)} placeholder="e.g. 45000" />
                     <Input label="Insurance Details" value={specs.insuranceStatus} onChange={(v) => updateSpec('insuranceStatus', v)} placeholder="e.g. Valid till March 2026" />
@@ -546,12 +546,12 @@ export const RelistListing = () => {
 
               {productType === 'laptop' && (
                 <>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+                  <div className="responsive-fields-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
                     <Input label="Processor" value={specs.processor} onChange={(v) => updateSpec('processor', v)} placeholder="e.g. Intel i5 / Ryzen 5" />
                     <Input label="RAM *" value={specs.ram} onChange={(v) => updateSpec('ram', v)} placeholder="e.g. 8GB" />
                     <Input label="Storage *" value={specs.storage} onChange={(v) => updateSpec('storage', v)} placeholder="e.g. 512GB SSD" />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+                  <div className="responsive-fields-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
                     <Input label="Graphics Card" value={specs.graphics} onChange={(v) => updateSpec('graphics', v)} placeholder="Graphics card" />
                     <Input label="Battery Backup" value={specs.batteryBackup} onChange={(v) => updateSpec('batteryBackup', v)} placeholder="e.g. 3-4 hours" />
                     <Input label="Battery Health" value={specs.batteryHealth} onChange={(v) => updateSpec('batteryHealth', v)} placeholder="Battery health" />
@@ -561,7 +561,7 @@ export const RelistListing = () => {
 
               {productType === 'mobile' && (
                 <>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+                  <div className="responsive-fields-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
                     <Input label="Storage *" value={specs.storage} onChange={(v) => updateSpec('storage', v)} placeholder="e.g. 128GB" />
                     <Input label="RAM *" value={specs.ram} onChange={(v) => updateSpec('ram', v)} placeholder="e.g. 6GB" />
                     <Input label="IMEI Number" value={specs.imeiNumber} onChange={(v) => updateSpec('imeiNumber', v)} placeholder="IMEI Number" />
@@ -590,11 +590,11 @@ export const RelistListing = () => {
             </section>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="responsive-form-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             
             <div className="card">
               <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Product Photos</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.75rem' }}>
+              <div className="responsive-photo-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.75rem' }}>
                 {(PHOTO_SLOTS[productType] || []).map((slot) => (
                   <PhotoSlot
                     key={slot}
@@ -647,7 +647,7 @@ export const RelistListing = () => {
               )}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.85rem', flexWrap: 'wrap' }}>
+            <div className="responsive-form-actions" style={{ display: 'flex', alignItems: 'stretch', gap: '0.85rem', flexWrap: 'wrap' }}>
               {errorMsg && (
                 <div style={{ flex: '2 1 280px', minHeight: '48px', display: 'flex', alignItems: 'center', gap: '0.65rem', backgroundColor: '#fef2f2', border: '1px solid #fca5a5', padding: '0.7rem 0.85rem', borderRadius: '0.85rem', color: '#dc2626', lineHeight: 1.3, fontWeight: 800, fontSize: '0.86rem' }}>
                   <AlertTriangle style={{ color: '#ef4444', flexShrink: 0 }} size={18} />
@@ -687,10 +687,10 @@ export const RelistListing = () => {
 };
 
 const TITLE_PLACEHOLDERS = {
-  car: 'e.g. Hyundai Creta 2020 – well maintained',
-  bike: 'e.g. Yamaha R15 2021 – minor scratches',
-  mobile: 'e.g. iPhone 13 128GB – good condition',
-  laptop: 'e.g. Dell Inspiron i5 – lightly used'
+  car: 'e.g. Hyundai Creta 2020 â€“ well maintained',
+  bike: 'e.g. Yamaha R15 2021 â€“ minor scratches',
+  mobile: 'e.g. iPhone 13 128GB â€“ good condition',
+  laptop: 'e.g. Dell Inspiron i5 â€“ lightly used'
 };
 
 const Input = ({ label, value, onChange, placeholder, type = 'text' }) => (
@@ -879,4 +879,5 @@ const UploadedBadge = ({ label, onRemove }) => (
 );
 
 export default RelistListing;
+
 

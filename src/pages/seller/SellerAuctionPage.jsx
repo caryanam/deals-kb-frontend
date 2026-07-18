@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Gavel, Clock, Trophy, RefreshCw, BarChart2, Share2 } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -79,9 +79,9 @@ export const SellerAuctionPage = () => {
   const uniqueBiddersCount = new Set(bidHistory.map(b => b.bidderName || b.bidder_name)).size;
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="dashboard-page" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+      <div className="responsive-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <button 
           onClick={() => navigate(`${basePath}/my-listings`)} 
           style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: '#8B8278', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}
@@ -89,7 +89,7 @@ export const SellerAuctionPage = () => {
           <ArrowLeft size={16} /> Back to My Listings
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <div className="responsive-page-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <button
             type="button"
             onClick={handleShareAuctionLink}
@@ -122,7 +122,7 @@ export const SellerAuctionPage = () => {
       </div>
 
       {/* Grid wrapper */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="grid-cols-2">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="grid-cols-2 responsive-auction-grid">
         
         {/* Left column: product summary info */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -327,3 +327,4 @@ export const SellerAuctionPage = () => {
 };
 
 export default SellerAuctionPage;
+

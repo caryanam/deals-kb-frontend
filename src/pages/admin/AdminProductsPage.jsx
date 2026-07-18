@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { RefreshCw, PlayCircle, BarChart2, ShieldAlert, X, Gavel, Clock, Trophy, Wifi, AlertTriangle, Film, FileText } from 'lucide-react';
 import { getProducts } from '../../api/productApi';
@@ -287,9 +287,9 @@ export const AdminProductsPage = () => {
   });
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="dashboard-page" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="responsive-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>Approved Products</h1>
           <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Monitor active listings, bidding timers, and concluded auctions on DealsKB</p>
@@ -332,7 +332,7 @@ export const AdminProductsPage = () => {
       </div>
 
       {/* Main Grid: Products Table + Live Monitor Panel */}
-      <div style={{ display: 'grid', gridTemplateColumns: selectedLiveId ? '1.4fr 1fr' : '1fr', gap: '1.5rem', alignItems: 'start' }}>
+      <div className="admin-products-layout" style={{ display: 'grid', gridTemplateColumns: selectedLiveId ? '1.4fr 1fr' : '1fr', gap: '1.5rem', alignItems: 'start' }}>
         
         {/* Products Table Card */}
         <div className="card" style={{ padding: '1.5rem', overflowX: 'auto' }}>
@@ -738,3 +738,4 @@ export const AdminProductsPage = () => {
 };
 
 export default AdminProductsPage;
+

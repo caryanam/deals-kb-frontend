@@ -12,15 +12,19 @@ const LandingNavbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.location.pathname !== '/') return;
-      const sections = ['home', 'marketplace', 'how-it-works', 'about-us'];
-      const scrollPosition = window.scrollY + 120;
 
+      // Bottom of page check
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
+        setActiveSection('about-us');
+        return;
+      }
+
+      const sections = ['home', 'marketplace', 'how-it-works', 'about-us'];
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 150 && rect.bottom > 150) {
             setActiveSection(section);
             break;
           }

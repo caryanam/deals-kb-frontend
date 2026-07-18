@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, ArrowUpRight, Plus, RefreshCw, AlertCircle, PlayCircle, ImageOff } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -30,9 +30,9 @@ const QUICK_INCREMENTS = {
 
 const formatQuickIncrementLabel = (val) => {
   if (val >= 1000) {
-    return `₹${val / 1000}k`;
+    return `â‚¹${val / 1000}k`;
   }
-  return `₹${val}`;
+  return `â‚¹${val}`;
 };
 
 export const LiveAuctionPage = () => {
@@ -153,9 +153,9 @@ export const LiveAuctionPage = () => {
   const isBiddingDisabled = submitting || auctionStatus !== 'live' || timer <= 0 || product?.is_cancelled || auctionStatus === 'cancelled';
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="dashboard-page" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Top Nav links */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+      <div className="responsive-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <button 
           onClick={() => navigate('/buyer/marketplace')} 
           style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', color: '#8B8278', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}
@@ -164,7 +164,7 @@ export const LiveAuctionPage = () => {
         </button>
 
         {/* Connection status badge */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div className="responsive-page-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span style={{
             width: '8px',
             height: '8px',
@@ -184,7 +184,7 @@ export const LiveAuctionPage = () => {
       </div>
 
       {/* Main Grid splits details */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '2rem' }} className="grid-cols-2">
+      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '2rem' }} className="grid-cols-2 responsive-auction-grid">
         
         {/* Left column: Product Summary Info */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -313,7 +313,7 @@ export const LiveAuctionPage = () => {
                 gap: '0.35rem',
                 textAlign: 'left'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div className="responsive-page-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <AlertCircle size={18} />
                   <span>Auction Cancelled by Moderator</span>
                 </div>
@@ -427,7 +427,7 @@ export const LiveAuctionPage = () => {
               <form onSubmit={handleBidSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <div style={{ position: 'relative', flex: 1 }}>
-                    <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: 800, color: '#8B8278' }}>₹</span>
+                    <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: 800, color: '#8B8278' }}>â‚¹</span>
                     <input
                       type="number"
                       className="form-control"
@@ -558,3 +558,4 @@ export const LiveAuctionPage = () => {
 };
 
 export default LiveAuctionPage;
+

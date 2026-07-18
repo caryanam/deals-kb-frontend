@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusCircle, ClipboardList, CheckCircle2, Gavel, Award, Sparkles, MessageSquare, ArrowRight, AlertTriangle, RefreshCw, ShieldCheck, Loader2 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { getProducts } from '../../api/productApi';
 import { getMyPlans } from '../../api/paymentApi';
+import { toast } from 'react-toastify';
 // import { triggerPayment } from '../../utils/paymentHelper';
 
 export const SellerDashboard = () => {
@@ -76,9 +77,9 @@ export const SellerDashboard = () => {
   };
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="dashboard-page" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Greeting Banner */}
-      <div style={{
+      <div className="responsive-banner" style={{
         background: 'linear-gradient(to right, #1F1A1D, #2d0a32)',
         padding: '2.5rem',
         borderRadius: '1rem',
@@ -99,7 +100,7 @@ export const SellerDashboard = () => {
             List your products, check verification statuses, and trigger live 2-minute bidding sessions.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div className="responsive-banner-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <button 
             onClick={loadSellerStats}
             disabled={loading}
@@ -143,12 +144,12 @@ export const SellerDashboard = () => {
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
               <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Monthly Plan (Mobile/Laptop/Bike)</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>₹1,000/month unlimited listings for Mobile, Laptop & Bike.</p>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>â‚¹1,000/month unlimited listings for Mobile, Laptop & Bike.</p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Plan (₹1000)
+            Activate Plan (â‚¹1000)
           </button>
         </div>
       )}
@@ -159,18 +160,18 @@ export const SellerDashboard = () => {
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
               <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Car Monthly Plan (Car)</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>₹1,999/month unlimited listings for Cars.</p>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>â‚¹1,999/month unlimited listings for Cars.</p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_car_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_car_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Car Plan (₹1999)
+            Activate Car Plan (â‚¹1999)
           </button>
         </div>
       )}
 
       {/* Stats Counters Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.25rem', marginBottom: '2.5rem' }}>
+      <div className="responsive-stats-grid-5" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.25rem', marginBottom: '2.5rem' }}>
         
         {/* Total Listings */}
         <div 
@@ -249,7 +250,7 @@ export const SellerDashboard = () => {
       </div>
 
       {/* Main Content Layout splits */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr', gap: '2rem' }} className="grid-cols-2">
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr', gap: '2rem' }} className="grid-cols-2 responsive-main-split">
         
         {/* Helper Instructions panel */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -292,3 +293,4 @@ export const SellerDashboard = () => {
 };
 
 export default SellerDashboard;
+

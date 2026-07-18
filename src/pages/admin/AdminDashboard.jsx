@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, UserCheck, ShieldCheck, Store, ClipboardList, CheckCircle2, Gavel, Award, ArrowRight, Activity, IndianRupee, RefreshCw, XCircle, Filter } from 'lucide-react';
 import { getAdminAnalytics } from '../../api/adminApi';
@@ -63,9 +63,9 @@ export const AdminDashboard = () => {
   });
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="dashboard-page" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Welcome banner */}
-      <div style={{
+      <div className="responsive-banner" style={{
         background: 'linear-gradient(to right, #1F1A1D, #2d0a32)',
         padding: '2.5rem',
         borderRadius: '1rem',
@@ -86,7 +86,7 @@ export const AdminDashboard = () => {
             Manage user rosters, inspect and verify product specifications, and review real-time platform metrics.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <div className="responsive-banner-actions" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button 
             onClick={() => navigate('/admin/products?filter=live')}
             className="btn btn-primary"
@@ -431,3 +431,4 @@ export const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

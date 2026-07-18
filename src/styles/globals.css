@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* ── Brand Palette ────────────────────────────────── */
+  /* â”€â”€ Brand Palette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --brand-cream:        #FAF6EA;   /* Page background         */
   --brand-purple:       #6B1B71;   /* Main primary / logo     */
   --brand-purple-hover: #7A2181;   /* Button hover            */
@@ -13,7 +13,7 @@
   --brand-dusty:        #AD7E94;   /* Illustration light shade*/
   --brand-tan:          #F5ECDD;   /* Illustration bg tan     */
 
-  /* ── Semantic Aliases (used by components) ───────── */
+  /* â”€â”€ Semantic Aliases (used by components) â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --primary-navy:        var(--brand-dark);
   --secondary-navy:      #2d1f2e;          /* Slightly lighter dark purple for sidebar borders */
   --accent-blue:         var(--brand-purple);
@@ -27,36 +27,36 @@
   --bg-tan:              var(--brand-tan);
   --border-color:        var(--brand-border);
 
-  /* ── Text ─────────────────────────────────────────── */
+  /* â”€â”€ Text â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --text-primary:   var(--brand-dark);
   --text-secondary: var(--brand-muted);
   --text-muted:     #a89f96;
   --text-light:     #FAF6EA;
 
-  /* ── Fonts ─────────────────────────────────────────── */
+  /* â”€â”€ Fonts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --font-headings: 'Outfit', sans-serif;
   --font-body:     'Plus Jakarta Sans', sans-serif;
 
-  /* ── Shadows ───────────────────────────────────────── */
+  /* â”€â”€ Shadows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --shadow-sm:      0 1px 2px 0 rgba(107, 27, 113, 0.06);
   --shadow-md:      0 4px 6px -1px rgba(107, 27, 113, 0.1), 0 2px 4px -1px rgba(107, 27, 113, 0.06);
   --shadow-lg:      0 10px 15px -3px rgba(107, 27, 113, 0.1), 0 4px 6px -2px rgba(107, 27, 113, 0.05);
   --shadow-premium: 0 20px 25px -5px rgba(107, 27, 113, 0.12), 0 10px 10px -5px rgba(107, 27, 113, 0.06);
 
-  /* ── Radii ─────────────────────────────────────────── */
+  /* â”€â”€ Radii â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --radius-sm:   0.375rem;
   --radius-md:   0.75rem;
   --radius-lg:   1rem;
   --radius-full: 9999px;
 
-  /* ── Transitions ───────────────────────────────────── */
+  /* â”€â”€ Transitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --transition-fast:   0.15s ease;
   --transition-normal: 0.25s ease;
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Reset & Base                                           */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -92,9 +92,9 @@ a {
   transition: var(--transition-fast);
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Buttons                                                */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -175,9 +175,9 @@ a {
   box-shadow: none !important;
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Cards                                                  */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .card {
   background: var(--bg-white);
   border: 1px solid var(--brand-border);
@@ -192,9 +192,9 @@ a {
   box-shadow: var(--shadow-md);
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Form Elements                                          */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .form-group {
   margin-bottom: 1.25rem;
 }
@@ -229,9 +229,9 @@ a {
   box-shadow: 0 0 0 3px rgba(107, 27, 113, 0.12);
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Badges                                                 */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -275,9 +275,9 @@ a {
   100% { opacity: 1; }
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Scrollbars                                             */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -296,9 +296,9 @@ a {
   background: var(--brand-muted);
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Grid Utilities                                         */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .grid { display: grid; gap: 1.5rem; }
 .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -315,35 +315,38 @@ a {
   .grid-cols-2 { grid-template-columns: 1fr; }
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Dashboard Layout (Vahan Finserv Style Structure)       */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dashboard-shell {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100dvh;
   background: #fbf5ea;
+  overflow-x: clip;
 }
 
 .dashboard-scroll-page {
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background: #fbf5ea;
 }
 
 .dashboard-main-area {
-  min-height: 100vh;
-  display: flex;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
   align-items: stretch;
+  flex: 1;
 }
 
 .dashboard-sidebar {
   width: 260px;
+  min-width: 260px;
   flex-shrink: 0;
-  height: 100vh;
+  min-height: 100dvh;
   position: sticky;
   top: 0;
-  align-self: flex-start;
+  align-self: start;
   background: linear-gradient(180deg, #3b0038 0%, #4b003f 45%, #260027 100%);
   color: #ffffff;
   display: flex;
@@ -371,6 +374,9 @@ a {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .sidebar-item,
@@ -404,15 +410,15 @@ a {
 }
 
 .dashboard-right {
-  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
 }
 
+.dashboard-topbar,
 .dashboard-header,
 .topbar-wrapper {
-  height: 72px;
+  min-height: 72px !important;
   flex-shrink: 0;
   position: sticky;
   top: 0;
@@ -422,21 +428,30 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  gap: 1rem;
+  padding: 0 32px !important;
 }
 
+.dashboard-topbar-left,
+.dashboard-topbar-right,
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dashboard-topbar-left,
+.dashboard-topbar-right {
+  min-width: 0;
+}
+
+.dashboard-topbar-title,
 .dashboard-header h2,
 .topbar-title {
   margin: 0;
   font-size: 20px;
   font-weight: 800;
   color: #111111;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
 }
 
 .user-badge {
@@ -457,8 +472,118 @@ a {
 
 .dashboard-content {
   flex: 1;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
   padding: 28px 32px 48px;
   background: #fbf5ea;
+}
+
+.app-container,
+.dashboard-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.responsive-banner,
+.responsive-page-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  flex-wrap: wrap !important;
+}
+
+.responsive-banner-actions,
+.responsive-page-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  flex-wrap: wrap !important;
+}
+
+.responsive-stats-grid-4 {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 1.25rem !important;
+}
+
+.responsive-stats-grid-5 {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 1.25rem !important;
+}
+
+.responsive-main-split,
+.responsive-auction-grid,
+.responsive-listing-form,
+.responsive-listing-form--relist,
+.admin-products-layout {
+  display: grid !important;
+  gap: 1.5rem !important;
+}
+
+.responsive-listing-form {
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr) !important;
+}
+
+.responsive-listing-form--relist {
+  grid-template-columns: 1.6fr 1fr !important;
+}
+
+.responsive-fields-2 {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1rem !important;
+}
+
+.responsive-fields-3 {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 1rem !important;
+}
+
+.responsive-photo-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.75rem !important;
+}
+
+.responsive-filter-row {
+  display: flex !important;
+  gap: 1rem !important;
+  flex-wrap: wrap !important;
+}
+
+.responsive-form-sidebar,
+.responsive-form-main {
+  min-width: 0;
+}
+
+.responsive-form-actions {
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 0.85rem !important;
+  flex-wrap: wrap !important;
+}
+
+.seller-listing-detail-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.95fr) !important;
+  gap: 1.5rem !important;
+}
+
+.seller-listing-photo-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+  gap: 0.9rem !important;
+}
+
+.seller-listing-spec-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.8rem !important;
 }
 
 .dashboard-scroll-page footer,
@@ -472,16 +597,98 @@ a {
   z-index: 100;
 }
 
-/* ─────────────────────────────────────────────────────── */
-/*  Sidebar Responsive                                     */
-/* ─────────────────────────────────────────────────────── */
+.mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(31, 26, 29, 0.65);
+  z-index: 45;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+}
+
+.mobile-backdrop.backdrop-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 1280px) {
+  .dashboard-content {
+    padding: 24px 24px 40px;
+  }
+
+  .dashboard-topbar,
+  .dashboard-header,
+  .topbar-wrapper {
+    padding: 0 24px !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .responsive-stats-grid-5 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .responsive-listing-form,
+  .responsive-listing-form--relist,
+  .responsive-auction-grid,
+  .seller-listing-detail-grid,
+  .admin-products-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-main-area {
+    grid-template-columns: 232px minmax(0, 1fr);
+  }
+
+  .dashboard-sidebar {
+    width: 232px;
+    min-width: 232px;
+  }
+
+  .responsive-stats-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .responsive-stats-grid-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .responsive-fields-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .dashboard-topbar,
+  .dashboard-header,
+  .topbar-wrapper {
+    min-height: 72px !important;
+    padding: 12px 20px !important;
+  }
+}
+
 @media (max-width: 768px) {
+  .dashboard-shell,
+  .dashboard-scroll-page,
+  .dashboard-main-area {
+    min-height: 100dvh;
+  }
+
+  .dashboard-main-area {
+    display: block;
+  }
+
   .dashboard-sidebar {
     position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
+    width: min(82vw, 300px);
+    min-width: min(82vw, 300px);
     transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 60;
   }
 
   .dashboard-sidebar.open {
@@ -492,35 +699,81 @@ a {
     width: 100%;
   }
 
-  .dashboard-main {
-    padding: 20px 16px;
+  .dashboard-topbar,
+  .dashboard-header,
+  .topbar-wrapper {
+    min-height: 72px !important;
+    padding: 12px 16px !important;
+    align-items: flex-start !important;
+    flex-wrap: wrap !important;
   }
-  
+
+  .dashboard-topbar-left,
+  .dashboard-topbar-right {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.75rem !important;
+    flex-wrap: wrap;
+  }
+
+  .dashboard-topbar-title {
+    font-size: 1.05rem !important;
+  }
+
+  .dashboard-content {
+    padding: 20px 16px 32px;
+  }
+
+  .responsive-banner,
+  .responsive-page-header {
+    align-items: flex-start !important;
+  }
+
+  .responsive-banner-actions,
+  .responsive-page-actions {
+    width: 100%;
+    justify-content: flex-start !important;
+  }
+
+  .responsive-fields-2,
+  .responsive-fields-3,
+  .responsive-photo-grid,
+  .seller-listing-spec-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .seller-listing-photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .responsive-stats-grid-4,
+  .responsive-stats-grid-5 {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
   .mobile-toggle {
-    display: block !important;
+    display: inline-flex !important;
   }
 }
 
-/* ─────────────────────────────────────────────────────── */
-/*  Backdrop                                               */
-/* ─────────────────────────────────────────────────────── */
-.mobile-backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(31, 26, 29, 0.65);
-  z-index: 45;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition-normal);
-}
-.mobile-backdrop.backdrop-open {
-  opacity: 1;
-  pointer-events: auto;
+@media (max-width: 560px) {
+  .dashboard-topbar-right > * {
+    max-width: 100%;
+  }
+
+  .seller-listing-photo-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .responsive-form-actions > * {
+    flex: 1 1 100% !important;
+    width: 100%;
+  }
 }
 
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /*  Premium Purple Glossy Buttons                          */
-/* ─────────────────────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .btn-primary,
 .primary-btn,
 button[type="submit"],
@@ -624,3 +877,4 @@ button[type="submit"]:disabled,
 .cta-button:hover .btn-arrow {
   transform: translateX(4px) !important;
 }
+
