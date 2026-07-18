@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   /* â”€â”€ Brand Palette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -876,5 +876,34 @@ button[type="submit"]:disabled,
 .primary-btn:hover .btn-arrow,
 .cta-button:hover .btn-arrow {
   transform: translateX(4px) !important;
+}
+
+/* Responsive Table wrapper to prevent page cut-off on mobile/tablet viewports */
+div:has(> table), 
+section:has(table), 
+.table-responsive {
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  margin-bottom: 1.25rem;
+}
+
+/* Prevent default browser red outline/border overrides for required/invalid input states */
+input:invalid,
+input:required,
+.form-control:invalid,
+.form-control:required {
+  box-shadow: none !important;
+  border-color: inherit !important;
+}
+
+/* Page safety boundaries to enforce 100% viewport width without horizontal scrollbars */
+.dashboard-shell,
+.dashboard-main-area,
+.dashboard-right,
+.dashboard-content,
+.app-container {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
 }
 

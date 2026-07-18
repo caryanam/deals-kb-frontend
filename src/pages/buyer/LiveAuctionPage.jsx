@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, ArrowUpRight, Plus, RefreshCw, AlertCircle, PlayCircle, ImageOff } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -143,8 +143,14 @@ export const LiveAuctionPage = () => {
 
   const handleQuickIncrement = (increment) => {
     setLocalError('');
-    const base = currentHighestBid || (product?.expected_price || 0);
-    setBidAmount(base + increment);
+    setBidAmount((prev) => {
+      const currentVal = Number(prev) || 0;
+      const base = currentHighestBid || (product?.expected_price || 0);
+      if (currentVal < base + increment) {
+        return base + increment;
+      }
+      return currentVal + increment;
+    });
   };
 
   const typeKey = product?.product_type?.toLowerCase()?.trim();
@@ -425,60 +431,56 @@ export const LiveAuctionPage = () => {
               </div>
             ) : (
               <form onSubmit={handleBidSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <div style={{ position: 'relative', flex: 1 }}>
-                    <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: 800, color: '#8B8278' }}>â‚¹</span>
-                    <input
-                      type="number"
-                      className="form-control"
-                      value={bidAmount}
-                      onChange={(e) => setBidAmount(e.target.value)}
-                      disabled={isBiddingDisabled}
-                      style={{
-                        backgroundColor: '#070a10',
-                        border: '1px solid #4a1a50',
-                        color: '#ffffff',
-                        paddingLeft: '2rem',
-                        fontSize: '1.2rem',
-                        fontWeight: 800,
-                        height: '52px'
-                      }}
-                      required
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    disabled={isBiddingDisabled}
-                    style={{ height: '52px', padding: '0 2.25rem', fontSize: '1rem' }}
-                  >
-                    Bid
-                  </button>
-                </div>
-
-                {/* Quick Increment Button */}
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                  {/* Quick Increment Button */}
                   <button
                     type="button"
                     onClick={() => handleQuickIncrement(incVal)}
                     disabled={isBiddingDisabled}
                     style={{
-                      width: '100%',
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      flex: 1,
+                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
                       color: '#ffffff',
-                      padding: '0.65rem',
-                      borderRadius: '0.5rem',
+                      height: '52px',
+                      borderRadius: '0.75rem',
                       cursor: 'pointer',
-                      fontSize: '0.85rem',
-                      fontWeight: 700,
+                      fontSize: '1rem',
+                      fontWeight: 800,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.2rem'
+                      gap: '0.25rem',
+                      transition: 'all 0.2s'
                     }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)'}
                   >
-                    <Plus size={14} /> {formatQuickIncrementLabel(incVal)}
+                    <Plus size={16} /> {formatQuickIncrementLabel(incVal)}
+                  </button>
+
+                  {/* Bid Button showing target bid price */}
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    disabled={isBiddingDisabled}
+                    style={{
+                      flex: 1.5,
+                      height: '52px',
+                      fontSize: '1.05rem',
+                      fontWeight: 800,
+                      borderRadius: '0.75rem',
+                      backgroundColor: '#10b981',
+                      border: 'none',
+                      color: '#ffffff',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#059669'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#10b981'}
+                  >
+                    Bid {formatCurrency(bidAmount || 0)}
                   </button>
                 </div>
               </form>
