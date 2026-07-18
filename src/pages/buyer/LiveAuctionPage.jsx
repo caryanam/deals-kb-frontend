@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, ArrowUpRight, Plus, RefreshCw, AlertCircle, PlayCircle, ImageOff } from 'lucide-react';
+import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, RefreshCw, AlertCircle, PlayCircle, ImageOff } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { getProductById } from '../../api/productApi';
@@ -19,20 +19,6 @@ const INCREMENTS = {
   laptop: 100,
   bike: 500,
   car: 1000
-};
-
-const QUICK_INCREMENTS = {
-  mobile: [50, 100, 200],
-  laptop: [100, 200, 500],
-  bike: [500, 1000, 2000],
-  car: [1000, 2000, 5000]
-};
-
-const formatQuickIncrementLabel = (val) => {
-  if (val >= 1000) {
-    return `â‚¹${val / 1000}k`;
-  }
-  return `â‚¹${val}`;
 };
 
 export const LiveAuctionPage = () => {
@@ -55,7 +41,6 @@ export const LiveAuctionPage = () => {
   } = useAuctionSocket(productId);
 
   const [product, setProduct] = useState(null);
-  const [bidAmount, setBidAmount] = useState('');
   const [localError, setLocalError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [mediaMode, setMediaMode] = useState('image'); // 'image' or 'video'
@@ -87,21 +72,11 @@ export const LiveAuctionPage = () => {
     loadProduct();
   }, [productId]);
 
-  // Set default bid increments on bid updates
-  useEffect(() => {
-    const inc = INCREMENTS[product?.product_type] || 100;
-    if (currentHighestBid) {
-      setBidAmount(currentHighestBid + inc);
-    } else if (product?.expected_price) {
-      setBidAmount(product.expected_price);
-    }
-  }, [currentHighestBid, product]);
-
   const handleBidSubmit = async (e) => {
     e.preventDefault();
     setLocalError('');
 
-    const parsedAmount = Number(bidAmount);
+    const parsedAmount = nextBidAmount;
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
       setLocalError('Please enter a valid positive bid amount.');
       return;
@@ -109,8 +84,8 @@ export const LiveAuctionPage = () => {
 
     // Bid Validation Rules
     if (!currentHighestBid || currentHighestBid === 0) {
-      if (product && parsedAmount < product.expected_price) {
-        setLocalError('Your first bid is below the minimum starting bid for this listing.');
+      if (parsedAmount < startingBidAmount) {
+        setLocalError(`Your first bid must be at least ${formatCurrency(startingBidAmount)}.`);
         return;
       }
     } else {
@@ -141,20 +116,11 @@ export const LiveAuctionPage = () => {
     }
   };
 
-  const handleQuickIncrement = (increment) => {
-    setLocalError('');
-    setBidAmount((prev) => {
-      const currentVal = Number(prev) || 0;
-      const base = currentHighestBid || (product?.expected_price || 0);
-      if (currentVal < base + increment) {
-        return base + increment;
-      }
-      return currentVal + increment;
-    });
-  };
-
   const typeKey = product?.product_type?.toLowerCase()?.trim();
   const incVal = INCREMENTS[typeKey] || 100;
+  const baseBid = currentHighestBid || 0;
+  const startingBidAmount = Math.ceil(Number(product?.expected_price || 0) * 0.5);
+  const nextBidAmount = baseBid > 0 ? baseBid + incVal : startingBidAmount;
 
   const isBiddingDisabled = submitting || auctionStatus !== 'live' || timer <= 0 || product?.is_cancelled || auctionStatus === 'cancelled';
 
@@ -431,58 +397,32 @@ export const LiveAuctionPage = () => {
               </div>
             ) : (
               <form onSubmit={handleBidSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                  {/* Quick Increment Button */}
-                  <button
-                    type="button"
-                    onClick={() => handleQuickIncrement(incVal)}
-                    disabled={isBiddingDisabled}
-                    style={{
-                      flex: 1,
-                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      color: '#ffffff',
-                      height: '52px',
-                      borderRadius: '0.75rem',
-                      cursor: 'pointer',
-                      fontSize: '1rem',
-                      fontWeight: 800,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.25rem',
-                      transition: 'all 0.2s'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)'}
-                  >
-                    <Plus size={16} /> {formatQuickIncrementLabel(incVal)}
-                  </button>
-
-                  {/* Bid Button showing target bid price */}
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    disabled={isBiddingDisabled}
-                    style={{
-                      flex: 1.5,
-                      height: '52px',
-                      fontSize: '1.05rem',
-                      fontWeight: 800,
-                      borderRadius: '0.75rem',
-                      backgroundColor: '#10b981',
-                      border: 'none',
-                      color: '#ffffff',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#059669'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#10b981'}
-                  >
-                    Bid {formatCurrency(bidAmount || 0)}
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="btn btn-success"
+                  disabled={isBiddingDisabled}
+                  style={{
+                    width: '100%',
+                    minHeight: '64px',
+                    fontSize: '1.08rem',
+                    fontWeight: 800,
+                    borderRadius: '0.9rem',
+                    backgroundColor: '#10b981',
+                    border: 'none',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#059669'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#10b981'}
+                >
+                  Bid {formatCurrency(nextBidAmount || 0)}
+                </button>
               </form>
             )}
           </div>

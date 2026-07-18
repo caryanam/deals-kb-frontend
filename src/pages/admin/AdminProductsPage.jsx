@@ -164,10 +164,6 @@ export const AdminProductsPage = () => {
             <p style={{ fontWeight: 700, margin: 0 }}>{specs.km_driven ? Number(specs.km_driven).toLocaleString() + ' km' : 'N/A'}</p>
           </div>
           <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Product Price</span>
-            <p style={{ fontWeight: 700, margin: 0 }}>{formatCurrency(selectedProduct.product_price)}</p>
-          </div>
-          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
             <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Expected Price</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{formatCurrency(selectedProduct.expected_price)}</p>
           </div>
@@ -229,10 +225,6 @@ export const AdminProductsPage = () => {
               <p style={{ fontWeight: 700, margin: 0 }}>{specs.imei_available ? 'Yes' : 'No'}</p>
             </div>
           )}
-          <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
-            <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Product Price</span>
-            <p style={{ fontWeight: 700, margin: 0 }}>{formatCurrency(selectedProduct.product_price)}</p>
-          </div>
           <div style={{ padding: '0.75rem', border: '1.5px solid #D8CFC1', borderRadius: '0.5rem' }}>
             <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Expected Valuation</span>
             <p style={{ fontWeight: 700, margin: 0 }}>{formatCurrency(selectedProduct.expected_price)}</p>

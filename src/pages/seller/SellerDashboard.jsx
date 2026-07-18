@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusCircle, ClipboardList, CheckCircle2, Gavel, Award, Sparkles, MessageSquare, ArrowRight, AlertTriangle, RefreshCw, ShieldCheck, Loader2 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -144,12 +144,12 @@ export const SellerDashboard = () => {
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
               <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Monthly Plan (Mobile/Laptop/Bike)</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>â‚¹1,000/month unlimited listings for Mobile, Laptop & Bike.</p>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}1,000/month unlimited listings for Mobile, Laptop & Bike.</p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Plan (â‚¹1000)
+            Activate Plan ({"\u20B9"}1000)
           </button>
         </div>
       )}
@@ -160,12 +160,12 @@ export const SellerDashboard = () => {
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
               <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Car Monthly Plan (Car)</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>â‚¹1,999/month unlimited listings for Cars.</p>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}1,999/month unlimited listings for Cars.</p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_car_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_car_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Car Plan (â‚¹1999)
+            Activate Car Plan ({"\u20B9"}1999)
           </button>
         </div>
       )}

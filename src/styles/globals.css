@@ -320,8 +320,9 @@ a {
 /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .dashboard-shell {
   min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background: #fbf5ea;
-  overflow-x: clip;
 }
 
 .dashboard-scroll-page {
@@ -332,29 +333,34 @@ a {
 }
 
 .dashboard-main-area {
-  min-height: 100dvh;
+  flex: 1;
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr);
   align-items: stretch;
-  flex: 1;
+  min-height: 100dvh;
 }
 
 .dashboard-sidebar {
   width: 260px;
   min-width: 260px;
   flex-shrink: 0;
-  min-height: 100dvh;
-  position: sticky;
-  top: 0;
-  align-self: start;
+  height: 100%;
   background: linear-gradient(180deg, #3b0038 0%, #4b003f 45%, #260027 100%);
   color: #ffffff;
   display: flex;
   flex-direction: column;
   padding: 0;
-  overflow: hidden;
   box-shadow: 4px 0 18px rgba(0, 0, 0, 0.16);
   z-index: 50;
+}
+
+.sidebar-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .sidebar-logo {
@@ -409,10 +415,12 @@ a {
   box-shadow: inset 4px 0 0 #00d1b2 !important;
 }
 
+/* Right Content Area */
 .dashboard-right {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .dashboard-topbar,
@@ -420,9 +428,6 @@ a {
 .topbar-wrapper {
   min-height: 72px !important;
   flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 40;
   background: #fffaf0;
   border-bottom: 1px solid rgba(80, 0, 70, 0.14);
   display: flex;
@@ -669,14 +674,22 @@ a {
 }
 
 @media (max-width: 768px) {
-  .dashboard-shell,
-  .dashboard-scroll-page,
-  .dashboard-main-area {
+  .dashboard-shell {
+    height: auto;
     min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .dashboard-scroll-page {
+    height: auto;
+    overflow: visible;
   }
 
   .dashboard-main-area {
     display: block;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
   }
 
   .dashboard-sidebar {
@@ -684,6 +697,7 @@ a {
     left: 0;
     top: 0;
     bottom: 0;
+    height: 100%;
     width: min(82vw, 300px);
     min-width: min(82vw, 300px);
     transform: translateX(-100%);
@@ -695,8 +709,16 @@ a {
     transform: translateX(0);
   }
 
+  .sidebar-sticky-wrapper {
+    position: relative !important;
+    height: 100% !important;
+    overflow: visible !important;
+  }
+
   .dashboard-right {
     width: 100%;
+    height: auto;
+    overflow: visible;
   }
 
   .dashboard-topbar,
@@ -722,6 +744,8 @@ a {
 
   .dashboard-content {
     padding: 20px 16px 32px;
+    height: auto;
+    overflow: visible;
   }
 
   .responsive-banner,

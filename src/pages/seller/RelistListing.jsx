@@ -1,8 +1,8 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AlertTriangle, Camera, CheckCircle2, FileText, Film, Loader2, Upload, X } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { getRelistData, submitRelistAfterPayment } from '../../api/productApi';
+import { getRelistData, submitRelistAfterPayment, getProducts } from '../../api/productApi';
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
 import { normalizeImageUrl } from '../../utils/imageUtils';
@@ -17,6 +17,9 @@ import {
   MOBILE_BRANDS,
   MOBILE_BRAND_TO_MODELS
 } from '../../data/carLaptopData';
+
+const MOBILE_RAM_OPTIONS = ['2GB', '3GB', '4GB', '6GB', '8GB', '12GB', '16GB'];
+const LAPTOP_RAM_OPTIONS = ['4GB', '8GB', '12GB', '16GB', '32GB', '64GB'];
 
 const CATEGORIES = [
   { value: 'car', label: 'CAR' },
@@ -153,7 +156,6 @@ export const RelistListing = () => {
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [condition, setCondition] = useState('Good');
-  const [productPrice, setProductPrice] = useState('');
   const [expectedPrice, setExpectedPrice] = useState('');
   const [description, setDescription] = useState('');
   const [specs, setSpecs] = useState(initialSpecs);
@@ -170,6 +172,45 @@ export const RelistListing = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const brandModelData = BRAND_MODEL_DATA[productType];
+
+  const [availableTitles, setAvailableTitles] = useState([]);
+  const [loadingTitles, setLoadingTitles] = useState(false);
+
+  useEffect(() => {
+    const fetchTitles = async () => {
+      try {
+        setLoadingTitles(true);
+        const productsData = await getProducts();
+        const titlesForCategory = new Set();
+        
+        const defaultTitles = {
+          car: ['Honda City VMT 2021', 'Hyundai Creta SX 2020', 'Maruti Swift VXI 2019', 'Tata Nexon XZ 2022'],
+          bike: ['Yamaha R15 V3 2021', 'Royal Enfield Classic 350 2020', 'Honda Activa 6G 2022', 'KTM Duke 200 2021'],
+          mobile: ['Apple iPhone 13 128GB', 'Samsung Galaxy S22 Ultra', 'OnePlus 10 Pro 256GB', 'Apple iPhone 14 Pro Max'],
+          laptop: ['Dell Inspiron 15 i5', 'HP Pavilion 14 Ryzen 5', 'Apple MacBook Air M2', 'Lenovo ThinkPad E14']
+        };
+
+        const normalizedType = (productType || '').toLowerCase().trim();
+        (defaultTitles[normalizedType] || []).forEach(t => titlesForCategory.add(t));
+
+        if (Array.isArray(productsData)) {
+          productsData.forEach(p => {
+            if (p.product_type?.toLowerCase()?.trim() === normalizedType && p.title) {
+              titlesForCategory.add(p.title.trim());
+            }
+          });
+        }
+        
+        setAvailableTitles(Array.from(titlesForCategory).sort());
+      } catch (err) {
+        console.error('Failed to fetch titles configuration:', err);
+      } finally {
+        setLoadingTitles(false);
+      }
+    };
+
+    fetchTitles();
+  }, [productType]);
 
   const pillStyle = (selected) => ({
     border: selected ? '1px solid #111827' : '1px solid #d1d5db',
@@ -210,7 +251,6 @@ export const RelistListing = () => {
         setMake(parsedSpecs.make || '');
         setModel(product.model || '');
         setCondition(product.condition || 'Good');
-        setProductPrice(product.product_price || '');
         setExpectedPrice(product.expected_price || '');
         setDescription(product.description || '');
 
@@ -333,7 +373,6 @@ export const RelistListing = () => {
     formData.append('model', model.trim());
     formData.append('condition', condition);
     formData.append('description', description.trim());
-    formData.append('product_price', Number(productPrice));
     formData.append('expected_price', Number(expectedPrice));
 
     const specifications = {
@@ -396,8 +435,12 @@ export const RelistListing = () => {
 
   const validateForm = () => {
     if (!title.trim() || !brand.trim() || !model.trim()) return 'Please complete title, brand, and model.';
-    if (!productPrice || Number(productPrice) <= 0) return 'Product price must be greater than 0.';
-    if (!expectedPrice || Number(expectedPrice) <= 0) return 'Expected price must be greater than 0.';
+    
+    if (!description.trim() || description.trim().length < 10) {
+      return 'Description must be at least 10 characters long.';
+    }
+    
+    if (!expectedPrice || Number(expectedPrice) < 10) return 'Expected price must be at least ₹10.';
     if (!video) return 'Video walkthrough is required.';
 
     // Mandatory Photo Validation
@@ -432,17 +475,55 @@ export const RelistListing = () => {
     if (productType === 'car' || productType === 'bike') {
       if (!specs.ownership || !specs.accidental) return 'Please select ownership and accidental status.';
       if (!rcCopy || !insuranceCopy) return 'RC Document and Insurance Document are required.';
+      
+      if (specs.year) {
+        const yearNum = parseInt(specs.year, 10);
+        const currentYear = new Date().getFullYear();
+        if (isNaN(yearNum) || yearNum < 1900 || yearNum > currentYear) {
+          return `Manufacturing year must be between 1900 and ${currentYear}.`;
+        }
+      }
+      if (specs.kmDriven) {
+        const kmNum = Number(specs.kmDriven);
+        if (isNaN(kmNum) || kmNum < 0) {
+          return 'Kilometer driven must be a positive number.';
+        }
+      }
     }
 
     if (productType === 'laptop') {
       if (!specs.ram.trim() || !specs.storage.trim()) {
         return 'RAM and Storage are required.';
       }
+      const storageStr = specs.storage.trim();
+      if (storageStr.includes('.')) {
+        return 'Storage must be a whole number (no decimals).';
+      }
+      const storageDigits = storageStr.replace(/\D/g, '');
+      const storageNum = parseInt(storageDigits, 10);
+      if (isNaN(storageNum) || storageNum < 10) {
+        return 'Storage must be at least 10 GB.';
+      }
       if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
     }
 
     if (productType === 'mobile') {
       if (!specs.ram.trim() || !specs.storage.trim()) return 'Storage and RAM are required.';
+      
+      const storageStr = specs.storage.trim();
+      if (storageStr.includes('.')) {
+        return 'Storage must be a whole number (no decimals).';
+      }
+      const storageDigits = storageStr.replace(/\D/g, '');
+      const storageNum = parseInt(storageDigits, 10);
+      if (isNaN(storageNum) || storageNum < 10) {
+        return 'Storage must be at least 10 GB.';
+      }
+
+      const imeiStr = (specs.imeiNumber || '').trim();
+      if (imeiStr && !/^\d{15}$/.test(imeiStr)) {
+        return 'IMEI number must be exactly 15 digits.';
+      }
       if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
     }
 
@@ -521,7 +602,12 @@ export const RelistListing = () => {
                 </div>
               </div>
 
-              <Input label="Listing Title *" value={title} onChange={setTitle} placeholder={TITLE_PLACEHOLDERS[productType]} />
+              <Input
+                label="Listing Title *"
+                value={title}
+                onChange={setTitle}
+                placeholder="Enter listing title"
+              />
               
               <div className="responsive-fields-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <Select label="Brand *" value={brand} onChange={handleBrandChange} options={brandModelData?.brands || []} placeholder={brandModelData?.brandPlaceholder || ''} />
@@ -548,7 +634,7 @@ export const RelistListing = () => {
                 <>
                   <div className="responsive-fields-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
                     <Input label="Processor" value={specs.processor} onChange={(v) => updateSpec('processor', v)} placeholder="e.g. Intel i5 / Ryzen 5" />
-                    <Input label="RAM *" value={specs.ram} onChange={(v) => updateSpec('ram', v)} placeholder="e.g. 8GB" />
+                    <Select label="RAM *" value={specs.ram} onChange={(v) => updateSpec('ram', v)} options={LAPTOP_RAM_OPTIONS} placeholder="Select RAM" required={true} />
                     <Input label="Storage *" value={specs.storage} onChange={(v) => updateSpec('storage', v)} placeholder="e.g. 512GB SSD" />
                   </div>
                   <div className="responsive-fields-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
@@ -562,9 +648,9 @@ export const RelistListing = () => {
               {productType === 'mobile' && (
                 <>
                   <div className="responsive-fields-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
-                    <Input label="Storage *" value={specs.storage} onChange={(v) => updateSpec('storage', v)} placeholder="e.g. 128GB" />
-                    <Input label="RAM *" value={specs.ram} onChange={(v) => updateSpec('ram', v)} placeholder="e.g. 6GB" />
-                    <Input label="IMEI Number" value={specs.imeiNumber} onChange={(v) => updateSpec('imeiNumber', v)} placeholder="IMEI Number" />
+                     <Input label="Storage *" value={specs.storage} onChange={(v) => updateSpec('storage', v)} placeholder="e.g. 128GB" />
+                     <Select label="RAM *" value={specs.ram} onChange={(v) => updateSpec('ram', v)} options={MOBILE_RAM_OPTIONS} placeholder="Select RAM" required={true} />
+                     <Input label="IMEI Number" value={specs.imeiNumber} onChange={(v) => updateSpec('imeiNumber', v)} placeholder="IMEI Number" />
                   </div>
                 </>
               )}
@@ -580,7 +666,6 @@ export const RelistListing = () => {
             <section className="card">
               <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Price & Description</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '1rem' }}>
-                <Input label="Product Price Rs *" type="number" value={productPrice} onChange={setProductPrice} placeholder="e.g. 500000" />
                 <Input label="Expected Price Rs *" type="number" value={expectedPrice} onChange={setExpectedPrice} placeholder="e.g. 450000" />
               </div>
               <div className="form-group" style={{ marginBottom: 0 }}>
@@ -674,7 +759,7 @@ export const RelistListing = () => {
                     <Loader2 size={16} className="animate-spin" style={{ marginRight: '0.5rem' }} /> Relisting...
                   </>
                 ) : (
-                  'Pay & Relist'
+                  'Relist for Approval'
                 )}
               </button>
             </div>
@@ -700,7 +785,7 @@ const Input = ({ label, value, onChange, placeholder, type = 'text' }) => (
   </div>
 );
 
-const Select = ({ label, value, onChange, options, placeholder, disabled = false }) => (
+const Select = ({ label, value, onChange, options, placeholder, disabled = false, required = false }) => (
   <div className="form-group" style={{ marginBottom: 0 }}>
     {label && <label className="form-label">{label}</label>}
     <select
@@ -708,6 +793,7 @@ const Select = ({ label, value, onChange, options, placeholder, disabled = false
       value={value}
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
+      required={required}
       style={{
         width: '100%',
         padding: '0.85rem 1.15rem',

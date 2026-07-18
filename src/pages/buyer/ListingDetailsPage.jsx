@@ -232,7 +232,7 @@ export const ListingDetailsPage = () => {
       case 'live':
         return <span className="badge badge-live">Bidding Live</span>;
       case 'approved':
-        return <span className="badge badge-approved">Approved</span>;
+        return <span className="badge badge-approved">Upcoming</span>;
       case 'ended':
         return <span className="badge badge-ended">Auction Ended</span>;
       case 'rejected':

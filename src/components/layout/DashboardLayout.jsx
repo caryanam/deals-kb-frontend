@@ -46,10 +46,10 @@ export const DashboardLayout = () => {
         onClick={closeSidebar}
       />
 
-      <div className="dashboard-scroll-page">
-        <div className="dashboard-main-area">
-          {/* Left Sidebar */}
-          <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+      <div className="dashboard-main-area">
+        {/* Left Sidebar */}
+        <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+          <div className="sidebar-sticky-wrapper">
             <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <img src={logoImg} alt="DealsKB Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
               <span style={{ letterSpacing: '-0.03em', fontWeight: 800 }}>DealsKB</span>
@@ -58,20 +58,20 @@ export const DashboardLayout = () => {
             <nav className="sidebar-menu">
               {renderSidebar()}
             </nav>
-          </aside>
+          </div>
+        </aside>
 
-          {/* Right Content Area */}
-          <section className="dashboard-right">
-            <Topbar onToggleSidebar={toggleSidebar} />
-            
-            <main className="dashboard-content">
-              <Outlet />
-            </main>
-          </section>
-        </div>
-
-        <Footer />
+        {/* Right Content Area */}
+        <section className="dashboard-right">
+          <Topbar onToggleSidebar={toggleSidebar} />
+          
+          <main className="dashboard-content">
+            <Outlet />
+          </main>
+        </section>
       </div>
+
+      <Footer />
     </div>
   );
 };

@@ -70,10 +70,13 @@ const formatLabel = (key) => {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
-const formatValue = (value) => {
+const formatValue = (value, key = '') => {
   if (value === null || value === undefined || value === '') return 'Not added';
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
   if (Array.isArray(value)) return value.length ? value.join(', ') : 'Not added';
+  if (key.toLowerCase() === 'year' || key.toLowerCase() === 'manufacturing_year') {
+    return String(value);
+  }
   if (typeof value === 'number') return Number.isFinite(value) ? value.toLocaleString('en-IN') : 'Not added';
   return String(value);
 };
@@ -166,6 +169,8 @@ export const MyListingsPage = () => {
     return sortByLatest(matches, 'updated_at')[0] || null;
   }, [selectedProductId, sellerChatRequestsData]);
 
+  const modalStartingBid = useMemo(() => Math.ceil(Number(modalListing?.expected_price || 0) * 0.5), [modalListing]);
+
   const detailEntries = useMemo(() => {
     if (!modalListing) return [];
     const fixedEntries = [
@@ -174,13 +179,12 @@ export const MyListingsPage = () => {
       ['Brand', modalListing.brand || 'Not added'],
       ['Model', modalListing.model || 'Not added'],
       ['Condition', modalListing.condition || 'Not added'],
-      ['Product Price', formatINR(modalListing.product_price || 0)],
       ['Expected Price', formatINR(modalListing.expected_price || 0)]
     ];
 
     const dynamicEntries = Object.entries(modalSpecifications || {})
       .filter(([key, value]) => !['brand', 'model', 'condition'].includes(key) && value !== null && value !== undefined && value !== '')
-      .map(([key, value]) => [formatLabel(key), formatValue(value)]);
+      .map(([key, value]) => [formatLabel(key), formatValue(value, key)]);
 
     return [...fixedEntries, ...dynamicEntries];
   }, [modalListing, modalSpecifications]);
@@ -643,6 +647,22 @@ export const MyListingsPage = () => {
               >
                 <X size={24} />
               </button>
+            </div>
+
+            <div style={{
+              padding: '0.8rem 1.5rem',
+              borderBottom: '1px solid #E6DED0',
+              backgroundColor: '#fffdf7',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '0.75rem',
+              flexWrap: 'wrap'
+            }}>
+              <span style={{ fontSize: '0.76rem', fontWeight: 800, color: '#8B8278', textTransform: 'uppercase', letterSpacing: '0.03em' }}>Bids will start from</span>
+              <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#10b981' }}>
+                {formatINR(modalStartingBid || 0)} <span style={{ color: '#8B8278', fontSize: '0.78rem', fontWeight: 700 }}>(50% of expected price)</span>
+              </span>
             </div>
 
             <div className="seller-listing-detail-grid" style={{ padding: '1.5rem', overflowY: 'auto', flex: 1, display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(320px, 0.95fr)', gap: '1.5rem' }}>

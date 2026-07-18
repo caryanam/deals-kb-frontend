@@ -64,7 +64,7 @@ export const UsersPage = () => {
   // Apply role filter
   const displayedUsers = roleFilter === 'all'
     ? nonAdminUsers
-    : nonAdminUsers.filter(u => u.role?.toLowerCase() === roleFilter);
+    : nonAdminUsers.filter(u => u.role?.toLowerCase() === roleFilter.toLowerCase());
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -109,7 +109,7 @@ export const UsersPage = () => {
             >
               {label}
               <span style={{ marginLeft: '0.4rem', opacity: 0.75, fontSize: '0.75rem' }}>
-                ({role === 'all' ? nonAdminUsers.length : nonAdminUsers.filter(u => u.role === role).length})
+                ({role === 'all' ? nonAdminUsers.length : nonAdminUsers.filter(u => u.role?.toLowerCase() === role.toLowerCase()).length})
               </span>
             </button>
           );
@@ -312,7 +312,7 @@ export const UsersPage = () => {
                           <div>
                             <strong style={{ fontSize: '0.875rem', color: '#6B1B71', textDecoration: 'underline' }}>{prod.title}</strong>
                             <span style={{ fontSize: '0.75rem', color: '#8B8278', display: 'block' }}>
-                              Category: {PRODUCT_TYPE_LABELS[prod.product_type] || prod.product_type} &bull; Product: {formatINR(prod.product_price)} &bull; Expected: {formatINR(prod.expected_price)}
+                              Category: {PRODUCT_TYPE_LABELS[prod.product_type] || prod.product_type} &bull; Expected: {formatINR(prod.expected_price)}
                             </span>
                           </div>
                           <span className={`badge badge-${prod.status || 'pending'}`} style={{ fontSize: '0.65rem' }}>
@@ -394,10 +394,6 @@ export const UsersPage = () => {
                 <div>
                   <span style={{ color: '#8B8278', fontWeight: 600 }}>Model:</span>
                   <p style={{ margin: 0, fontWeight: 700 }}>{selectedProduct.model}</p>
-                </div>
-                <div>
-                  <span style={{ color: '#8B8278', fontWeight: 600 }}>Product Price:</span>
-                  <p style={{ margin: 0, fontWeight: 800, color: '#1F1A1D' }}>{formatINR(selectedProduct.product_price)}</p>
                 </div>
                 <div>
                   <span style={{ color: '#8B8278', fontWeight: 600 }}>Expected Valuation:</span>

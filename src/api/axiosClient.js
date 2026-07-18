@@ -50,7 +50,12 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !shouldBypassUnauthorizedRedirect(error)) {
       sessionStorage.removeItem("access_token");
       sessionStorage.removeItem("user");
-      if (window.location.pathname !== "/login") {
+      const currentPath = window.location.pathname || "";
+      const isProtected = currentPath.startsWith("/buyer") || 
+                          currentPath.startsWith("/seller") || 
+                          currentPath.startsWith("/dealer") || 
+                          currentPath.startsWith("/admin");
+      if (isProtected && currentPath !== "/login") {
         window.location.href = "/login";
       }
     }

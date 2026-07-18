@@ -2,10 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Fuel, Gauge, Calendar, ShieldCheck, ArrowUpRight, Cpu, Layers, ImageOff } from 'lucide-react';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { useAuth } from '../../hooks/useAuth';
 import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 export const ListingCard = ({ listing: product }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleAction = (e) => {
     e.stopPropagation();
@@ -18,11 +20,12 @@ export const ListingCard = ({ listing: product }) => {
 
   // Status Badge Selection
   const getStatusBadge = () => {
+    const isBuyerLike = !user || user.role === 'Buyer';
     switch (product.status) {
       case 'live':
         return <span className="badge badge-live">Live Auction</span>;
       case 'approved':
-        return <span className="badge badge-approved">Approved</span>;
+        return <span className="badge badge-approved">{isBuyerLike ? 'Upcoming' : 'Approved'}</span>;
       case 'ended':
         return <span className="badge badge-ended">Ended</span>;
       case 'rejected':
@@ -75,6 +78,7 @@ export const ListingCard = ({ listing: product }) => {
     }
   };
 
+  const startingBidAmount = Math.ceil(Number(product?.expected_price || 0) * 0.5);
   const photosArray = safeParseJSON(product.photos, []);
   const coverPhoto = photosArray.length > 0
     ? normalizeImageUrl(photosArray[0])
@@ -162,11 +166,14 @@ export const ListingCard = ({ listing: product }) => {
               </p>
             </div>
           ) : (
-            <div>
-              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Status</span>
-              <p style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1F1A1D', margin: 0, textTransform: 'capitalize' }}>
-                {product.status || 'Pending'}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Price</span>
+              <p style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>
+                {formatINR(product.expected_price || 0)}
               </p>
+              <span style={{ fontSize: '0.72rem', color: '#8B8278', fontWeight: 700 }}>
+                Bid starts from {formatINR(startingBidAmount || 0)}
+              </span>
             </div>
           )}
           

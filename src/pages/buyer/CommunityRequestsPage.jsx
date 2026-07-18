@@ -19,6 +19,7 @@ export const CommunityRequestsPage = () => {
   
   const [activeTab, setActiveTab] = useState('all'); // all, created, joined
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,13 @@ export const CommunityRequestsPage = () => {
   const [conditionPreference, setConditionPreference] = useState('Any');
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
   const fetchRequests = async () => {
     try {
       setLoading(true);
@@ -43,8 +51,8 @@ export const CommunityRequestsPage = () => {
         if (categoryFilter !== 'all') {
           params.product_type = categoryFilter;
         }
-        if (searchTerm.trim() !== '') {
-          params.search = searchTerm.trim();
+        if (debouncedSearch.trim() !== '') {
+          params.search = debouncedSearch.trim();
         }
         const data = await getCommunityRequests(params);
         setRequests(data || []);
@@ -63,7 +71,7 @@ export const CommunityRequestsPage = () => {
 
   useEffect(() => {
     fetchRequests();
-  }, [activeTab, categoryFilter, searchTerm]);
+  }, [activeTab, categoryFilter, debouncedSearch]);
 
   const handlePostRequest = async (e) => {
     e.preventDefault();

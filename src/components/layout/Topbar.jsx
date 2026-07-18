@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, LogOut, User, Check, X, Phone, Lock, Mail, AlertCircle, Loader2, Bell, Trash2, CheckCircle2, RefreshCw, MessageSquare, Send, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -32,6 +32,7 @@ export const Topbar = ({ onToggleSidebar }) => {
 
   // Notifications states
   const [showNotifications, setShowNotifications] = useState(false);
+  const [selectedNotification, setSelectedNotification] = useState(null);
 
   // Chat feature states
   const [showChats, setShowChats] = useState(false);
@@ -817,7 +818,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                 </div>
                                 <span style={{ fontSize: '0.6rem', color: '#8B8278', marginTop: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                   <span>{formatChatDateTime(msg?.created_at)}</span>
-                                  {isMe && <span title={msg?.is_read ? 'Read' : 'Sent'} style={{ color: msg?.is_read ? '#6B1B71' : '#8B8278', fontWeight: 900, letterSpacing: '-0.08em' }}>âœ“âœ“</span>}
+                                  {isMe && <span title={msg?.is_read ? 'Read' : 'Sent'} style={{ color: msg?.is_read ? '#6B1B71' : '#8B8278', fontWeight: 900, letterSpacing: '-0.08em' }}>{"\u2713\u2713"}</span>}
                                 </span>
                               </div>
                             );
@@ -1194,21 +1195,25 @@ export const Topbar = ({ onToggleSidebar }) => {
                 {unreadCount > 0 && (
                   <span style={{
                     position: 'absolute',
-                    top: '2px',
-                    right: '2px',
-                    backgroundColor: '#ef4444',
+                    top: '-5px',
+                    right: '-7px',
+                    minWidth: '22px',
+                    height: '22px',
+                    padding: '0 0.38rem',
+                    background: 'linear-gradient(135deg, #ff6b6b 0%, #ef4444 55%, #b91c1c 100%)',
                     color: '#ffffff',
-                    fontSize: '0.65rem',
+                    fontSize: '0.68rem',
                     fontWeight: 800,
-                    borderRadius: '50%',
-                    width: '18px',
-                    height: '18px',
+                    lineHeight: 1,
+                    borderRadius: '999px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '2px solid #ffffff'
+                    border: '2px solid #fffaf2',
+                    boxShadow: '0 8px 18px rgba(239, 68, 68, 0.28)',
+                    letterSpacing: '0'
                   }}>
-                    {unreadCount}
+                    {unreadCount > 99 ? '99+' : unreadCount}
                   </span>
                 )}
               </button>
@@ -1279,10 +1284,11 @@ export const Topbar = ({ onToggleSidebar }) => {
                     ) : (
                       notifications.map((notif, idx) => (
                         <div
-                          key={notif.notification_id || notif.id || idx}
+                          key={notif.notif_id || idx}
                           onClick={() => {
+                            setSelectedNotification(notif);
                             if (!notif.is_read) {
-                              handleMarkAsRead(notif.id);
+                              handleMarkAsRead(notif.notif_id);
                             }
                           }}
                           style={{
@@ -1327,7 +1333,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                             </span>
                           </div>
                           <button
-                            onClick={(e) => handleDeleteNotif(e, notif.id)}
+                            onClick={(e) => handleDeleteNotif(e, notif.notif_id)}
                             style={{
                               background: 'none',
                               border: 'none',
@@ -2098,7 +2104,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                             letterSpacing: '-0.08em'
                           }}
                         >
-                          âœ“âœ“
+                          \u2713\u2713
                         </span>
                       )}
                     </span>
@@ -2158,6 +2164,134 @@ export const Topbar = ({ onToggleSidebar }) => {
               <Send size={16} />
             </button>
           </form>
+        </div>
+      )}
+
+      {selectedNotification && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(31, 26, 29, 0.4)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000,
+          padding: '1rem'
+        }}>
+          <div className="card" style={{
+            width: '100%',
+            maxWidth: '480px',
+            backgroundColor: '#ffffff',
+            borderRadius: '1rem',
+            border: '1px solid #D8CFC1',
+            boxShadow: 'var(--shadow-premium)',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              padding: '1.25rem 1.5rem',
+              borderBottom: '1px solid #D8CFC1',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: '#FAF6EA'
+            }}>
+              <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#1F1A1D', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Bell size={18} style={{ color: '#6B1B71' }} /> Notification Details
+              </h3>
+              <button
+                onClick={() => setSelectedNotification(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278', display: 'flex', padding: 0 }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#F5ECDD',
+                  color: '#6B1B71',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <Bell size={20} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ margin: '0 0 0.35rem 0', fontSize: '1rem', fontWeight: 800, color: '#1F1A1D' }}>
+                    {selectedNotification.title || 'Platform Alert'}
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '0.9rem', color: '#4a1a50', lineHeight: 1.5, whiteSpace: 'pre-wrap', textAlign: 'left' }}>
+                    {selectedNotification.message}
+                  </p>
+                </div>
+              </div>
+
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: '0.5rem',
+                fontSize: '0.75rem',
+                color: '#8B8278',
+                paddingTop: '0.75rem',
+                borderTop: '1px solid #f1f5f9'
+              }}>
+                <span>Received: {selectedNotification.created_at ? new Date(selectedNotification.created_at).toLocaleString() : 'Just now'}</span>
+                <span style={{
+                  backgroundColor: '#f1f5f9',
+                  padding: '0.15rem 0.5rem',
+                  borderRadius: '999px',
+                  fontWeight: 700,
+                  color: '#8B8278'
+                }}>
+                  {selectedNotification.type || 'system'}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div style={{
+              padding: '1rem 1.5rem',
+              backgroundColor: '#FAF6EA',
+              borderTop: '1px solid #D8CFC1',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '0.75rem'
+            }}>
+              {selectedNotification.product_id && (
+                <button
+                  onClick={() => {
+                    navigate(`/buyer/listings/${selectedNotification.product_id}`);
+                    setSelectedNotification(null);
+                  }}
+                  className="btn btn-primary"
+                  style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', fontWeight: 700 }}
+                >
+                  View Related Product
+                </button>
+              )}
+              <button
+                onClick={() => setSelectedNotification(null)}
+                className="btn btn-secondary"
+                style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', fontWeight: 700 }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </>

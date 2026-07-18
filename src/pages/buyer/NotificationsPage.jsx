@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Check, Clock, Eye } from 'lucide-react';
+import { Bell, Check, Clock, Eye, X } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getNotifications, markNotificationAsRead } from '../../api/notificationApi';
 import { formatDate } from '../../utils/helpers';
@@ -8,6 +8,7 @@ import { formatDate } from '../../utils/helpers';
 export const NotificationsPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [selectedNotification, setSelectedNotification] = useState(null);
 
   const { data: notificationsData = [], isLoading: loading } = useQuery({
     queryKey: ['notifications'],
@@ -82,7 +83,13 @@ export const NotificationsPage = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {notifications.map((notif, idx) => (
             <div 
-              key={notif.notification_id || notif.id || idx}
+              key={notif.notif_id || idx}
+              onClick={() => {
+                setSelectedNotification(notif);
+                if (!notif.read) {
+                  handleMarkRead(notif.notif_id);
+                }
+              }}
               style={{
                 backgroundColor: notif.read ? '#ffffff' : '#f0f9ff',
                 border: '1px solid #D8CFC1',
@@ -94,6 +101,7 @@ export const NotificationsPage = () => {
                 alignItems: 'center',
                 gap: '1.5rem',
                 boxShadow: 'var(--shadow-sm)',
+                cursor: 'pointer',
                 transition: 'all 0.15s ease'
               }}
             >
@@ -112,12 +120,13 @@ export const NotificationsPage = () => {
                 }}>
                   <Bell size={18} />
                 </div>
-                <div>
+                <div style={{ flex: 1, textAlign: 'left' }}>
                   <p style={{ 
                     fontSize: '0.95rem', 
                     color: '#4a1a50', 
                     fontWeight: notif.read ? 500 : 700,
-                    lineHeight: 1.45
+                    lineHeight: 1.45,
+                    margin: 0
                   }}>
                     {notif.message}
                   </p>
@@ -128,10 +137,13 @@ export const NotificationsPage = () => {
               </div>
 
               {/* Action buttons */}
-              <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+              <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }} onClick={(e) => e.stopPropagation()}>
                 {notif.product_id && (
                   <button
-                    onClick={() => handleInspectProduct(notif.product_id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleInspectProduct(notif.product_id);
+                    }}
                     style={{
                       border: '1px solid #cbd5e1',
                       backgroundColor: '#FAF6EA',
@@ -149,7 +161,10 @@ export const NotificationsPage = () => {
                 )}
                 {!notif.read && (
                   <button
-                    onClick={() => handleMarkRead(notif.notification_id || notif.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMarkRead(notif.notif_id);
+                    }}
                     style={{
                       border: '1px solid #D8CFC1',
                       backgroundColor: '#F5ECDD',
@@ -169,6 +184,133 @@ export const NotificationsPage = () => {
 
             </div>
           ))}
+        </div>
+      )}
+      {selectedNotification && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(31, 26, 29, 0.4)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000,
+          padding: '1rem'
+        }}>
+          <div className="card" style={{
+            width: '100%',
+            maxWidth: '480px',
+            backgroundColor: '#ffffff',
+            borderRadius: '1rem',
+            border: '1px solid #D8CFC1',
+            boxShadow: 'var(--shadow-premium)',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              padding: '1.25rem 1.5rem',
+              borderBottom: '1px solid #D8CFC1',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: '#FAF6EA'
+            }}>
+              <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#1F1A1D', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Bell size={18} style={{ color: '#6B1B71' }} /> Notification Details
+              </h3>
+              <button
+                onClick={() => setSelectedNotification(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8B8278', display: 'flex', padding: 0 }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#F5ECDD',
+                  color: '#6B1B71',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <Bell size={20} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ margin: '0 0 0.35rem 0', fontSize: '1rem', fontWeight: 800, color: '#1F1A1D' }}>
+                    {selectedNotification.title || 'Platform Alert'}
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '0.9rem', color: '#4a1a50', lineHeight: 1.5, whiteSpace: 'pre-wrap', textAlign: 'left' }}>
+                    {selectedNotification.message}
+                  </p>
+                </div>
+              </div>
+
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: '0.5rem',
+                fontSize: '0.75rem',
+                color: '#8B8278',
+                paddingTop: '0.75rem',
+                borderTop: '1px solid #f1f5f9'
+              }}>
+                <span>Received: {selectedNotification.created_at ? new Date(selectedNotification.created_at).toLocaleString() : 'Just now'}</span>
+                <span style={{
+                  backgroundColor: '#f1f5f9',
+                  padding: '0.15rem 0.5rem',
+                  borderRadius: '999px',
+                  fontWeight: 700,
+                  color: '#8B8278'
+                }}>
+                  {selectedNotification.type || 'system'}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div style={{
+              padding: '1rem 1.5rem',
+              backgroundColor: '#FAF6EA',
+              borderTop: '1px solid #D8CFC1',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '0.75rem'
+            }}>
+              {selectedNotification.product_id && (
+                <button
+                  onClick={() => {
+                    navigate(`/buyer/listings/${selectedNotification.product_id}`);
+                    setSelectedNotification(null);
+                  }}
+                  className="btn btn-primary"
+                  style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', fontWeight: 700 }}
+                >
+                  View Related Product
+                </button>
+              )}
+              <button
+                onClick={() => setSelectedNotification(null)}
+                className="btn btn-secondary"
+                style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', fontWeight: 700 }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

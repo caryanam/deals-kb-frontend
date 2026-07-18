@@ -467,7 +467,6 @@ export const ReportsPage = () => {
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.8rem', color: '#8B8278', marginTop: '0.25rem' }}>
                           <div>Brand: <strong>{reportDetails.product.brand || 'N/A'}</strong></div>
                           <div>Model: <strong>{reportDetails.product.model || 'N/A'}</strong></div>
-                          <div>Product Price: <strong>{formatINR(reportDetails.product.product_price || 0)}</strong></div>
                           <div>Expected Price: <strong>{formatINR(reportDetails.product.expected_price || 0)}</strong></div>
                           <div>Status: <span className={`badge badge-${reportDetails.product.status}`} style={{ fontSize: '0.65rem' }}>{reportDetails.product.status}</span></div>
                         </div>

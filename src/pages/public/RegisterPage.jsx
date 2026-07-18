@@ -23,6 +23,8 @@ export const RegisterPage = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
@@ -53,9 +55,25 @@ export const RegisterPage = () => {
     setSuccessMsg('');
   };
 
+  const validateFullName = (fullName) => {
+    const trimmed = fullName.trim();
+    if (!trimmed) {
+      return 'Full Name is required.';
+    }
+    if (trimmed.length < 2) {
+      return 'Full name must contain at least 2 characters.';
+    }
+    const nameRegex = /^[a-zA-Z\s'\-\.]+$/;
+    if (!nameRegex.test(trimmed)) {
+      return 'Full name must contain only letters, spaces, apostrophes, hyphens, or periods.';
+    }
+    return '';
+  };
+
   const validateTopFields = () => {
     if (!role) return 'Please select a role.';
-    if (!name.trim()) return 'Full Name is required.';
+    const nameErr = validateFullName(name);
+    if (nameErr) return nameErr;
     if (!email.trim()) return 'Email Address is required.';
     const emailRegex = /^\S+@\S+\.\S+$/;
     if (!emailRegex.test(email.trim())) return 'Please enter a valid email address.';
@@ -184,8 +202,15 @@ export const RegisterPage = () => {
       toast.error(errMsg);
       return;
     }
-    if (password.length < 6) {
-      const errMsg = 'Password must be at least 6 characters long.';
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_\-+=])[^\s]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      const errMsg = 'Password must be at least 8 characters long, and include at least one uppercase letter, one lowercase letter, one number, one special character, and no spaces.';
+      setValidationError(errMsg);
+      toast.error(errMsg);
+      return;
+    }
+    if (password !== confirmPassword) {
+      const errMsg = 'Confirm password must match password.';
       setValidationError(errMsg);
       toast.error(errMsg);
       return;
@@ -491,6 +516,44 @@ export const RegisterPage = () => {
                     title={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="form-group" style={{ marginTop: '0.65rem', marginBottom: 0 }}>
+                <label className="form-label" htmlFor="confirm-password-input" style={{ fontSize: '0.78rem', marginBottom: '0.2rem' }}>Confirm Password *</label>
+                <div style={{ position: 'relative' }}>
+                  <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#000000' }} />
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id="confirm-password-input"
+                    className="form-control"
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    disabled={fieldDisabledUntilOtp}
+                    style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem', paddingTop: '0.45rem', paddingBottom: '0.45rem', fontSize: '0.85rem' }}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '0.85rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#000000',
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: 0
+                    }}
+                    title={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+                  >
+                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
