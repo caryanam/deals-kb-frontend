@@ -425,7 +425,7 @@ export const LiveAuctionPage = () => {
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#059669'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#10b981'}
                 >
-                  Bid {formatCurrency(nextBidAmount || 0)}
+                  Bid {formatCurrency(incVal)}
                 </button>
               </form>
             )}
