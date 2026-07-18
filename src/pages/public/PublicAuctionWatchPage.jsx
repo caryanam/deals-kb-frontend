@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, BarChart2, Clock, Eye, RefreshCw, Trophy } from 'lucide-react';
 import { getPublicAuctionBids, getPublicAuctionProduct } from '../../api/productApi';
-import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials } from '../../utils/helpers';
 import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8000/api/ws/auction';
@@ -216,7 +216,7 @@ export const PublicAuctionWatchPage = () => {
               <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16, padding: '1rem', textAlign: 'center' }}>
                 <div style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase' }}>Current Highest Bid</div>
                 <div style={{ fontSize: 'clamp(2rem, 5vw, 3.25rem)', fontWeight: 950, color: '#22c55e', margin: '0.25rem 0' }}>{formatCurrency(highestBid)}</div>
-                <div style={{ color: '#cbd5e1', fontSize: '0.9rem' }}>Lead bidder: <strong>{highestBidder}</strong></div>
+                <div style={{ color: '#cbd5e1', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>Lead bidder:{' '}{highestBidder === 'No bids placed' ? <strong>{highestBidder}</strong> : <span className="bidder-avatar-chip">{getNameInitials(highestBidder)}</span>}</div>
               </div>
 
               {product?.status === 'ended' && (
@@ -239,7 +239,7 @@ export const PublicAuctionWatchPage = () => {
                   bids.map((bid, index) => (
                     <div key={bid.bid_id || `${bid.amount}-${index}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', border: '1px solid #e2e8f0', background: index === 0 ? '#f0fdf4' : '#fff', borderRadius: 14, padding: '0.75rem' }}>
                       <div>
-                        <div style={{ fontWeight: 900 }}>{bid.bidder_name || 'Bidder'}</div>
+                        <div className="bidder-avatar-chip bidder-avatar-chip--compact">{getNameInitials(bid.bidder_name || 'Bidder')}</div>
                         <div style={{ color: '#64748b', fontSize: '0.78rem' }}>{bid.created_at ? new Date(bid.created_at).toLocaleString('en-IN') : 'Just now'}</div>
                       </div>
                       <div style={{ fontWeight: 950, color: index === 0 ? '#16a34a' : '#0f172a' }}>{formatCurrency(bid.amount)}</div>

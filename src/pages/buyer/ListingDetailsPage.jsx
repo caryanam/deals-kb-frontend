@@ -7,7 +7,7 @@ import { createConversation } from '../../api/chatApi';
 import { createChatRequest } from '../../api/chatRequestApi';
 import { createReport } from '../../api/reportApi';
 import { useAuth } from '../../hooks/useAuth';
-import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials } from '../../utils/helpers';
 import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
 // import { getMyPlans } from '../../api/paymentApi';
@@ -672,7 +672,7 @@ export const ListingDetailsPage = () => {
                   fontWeight: 600
                 }}>
                   <CheckCircle size={18} style={{ color: '#8B8278' }} />
-                  <span>Bidding concluded. Winner: <strong>{product.winner_name || 'No bids placed'}</strong></span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>Bidding concluded. Winner: {product.winner_name ? <span className="bidder-avatar-chip bidder-avatar-chip--compact">{getNameInitials(product.winner_name)}</span> : <strong>No bids placed</strong>}</span>
                 </div>
 
                 {/* Seller contact detail visibility panel */}
@@ -826,7 +826,7 @@ export const ListingDetailsPage = () => {
                       fontSize: '0.85rem'
                     }}>
                       <div>
-                        <span style={{ fontWeight: 700, color: '#4a1a50' }}>{bid.bidderName || bid.bidder_name || 'Anonymous'}</span>
+                        <span className="bidder-avatar-chip bidder-avatar-chip--compact">{getNameInitials(bid.bidderName || bid.bidder_name || 'Anonymous')}</span>
                         <p style={{ fontSize: '0.7rem', color: '#8B8278', margin: 0 }}>{bid.time || 'N/A'}</p>
                       </div>
                       <span style={{ fontWeight: 800, color: '#6B1B71' }}>{formatCurrency(bid.amount)}</span>

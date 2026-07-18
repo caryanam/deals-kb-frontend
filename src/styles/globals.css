@@ -533,6 +533,39 @@ a {
   grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr) !important;
 }
 
+
+.bidder-avatar-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.bidder-avatar-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d600ff 0%, #8b16d9 52%, #430a7a 100%);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  box-shadow: 0 10px 22px rgba(107, 27, 113, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.bidder-avatar-chip--compact {
+  min-width: 1.85rem;
+  height: 1.85rem;
+  font-size: 0.72rem;
+  padding: 0 0.45rem;
+}
+
 .responsive-listing-form--relist {
   grid-template-columns: 1.6fr 1fr !important;
 }

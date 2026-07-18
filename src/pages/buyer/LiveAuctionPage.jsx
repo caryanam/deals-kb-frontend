@@ -4,7 +4,7 @@ import { ArrowLeft, Gavel, Clock, Trophy, AlertTriangle, RefreshCw, AlertCircle,
 import { useAuth } from '../../hooks/useAuth';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { getProductById } from '../../api/productApi';
-import { formatCurrency, safeParseJSON, formatRelativeTime } from '../../utils/helpers';
+import { formatCurrency, safeParseJSON, formatRelativeTime, getNameInitials } from '../../utils/helpers';
 import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
 
 const formatTimer = (seconds = 0) => {
@@ -333,7 +333,7 @@ export const LiveAuctionPage = () => {
                 {formatCurrency(currentHighestBid || 0)}
               </h3>
               <p style={{ fontSize: '0.85rem', color: '#8B8278', margin: 0 }}>
-                Highest Bidder: <strong style={{ color: '#ffffff' }}>{highestBidder || 'No bids placed'}</strong>
+                Highest Bidder:{' '}<span className="bidder-avatar-row">{highestBidder ? <span className="bidder-avatar-chip">{getNameInitials(highestBidder)}</span> : <strong style={{ color: '#ffffff' }}>No bids placed</strong>}</span>
               </p>
             </div>
 
@@ -373,9 +373,13 @@ export const LiveAuctionPage = () => {
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff' }}>Auction Ended</h3>
                 <p style={{ fontSize: '0.9rem', color: '#8B8278', margin: 0 }}>
                   Winner:{' '}
-                  <strong style={{ color: '#ffffff', fontSize: '1.1rem' }}>
-                    {winner || highestBidder || 'No winning bids registered'}
-                  </strong>
+                  {winner || highestBidder ? (
+                    <span className="bidder-avatar-chip" style={{ fontSize: '0.9rem', minWidth: '2.35rem', height: '2.35rem' }}>
+                      {winner ? getNameInitials(winner) : getNameInitials(highestBidder)}
+                    </span>
+                  ) : (
+                    <strong style={{ color: '#ffffff', fontSize: '1.1rem' }}>No winning bids registered</strong>
+                  )}
                 </p>
                 {(highestBidderId === user?.user_id || highestBidderId === user?.id) && (
                   <button
@@ -460,10 +464,11 @@ export const LiveAuctionPage = () => {
                     }}
                   >
                     <div>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#4a1a50' }}>
-                        {bid.bidderName || bid.bidder_name}
-                      </span>
-                      {index === 0 && (
+                      <div className="bidder-avatar-row">
+                        <span className="bidder-avatar-chip bidder-avatar-chip--compact">
+                          {getNameInitials(bid.bidderName || bid.bidder_name)}
+                        </span>
+                        {index === 0 && (
                         <span style={{
                           marginLeft: '0.5rem',
                           fontSize: '0.65rem',
@@ -477,6 +482,7 @@ export const LiveAuctionPage = () => {
                           Highest
                         </span>
                       )}
+                      </div>
                       <p style={{ fontSize: '0.7rem', color: '#8B8278', margin: 0 }}>{formatRelativeTime(bid.created_at || bid.time)}</p>
                     </div>
                     <span style={{

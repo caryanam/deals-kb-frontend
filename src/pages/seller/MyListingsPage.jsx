@@ -23,7 +23,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../hooks/useAuth';
 import { getProducts, getProductById, getProductBids, startAuction } from '../../api/productApi';
 import { getSellerChatRequests } from '../../api/chatRequestApi';
-import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
+import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials } from '../../utils/helpers';
 import { toast } from 'react-toastify';
 
 const formatDateTime = (value) => {
@@ -526,7 +526,7 @@ export const MyListingsPage = () => {
                     }}>
                       <Trophy size={14} />
                       <span>
-                        Sold to <strong>{product.winner_name || 'No winner'}</strong> for <strong>{formatINR(product.current_bid || 0)}</strong>
+                        Sold to {product.winner_name ? <span className="bidder-avatar-chip bidder-avatar-chip--compact" style={{ margin: '0 0.3rem', verticalAlign: 'middle' }}>{getNameInitials(product.winner_name)}</span> : <strong>No winner</strong>} for <strong>{formatINR(product.current_bid || 0)}</strong>
                       </span>
                     </div>
                   )}
@@ -901,7 +901,9 @@ export const MyListingsPage = () => {
                           alignItems: 'flex-start'
                         }}>
                           <div style={{ minWidth: 0 }}>
-                            <span style={{ display: 'block', fontSize: '0.9rem', fontWeight: 900, color: '#1F1A1D' }}>{bid.bidder_name || 'Bidder'}</span>
+                            <div className="bidder-avatar-row">
+                              <span className="bidder-avatar-chip bidder-avatar-chip--compact">{getNameInitials(bid.bidder_name || 'Bidder')}</span>
+                            </div>
                             <span style={{ display: 'block', fontSize: '0.76rem', color: '#8B8278', marginTop: '0.18rem' }}>{formatDateTime(bid.created_at)}</span>
                             {index === 0 && (
                               <span style={{ display: 'inline-block', marginTop: '0.45rem', fontSize: '0.68rem', fontWeight: 900, color: '#166534', backgroundColor: '#dcfce7', borderRadius: '999px', padding: '0.18rem 0.55rem' }}>

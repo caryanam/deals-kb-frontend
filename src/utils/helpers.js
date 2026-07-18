@@ -97,6 +97,18 @@ export const compressImage = (file, maxWidth = 1024, maxHeight = 1024, quality =
   });
 };
 
+export const getNameInitials = (name, fallback = 'Bidder') => {
+  const normalized = String(name || '').trim();
+  if (!normalized) return fallback;
+
+  const parts = normalized.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  return `${(parts[0][0] || '')}${(parts[parts.length - 1][0] || '')}`.toUpperCase();
+};
+
 export const formatRelativeTime = (timeInput) => {
   if (!timeInput) return 'Just now';
   try {
