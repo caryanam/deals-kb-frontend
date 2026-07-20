@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
+import { normalizeImageUrl, getProductCoverImage, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Gavel,
@@ -25,6 +25,11 @@ import { getProducts, getProductById, getProductBids, startAuction } from '../..
 import { getSellerChatRequests } from '../../api/chatRequestApi';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
 import { toast } from 'react-toastify';
+
+const VERIFICATION_DOCUMENT_KEYS = new Set(['rc_copy', 'insurance_copy', 'aadhaar_card', 'pan_card']);
+const getVerificationDocuments = (docs = {}) => Object.fromEntries(
+  Object.entries(docs || {}).filter(([key, value]) => VERIFICATION_DOCUMENT_KEYS.has(key) && value)
+);
 
 const formatDateTime = (value) => {
   if (!value) return 'Just now';
@@ -155,8 +160,8 @@ export const MyListingsPage = () => {
   });
 
   const modalListing = selectedListingData || selectedListingSummary;
-  const modalPhotos = useMemo(() => normalizePhotosArray(modalListing?.photos, []), [modalListing]);
-  const modalDocuments = useMemo(() => safeParseJSON(modalListing?.documents, {}), [modalListing]);
+  const modalPhotos = useMemo(() => getProductGalleryImages(modalListing), [modalListing]);
+  const modalDocuments = useMemo(() => getVerificationDocuments(safeParseJSON(modalListing?.documents, {})), [modalListing]);
   const modalSpecifications = useMemo(() => safeParseJSON(modalListing?.specifications, {}), [modalListing]);
   const listingBids = useMemo(() => {
     const bidList = Array.isArray(listingBidsData) ? listingBidsData : [];
@@ -422,7 +427,7 @@ export const MyListingsPage = () => {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {filteredListings.map((product) => {
-            const photosArray = safeParseJSON(product.photos, []);
+            const coverPhoto = getProductCoverImage(product);
             return (
               <div key={product.product_id} className="card" style={{
                 padding: '1.5rem',
@@ -442,9 +447,9 @@ export const MyListingsPage = () => {
                   flexShrink: 0,
                   cursor: 'pointer'
                 }} onClick={() => handleOpenListingDetails(product)}>
-                  {photosArray.length > 0 ? (
+                  {coverPhoto ? (
                     <img
-                      src={normalizeImageUrl(photosArray[0])}
+                      src={coverPhoto}
                       alt=""
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       onError={handleImageError}

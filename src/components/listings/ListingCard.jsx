@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Fuel, Gauge, Calendar, ShieldCheck, ArrowUpRight, Cpu, Layers, ImageOff } from 'lucide-react';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
 import { useAuth } from '../../hooks/useAuth';
-import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
+import { getProductCoverImage, handleImageError } from '../../utils/imageUtils';
 
 export const ListingCard = ({ listing: product }) => {
   const navigate = useNavigate();
@@ -79,10 +79,7 @@ export const ListingCard = ({ listing: product }) => {
   };
 
   const startingBidAmount = Math.ceil(Number(product?.expected_price || 0) * 0.5);
-  const photosArray = safeParseJSON(product.photos, []);
-  const coverPhoto = photosArray.length > 0
-    ? normalizeImageUrl(photosArray[0])
-    : '';
+  const coverPhoto = getProductCoverImage(product);
 
   return (
     <div 

@@ -8,9 +8,14 @@ import { createChatRequest } from '../../api/chatRequestApi';
 import { createReport } from '../../api/reportApi';
 import { useAuth } from '../../hooks/useAuth';
 import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
-import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
+import { normalizeImageUrl, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
 // import { getMyPlans } from '../../api/paymentApi';
+
+const VERIFICATION_DOCUMENT_KEYS = new Set(['rc_copy', 'insurance_copy', 'aadhaar_card', 'pan_card']);
+const getVerificationDocuments = (docs = {}) => Object.fromEntries(
+  Object.entries(docs || {}).filter(([key, value]) => VERIFICATION_DOCUMENT_KEYS.has(key) && value)
+);
 
 export const ListingDetailsPage = () => {
   const { id: productId } = useParams();
@@ -35,7 +40,7 @@ export const ListingDetailsPage = () => {
   const [mediaMode, setMediaMode] = useState('image'); // 'image' or 'video'
 
   const photosArray = useMemo(() => {
-    return product ? normalizePhotosArray(product.photos, []) : [];
+    return product ? getProductGalleryImages(product) : [];
   }, [product]);
 
   useEffect(() => {
@@ -354,7 +359,7 @@ export const ListingDetailsPage = () => {
   };
 
   const renderDocuments = () => {
-    const docs = safeParseJSON(product.documents, {});
+    const docs = getVerificationDocuments(safeParseJSON(product.documents, {}));
     if (Object.keys(docs).length === 0) return null;
 
     return (
@@ -377,7 +382,7 @@ export const ListingDetailsPage = () => {
               color: '#4a1a50'
             }}>
               <CheckCircle size={14} style={{ color: '#10b981' }} />
-              <span>{key.replace('_', ' ').toUpperCase()}</span>
+              <span>{key.replace(/_/g, ' ').toUpperCase()}</span>
             </div>
           ))}
         </div>
@@ -414,7 +419,7 @@ export const ListingDetailsPage = () => {
     );
   }
 
-  const gallery = normalizePhotosArray(product.photos, []);
+  const gallery = getProductGalleryImages(product);
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>

@@ -4,8 +4,13 @@ import { RefreshCw, PlayCircle, BarChart2, ShieldAlert, X, Gavel, Clock, Trophy,
 import { getProducts } from '../../api/productApi';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { formatCurrency, formatDate, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
-import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
+import { normalizeImageUrl, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
+
+const VERIFICATION_DOCUMENT_KEYS = new Set(['rc_copy', 'insurance_copy', 'aadhaar_card', 'pan_card']);
+const getVerificationDocuments = (docs = {}) => Object.fromEntries(
+  Object.entries(docs || {}).filter(([key, value]) => VERIFICATION_DOCUMENT_KEYS.has(key) && value)
+);
 
 // Sub-component for Ongoing Auction Live Monitor
 const AuctionMonitorPanel = ({ productId, onClose }) => {
@@ -518,7 +523,7 @@ export const AdminProductsPage = () => {
               <div>
                 <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Photos (Click to preview)</span>
                 <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
-                  {safeParseJSON(selectedProduct.photos, []).map((img, idx) => (
+                  {getProductGalleryImages(selectedProduct).map((img, idx) => (
                     <div 
                       key={idx} 
                       onClick={() => setPreviewMedia({ type: 'image', src: normalizeImageUrl(img), title: `Product Photo ${idx + 1}` })}
@@ -571,7 +576,7 @@ export const AdminProductsPage = () => {
 
               {/* Attached documents */}
               {(() => {
-                const docs = safeParseJSON(selectedProduct.documents, {});
+                const docs = getVerificationDocuments(safeParseJSON(selectedProduct.documents, {}));
                 if (!docs || Object.keys(docs).length === 0) return null;
                 return (
                   <div className="card" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

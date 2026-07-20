@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, BarChart2, Clock, Eye, RefreshCw, Trophy } from 'lucide-react';
 import { getPublicAuctionBids, getPublicAuctionProduct } from '../../api/productApi';
 import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
-import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
+import { getProductCoverImage, handleImageError } from '../../utils/imageUtils';
 
 const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8000/api/ws/auction';
 
@@ -131,8 +131,7 @@ export const PublicAuctionWatchPage = () => {
   }, [productId]);
 
   const coverPhoto = useMemo(() => {
-    const photos = safeParseJSON(product?.photos, []);
-    return Array.isArray(photos) && photos.length > 0 ? normalizeImageUrl(photos[0]) : '';
+    return getProductCoverImage(product);
   }, [product?.photos]);
 
   const highestBid = product?.current_bid || bids[0]?.amount || 0;

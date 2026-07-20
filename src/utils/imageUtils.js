@@ -94,6 +94,23 @@ export function normalizePhotosArray(photosData, fallback = []) {
   return arr.map(normalizeImageUrl).filter(Boolean);
 }
 
+
+export function getProductCoverImage(product) {
+  if (!product) return '';
+  const cover = product.cover_image || product.side_view_image;
+  if (cover) return normalizeImageUrl(cover);
+  const photos = normalizePhotosArray(product.photos, []);
+  return photos[0] || '';
+}
+
+export function getProductGalleryImages(product) {
+  if (!product) return [];
+  const photos = normalizePhotosArray(product.photos, []);
+  const cover = getProductCoverImage(product);
+  const ordered = cover ? [cover, ...photos.filter((photo) => photo !== cover)] : photos;
+  return Array.from(new Set(ordered));
+}
+
 /**
  * onError handler for <img> elements.
  * Swaps in a placeholder image and logs the failed URL in development.

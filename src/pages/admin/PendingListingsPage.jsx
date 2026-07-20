@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { ClipboardList, Eye, Check, X, AlertTriangle, FileText, Film, RefreshCw } from 'lucide-react';
 import { getProducts, reviewProduct } from '../../api/productApi';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
-import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
+import { normalizeImageUrl, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
+
+const VERIFICATION_DOCUMENT_KEYS = new Set(['rc_copy', 'insurance_copy', 'aadhaar_card', 'pan_card']);
+const getVerificationDocuments = (docs = {}) => Object.fromEntries(
+  Object.entries(docs || {}).filter(([key, value]) => VERIFICATION_DOCUMENT_KEYS.has(key) && value)
+);
 
 export const PendingListingsPage = () => {
   const [pendingList, setPendingList] = useState([]);
@@ -375,7 +380,7 @@ export const PendingListingsPage = () => {
               <div>
                 <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Photos (Click to preview)</span>
                 <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
-                  {safeParseJSON(selectedListing.photos, []).map((img, idx) => (
+                  {getProductGalleryImages(selectedListing).map((img, idx) => (
                     <div 
                       key={idx} 
                       onClick={() => setPreviewMedia({ type: 'image', src: normalizeImageUrl(img), title: `Product Photo ${idx + 1}` })}
@@ -430,7 +435,7 @@ export const PendingListingsPage = () => {
 
               {/* Attached documents list check */}
               {(() => {
-                const docs = safeParseJSON(selectedListing.documents, {});
+                const docs = getVerificationDocuments(safeParseJSON(selectedListing.documents, {}));
                 if (!docs || Object.keys(docs).length === 0) return null;
                 return (
                   <div className="card" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

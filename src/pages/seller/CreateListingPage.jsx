@@ -45,11 +45,22 @@ const TITLE_PLACEHOLDERS = {
 const CONDITIONS = ['Excellent', 'Good', 'Average', 'Needs Repair'];
 const FUEL_TYPES = ['Petrol', 'Diesel', 'Cng', 'Electric', 'Hybrid'];
 const OWNERSHIP_OPTIONS = ['1st', '2nd', '3rd', '4th+'];
+const FRONT_VIEW_SLOT = 'Front image';
+const BACK_VIEW_SLOT = 'Back image';
+const SIDE_VIEW_SLOT = 'Side view image';
+const VEHICLE_IMAGE_FIELD_BY_SLOT = {
+  [FRONT_VIEW_SLOT]: 'front_view_image',
+  [BACK_VIEW_SLOT]: 'back_view_image',
+  [SIDE_VIEW_SLOT]: 'side_view_image'
+};
+const isVehicleType = (type) => type === 'car' || type === 'bike';
+const getExistingVehicleImage = (product, docs, field) => normalizeImageUrl(product?.[field] || docs?.[field]) || null;
 
 const PHOTO_SLOTS = {
   car: [
     'Front image',
     'Back image',
+    SIDE_VIEW_SLOT,
     'Dashboard',
     'Seat',
     'Tyre',
@@ -60,6 +71,7 @@ const PHOTO_SLOTS = {
   bike: [
     'Front image',
     'Back image',
+    SIDE_VIEW_SLOT,
     'Dashboard',
     'Seat',
     'Tyre',
@@ -101,10 +113,10 @@ const initialSpecs = {
 
 const isPhotoSlotRequired = (type, slot) => {
   if (type === 'car') {
-    return ['Front image', 'Back image', 'Dashboard', 'Speedometer', 'Engine'].includes(slot);
+    return [FRONT_VIEW_SLOT, BACK_VIEW_SLOT, SIDE_VIEW_SLOT, 'Dashboard', 'Speedometer', 'Engine'].includes(slot);
   }
   if (type === 'bike') {
-    return ['Front image', 'Back image', 'Dashboard', 'Engine'].includes(slot);
+    return [FRONT_VIEW_SLOT, BACK_VIEW_SLOT, SIDE_VIEW_SLOT, 'Dashboard', 'Engine'].includes(slot);
   }
   if (type === 'laptop') {
     return ['Front image', 'Back image', 'Barcode image', 'Specification image'].includes(slot);
@@ -258,6 +270,12 @@ export const CreateListingPage = () => {
             nextSlots[slotLabel] = loadedPhotos[index];
           }
         });
+        if (isVehicleType(product.product_type || '')) {
+          Object.entries(VEHICLE_IMAGE_FIELD_BY_SLOT).forEach(([slotLabel, fieldName]) => {
+            const existingImage = getExistingVehicleImage(product, parsedDocs, fieldName);
+            if (existingImage) nextSlots[slotLabel] = existingImage;
+          });
+        }
         setPhotoSlots(nextSlots);
 
         setVideo(normalizeImageUrl(product.video) || null);
@@ -300,7 +318,7 @@ export const CreateListingPage = () => {
   const handleBrandChange = (newBrand) => {
     setBrand(newBrand);
     setModel('');
-    if (productType === 'car' || productType === 'bike') {
+    if (isVehicleType(productType)) {
       setMake(newBrand);
     }
   };
@@ -389,10 +407,13 @@ export const CreateListingPage = () => {
       warranty_available: specs.warrantyAvailable
     };
 
-    const finalMake = (productType === 'car' || productType === 'bike') ? brand : make;
+    const finalMake = isVehicleType(productType) ? brand : make;
     if (finalMake.trim()) specifications.make = finalMake.trim();
 
-    if (productType === 'car' || productType === 'bike') {
+    if (aadhaarCard) formData.append('aadhaar_card', aadhaarCard);
+    if (panCard) formData.append('pan_card', panCard);
+
+    if (isVehicleType(productType)) {
       Object.assign(specifications, {
         year: Number(specs.year),
         km_driven: Number(specs.kmDriven),
@@ -403,6 +424,10 @@ export const CreateListingPage = () => {
       });
       if (rcCopy) formData.append('rc_copy', rcCopy);
       if (insuranceCopy) formData.append('insurance_copy', insuranceCopy);
+      Object.entries(VEHICLE_IMAGE_FIELD_BY_SLOT).forEach(([slotLabel, fieldName]) => {
+        const fileOrUrl = photoSlots[slotLabel];
+        if (fileOrUrl) formData.append(fieldName, fileOrUrl);
+      });
     }
 
     if (productType === 'laptop') {
@@ -411,8 +436,6 @@ export const CreateListingPage = () => {
         ram: specs.ram.trim(),
         storage: specs.storage.trim()
       });
-      if (aadhaarCard) formData.append('aadhaar_card', aadhaarCard);
-      if (panCard) formData.append('pan_card', panCard);
       if (specs.batteryBackup.trim()) specifications.battery_backup = specs.batteryBackup.trim();
       if (specs.graphics.trim()) specifications.graphics = specs.graphics.trim();
       if (specs.batteryHealth.trim()) specifications.battery_health = specs.batteryHealth.trim();
@@ -423,17 +446,15 @@ export const CreateListingPage = () => {
         ram: specs.ram.trim(),
         storage: specs.storage.trim()
       });
-      if (aadhaarCard) formData.append('aadhaar_card', aadhaarCard);
-      if (panCard) formData.append('pan_card', panCard);
       if (specs.imeiNumber.trim()) specifications.imei_number = specs.imeiNumber.trim();
     }
 
     formData.append('specifications', JSON.stringify(specifications));
 
-    Object.values(photoSlots).forEach((val) => {
-      if (val) {
-        formData.append('photos', val);
-      }
+    Object.entries(photoSlots).forEach(([slotLabel, val]) => {
+      if (!val) return;
+      if (isVehicleType(productType) && slotLabel === SIDE_VIEW_SLOT) return;
+      formData.append('photos', val);
     });
 
     if (video) {
@@ -459,9 +480,10 @@ export const CreateListingPage = () => {
       return `Please upload required photos: ${missingSlots.join(', ')}.`;
     }
 
-    if (productType === 'car' || productType === 'bike') {
+    if (isVehicleType(productType)) {
       if (!specs.ownership || !specs.accidental) return 'Please select ownership and accidental status.';
       if (!rcCopy || !insuranceCopy) return 'RC Document and Insurance Document are required.';
+      if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
       
       if (specs.year) {
         const yearNum = parseInt(specs.year, 10);
@@ -633,7 +655,7 @@ export const CreateListingPage = () => {
 
           <section>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>{sectionTitle[productType]}</h2>
-            {(productType === 'car' || productType === 'bike') && (
+            {isVehicleType(productType) && (
               <>
                 <div className="responsive-fields-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
                   <Input label="Manufacturing Year" type="number" value={specs.year} onChange={(v) => updateSpec('year', v)} placeholder="e.g. 2020" />
@@ -715,7 +737,7 @@ export const CreateListingPage = () => {
             </div>
           </div>
 
-          {(productType === 'car' || productType === 'bike') && (
+          {isVehicleType(productType) && (
             <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.25rem' }}>Admin Documents *</h2>
               <>
@@ -725,7 +747,7 @@ export const CreateListingPage = () => {
             </div>
           )}
 
-          {(productType === 'laptop' || productType === 'mobile') && (
+          {(productType === 'car' || productType === 'bike' || productType === 'laptop' || productType === 'mobile') && (
             <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.25rem' }}>KYC Documents *</h2>
               <>
@@ -910,9 +932,9 @@ const PhotoSlot = ({ label, value, onUpload, onRemove, required }) => {
           <span style={{ fontWeight: 850, color: '#111827', fontSize: '0.9rem', lineHeight: 1.25 }}>
             {label} {required && <span style={{ color: '#ef4444' }}>*</span>}
           </span>
-          {(label === 'Front image' || label === 'Back image') && (
+          {([FRONT_VIEW_SLOT, BACK_VIEW_SLOT, SIDE_VIEW_SLOT].includes(label)) && (
             <p style={{ margin: '0.15rem 0 0', color: '#8B8278', fontSize: '0.72rem', fontWeight: 700, lineHeight: 1.25 }}>
-              Note: number plate should be hidden.
+              Note: number plate should be hidden or unreadable.
             </p>
           )}
         </div>

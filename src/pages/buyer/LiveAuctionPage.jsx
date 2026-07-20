@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { getProductById } from '../../api/productApi';
 import { formatCurrency, safeParseJSON, formatRelativeTime, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
-import { normalizeImageUrl, normalizePhotosArray, handleImageError } from '../../utils/imageUtils';
+import { getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 
 const formatTimer = (seconds = 0) => {
   const safeSeconds = Math.max(0, Number(seconds) || 0);
@@ -61,7 +61,7 @@ export const LiveAuctionPage = () => {
       try {
         const details = await getProductById(productId);
         setProduct(details);
-        const photosArray = normalizePhotosArray(details.photos, []);
+        const photosArray = getProductGalleryImages(details);
         if (photosArray.length > 0) {
           setActiveImage(photosArray[0]);
         }
