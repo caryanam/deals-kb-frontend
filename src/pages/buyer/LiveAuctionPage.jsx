@@ -101,15 +101,6 @@ export const LiveAuctionPage = () => {
       await placeBid(parsedAmount);
       setLocalError('');
     } catch (err) {
-      // Temporary no-payment mode:
-      // const required = err.data?.detail?.required_plan || err.data?.required_plan;
-      // if (err.status === 402 || required) {
-      //   setRequiredPlan(required || null);
-      //   setShowPlans(true);
-      //   setLocalError('');
-      // } else {
-      //   setLocalError(err.message || 'Failed to place bid.');
-      // }
       setLocalError(err.message || 'Failed to place bid.');
     } finally {
       setSubmitting(false);

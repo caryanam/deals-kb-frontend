@@ -1,40 +1,40 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { X, ShieldCheck, Loader2, CheckCircle2 } from 'lucide-react';
 import { toast } from 'react-toastify';
-// import { triggerPayment } from '../../utils/paymentHelper';
+import { triggerBuyerPassPayment } from '../../utils/paymentHelper';
 import { formatCurrency, PRODUCT_TYPE_LABELS } from '../../utils/helpers';
 import { getMyPlans } from '../../api/paymentApi';
 
 const CATEGORY_PLAN_IDS = {
-  mobile: 'buyer_mobile_24h',
-  laptop: 'buyer_laptop_24h',
-  car: 'buyer_car_24h',
-  bike: 'buyer_bike_24h'
+  mobile: 'buyer_mobile_day',
+  laptop: 'buyer_laptop_day',
+  car: 'buyer_car_day',
+  bike: 'buyer_bike_day'
 };
 
 const FALLBACK_PLANS = {
   mobile: {
-    plan_id: 'buyer_mobile_24h',
+    plan_id: 'buyer_mobile_day',
     name: 'Mobile Bidding Pass',
-    amount: 100,
+    amount: 1,
     description: 'Unlimited mobile bidding for 24 hours.'
   },
   laptop: {
-    plan_id: 'buyer_laptop_24h',
+    plan_id: 'buyer_laptop_day',
     name: 'Laptop Bidding Pass',
-    amount: 100,
+    amount: 1,
     description: 'Unlimited laptop bidding for 24 hours.'
   },
   car: {
-    plan_id: 'buyer_car_24h',
+    plan_id: 'buyer_car_day',
     name: 'Car Bidding Pass',
-    amount: 100,
+    amount: 1,
     description: 'Unlimited car bidding for 24 hours.'
   },
   bike: {
-    plan_id: 'buyer_bike_24h',
+    plan_id: 'buyer_bike_day',
     name: 'Bike Bidding Pass',
-    amount: 100,
+    amount: 1,
     description: 'Unlimited bike bidding for 24 hours.'
   }
 };
@@ -84,18 +84,12 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
     }
     try {
       setActivatingPlanId(plan.plan_id);
-      // Temporary no-payment mode:
-      // const freshUser = await triggerPayment(plan.plan_id || CATEGORY_PLAN_IDS[plan.product_type]);
-      // if (freshUser) {
-      //   toast.success('Bidding pass activated successfully.');
-      //   onActivated?.(freshUser, plan);
-      //   const data = await getMyPlans().catch(() => []);
-      //   setPlanStatuses(Array.isArray(data) ? data : []);
-      //   onClose?.();
-      // }
-      toast.info('Bidding passes are temporarily not required. You can continue without payment.');
-      onActivated?.(null, plan);
-      onClose?.();
+      const result = await triggerBuyerPassPayment(plan.plan_id || CATEGORY_PLAN_IDS[plan.product_type]);
+      if (result) {
+        toast.info('Complete payment in the CCAvenue window to activate your bidding pass.');
+        onActivated?.(null, plan);
+        onClose?.();
+      }
     } finally {
       setActivatingPlanId('');
     }
@@ -155,14 +149,14 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                     </span>
                     {plan.active && <CheckCircle2 size={17} style={{ color: '#16a34a' }} />}
                   </div>
-                  <h3 style={{ margin: 0, color: '#1F1A1D', fontSize: '1.03rem', fontWeight: 900 }}>{plan.name}</h3>
+                  <h3 style={{ margin: 0, color: '#1F1A1D', fontSize: '1.03rem', fontWeight: 900 }}>{plan.name || plan.plan_name}</h3>
                   <strong style={{ color: '#1F1A1D', fontSize: '1.75rem', fontWeight: 950 }}>
-                    {formatCurrency(plan.amount / 100)} <span style={{ fontSize: '0.86rem', color: '#8B8278', fontWeight: 800 }}>/ 24 hours</span>
+                    {formatCurrency(Number(plan.amount || 1))} <span style={{ fontSize: '0.86rem', color: '#8B8278', fontWeight: 800 }}>/ 24 hours</span>
                   </strong>
                   <p style={{ margin: 0, color: '#8B8278', fontSize: '0.84rem', fontWeight: 650, minHeight: 38 }}>{plan.description}</p>
-                  {plan.active && plan.expires_at && (
+                  {plan.active && (plan.active_until || plan.expires_at) && (
                     <span style={{ fontSize: '0.72rem', color: '#166534', fontWeight: 800 }}>
-                      Active until {new Date(plan.expires_at).toLocaleString()}
+                      Active until {new Date(plan.active_until || plan.expires_at).toLocaleString()}
                     </span>
                   )}
                   <button
@@ -180,7 +174,7 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
             })}
           </div>
           <p style={{ margin: '0.65rem 0 0', color: '#8B8278', fontSize: '0.78rem', textAlign: 'center', fontWeight: 700 }}>
-            Secure payment powered by Cashfree
+            Secure payment powered by CCAvenue
           </p>
         </div>
       </div>

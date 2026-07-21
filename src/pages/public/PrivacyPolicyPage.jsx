@@ -65,7 +65,7 @@ export const PrivacyPolicyPage = () => (
         'Product interest and offer activity: Products you view, save, show interest in, send price offers for, negotiate on, or interact with through the platform.',
         'Subscription and platform access details: Subscription plan details, listing access, platform access status, payment references, and service activation details.',
         'Listing information: Product details, photos, videos, ownership-related documents, condition details, pricing information, and other information uploaded by Sellers or Dealers.',
-        'Payment data: Transaction IDs, order references, payment status, invoice details, and payment confirmation details processed through Cashfree or other approved payment partners. We do not store card numbers, CVV, UPI PIN, net banking passwords, or other sensitive payment credentials.',
+        'Payment data: Transaction IDs, order references, payment status, invoice details, and payment confirmation details processed through CCAvenue or other approved payment partners. We do not store card numbers, CVV, UPI PIN, net banking passwords, or other sensitive payment credentials.',
         'Device and usage data: IP address, browser type, device information, operating system, pages visited, session activity, and platform usage details for security, analytics, and service improvement.',
         'Communication data: Messages, enquiries, interest requests, offer-related discussions, and communication exchanged between buyers, sellers, dealers, and our support or admin team.',
       ]} />
@@ -92,7 +92,7 @@ export const PrivacyPolicyPage = () => (
       <P>We do not sell your personal data.</P>
       <P>We may share limited information with:</P>
       <Ul items={[
-        'Cashfree or payment partners: For secure payment processing, payment confirmation, refunds, and transaction verification.',
+        'CCAvenue or payment partners: For secure payment processing, payment confirmation, refunds, and transaction verification.',
         'Admin and support team: For listing verification, account support, dispute handling, fraud prevention, document review, and service management.',
         'Interested buyer, seller, or dealer: Limited contact or product-related information may be shared when required to enable genuine product sale or purchase communication.',
         'Service providers: Trusted technology, hosting, analytics, communication, storage, and support service providers who help us operate the platform.',
@@ -118,7 +118,7 @@ export const PrivacyPolicyPage = () => (
         'Payment processing through secure payment partners',
         'Monitoring for suspicious or unauthorized activity',
       ]} />
-      <P>Passwords are never stored in plain text. Payment information is processed securely by Cashfree or other approved payment partners. DealsKB does not store sensitive card details, CVV, UPI PIN, or banking passwords.</P>
+      <P>Passwords are never stored in plain text. Payment information is processed securely by CCAvenue or other approved payment partners. DealsKB does not store sensitive card details, CVV, UPI PIN, or banking passwords.</P>
       <P>However, no online platform can guarantee complete security. Users are responsible for keeping their login credentials confidential and must immediately notify us of any unauthorized account activity.</P>
     </Section>
 

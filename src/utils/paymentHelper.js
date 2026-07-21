@@ -1,143 +1,57 @@
-import { createPaymentOrder, markPaymentFailed, verifyPayment } from '../api/paymentApi';
-import { getCurrentUser } from '../api/authApi';
+import { createCCAvenuePayment } from '../api/paymentApi';
 import { toast } from 'react-toastify';
 
-const CASHFREE_CHECKOUT_SRC = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-
-const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
-
-const getCashfreeFactory = () => window.Cashfree || globalThis.Cashfree;
-
-const buildFailureReason = (result) => {
-  const error = result?.error || {};
-  return [
-    error.message || error.description || error.reason || 'Payment failed',
-    error.code ? `Code: ${error.code}` : '',
-    error.type ? `Type: ${error.type}` : ''
-  ].filter(Boolean).join(' | ');
-};
-
-const verifyCashfreeOrder = async (orderId, attempts = 5) => {
-  let lastError = null;
-
-  for (let attempt = 0; attempt < attempts; attempt += 1) {
-    try {
-      return await verifyPayment({ cashfree_order_id: orderId });
-    } catch (err) {
-      lastError = err;
-      const detail = err.response?.data?.detail || '';
-      const retriable = /payment not completed/i.test(detail) || /ACTIVE/i.test(detail);
-      if (!retriable || attempt === attempts - 1) {
-        break;
-      }
-      await sleep(1500);
-    }
+const submitCCAvenueForm = ({ gateway_url, enc_request, access_code }) => {
+  if (!gateway_url || !enc_request || !access_code) {
+    throw new Error('CCAvenue payment session could not be created.');
   }
 
-  throw lastError || new Error('Payment verification failed');
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = gateway_url;
+  form.style.display = 'none';
+
+  const encInput = document.createElement('input');
+  encInput.type = 'hidden';
+  encInput.name = 'encRequest';
+  encInput.value = enc_request;
+  form.appendChild(encInput);
+
+  const accessInput = document.createElement('input');
+  accessInput.type = 'hidden';
+  accessInput.name = 'access_code';
+  accessInput.value = access_code;
+  form.appendChild(accessInput);
+
+  document.body.appendChild(form);
+  form.submit();
 };
 
-export const loadCashfree = () =>
-  new Promise((resolve) => {
-    if (getCashfreeFactory()) {
-      resolve(true);
-      return;
-    }
-
-    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
-      resolve(false);
-      return;
-    }
-
-    document
-      .querySelectorAll(`script[src="${CASHFREE_CHECKOUT_SRC}"]`)
-      .forEach((script) => script.remove());
-
-    const script = document.createElement('script');
-    let settled = false;
-    const finish = (loaded) => {
-      if (settled) return;
-      settled = true;
-      window.clearTimeout(timeoutId);
-      if (!loaded) script.remove();
-      resolve(loaded);
-    };
-    const timeoutId = window.setTimeout(() => finish(false), 15000);
-    script.src = CASHFREE_CHECKOUT_SRC;
-    script.async = true;
-    script.onload = () => finish(Boolean(getCashfreeFactory()));
-    script.onerror = () => finish(false);
-    document.body.appendChild(script);
-  });
-
-
-export const triggerPayment = async (planId, onSuccess, onCancel) => {
+export const triggerPayment = async (payload, onSuccess, onCancel) => {
   try {
-    const loaded = await loadCashfree();
-    if (!loaded) {
-      toast.error('Unable to load Cashfree Checkout. Please check your internet connection and try again.');
-      return null;
-    }
+    const requestPayload = typeof payload === 'string'
+      ? { payment_type: 'BUYER_PASS', plan_id: payload }
+      : payload;
 
-    const data = await createPaymentOrder(planId);
-    const paymentSessionId = data.payment_session_id || data.paymentSessionId || data?.payment?.cashfree_payment_session_id || data?.payment?.cashfreePaymentSessionId;
-    const orderId = data.order_id || data.orderId || data?.payment?.cashfree_order_id || data?.payment?.cashfreeOrderId;
-    const modeValue = data.cashfree_mode || data.cashfreeMode || data?.payment?.cashfree_mode;
-    const mode = modeValue === 'production' ? 'production' : 'sandbox';
-
-    if (!paymentSessionId || !orderId) {
-      console.error('Cashfree order payload missing checkout fields:', data);
-      toast.error('Cashfree order session could not be created.');
-      return null;
-    }
-
-    const cashfreeFactory = getCashfreeFactory();
-    if (typeof cashfreeFactory !== 'function') {
-      toast.error('Cashfree SDK is not available.');
-      return null;
-    }
-
-    const cashfree = cashfreeFactory({ mode });
-    const result = await cashfree.checkout({
-      paymentSessionId,
-      redirectTarget: '_modal'
-    });
-
-    if (result?.error) {
-      const reason = buildFailureReason(result);
-      await markPaymentFailed(orderId, reason).catch(() => null);
-      toast.error(reason);
-      if (onCancel) onCancel();
-      return null;
-    }
-
-    try {
-      await verifyCashfreeOrder(orderId);
-
-      const freshUser = await getCurrentUser();
-      sessionStorage.setItem('user', JSON.stringify(freshUser));
-
-      toast.success('Payment verified successfully.');
-      if (onSuccess) onSuccess(freshUser);
-      return freshUser;
-    } catch (err) {
-      console.error('Cashfree payment verification failed:', err);
-      const detail = err.response?.data?.detail || 'Payment verification failed.';
-      await markPaymentFailed(orderId, detail).catch(() => null);
-      if (/payment not completed/i.test(detail)) {
-        toast.info('Payment cancelled or not completed.');
-      } else {
-        toast.error(detail);
-      }
-      if (onCancel) onCancel();
-      return null;
-    }
+    const data = await createCCAvenuePayment(requestPayload);
+    sessionStorage.setItem('pending_payment_order_id', data.order_id || '');
+    toast.info('Redirecting to secure CCAvenue checkout...');
+    submitCCAvenueForm(data);
+    if (onSuccess) onSuccess(data);
+    return data;
   } catch (err) {
-    console.error('Failed to start payment:', err);
-    toast.error(err.response?.data?.detail || 'Failed to initialize Cashfree payment.');
+    console.error('Failed to start CCAvenue payment:', err);
+    toast.error(err.response?.data?.detail || err.message || 'Failed to initialize payment.');
+    if (onCancel) onCancel();
     return null;
   }
 };
 
+export const triggerBuyerPassPayment = (planId, onSuccess, onCancel) =>
+  triggerPayment({ payment_type: 'BUYER_PASS', plan_id: planId }, onSuccess, onCancel);
 
+export const triggerDealerPlanPayment = (planId, onSuccess, onCancel) =>
+  triggerPayment({ payment_type: 'DEALER_PLAN', plan_id: planId }, onSuccess, onCancel);
 
+export const triggerSellerListingPayment = (listingId, onSuccess, onCancel) =>
+  triggerPayment({ payment_type: 'SELLER_LISTING', listing_id: listingId }, onSuccess, onCancel);

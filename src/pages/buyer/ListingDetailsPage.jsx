@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
 import { normalizeImageUrl, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
-// import { getMyPlans } from '../../api/paymentApi';
+import { getMyPlans } from '../../api/paymentApi';
 
 const VERIFICATION_DOCUMENT_KEYS = new Set(['rc_copy', 'insurance_copy', 'aadhaar_card', 'pan_card']);
 const getVerificationDocuments = (docs = {}) => Object.fromEntries(
@@ -211,23 +211,21 @@ export const ListingDetailsPage = () => {
 
   const handleJoinAuction = async () => {
     if (product && product.status === 'live') {
-      // Temporary no-payment mode:
-      // if (user?.role === 'Buyer') {
-      //   try {
-      //     const plans = await getMyPlans();
-      //     const activePlan = (plans || []).find((plan) => plan.product_type === product.product_type && plan.active);
-      //     if (!activePlan) {
-      //       const required = (plans || []).find((plan) => plan.product_type === product.product_type && plan.role === 'Buyer');
-      //       setRequiredPlan(required || null);
-      //       setShowPlans(true);
-      //       return;
-      //     }
-      //   } catch (err) {
-      //     console.warn('Failed to check bidding pass:', err);
-      //     setShowPlans(true);
-      //     return;
-      //   }
-      // }
+      if (user?.role === 'Buyer') {
+        try {
+          const plans = await getMyPlans();
+          const activePlan = (plans || []).find((plan) => plan.product_type === product.product_type && plan.active);
+          if (!activePlan) {
+            setRequiredPlan(null);
+            setShowPlans(true);
+            return;
+          }
+        } catch (err) {
+          console.warn('Failed to check bidding pass:', err);
+          setShowPlans(true);
+          return;
+        }
+      }
       navigate(`/buyer/auction/${product.product_id}`);
     }
   };

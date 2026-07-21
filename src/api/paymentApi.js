@@ -6,22 +6,30 @@ export const getPaymentConfig = async () => {
 };
 
 export const getPaymentPlans = async () => {
-  const response = await api.get("/plans");
+  const response = await api.get("/payments/plans");
   return response.data;
 };
 
 export const getMyPlans = async () => {
-  const response = await api.get("/plans/my");
+  const response = await api.get("/payments/plans/my");
   return response.data;
 };
 
-export const createPaymentOrder = async (planId) => {
-  const response = await api.post("/payments/create-plan-order", { plan_id: planId });
+export const createCCAvenuePayment = async (payload) => {
+  const response = await api.post("/payments/ccavenue/create", payload);
   return response.data;
 };
 
-export const verifyPayment = async (payload) => {
-  const response = await api.post("/payments/verify-plan-payment", payload);
+export const createPaymentOrder = async (planId, paymentType = "BUYER_PASS") => {
+  return createCCAvenuePayment({ plan_id: planId, payment_type: paymentType });
+};
+
+export const createSellerListingPayment = async (listingId) => {
+  return createCCAvenuePayment({ listing_id: listingId, payment_type: "SELLER_LISTING" });
+};
+
+export const getPaymentStatus = async (orderId) => {
+  const response = await api.get(`/payments/${orderId}/status`);
   return response.data;
 };
 

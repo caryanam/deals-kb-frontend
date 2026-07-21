@@ -36,7 +36,7 @@ const faqs = [
   },
   {
     q: 'Is my payment information secure?',
-    a: 'Yes. All payments are processed through Cashfree with industry-standard SSL encryption. We never store your card details.',
+    a: 'Yes. All payments are processed through CCAvenue with industry-standard SSL encryption. We never store your card details.',
   },
 ];
 

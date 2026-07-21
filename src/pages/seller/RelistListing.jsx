@@ -6,7 +6,6 @@ import { getRelistData, submitRelistAfterPayment, getProducts } from '../../api/
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
 import { normalizeImageUrl } from '../../utils/imageUtils';
-// import { loadCashfree } from '../../utils/paymentHelper';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -41,16 +40,6 @@ const VEHICLE_IMAGE_FIELD_BY_SLOT = {
 };
 const isVehicleType = (type) => type === 'car' || type === 'bike';
 const getExistingVehicleImage = (product, docs, field) => normalizeImageUrl(product?.[field] || docs?.[field]) || null;
-const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
-
-const buildCashfreeFailureReason = (result) => {
-  const error = result?.error || {};
-  return [
-    error.message || error.description || error.reason || 'Payment cancelled or failed',
-    error.code ? `Code: ${error.code}` : ''
-  ].filter(Boolean).join(' | ');
-};
-
 const PHOTO_SLOTS = {
   car: [
     'Front image',
@@ -528,7 +517,6 @@ export const RelistListing = () => {
       if (isNaN(storageNum) || storageNum < 10) {
         return 'Storage must be at least 10 GB.';
       }
-      if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
     }
 
     if (productType === 'mobile') {
@@ -548,7 +536,6 @@ export const RelistListing = () => {
       if (imeiStr && !/^\d{15}$/.test(imeiStr)) {
         return 'IMEI number must be exactly 15 digits.';
       }
-      if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
     }
 
     return '';
@@ -569,10 +556,6 @@ export const RelistListing = () => {
     setLoading(true);
 
     try {
-      // Temporary no-payment mode:
-      // const loaded = await loadCashfree();
-      // const orderRes = await createRelistOrder(listingId);
-      // ...Cashfree checkout intentionally bypassed for now.
       await submitRelistAfterPayment(listingId, formData);
       toast.success('Listing submitted for admin approval.');
       navigate(`${basePath}/my-listings`);
@@ -732,7 +715,7 @@ export const RelistListing = () => {
               </div>
             )}
 
-            {(productType === 'car' || productType === 'bike' || productType === 'laptop' || productType === 'mobile') && (
+            {isVehicleType(productType) && (
               <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                 <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.25rem' }}>KYC Documents *</h2>
                 <UploadRow label="Aadhaar Card" file={aadhaarCard} onUpload={(e) => handleDocUpload(e, setAadhaarCard)} onRemove={() => setAadhaarCard(null)} />

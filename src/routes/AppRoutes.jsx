@@ -48,6 +48,7 @@ import DeleteAccountPage from '../pages/public/DeleteAccountPage';
 // Common
 import MyReportsPage from '../pages/buyer/MyReportsPage';
 import PaymentsPage from '../pages/payments/PaymentsPage';
+import PaymentResultPage from '../pages/payments/PaymentResultPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 export const AppRoutes = () => {
@@ -69,6 +70,7 @@ export const AppRoutes = () => {
       <Route path="/seller-guide" element={<SellerGuidePage />} />
       <Route path="/auction/watch/:productId" element={<PublicAuctionWatchPage />} />
       <Route path="/delete-account" element={<DeleteAccountPage />} />
+      <Route path="/payment-result" element={<PaymentResultPage />} />
 
       {/* 2. Buyer Protected Routes */}
       <Route

@@ -6,7 +6,7 @@ import { createProduct, getProductById, updateProduct, getProducts } from '../..
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
 import { normalizeImageUrl } from '../../utils/imageUtils';
-// import { triggerPayment } from '../../utils/paymentHelper';
+import { triggerSellerListingPayment } from '../../utils/paymentHelper';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -29,10 +29,10 @@ const CATEGORIES = [
 ];
 
 const LISTING_FEES = {
-  car: '\u20B9118',
-  mobile: '\u20B911.80',
-  bike: '\u20B959',
-  laptop: '\u20B923.60'
+  car: '\u20B91',
+  mobile: '\u20B91',
+  bike: '\u20B91',
+  laptop: '\u20B91'
 };
 
 const TITLE_PLACEHOLDERS = {
@@ -513,7 +513,6 @@ export const CreateListingPage = () => {
       if (isNaN(storageNum) || storageNum < 10) {
         return 'Storage must be at least 10 GB.';
       }
-      if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
     }
 
     if (productType === 'mobile') {
@@ -533,7 +532,6 @@ export const CreateListingPage = () => {
       if (imeiStr && !/^\d{15}$/.test(imeiStr)) {
         return 'IMEI number must be exactly 15 digits.';
       }
-      if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
     }
 
     return '';
@@ -558,13 +556,12 @@ export const CreateListingPage = () => {
         await updateProduct(editId, payload);
         toast.success('Product listing updated successfully!');
       } else {
-        // Temporary no-payment mode:
-        // if (user?.role !== 'Dealer') {
-        //   const paymentResult = await triggerPayment(`seller_listing_${productType}`);
-        //   if (!paymentResult) return;
-        // }
-        await createProduct(payload);
-        toast.success('Product listing created successfully!');
+        const createdProduct = await createProduct(payload);
+        const listingId = createdProduct?.product_id || createdProduct?.id;
+        toast.success('Product listing created successfully! Redirecting to payment...');
+        if (listingId) {
+          await triggerSellerListingPayment(listingId);
+        }
       }
       setSuccessMsg('Listing submitted for approval. Redirecting...');
       setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
@@ -747,7 +744,7 @@ export const CreateListingPage = () => {
             </div>
           )}
 
-          {(productType === 'car' || productType === 'bike' || productType === 'laptop' || productType === 'mobile') && (
+          {isVehicleType(productType) && (
             <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.25rem' }}>KYC Documents *</h2>
               <>

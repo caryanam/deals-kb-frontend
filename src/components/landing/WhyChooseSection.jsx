@@ -43,7 +43,7 @@ const WhyChooseSection = () => {
       color: '#f0fdfa',
       iconColor: '#0d9488',
       title: 'Secure Payments',
-      desc: 'Protected Cashfree payment infrastructure keeps user information and order transactions secure and transparent.'
+      desc: 'Protected CCAvenue payment infrastructure keeps user information and order transactions secure and transparent.'
     }
   ];
 

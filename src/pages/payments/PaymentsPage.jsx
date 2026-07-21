@@ -4,12 +4,12 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../hooks/useAuth';
 import { getMyPayments } from '../../api/paymentApi';
 
-const formatINR = (amountInPaise = 0) =>
+const formatINR = (amount = 0) =>
   new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
-    maximumFractionDigits: 0
-  }).format((amountInPaise || 0) / 100);
+    maximumFractionDigits: 2
+  }).format(Number(amount || 0));
 
 const PaymentsPage = () => {
   const { user } = useAuth();
@@ -73,8 +73,11 @@ const PaymentsPage = () => {
                   </thead>
                   <tbody>
                     {payments.map((payment) => {
-                      const statusLabel = payment.status === 'paid' ? 'Paid' : payment.status === 'failed' ? 'Failed' : 'Not completed';
-                      const gatewayOrderId = payment.cashfree_order_id || '-';
+                      const normalizedStatus = String(payment.status || '').toUpperCase();
+                      const statusLabel = normalizedStatus === 'SUCCESS' || normalizedStatus === 'PAID' ? 'Paid' : normalizedStatus === 'FAILED' ? 'Failed' : normalizedStatus || 'Not completed';
+                      const gatewayOrderId = payment.order_id || payment.gateway_tracking_id || '-';
+                      const paid = normalizedStatus === 'SUCCESS' || normalizedStatus === 'PAID';
+                      const failed = normalizedStatus === 'FAILED' || normalizedStatus === 'ABORTED' || normalizedStatus === 'INVALID';
                       return (
                         <tr key={payment.payment_id} style={{ borderTop: '1px solid #f1f5f9' }}>
                           <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: '#1F1A1D' }}>{payment.plan_name}</td>
@@ -85,8 +88,8 @@ const PaymentsPage = () => {
                               borderRadius: '999px',
                               fontSize: '0.75rem',
                               fontWeight: 800,
-                              backgroundColor: payment.status === 'paid' ? '#dcfce7' : payment.status === 'failed' ? '#fee2e2' : '#e0f2fe',
-                              color: payment.status === 'paid' ? '#166534' : payment.status === 'failed' ? '#991b1b' : '#075985'
+                              backgroundColor: paid ? '#dcfce7' : failed ? '#fee2e2' : '#e0f2fe',
+                              color: paid ? '#166534' : failed ? '#991b1b' : '#075985'
                             }}>
                               {statusLabel}
                             </span>
