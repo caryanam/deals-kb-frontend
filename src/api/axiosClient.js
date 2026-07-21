@@ -27,6 +27,7 @@ const PUBLIC_AUTH_BYPASS_PATHS = [
   "/auth/send-registration-otp",
   "/auth/check-registration-otp",
   "/auth/verify-registration-otp",
+  "/payments/",
 ];
 
 const shouldBypassUnauthorizedRedirect = (error) => {
