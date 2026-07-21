@@ -494,10 +494,11 @@ export const CreateListingPage = () => {
       return `Please upload required photos: ${missingSlots.join(', ')}.`;
     }
 
+    if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
+
     if (isVehicleType(productType)) {
       if (!specs.ownership || !specs.accidental) return 'Please select ownership and accidental status.';
       if (!rcCopy || !insuranceCopy) return 'RC Document and Insurance Document are required.';
-      if (!aadhaarCard || !panCard) return 'Aadhaar Card and PAN Card are required.';
       
       if (specs.year) {
         const yearNum = parseInt(specs.year, 10);
@@ -684,7 +685,7 @@ export const CreateListingPage = () => {
                     backgroundColor: isActive ? '#dcfce7' : '#fee2e2',
                     color: isActive ? '#166534' : '#991b1b'
                   }}>
-                    {isActive ? 'Active' : 'Inactive (Redirects to payment on submit)'}
+                    {isActive ? 'Active' : 'Inactive (Payment needed)'}
                   </strong>
                 </div>
               );
@@ -813,15 +814,13 @@ export const CreateListingPage = () => {
             </div>
           )}
 
-          {isVehicleType(productType) && (
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.25rem' }}>KYC Documents *</h2>
-              <>
-                <UploadRow label="Aadhaar Card" file={aadhaarCard} onUpload={(e) => handleDocUpload(e, setAadhaarCard)} onRemove={() => setAadhaarCard(null)} />
-                <UploadRow label="PAN Card" file={panCard} onUpload={(e) => handleDocUpload(e, setPanCard)} onRemove={() => setPanCard(null)} />
-              </>
-            </div>
-          )}
+          <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.25rem' }}>KYC Documents *</h2>
+            <>
+              <UploadRow label="Aadhaar Card" file={aadhaarCard} onUpload={(e) => handleDocUpload(e, setAadhaarCard)} onRemove={() => setAadhaarCard(null)} />
+              <UploadRow label="PAN Card" file={panCard} onUpload={(e) => handleDocUpload(e, setPanCard)} onRemove={() => setPanCard(null)} />
+            </>
+          </div>
 
           <div className="card">
             <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem' }}>Upload Video Walkthrough *</h2>
