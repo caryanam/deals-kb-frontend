@@ -136,8 +136,13 @@ export const getBidderDisplayName = (bidderName, bidderId, currentUser) => {
   const name = String(bidderName || '').trim();
   if (!name) return 'Anonymous';
   
+  // If currentUser is an admin, show full name
+  if (currentUser?.role?.toLowerCase() === 'admin') {
+    return name;
+  }
+  
   // If currentUser exists and bidderId matches, show full name
-  if (currentUser && bidderId && currentUser.user_id === bidderId) {
+  if (currentUser && bidderId && (currentUser.user_id === bidderId || currentUser.id === bidderId)) {
     return name;
   }
   

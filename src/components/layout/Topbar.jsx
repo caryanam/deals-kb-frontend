@@ -9,6 +9,7 @@ import { getConversations, getMessages, sendMessage, markConversationRead } from
 import { getBuyerChatRequests, getSellerChatRequests, respondToChatRequest } from '../../api/chatRequestApi';
 import { createReport } from '../../api/reportApi';
 import { toast } from 'react-toastify';
+import { getBidderDisplayName } from '../../utils/helpers';
 
 export const Topbar = ({ onToggleSidebar }) => {
   const { user, setUser, logout } = useAuth();
@@ -714,7 +715,7 @@ export const Topbar = ({ onToggleSidebar }) => {
 
                       <div style={{ padding: '1rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#FAF6EA' }}>
                         <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
-                          <div><strong style={{ color: '#1F1A1D' }}>Buyer:</strong> {activeRequest.buyer_name || 'Buyer'}</div>
+                          <div><strong style={{ color: '#1F1A1D' }}>Buyer:</strong> {getBidderDisplayName(activeRequest.buyer_name, activeRequest.buyer_id, user)}</div>
                           <div><strong style={{ color: '#1F1A1D' }}>Winning bid:</strong> â‚¹{activeRequest.winning_bid_amount}</div>
                           <div><strong style={{ color: '#1F1A1D' }}>Status:</strong> {activeRequest.status}</div>
                           <div><strong style={{ color: '#1F1A1D' }}>Created:</strong> {formatChatDateTime(activeRequest.created_at) || 'Just now'}</div>
@@ -918,7 +919,7 @@ export const Topbar = ({ onToggleSidebar }) => {
                                   </span>
                                 </div>
                                 <span style={{ fontSize: '0.75rem', color: '#8B8278', fontWeight: 600 }}>
-                                  Buyer: {req.buyer_name} | Bid: â‚¹{req.winning_bid_amount}
+                                  Buyer: {getBidderDisplayName(req.buyer_name, req.buyer_id, user)} | Bid: ₹{req.winning_bid_amount}
                                 </span>
                                 <span style={{
                                   fontSize: '0.75rem',
@@ -1929,7 +1930,7 @@ export const Topbar = ({ onToggleSidebar }) => {
 
           <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.85rem', backgroundColor: '#FAF6EA' }}>
             <div style={{ padding: '0.85rem 1rem', borderRadius: '0.75rem', border: '1px solid #D8CFC1', backgroundColor: '#FAF6EA', display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.65rem', fontSize: '0.8rem', color: '#8B8278' }}>
-              <div><strong style={{ color: '#1F1A1D' }}>Buyer:</strong> {activeRequest.buyer_name || 'Buyer'}</div>
+              <div><strong style={{ color: '#1F1A1D' }}>Buyer:</strong> {getBidderDisplayName(activeRequest.buyer_name, activeRequest.buyer_id, user)}</div>
               <div><strong style={{ color: '#1F1A1D' }}>Winning bid:</strong> â‚¹{activeRequest.winning_bid_amount}</div>
               <div><strong style={{ color: '#1F1A1D' }}>Status:</strong> {activeRequest.status}</div>
               <div><strong style={{ color: '#1F1A1D' }}>Created:</strong> {formatChatDateTime(activeRequest.created_at) || 'Just now'}</div>

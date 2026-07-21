@@ -1,11 +1,11 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Gavel, Clock, Trophy, RefreshCw, BarChart2, Share2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { useAuth } from '../../hooks/useAuth';
 import { getProductById } from '../../api/productApi';
-import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, formatRelativeTime } from '../../utils/helpers';
+import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, formatRelativeTime, getBidderDisplayName } from '../../utils/helpers';
 import { normalizeImageUrl, handleImageError } from '../../utils/imageUtils';
 
 const formatTimer = (seconds = 0) => {
@@ -26,6 +26,7 @@ export const SellerAuctionPage = () => {
     auctionStatus,
     currentHighestBid,
     highestBidder,
+    highestBidderId,
     bidHistory,
     timer,
     winner,
@@ -221,7 +222,7 @@ export const SellerAuctionPage = () => {
                 {formatCurrency(currentHighestBid)}
               </h3>
               <p style={{ fontSize: '0.8rem', color: '#8B8278', margin: 0 }}>
-                Lead Bidder: <strong style={{ color: '#ffffff' }}>{highestBidder || 'No bids placed'}</strong>
+                Lead Bidder: <strong style={{ color: '#ffffff' }}>{highestBidder ? getBidderDisplayName(highestBidder, highestBidderId, user) : 'No bids placed'}</strong>
               </p>
             </div>
 
@@ -241,7 +242,7 @@ export const SellerAuctionPage = () => {
                 <Trophy size={28} style={{ color: '#10b981' }} />
                 <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>Auction Concluded</h4>
                 <p style={{ fontSize: '0.8rem', color: '#8B8278', margin: 0 }}>
-                  Sold to: <strong style={{ color: '#ffffff' }}>{winner || highestBidder}</strong>
+                  Sold to: <strong style={{ color: '#ffffff' }}>{getBidderDisplayName(winner || highestBidder, highestBidderId, user)}</strong>
                 </p>
                 <button
                   onClick={() => navigate('/seller/dashboard')}
@@ -302,7 +303,7 @@ export const SellerAuctionPage = () => {
                   >
                     <div>
                       <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#4a1a50' }}>
-                        {bid.bidderName || bid.bidder_name}
+                        {getBidderDisplayName(bid.bidderName || bid.bidder_name, bid.bidderId || bid.bidder_id, user)}
                       </span>
                       <p style={{ fontSize: '0.65rem', color: '#8B8278', margin: 0 }}>{formatRelativeTime(bid.created_at || bid.time)}</p>
                     </div>

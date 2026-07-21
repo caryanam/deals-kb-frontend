@@ -198,7 +198,10 @@ const AppComingSoonSection = () => {
 
           {/* Store Download Buttons */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <div
+            <a
+              href="https://expo.dev/artifacts/eas/Ag7zEVCxTuCFfjCAnQo0D4vUdNiude2DIPYhCpuQIE0.apk"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -212,6 +215,7 @@ const AppComingSoonSection = () => {
                 cursor: 'pointer',
                 boxShadow: '0 4px 16px rgba(31, 26, 29, 0.25)',
                 transition: 'all 0.2s ease',
+                textDecoration: 'none',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
@@ -224,7 +228,7 @@ const AppComingSoonSection = () => {
             >
               <Smartphone size={19} />
               <span>Play Store</span>
-            </div>
+            </a>
 
             <div
               style={{

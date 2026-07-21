@@ -321,7 +321,7 @@ export const MyListingsPage = () => {
               Buyer Request
             </span>
             <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1F1A1D', display: 'block', marginTop: '0.15rem' }}>
-              {activeChatRequest.buyer_name || 'Buyer'}
+              {getBidderDisplayName(activeChatRequest.buyer_name, activeChatRequest.buyer_id, user)}
             </span>
           </div>
           <span style={{
@@ -534,7 +534,7 @@ export const MyListingsPage = () => {
                         Sold to {product.winner_name ? (
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', verticalAlign: 'middle' }}>
                             <span className="bidder-avatar-chip bidder-avatar-chip--compact" style={{ margin: 0 }}>{getNameInitials(product.winner_name)}</span>
-                            <strong style={{ fontWeight: 800 }}>{product.winner_name}</strong>
+                            <strong style={{ fontWeight: 800 }}>{getBidderDisplayName(product.winner_name, product.winner_id, user)}</strong>
                           </span>
                         ) : (
                           <strong>No winner</strong>
@@ -916,7 +916,7 @@ export const MyListingsPage = () => {
                             <div className="bidder-avatar-row" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                               <span className="bidder-avatar-chip bidder-avatar-chip--compact">{getNameInitials(bid.bidder_name || 'Bidder')}</span>
                               <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1F1A1D' }}>
-                                {getBidderDisplayName(bid.bidder_name, null, null)}
+                                {getBidderDisplayName(bid.bidder_name, bid.bidder_id, user)}
                               </span>
                             </div>
                             <span style={{ display: 'block', fontSize: '0.76rem', color: '#8B8278', marginTop: '0.18rem' }}>{formatDateTime(bid.created_at)}</span>
