@@ -1,4 +1,5 @@
 import { createCCAvenuePayment } from '../api/paymentApi';
+import { createRelistOrder } from '../api/productApi';
 import { toast } from 'react-toastify';
 
 const submitCCAvenueForm = ({ gateway_url, enc_request, access_code }) => {
@@ -55,3 +56,19 @@ export const triggerDealerPlanPayment = (planId, onSuccess, onCancel) =>
 
 export const triggerSellerListingPayment = (listingId, onSuccess, onCancel) =>
   triggerPayment({ payment_type: 'SELLER_LISTING', listing_id: listingId }, onSuccess, onCancel);
+
+export const triggerRelistPayment = async (productId, onSuccess, onCancel) => {
+  try {
+    const data = await createRelistOrder(productId);
+    sessionStorage.setItem('pending_payment_order_id', data.order_id || '');
+    toast.info('Redirecting to secure CCAvenue checkout...');
+    submitCCAvenueForm(data);
+    if (onSuccess) onSuccess(data);
+    return data;
+  } catch (err) {
+    console.error('Failed to start CCAvenue payment for relisting:', err);
+    toast.error(err.response?.data?.detail || err.message || 'Failed to initialize payment.');
+    if (onCancel) onCancel();
+    return null;
+  }
+};

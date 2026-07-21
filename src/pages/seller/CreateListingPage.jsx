@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import { createProduct, getProductById, updateProduct, getProducts } from '../../api/productApi';
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
-import { normalizeImageUrl } from '../../utils/imageUtils';
-import { triggerSellerListingPayment } from '../../utils/paymentHelper';
+import { normalizeImageUrl, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
+import { triggerSellerListingPayment, triggerDealerPlanPayment } from '../../utils/paymentHelper';
+import { getMyPlans } from '../../api/paymentApi';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -189,6 +190,7 @@ export const CreateListingPage = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [dealerPlans, setDealerPlans] = useState([]);
   const brandModelData = BRAND_MODEL_DATA[productType];
 
   const [availableTitles, setAvailableTitles] = useState([]);
@@ -229,6 +231,18 @@ export const CreateListingPage = () => {
 
     fetchTitles();
   }, [productType]);
+
+  useEffect(() => {
+    if (user?.role === 'Dealer') {
+      getMyPlans()
+        .then((plans) => {
+          setDealerPlans(plans || []);
+        })
+        .catch((err) => {
+          console.warn('Failed to load dealer plans:', err);
+        });
+    }
+  }, [user]);
 
   const dataURLtoFile = (dataurl, filename) => {
     const arr = dataurl.split(',');
@@ -555,16 +569,39 @@ export const CreateListingPage = () => {
       if (editId) {
         await updateProduct(editId, payload);
         toast.success('Product listing updated successfully!');
+        setSuccessMsg('Listing updated successfully. Redirecting...');
+        setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
       } else {
         const createdProduct = await createProduct(payload);
         const listingId = createdProduct?.product_id || createdProduct?.id;
-        toast.success('Product listing created successfully! Redirecting to payment...');
-        if (listingId) {
-          await triggerSellerListingPayment(listingId);
+
+        if (user?.role === 'Dealer') {
+          const isCar = productType === 'car';
+          const hasActivePlan = isCar
+            ? dealerPlans.some(p => p.plan_id === 'dealer_car_monthly' && p.active)
+            : dealerPlans.some(p => p.plan_id === 'dealer_monthly' && p.active);
+
+          if (hasActivePlan) {
+            toast.success('Product listing created successfully under your active plan!');
+            setSuccessMsg('Listing submitted for approval. Redirecting...');
+            setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
+          } else {
+            const planId = isCar ? 'dealer_car_monthly' : 'dealer_monthly';
+            toast.success('Listing created! Redirecting to plan payment...');
+            await triggerDealerPlanPayment(planId);
+            setSuccessMsg('Listing created! Please complete payment in the CCAvenue window to activate your monthly plan.');
+            setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
+          }
+        } else {
+          // Regular Seller pays for each listing
+          toast.success('Product listing created successfully! Redirecting to payment...');
+          if (listingId) {
+            await triggerSellerListingPayment(listingId);
+          }
+          setSuccessMsg('Listing submitted for approval. Redirecting...');
+          setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
         }
       }
-      setSuccessMsg('Listing submitted for approval. Redirecting...');
-      setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
     } catch (err) {
       const msg = err.response?.data?.detail || err.response?.data?.message || 'Failed to submit product listing.';
       setErrorMsg(msg);
@@ -614,12 +651,44 @@ export const CreateListingPage = () => {
                 </button>
               ))}
             </div>
-            {user?.role !== 'Dealer' && (
+            {user?.role !== 'Dealer' ? (
               <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', border: '1px solid #D8CFC1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
                 <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Listing fee for selected category</span>
                 <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
               </div>
-            )}
+            ) : (() => {
+              const isCar = productType === 'car';
+              const isActive = isCar
+                ? dealerPlans.some(p => p.plan_id === 'dealer_car_monthly' && p.active)
+                : dealerPlans.some(p => p.plan_id === 'dealer_monthly' && p.active);
+              return (
+                <div style={{
+                  marginTop: '1rem',
+                  padding: '0.85rem 1rem',
+                  borderRadius: '0.75rem',
+                  backgroundColor: isActive ? '#f0fdf4' : '#fef2f2',
+                  border: isActive ? '1px solid #bbf7d0' : '1px solid #fca5a5',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: '1rem'
+                }}>
+                  <span style={{ color: isActive ? '#166534' : '#991b1b', fontWeight: 800, fontSize: '0.9rem' }}>
+                    {isCar ? 'Dealer Car Monthly Plan Status' : 'Dealer Monthly Plan Status (Mobile/Laptop/Bike)'}
+                  </span>
+                  <strong style={{
+                    padding: '0.25rem 0.55rem',
+                    borderRadius: '999px',
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
+                    backgroundColor: isActive ? '#dcfce7' : '#fee2e2',
+                    color: isActive ? '#166534' : '#991b1b'
+                  }}>
+                    {isActive ? 'Active' : 'Inactive (Redirects to payment on submit)'}
+                  </strong>
+                </div>
+              );
+            })()}
           </section>
 
           <section>

@@ -6,6 +6,8 @@ import { getRelistData, submitRelistAfterPayment, getProducts } from '../../api/
 import { useAuth } from '../../hooks/useAuth';
 import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers';
 import { normalizeImageUrl } from '../../utils/imageUtils';
+import { getMyPlans } from '../../api/paymentApi';
+import { triggerDealerPlanPayment, triggerRelistPayment } from '../../utils/paymentHelper';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -172,6 +174,7 @@ export const RelistListing = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [dealerPlans, setDealerPlans] = useState([]);
   const brandModelData = BRAND_MODEL_DATA[productType];
 
   const [availableTitles, setAvailableTitles] = useState([]);
@@ -212,6 +215,18 @@ export const RelistListing = () => {
 
     fetchTitles();
   }, [productType]);
+
+  useEffect(() => {
+    if (user?.role === 'Dealer') {
+      getMyPlans()
+        .then((plans) => {
+          setDealerPlans(plans || []);
+        })
+        .catch((err) => {
+          console.warn('Failed to load dealer plans:', err);
+        });
+    }
+  }, [user]);
 
   const pillStyle = (selected) => ({
     border: selected ? '1px solid #111827' : '1px solid #d1d5db',
@@ -556,12 +571,40 @@ export const RelistListing = () => {
     setLoading(true);
 
     try {
-      await submitRelistAfterPayment(listingId, formData);
-      toast.success('Listing submitted for admin approval.');
-      navigate(`${basePath}/my-listings`);
+      if (user?.role === 'Dealer') {
+        const isCar = productType === 'car';
+        const hasActivePlan = isCar
+          ? dealerPlans.some(p => p.plan_id === 'dealer_car_monthly' && p.active)
+          : dealerPlans.some(p => p.plan_id === 'dealer_monthly' && p.active);
+
+        if (hasActivePlan) {
+          await submitRelistAfterPayment(listingId, formData);
+          toast.success('Listing relisted successfully under your active plan!');
+          setSuccessMsg('Listing submitted for admin approval. Redirecting...');
+          setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
+        } else {
+          const planId = isCar ? 'dealer_car_monthly' : 'dealer_monthly';
+          // Save details first
+          await submitRelistAfterPayment(listingId, formData);
+          toast.success('Listing details saved! Redirecting to plan payment...');
+          await triggerDealerPlanPayment(planId);
+          setSuccessMsg('Listing details saved! Please complete payment in the CCAvenue window to activate your monthly plan.');
+          setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
+        }
+      } else {
+        // Regular Seller pays for each relisting
+        // Save details first
+        await submitRelistAfterPayment(listingId, formData);
+        toast.success('Listing details saved! Redirecting to relisting payment...');
+        await triggerRelistPayment(listingId);
+        setSuccessMsg('Listing details saved! Please complete payment in the CCAvenue window to complete the relisting.');
+        setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
+      }
     } catch (err) {
       console.error('Relisting submit failed:', err);
-      toast.error(err.response?.data?.detail || 'Failed to submit relisted listing.');
+      const msg = err.response?.data?.detail || err.response?.data?.message || 'Failed to submit relisted listing.';
+      toast.error(msg);
+      setErrorMsg(msg);
     } finally {
       setLoading(false);
     }
@@ -608,6 +651,57 @@ export const RelistListing = () => {
                   ))}
                 </div>
               </div>
+
+              {user?.role === 'Dealer' ? (() => {
+                const isCar = productType === 'car';
+                const isActive = isCar
+                  ? dealerPlans.some(p => p.plan_id === 'dealer_car_monthly' && p.active)
+                  : dealerPlans.some(p => p.plan_id === 'dealer_monthly' && p.active);
+                return (
+                  <div style={{
+                    marginTop: '1rem',
+                    padding: '0.85rem 1rem',
+                    borderRadius: '0.75rem',
+                    backgroundColor: isActive ? '#f0fdf4' : '#fef2f2',
+                    border: isActive ? '1px solid #bbf7d0' : '1px solid #fca5a5',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    marginBottom: '1rem'
+                  }}>
+                    <span style={{ color: isActive ? '#166534' : '#991b1b', fontWeight: 800, fontSize: '0.9rem' }}>
+                      {isCar ? 'Dealer Car Monthly Plan Status' : 'Dealer Monthly Plan Status (Mobile/Laptop/Bike)'}
+                    </span>
+                    <strong style={{
+                      padding: '0.25rem 0.55rem',
+                      borderRadius: '999px',
+                      fontSize: '0.75rem',
+                      fontWeight: 800,
+                      backgroundColor: isActive ? '#dcfce7' : '#fee2e2',
+                      color: isActive ? '#166534' : '#991b1b'
+                    }}>
+                      {isActive ? 'Active' : 'Inactive (Redirects to payment on submit)'}
+                    </strong>
+                  </div>
+                );
+              })() : (
+                <div style={{
+                  marginTop: '1rem',
+                  padding: '0.85rem 1rem',
+                  borderRadius: '0.75rem',
+                  backgroundColor: '#F5ECDD',
+                  border: '1px solid #D8CFC1',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  marginBottom: '1rem'
+                }}>
+                  <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Relisting Fee</span>
+                  <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{"\u20B9"}1</strong>
+                </div>
+              )}
 
               <Input
                 label="Listing Title *"

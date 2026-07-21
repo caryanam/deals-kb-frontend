@@ -11,6 +11,7 @@ import { formatCurrency, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials, ge
 import { normalizeImageUrl, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { toast } from 'react-toastify';
 import { getMyPlans } from '../../api/paymentApi';
+import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
 
 const VERIFICATION_DOCUMENT_KEYS = new Set(['rc_copy', 'insurance_copy', 'aadhaar_card', 'pan_card']);
 const getVerificationDocuments = (docs = {}) => Object.fromEntries(
@@ -38,6 +39,8 @@ export const ListingDetailsPage = () => {
 
   const [activeImage, setActiveImage] = useState('');
   const [mediaMode, setMediaMode] = useState('image'); // 'image' or 'video'
+  const [showPlans, setShowPlans] = useState(false);
+  const [requiredPlan, setRequiredPlan] = useState(null);
 
   const photosArray = useMemo(() => {
     return product ? getProductGalleryImages(product) : [];
@@ -999,6 +1002,16 @@ export const ListingDetailsPage = () => {
           </div>
         </div>
       )}
+
+      <PricingPlanPopup
+        isOpen={showPlans}
+        productType={product?.product_type}
+        requiredPlan={requiredPlan}
+        onClose={() => setShowPlans(false)}
+        onActivated={() => {
+          loadProductData();
+        }}
+      />
 
       <style>{`
         @keyframes spin {
