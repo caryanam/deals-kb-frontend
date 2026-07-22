@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Gavel, Landmark, Bell, Trophy, ArrowRight, Clock, AlertCircle, RefreshCw } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { getProducts } from '../../api/productApi';
 import { getMyBids, getMyWins } from '../../api/userApi';
 import { getNotifications } from '../../api/notificationApi';
+
 
 export const BuyerDashboard = () => {
   const { user } = useAuth();
@@ -240,6 +241,7 @@ export const BuyerDashboard = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };

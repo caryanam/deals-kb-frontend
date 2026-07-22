@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, LogOut, User, Check, X, Phone, Lock, Mail, AlertCircle, Loader2, Bell, Trash2, CheckCircle2, RefreshCw, MessageSquare, Send, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { Menu, LogOut, User, Check, X, Phone, Lock, Mail, AlertCircle, Loader2, Bell, Trash2, CheckCircle2, RefreshCw, MessageSquare, Send, ArrowLeft, Eye, EyeOff, MapPin } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../hooks/useAuth';
 import { updateProfile } from '../../api/userApi';
@@ -15,6 +15,65 @@ export const Topbar = ({ onToggleSidebar }) => {
   const { user, setUser, logout } = useAuth();
   const navigate = useNavigate();
   
+  // Geolocation state
+  const [locationName, setLocationName] = useState('');
+  const [loadingLocation, setLoadingLocation] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    
+    const formatAddress = (data) => {
+      if (!data || !data.address) return '';
+      const addr = data.address;
+      const locality = addr.suburb || addr.neighbourhood || addr.quarter || addr.residential || addr.subdivision || addr.subdistrict || addr.city_district;
+      const city = addr.city || addr.town || addr.village || addr.municipality || addr.county;
+      const state = addr.state;
+
+      if (locality && city) {
+        return `${locality}, ${city}`;
+      } else if (city) {
+        return state ? `${city}, ${state}` : city;
+      } else if (locality) {
+        return state ? `${locality}, ${state}` : locality;
+      }
+      return data.display_name || '';
+    };
+
+    const detectLocation = () => {
+      if (!navigator.geolocation) return;
+      setLoadingLocation(true);
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const { latitude, longitude } = pos.coords;
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+              {
+                headers: { 'Accept-Language': 'en' }
+              }
+            );
+            if (response.ok) {
+              const data = await response.json();
+              const formatted = formatAddress(data);
+              setLocationName(formatted);
+            }
+          } catch (err) {
+            console.error('Topbar location reverse geocoding error:', err);
+          } finally {
+            setLoadingLocation(false);
+          }
+        },
+        (err) => {
+          console.error('Topbar geolocation error:', err);
+          setLoadingLocation(false);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    };
+
+    detectLocation();
+  }, [user]);
+
   // Logout & Profile states
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -1391,6 +1450,20 @@ export const Topbar = ({ onToggleSidebar }) => {
                 }}>
                   {user.role}
                 </span>
+                {(loadingLocation || locationName) && (
+                  <span style={{ 
+                    fontSize: '0.65rem', 
+                    color: '#8B8278',
+                    fontWeight: 650,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.15rem',
+                    marginTop: '0.15rem'
+                  }}>
+                    <MapPin size={10} style={{ color: '#6B1B71' }} />
+                    {loadingLocation ? 'Locating...' : locationName}
+                  </span>
+                )}
               </div>
             </div>
           )}

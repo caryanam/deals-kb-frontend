@@ -6,6 +6,7 @@ import { getProducts } from '../../api/productApi';
 import { getMyPlans } from '../../api/paymentApi';
 import { triggerDealerPlanPayment } from '../../utils/paymentHelper';
 
+
 export const SellerDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -281,6 +282,7 @@ export const SellerDashboard = () => {
         </div>
 
       </div>
+
     </div>
   );
 };
