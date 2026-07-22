@@ -199,7 +199,7 @@ const AppComingSoonSection = () => {
           {/* Store Download Buttons */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <a
-              href="https://expo.dev/artifacts/eas/KnhCEMNHzfW3pKkxpHtePrp0QPaxzuSxyUj6pwNJ7Oc.apk"
+              href="https://github.com/caryanam/DealsKb.apk/releases/download/v1.0.0/dealskb.apk"
               target="_blank"
               rel="noopener noreferrer"
               style={{
