@@ -1,5 +1,7 @@
 import React from 'react';
 import { Smartphone, Check, Grid, Apple } from 'lucide-react';
+import carImg from '../../assets/car.png';
+import logoImg from '../../assets/logo.png';
 
 const PURPLE = '#6B1B71';
 const PURPLE_LIGHT = '#965284';
@@ -53,68 +55,257 @@ const AppComingSoonSection = () => {
             style={{
               width: '280px',
               height: '520px',
-              backgroundColor: '#0c0f19',
+              backgroundColor: '#FAF6EA',
               borderRadius: '40px',
-              border: '10px solid #1a2030',
+              border: '10px solid #1F1A1D',
               boxShadow: '0 25px 50px -12px rgba(107, 27, 113, 0.25)',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
               position: 'relative',
-              padding: '24px',
+              overflow: 'hidden',
             }}
           >
             {/* Top Notch */}
             <div
               style={{
                 position: 'absolute',
-                top: '18px',
-                width: '80px',
-                height: '14px',
-                backgroundColor: '#1a2030',
-                borderRadius: '10px',
+                top: '0',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '88px',
+                height: '18px',
+                backgroundColor: '#1F1A1D',
+                borderRadius: '0 0 12px 12px',
+                zIndex: 20,
               }}
             />
 
             {/* Screen Inner Display */}
-            <div style={{ textAlign: 'center', zIndex: 2 }}>
-              <div
-                style={{
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '18px',
-                  background: `linear-gradient(135deg, ${PURPLE} 0%, ${PURPLE_LIGHT} 100%)`,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '18px',
-                  boxShadow: '0 10px 24px rgba(107, 27, 113, 0.4)',
-                }}
-              >
-                <Grid size={32} color="#ffffff" />
-              </div>
-              <h4
-                style={{
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+            }}>
+              {/* Header */}
+              <div style={{
+                height: '54px',
+                backgroundColor: '#6B1B71',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '16px 14px 0 14px',
+                color: '#ffffff',
+                fontSize: '0.8rem',
+                fontWeight: 900,
+                zIndex: 15
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <img src={logoImg} alt="Logo" style={{ height: '20px', width: 'auto', objectFit: 'contain' }} />
+                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>
+                    Deals<span style={{ color: '#c084fc' }}>KB</span>
+                  </span>
+                </div>
+                <span style={{
+                  backgroundColor: '#ef4444',
                   color: '#ffffff',
-                  fontSize: '20px',
-                  fontWeight: '700',
-                  margin: '0 0 6px',
-                  fontFamily: "'Inter', 'Poppins', sans-serif",
-                }}
-              >
-                Mobile App
-              </h4>
-              <span
-                style={{
-                  color: '#8B8278',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  letterSpacing: '0.5px',
-                }}
-              >
-                Coming Soon
-              </span>
+                  fontSize: '0.55rem',
+                  padding: '1px 6px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  textTransform: 'uppercase'
+                }}>Live Bids</span>
+              </div>
+
+              {/* Scrollable Mobile Body */}
+              <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.65rem',
+                paddingTop: '0.5rem',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}>
+                {/* Hide scrollbars style */}
+                <style>{`
+                  .scrollable-body::-webkit-scrollbar {
+                    display: none;
+                  }
+                `}</style>
+
+                {/* Search Bar Dummy */}
+                <div style={{ padding: '0 10px' }}>
+                  <div style={{
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #D8CFC1',
+                    borderRadius: '20px',
+                    padding: '6px 12px',
+                    fontSize: '0.65rem',
+                    color: '#8B8278',
+                    textAlign: 'left',
+                    fontWeight: 600
+                  }}>
+                    🔍 Search cars, bikes, gadgets...
+                  </div>
+                </div>
+
+                {/* Category Pills Row */}
+                <div style={{
+                  display: 'flex',
+                  gap: '0.4rem',
+                  padding: '0 10px',
+                  overflowX: 'auto',
+                  whiteSpace: 'nowrap'
+                }} className="scrollable-body">
+                  {['🚗 Cars', '🏍️ Bikes', '📱 Mobiles', '💻 Laptops'].map((cat, i) => (
+                    <span key={i} style={{
+                      backgroundColor: i === 0 ? '#6B1B71' : '#ffffff',
+                      color: i === 0 ? '#ffffff' : '#1F1A1D',
+                      padding: '4px 10px',
+                      borderRadius: '12px',
+                      fontSize: '0.6rem',
+                      fontWeight: 800,
+                      border: '1px solid #D8CFC1',
+                      display: 'inline-block'
+                    }}>
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Active pass widget */}
+                <div style={{
+                  margin: '0 10px',
+                  padding: '8px 10px',
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  border: '1.5px solid #D8CFC1',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '2px',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
+                }}>
+                  <span style={{ fontSize: '0.55rem', color: '#B2772D', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                    Active Bidding Pass
+                  </span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.7rem', color: '#1F1A1D', fontWeight: 800 }}>🚗 Car Pass active</span>
+                    <span style={{ fontSize: '0.6rem', color: '#166534', fontWeight: 800 }}>18 Hours left</span>
+                  </div>
+                </div>
+
+                {/* Live Card 1 */}
+                <div style={{
+                  margin: '0 10px 6px 10px',
+                  backgroundColor: '#ffffff',
+                  border: '1.5px solid #D8CFC1',
+                  borderRadius: '14px',
+                  overflow: 'hidden',
+                  boxShadow: '0 3px 8px rgba(0,0,0,0.02)'
+                }}>
+                  <div style={{
+                    height: '92px',
+                    backgroundColor: '#f1f5f9',
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden'
+                  }}>
+                    <img 
+                      src={carImg} 
+                      alt="Car" 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
+                    <span style={{
+                      position: 'absolute',
+                      top: '6px',
+                      left: '6px',
+                      backgroundColor: '#ef4444',
+                      color: '#ffffff',
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                      fontSize: '0.5rem',
+                      fontWeight: 800
+                    }}>
+                      LIVE
+                    </span>
+                    <span style={{
+                      position: 'absolute',
+                      top: '6px',
+                      right: '6px',
+                      width: '20px',
+                      height: '20px',
+                      borderRadius: '50%',
+                      backgroundColor: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.7rem',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}>
+                      ❤️
+                    </span>
+                  </div>
+                  <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <h5 style={{ margin: 0, fontSize: '0.75rem', fontWeight: 800, color: '#1F1A1D' }}>Honda Civic ZX 2021</h5>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.58rem', color: '#8B8278', fontWeight: 700 }}>
+                      <span>PUNE, MH</span>
+                      <span>TODAY</span>
+                    </div>
+                    <button style={{
+                      width: '100%',
+                      backgroundColor: '#16a34a',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '4px 0',
+                      fontSize: '0.65rem',
+                      fontWeight: 800,
+                      marginTop: '4px',
+                      cursor: 'pointer'
+                    }}>
+                      Bid Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Navigation Bar */}
+              <div style={{
+                height: '46px',
+                backgroundColor: '#ffffff',
+                borderTop: '1.5px solid #D8CFC1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-around',
+                color: '#8B8278',
+                fontSize: '0.55rem',
+                fontWeight: 850,
+                zIndex: 10,
+                paddingBottom: '4px'
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: '#6B1B71', gap: '2px' }}>
+                  <span style={{ fontSize: '1rem' }}>🏠</span>
+                  <span>Home</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                  <span style={{ fontSize: '1rem' }}>⚡</span>
+                  <span>My Bids</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                  <span style={{ fontSize: '1rem' }}>💬</span>
+                  <span>Chat</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                  <span style={{ fontSize: '1rem' }}>👤</span>
+                  <span>Profile</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
