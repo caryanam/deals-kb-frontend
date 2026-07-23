@@ -22,8 +22,9 @@ export const SellerDashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dealerPlanActive, setDealerPlanActive] = useState(false);
-  const [dealerCarPlanActive, setDealerCarPlanActive] = useState(false);
+  const [dealerMobileActive, setDealerMobileActive] = useState(false);
+  const [dealerLaptopBikeActive, setDealerLaptopBikeActive] = useState(false);
+  const [dealerCarActive, setDealerCarActive] = useState(false);
   const [payingPlanId, setPayingPlanId] = useState(null);
 
   const loadSellerStats = async () => {
@@ -36,8 +37,9 @@ export const SellerDashboard = () => {
       if (user.role === 'Dealer') {
         const plans = await getMyPlans();
         const activePlans = plans || [];
-        setDealerPlanActive(activePlans.some((plan) => plan.plan_id === 'dealer_monthly' && plan.active));
-        setDealerCarPlanActive(activePlans.some((plan) => plan.plan_id === 'dealer_car_monthly' && plan.active));
+        setDealerMobileActive(activePlans.some((plan) => plan.plan_id === 'dealer_mobile_monthly' && plan.active));
+        setDealerLaptopBikeActive(activePlans.some((plan) => plan.plan_id === 'dealer_laptop_bike_monthly' && plan.active));
+        setDealerCarActive(activePlans.some((plan) => plan.plan_id === 'dealer_car_monthly' && plan.active));
       }
       
       const counts = {
@@ -132,34 +134,50 @@ export const SellerDashboard = () => {
         </div>
       )}
 
-      {user?.role === 'Dealer' && !dealerPlanActive && (
+      {user?.role === 'Dealer' && !dealerMobileActive && (
         <div className="card" style={{ marginBottom: '2rem', border: '1px solid #D8CFC1', backgroundColor: '#F5ECDD', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Monthly Plan (Mobile/Laptop/Bike)</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}1/month unlimited listings for Mobile, Laptop & Bike.</p>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Mobile Plan</h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}999/month (+ 18% GST) for unlimited Mobile listings.</p>
             </div>
           </div>
-          <button type="button" onClick={() => handleActivatePlan('dealer_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
-            {payingPlanId === 'dealer_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Plan ({"\u20B9"}1)
+          <button type="button" onClick={() => handleActivatePlan('dealer_mobile_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
+            {payingPlanId === 'dealer_mobile_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
+            Activate Mobile Plan ({"\u20B9"}999 + GST)
           </button>
         </div>
       )}
 
-      {user?.role === 'Dealer' && !dealerCarPlanActive && (
+      {user?.role === 'Dealer' && !dealerLaptopBikeActive && (
         <div className="card" style={{ marginBottom: '2rem', border: '1px solid #D8CFC1', backgroundColor: '#F5ECDD', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Car Monthly Plan (Car)</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}1/month unlimited listings for Cars.</p>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Laptop & Bike Plan</h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}1999/month (+ 18% GST) for unlimited Laptop & Bike listings.</p>
+            </div>
+          </div>
+          <button type="button" onClick={() => handleActivatePlan('dealer_laptop_bike_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
+            {payingPlanId === 'dealer_laptop_bike_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
+            Activate Laptop & Bike Plan ({"\u20B9"}1999 + GST)
+          </button>
+        </div>
+      )}
+
+      {user?.role === 'Dealer' && !dealerCarActive && (
+        <div className="card" style={{ marginBottom: '2rem', border: '1px solid #D8CFC1', backgroundColor: '#F5ECDD', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
+            <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
+            <div>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Car Plan</h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}2999/month (+ 18% GST) for unlimited Car listings.</p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_car_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_car_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Car Plan ({"\u20B9"}1)
+            Activate Car Plan ({"\u20B9"}2999 + GST)
           </button>
         </div>
       )}

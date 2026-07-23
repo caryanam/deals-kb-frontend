@@ -8,6 +8,7 @@ import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers'
 import { normalizeImageUrl, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { triggerSellerListingPayment, triggerDealerPlanPayment } from '../../utils/paymentHelper';
 import { getMyPlans } from '../../api/paymentApi';
+import { ListingLocationCard } from '../../components/location/ListingLocationCard';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -30,10 +31,10 @@ const CATEGORIES = [
 ];
 
 const LISTING_FEES = {
-  car: '\u20B91',
-  mobile: '\u20B91',
-  bike: '\u20B91',
-  laptop: '\u20B91'
+  mobile: '\u20B910',
+  laptop: '\u20B950',
+  bike: '\u20B9100',
+  car: '\u20B9500'
 };
 
 const TITLE_PLACEHOLDERS = {
@@ -187,6 +188,14 @@ export const CreateListingPage = () => {
   const [aadhaarCard, setAadhaarCard] = useState(null);
   const [panCard, setPanCard] = useState(null);
 
+  // Geolocation State
+  const [location, setLocation] = useState({
+    address: '',
+    latitude: null,
+    longitude: null,
+    accuracy: null
+  });
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -257,8 +266,6 @@ export const CreateListingPage = () => {
   };
 
   useEffect(() => {
-    if (!editId) return;
-
     const loadProduct = async () => {
       try {
         setLoading(true);
@@ -314,6 +321,15 @@ export const CreateListingPage = () => {
         setInsuranceCopy(parsedDocs.insurance_copy || null);
         setAadhaarCard(parsedDocs.aadhaar_card || null);
         setPanCard(parsedDocs.pan_card || null);
+
+        if (product.location) {
+          setLocation({
+            address: product.location.address || '',
+            latitude: product.location.latitude || null,
+            longitude: product.location.longitude || null,
+            accuracy: product.location.accuracy || null
+          });
+        }
       } catch (err) {
         console.error('Failed to load listing:', err);
         setErrorMsg('Failed to load listing data for editing.');
@@ -322,7 +338,9 @@ export const CreateListingPage = () => {
       }
     };
 
-    loadProduct();
+    if (editId) {
+      loadProduct();
+    }
   }, [editId]);
 
   const updateSpec = (key, value) => {
@@ -416,6 +434,13 @@ export const CreateListingPage = () => {
     formData.append('condition', condition);
     formData.append('description', description.trim());
     formData.append('expected_price', Number(expectedPrice));
+
+    if (location && location.latitude) formData.append('location_latitude', Number(location.latitude));
+    if (location && location.longitude) formData.append('location_longitude', Number(location.longitude));
+    if (location && location.address) {
+      formData.append('location_address', location.address.trim());
+      formData.append('location_full_address', location.address.trim());
+    }
 
     const specifications = {
       warranty_available: specs.warrantyAvailable
@@ -577,17 +602,19 @@ export const CreateListingPage = () => {
         const listingId = createdProduct?.product_id || createdProduct?.id;
 
         if (user?.role === 'Dealer') {
-          const isCar = productType === 'car';
-          const hasActivePlan = isCar
-            ? dealerPlans.some(p => p.plan_id === 'dealer_car_monthly' && p.active)
-            : dealerPlans.some(p => p.plan_id === 'dealer_monthly' && p.active);
+          const planId = productType === 'car'
+            ? 'dealer_car_monthly'
+            : productType === 'mobile'
+            ? 'dealer_mobile_monthly'
+            : 'dealer_laptop_bike_monthly';
+
+          const hasActivePlan = dealerPlans.some(p => p.plan_id === planId && p.active);
 
           if (hasActivePlan) {
             toast.success('Product listing created successfully under your active plan!');
             setSuccessMsg('Listing submitted for approval. Redirecting...');
             setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
           } else {
-            const planId = isCar ? 'dealer_car_monthly' : 'dealer_monthly';
             toast.success('Listing created! Redirecting to plan payment...');
             await triggerDealerPlanPayment(planId);
             setSuccessMsg('Listing created! Please complete payment in the CCAvenue window to activate your monthly plan.');
@@ -658,10 +685,17 @@ export const CreateListingPage = () => {
                 <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
               </div>
             ) : (() => {
-              const isCar = productType === 'car';
-              const isActive = isCar
-                ? dealerPlans.some(p => p.plan_id === 'dealer_car_monthly' && p.active)
-                : dealerPlans.some(p => p.plan_id === 'dealer_monthly' && p.active);
+              const planId = productType === 'car'
+                ? 'dealer_car_monthly'
+                : productType === 'mobile'
+                ? 'dealer_mobile_monthly'
+                : 'dealer_laptop_bike_monthly';
+              const isActive = dealerPlans.some(p => p.plan_id === planId && p.active);
+              const planName = productType === 'car'
+                ? 'Dealer Car Plan'
+                : productType === 'mobile'
+                ? 'Dealer Mobile Plan'
+                : 'Dealer Laptop & Bike Plan';
               return (
                 <div style={{
                   marginTop: '1rem',
@@ -675,7 +709,7 @@ export const CreateListingPage = () => {
                   gap: '1rem'
                 }}>
                   <span style={{ color: isActive ? '#166534' : '#991b1b', fontWeight: 800, fontSize: '0.9rem' }}>
-                    {isCar ? 'Dealer Car Monthly Plan Status' : 'Dealer Monthly Plan Status (Mobile/Laptop/Bike)'}
+                    {planName} Status
                   </span>
                   <strong style={{
                     padding: '0.25rem 0.55rem',
@@ -717,6 +751,10 @@ export const CreateListingPage = () => {
                 placeholder={brand ? brandModelData.modelPlaceholder : 'Select Brand First'}
                 disabled={!brand}
               />
+            </div>
+
+            <div style={{ marginTop: '1.25rem' }}>
+              <ListingLocationCard value={location} onChange={setLocation} />
             </div>
           </section>
 

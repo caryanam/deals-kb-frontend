@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Fuel, Calendar, Gauge, ShieldCheck, AlertCircle, PlayCircle, CheckCircle, Cpu, Layers, HardDrive, FileText, Trophy, ArrowRight, MessageSquare, X, ImageOff } from 'lucide-react';
+import { ArrowLeft, Fuel, Calendar, Gauge, ShieldCheck, AlertCircle, PlayCircle, CheckCircle, Cpu, Layers, HardDrive, FileText, Trophy, ArrowRight, MessageSquare, X, ImageOff, MapPin, Heart } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProductById, getSellerContact, getWinnerContact, getProductBids } from '../../api/productApi';
 import { createConversation } from '../../api/chatApi';
@@ -158,6 +158,33 @@ export const ListingDetailsPage = () => {
   };
 
   const isSeller = user && product && (user.user_id === product.seller_id || user.id === product.seller_id);
+  const isBuyer = !user || user.role === 'Buyer';
+
+  const [isLiked, setIsLiked] = useState(() => {
+    try {
+      const liked = JSON.parse(localStorage.getItem('dealskb_liked_listings') || '[]');
+      return liked.includes(productId);
+    } catch {
+      return false;
+    }
+  });
+
+  const handleLikeToggle = () => {
+    try {
+      const liked = JSON.parse(localStorage.getItem('dealskb_liked_listings') || '[]');
+      let nextLiked = [];
+      if (liked.includes(productId)) {
+        nextLiked = liked.filter(id => id !== productId);
+        setIsLiked(false);
+      } else {
+        nextLiked = [...liked, productId];
+        setIsLiked(true);
+      }
+      localStorage.setItem('dealskb_liked_listings', JSON.stringify(nextLiked));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleFetchWinnerContact = async () => {
     try {
@@ -557,14 +584,38 @@ export const ListingDetailsPage = () => {
               )}
             </div>
             
-            <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif", letterSpacing: '-0.02em', marginBottom: '0.5rem', lineHeight: 1.25 }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif", letterSpacing: '-0.02em', marginBottom: '0.5rem', lineHeight: 1.25, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               {product.title}
+              <button
+                type="button"
+                onClick={handleLikeToggle}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: isLiked ? '#ef4444' : '#8B8278',
+                  padding: '0.25rem',
+                  transition: 'transform 0.15s ease'
+                }}
+                title={isLiked ? 'Remove from Liked' : 'Add to Liked'}
+              >
+                <Heart size={24} fill={isLiked ? '#ef4444' : 'none'} />
+              </button>
             </h1>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem' }}>
               <p style={{ color: '#8B8278', fontSize: '0.95rem', margin: 0 }}>
                 Brand: <strong>{product.brand}</strong> &bull; Model: <strong>{product.model}</strong> &bull; Condition: <strong>{product.condition}</strong>
               </p>
+              {product.location && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#6B1B71', fontSize: '0.9rem', fontWeight: 650, marginTop: '0.35rem' }}>
+                  <MapPin size={14} />
+                  <span>Location: {product.location.address}</span>
+                </div>
+              )}
               {user && user.role?.toLowerCase() !== 'admin' && (
                 <button
                   type="button"
@@ -601,10 +652,10 @@ export const ListingDetailsPage = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <span style={{ fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>
-                  {product.status === 'live' ? 'Current Highest Bid' : 'Listing Status'}
+                  {isBuyer ? 'Bidding Status' : (product.status === 'live' ? 'Current Highest Bid' : 'Listing Status')}
                 </span>
                 <p style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>
-                  {product.status === 'live' ? formatCurrency(product.current_bid || 0) : (product.status || '').toUpperCase()}
+                  {isBuyer ? (product.status === 'live' ? 'Live' : (product.status || '').toUpperCase()) : (product.status === 'live' ? formatCurrency(product.current_bid || 0) : (product.status || '').toUpperCase())}
                 </p>
               </div>
               <div style={{ textAlign: 'right' }}>
@@ -852,7 +903,7 @@ export const ListingDetailsPage = () => {
                         </div>
                         <p style={{ fontSize: '0.7rem', color: '#8B8278', margin: 0 }}>{bid.time || 'N/A'}</p>
                       </div>
-                      <span style={{ fontWeight: 800, color: '#6B1B71' }}>{formatCurrency(bid.amount)}</span>
+                      {!isBuyer && <span style={{ fontWeight: 800, color: '#6B1B71' }}>{formatCurrency(bid.amount)}</span>}
                     </div>
                   ))
                 )}

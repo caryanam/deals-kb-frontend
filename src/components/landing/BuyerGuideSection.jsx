@@ -1,17 +1,15 @@
 import React from 'react';
 
 const PURPLE = '#6B1B71';
-const BORDER = '#D8CFC1';
-const GOLD = '#B2772D';
 
-const steps = [
-  { num: 1, title: 'Register as a Buyer on DealsKB', icon: '📝' },
-  { num: 2, title: 'Browse the marketplace — explore Cars, Bikes, Mobiles, Laptops', icon: '🔍' },
-  { num: 3, title: 'Select a product listing that interests you', icon: '🎯' },
-  { num: 4, title: 'Activate a 24-hour Pass for that category', icon: '🎫' },
-  { num: 5, title: 'Enter the live sells and place unlimited buy', icon: '⚡' },
-  { num: 6, title: 'Place highest buy price and the sell ends', icon: '🏆' },
-  { num: 7, title: 'Connect with the seller and complete the handover', icon: '🤝' },
+const guidelines = [
+  { title: 'Register as a Buyer on DealsKB', icon: '📝', desc: 'Create your buyer profile in seconds to gain access to all active bidding rooms.' },
+  { title: 'Browse the marketplace — explore Cars, Bikes, Mobiles, Laptops', icon: '🔍', desc: 'Discover premium verified items listed directly by sellers using search filters.' },
+  { title: 'Select a product listing that interests you', icon: '🎯', desc: 'Read specs, check images, and view the listing location details.' },
+  { title: 'Activate a 24-hour Pass for that category', icon: '🎫', desc: 'Choose a bidding pass to unlock unlimited bidding for 24 hours.' },
+  { title: 'Enter the live sells and place unlimited buy', icon: '⚡', desc: 'Join the action and bid as many times as you like in real time.' },
+  { title: 'Place highest buy price and the sell ends', icon: '🏆', desc: 'Secure the win by maintaining the highest bid until the timer expires.' },
+  { title: 'Connect with the seller and complete the handover', icon: '🤝', desc: 'Meet or chat with the seller to finalize the deal securely.' },
 ];
 
 const BuyerGuideSection = () => {
@@ -19,20 +17,90 @@ const BuyerGuideSection = () => {
     <section
       id="buyer-guide"
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: '#FAF6EA',
         padding: '80px 24px',
       }}
     >
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      <style>{`
+        .guide-grid-container {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+        }
+        @media (max-width: 900px) {
+          .guide-grid-container {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        @media (max-width: 600px) {
+          .guide-grid-container {
+            grid-template-columns: 1fr;
+          }
+        }
+        .guide-cool-card {
+          background: #ffffff;
+          border: 1.5px solid #D8CFC1;
+          border-radius: 1.25rem;
+          padding: 2.25rem 1.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 1.25rem;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+          cursor: default;
+        }
+        .guide-cool-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #6B1B71, #B2772D);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .guide-cool-card:hover {
+          transform: translateY(-8px);
+          border-color: #6B1B71;
+          box-shadow: 0 16px 36px rgba(107, 27, 113, 0.12) !important;
+        }
+        .guide-cool-card:hover::before {
+          opacity: 1;
+        }
+        .guide-card-icon-wrapper {
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background-color: #F5ECDD;
+          display: flex;
+          align-items: center;
+          justifyContent: center;
+          font-size: 2rem;
+          box-shadow: 0 4px 10px rgba(178,119,45,0.08);
+          transition: all 0.3s ease;
+        }
+        .guide-cool-card:hover .guide-card-icon-wrapper {
+          background-color: #6B1B71;
+          transform: scale(1.08) rotate(5deg);
+          box-shadow: 0 6px 15px rgba(107,27,113,0.25);
+        }
+      `}</style>
+
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <span
             style={{
               display: 'inline-block',
               backgroundColor: PURPLE,
               color: '#fff',
-              fontSize: '12px',
-              fontWeight: '700',
+              fontSize: '11px',
+              fontWeight: '800',
               letterSpacing: '2px',
               textTransform: 'uppercase',
               padding: '6px 18px',
@@ -44,112 +112,35 @@ const BuyerGuideSection = () => {
           </span>
           <h2
             style={{
-              fontSize: 'clamp(26px, 4vw, 42px)',
-              fontWeight: '800',
-              color: '#1a1a1a',
+              fontSize: 'clamp(28px, 4vw, 42px)',
+              fontWeight: '900',
+              color: '#1F1A1D',
               margin: '0 0 12px',
+              fontFamily: "'Outfit', sans-serif",
             }}
           >
             Buyer's <span style={{ color: PURPLE }}>Guide</span>
           </h2>
-          <p style={{ fontSize: '16px', color: '#666', maxWidth: '520px', margin: '0 auto' }}>
-            Follow these simple steps to start bidding and winning amazing deals on DealsKB.
+          <p style={{ fontSize: '16px', color: '#8B8278', maxWidth: '520px', margin: '0 auto', fontWeight: 600 }}>
+            Read through these helpful guidelines to start bidding and winning amazing deals on DealsKB.
           </p>
         </div>
 
-        {/* Steps */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
-          {steps.map((step, i) => (
-            <div
-              key={i}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '24px',
-                backgroundColor: '#fff',
-                border: `1.5px solid ${BORDER}`,
-                borderRadius: '14px',
-                padding: '22px 28px',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateX(6px)';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(107,27,113,0.12)';
-                e.currentTarget.style.borderColor = PURPLE;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateX(0)';
-                e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)';
-                e.currentTarget.style.borderColor = BORDER;
-              }}
-            >
-              {/* Step number */}
-              <div
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  backgroundColor: PURPLE,
-                  color: '#fff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '18px',
-                  fontWeight: '800',
-                  flexShrink: 0,
-                }}
-              >
-                {step.num}
+        {/* Guidelines Grid */}
+        <div className="guide-grid-container">
+          {guidelines.map((guide, i) => (
+            <div key={i} className="guide-cool-card">
+              <div className="guide-card-icon-wrapper">
+                {guide.icon}
               </div>
-
-              {/* Icon */}
-              <span style={{ fontSize: '28px', flexShrink: 0 }}>{step.icon}</span>
-
-              {/* Text */}
-              <p
-                style={{
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  color: '#1a1a1a',
-                  margin: 0,
-                  lineHeight: '1.5',
-                }}
-              >
-                {step.title}
-              </p>
-
-              {/* Arrow */}
-              {i < steps.length - 1 && (
-                <span
-                  style={{
-                    marginLeft: 'auto',
-                    fontSize: '18px',
-                    color: GOLD,
-                    flexShrink: 0,
-                  }}
-                >
-                  →
-                </span>
-              )}
-              {i === steps.length - 1 && (
-                <span
-                  style={{
-                    marginLeft: 'auto',
-                    fontSize: '18px',
-                    color: PURPLE,
-                    flexShrink: 0,
-                  }}
-                >
-                  🎉
-                </span>
-              )}
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#1F1A1D', lineHeight: 1.4, minHeight: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {guide.title}
+                </h3>
+                <p style={{ margin: '0.5rem 0 0', color: '#8B8278', fontSize: '0.88rem', fontWeight: 600, lineHeight: 1.5 }}>
+                  {guide.desc}
+                </p>
+              </div>
             </div>
           ))}
         </div>

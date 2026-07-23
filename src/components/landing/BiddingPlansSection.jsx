@@ -7,17 +7,17 @@ const GOLD = '#B2772D';
 const BORDER = '#D8CFC1';
 
 const buyerPasses = [
-  { category: 'Mobile', icon: '📱', price: '₹1', duration: '24 hours', desc: 'Place unlimited buy on mobile auctions (incl. 18% GST)' },
-  { category: 'Laptop', icon: '💻', price: '₹1', duration: '24 hours', desc: 'Place unlimited buy on laptop auctions (incl. 18% GST)' },
-  { category: 'Bike', icon: '🏍️', price: '₹1', duration: '24 hours', desc: 'Place unlimited buy on bike auctions (incl. 18% GST)' },
-  { category: 'Car', icon: '🚗', price: '₹1', duration: '24 hours', desc: 'Place unlimited buy on car auctions (incl. 18% GST)' },
+  { category: 'Mobile', icon: '📱', price: '₹21', duration: '24 hours', desc: 'Place unlimited buy on mobile auctions (+ 18% GST)' },
+  { category: 'Laptop', icon: '💻', price: '₹41', duration: '24 hours', desc: 'Place unlimited buy on laptop auctions (+ 18% GST)' },
+  { category: 'Bike', icon: '🏍️', price: '₹101', duration: '24 hours', desc: 'Place unlimited buy on bike auctions (+ 18% GST)' },
+  { category: 'Car', icon: '🚗', price: '₹211', duration: '24 hours', desc: 'Place unlimited buy on car auctions (+ 18% GST)' },
 ];
 
 const sellerFees = [
-  { category: 'Mobile Listing', icon: '📱', price: '₹1', type: 'one-time (incl. 18% GST)' },
-  { category: 'Laptop Listing', icon: '💻', price: '₹1', type: 'one-time (incl. 18% GST)' },
-  { category: 'Bike Listing', icon: '🏍️', price: '₹1', type: 'one-time (incl. 18% GST)' },
-  { category: 'Car Listing', icon: '🚗', price: '₹1', type: 'one-time (incl. 18% GST)' },
+  { category: 'Mobile Listing', icon: '📱', price: '₹10', type: 'one-time (+ 18% GST)' },
+  { category: 'Laptop Listing', icon: '💻', price: '₹50', type: 'one-time (+ 18% GST)' },
+  { category: 'Bike Listing', icon: '🏍️', price: '₹100', type: 'one-time (+ 18% GST)' },
+  { category: 'Car Listing', icon: '🚗', price: '₹500', type: 'one-time (+ 18% GST)' },
 ];
 
 const GroupTitle = ({ children, sub }) => (
@@ -214,26 +214,32 @@ const BiddingPlansSection = () => {
             </h3>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap', margin: '16px 0 20px' }}>
               <div>
-                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', display: 'block', fontWeight: 800 }}>Mobile/Laptop/Bike</span>
-                <div style={{ fontSize: '32px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹1</div>
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)' }}>/ month (incl. GST)</span>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', display: 'block', fontWeight: 800 }}>Mobile Plan</span>
+                <div style={{ fontSize: '26px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹999</div>
+                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.65)' }}>/ month (+ 18% GST)</span>
+              </div>
+              <div style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', height: '48px', alignSelf: 'center' }} />
+              <div>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', display: 'block', fontWeight: 800 }}>Laptop & Bike</span>
+                <div style={{ fontSize: '26px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹1999</div>
+                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.65)' }}>/ month (+ 18% GST)</span>
               </div>
               <div style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', height: '48px', alignSelf: 'center' }} />
               <div>
                 <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', display: 'block', fontWeight: 800 }}>Car Plan</span>
-                <div style={{ fontSize: '32px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹1</div>
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)' }}>/ month (incl. GST)</span>
+                <div style={{ fontSize: '26px', fontWeight: '900', color: '#FFD700', lineHeight: 1.1 }}>₹2999</div>
+                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.65)' }}>/ month (+ 18% GST)</span>
               </div>
             </div>
             <p
               style={{
-                fontSize: '15px',
+                fontSize: '14px',
                 color: 'rgba(255,255,255,0.88)',
-                lineHeight: 1.7,
+                lineHeight: 1.6,
                 margin: '0 0 28px',
               }}
             >
-              Unlimited listings for Mobile, Laptop & Bike at ₹1/month, and Cars at ₹1/month.
+              Unlimited listings for Mobile at ₹999/month, Laptop & Bike at ₹1999/month, and Cars at ₹2999/month (+ 18% GST).
               No per-listing charges. Perfect for high-volume dealers.
             </p>
             <ul

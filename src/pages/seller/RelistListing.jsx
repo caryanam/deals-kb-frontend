@@ -573,10 +573,13 @@ export const RelistListing = () => {
 
     try {
       if (user?.role === 'Dealer') {
-        const isCar = productType === 'car';
-        const hasActivePlan = isCar
-          ? dealerPlans.some(p => p.plan_id === 'dealer_car_monthly' && p.active)
-          : dealerPlans.some(p => p.plan_id === 'dealer_monthly' && p.active);
+        const planId = productType === 'car'
+          ? 'dealer_car_monthly'
+          : productType === 'mobile'
+          ? 'dealer_mobile_monthly'
+          : 'dealer_laptop_bike_monthly';
+
+        const hasActivePlan = dealerPlans.some(p => p.plan_id === planId && p.active);
 
         if (hasActivePlan) {
           await submitRelistAfterPayment(listingId, formData);
@@ -584,7 +587,6 @@ export const RelistListing = () => {
           setSuccessMsg('Listing submitted for admin approval. Redirecting...');
           setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
         } else {
-          const planId = isCar ? 'dealer_car_monthly' : 'dealer_monthly';
           // Save details first
           await submitRelistAfterPayment(listingId, formData);
           toast.success('Listing details saved! Redirecting to plan payment...');
@@ -654,10 +656,17 @@ export const RelistListing = () => {
               </div>
 
               {user?.role === 'Dealer' ? (() => {
-                const isCar = productType === 'car';
-                const isActive = isCar
-                  ? dealerPlans.some(p => p.plan_id === 'dealer_car_monthly' && p.active)
-                  : dealerPlans.some(p => p.plan_id === 'dealer_monthly' && p.active);
+                const planId = productType === 'car'
+                  ? 'dealer_car_monthly'
+                  : productType === 'mobile'
+                  ? 'dealer_mobile_monthly'
+                  : 'dealer_laptop_bike_monthly';
+                const isActive = dealerPlans.some(p => p.plan_id === planId && p.active);
+                const planName = productType === 'car'
+                  ? 'Dealer Car Plan'
+                  : productType === 'mobile'
+                  ? 'Dealer Mobile Plan'
+                  : 'Dealer Laptop & Bike Plan';
                 return (
                   <div style={{
                     marginTop: '1rem',
@@ -672,7 +681,7 @@ export const RelistListing = () => {
                     marginBottom: '1rem'
                   }}>
                     <span style={{ color: isActive ? '#166534' : '#991b1b', fontWeight: 800, fontSize: '0.9rem' }}>
-                      {isCar ? 'Dealer Car Monthly Plan Status' : 'Dealer Monthly Plan Status (Mobile/Laptop/Bike)'}
+                      {planName} Status
                     </span>
                     <strong style={{
                       padding: '0.25rem 0.55rem',

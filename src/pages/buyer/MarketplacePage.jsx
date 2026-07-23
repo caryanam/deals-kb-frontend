@@ -1,6 +1,6 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, RefreshCw, AlertCircle } from 'lucide-react';
+import { Search, RefreshCw, AlertCircle, Heart } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getProducts } from '../../api/productApi';
 import ListingCard from '../../components/listings/ListingCard';
@@ -20,6 +20,14 @@ export const MarketplacePage = () => {
   const [selectedType, setSelectedType] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState(initialStatus || 'live_or_upcoming');
   const [showPlans, setShowPlans] = useState(false);
+  const [showOnlyLiked, setShowOnlyLiked] = useState(false);
+  const [likedIds, setLikedIds] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('dealskb_liked_listings') || '[]');
+    } catch {
+      return [];
+    }
+  });
 
   // Build parameters according to backend spec
   const params = useMemo(() => {
@@ -50,6 +58,9 @@ export const MarketplacePage = () => {
   // Frontend local search filters
   const filteredListings = useMemo(() => {
     let result = listings;
+    if (showOnlyLiked) {
+      result = result.filter(l => likedIds.includes(l.product_id));
+    }
     if (searchTerm.trim() !== '') {
       const term = searchTerm.toLowerCase();
       result = result.filter(
@@ -60,7 +71,7 @@ export const MarketplacePage = () => {
       );
     }
     return result;
-  }, [searchTerm, listings]);
+  }, [searchTerm, listings, showOnlyLiked, likedIds]);
 
   const fetchListings = () => {
     queryClient.invalidateQueries({ queryKey: ['products'] });
@@ -74,7 +85,32 @@ export const MarketplacePage = () => {
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>Product Marketplace</h1>
           <p style={{ color: '#8B8278', fontSize: '0.9rem' }}>Browse approved items, join live auctions, and place bids in real time</p>
         </div>
-        <div className="responsive-page-actions" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <div className="responsive-page-actions" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <button
+            type="button"
+            onClick={() => {
+              try {
+                const ids = JSON.parse(localStorage.getItem('dealskb_liked_listings') || '[]');
+                setLikedIds(ids);
+              } catch {}
+              setShowOnlyLiked(!showOnlyLiked);
+            }}
+            className="btn"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              backgroundColor: showOnlyLiked ? '#fee2e2' : 'transparent',
+              color: showOnlyLiked ? '#ef4444' : '#6B1B71',
+              border: '1.5px solid #6B1B71',
+              fontWeight: 700,
+              fontSize: '0.85rem'
+            }}
+          >
+            <Heart size={16} fill={showOnlyLiked ? '#ef4444' : 'none'} />
+            {showOnlyLiked ? 'Showing Liked' : 'Liked Listings'}
+          </button>
+
           <button 
             onClick={fetchListings} 
             className="btn btn-secondary" 
@@ -194,7 +230,17 @@ export const MarketplacePage = () => {
         <div className="grid grid-cols-3">
           {filteredListings.map(product => (
             <div key={product.product_id}>
-              <ListingCard listing={product} />
+              <ListingCard 
+                listing={{
+                  ...product,
+                  onLikeToggle: () => {
+                    try {
+                      const ids = JSON.parse(localStorage.getItem('dealskb_liked_listings') || '[]');
+                      setLikedIds(ids);
+                    } catch {}
+                  }
+                }} 
+              />
             </div>
           ))}
         </div>

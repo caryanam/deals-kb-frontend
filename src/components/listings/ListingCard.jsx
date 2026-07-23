@@ -1,13 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Fuel, Gauge, Calendar, ShieldCheck, ArrowUpRight, Cpu, Layers, ImageOff } from 'lucide-react';
+import { Fuel, Gauge, Calendar, ShieldCheck, ArrowUpRight, Cpu, Layers, ImageOff, MapPin, Heart } from 'lucide-react';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
 import { useAuth } from '../../hooks/useAuth';
 import { getProductCoverImage, handleImageError } from '../../utils/imageUtils';
 
+const getListingDateText = (dateStr) => {
+  if (!dateStr) return 'TODAY';
+  try {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays <= 1) {
+      return 'TODAY';
+    } else if (diffDays === 2) {
+      return 'YESTERDAY';
+    }
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+  } catch {
+    return 'TODAY';
+  }
+};
+
 export const ListingCard = ({ listing: product }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const isBuyer = !user || user.role === 'Buyer';
+
+  const [isLiked, setIsLiked] = useState(() => {
+    try {
+      const liked = JSON.parse(localStorage.getItem('dealskb_liked_listings') || '[]');
+      return liked.includes(product.product_id);
+    } catch {
+      return false;
+    }
+  });
+
+  const handleLikeToggle = (e) => {
+    e.stopPropagation();
+    try {
+      const liked = JSON.parse(localStorage.getItem('dealskb_liked_listings') || '[]');
+      let nextLiked = [];
+      if (liked.includes(product.product_id)) {
+        nextLiked = liked.filter(id => id !== product.product_id);
+        setIsLiked(false);
+      } else {
+        nextLiked = [...liked, product.product_id];
+        setIsLiked(true);
+      }
+      localStorage.setItem('dealskb_liked_listings', JSON.stringify(nextLiked));
+      if (product.onLikeToggle) {
+        product.onLikeToggle();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleAction = (e) => {
     e.stopPropagation();
@@ -122,21 +171,31 @@ export const ListingCard = ({ listing: product }) => {
         <div style={{ position: 'absolute', top: '0.5rem', left: '0.5rem', zIndex: 10 }}>
           {getStatusBadge()}
         </div>
-        <div style={{
-          position: 'absolute',
-          top: '0.5rem',
-          right: '0.5rem',
-          zIndex: 10,
-          backgroundColor: '#1F1A1D',
-          color: '#ffffff',
-          padding: '0.2rem 0.5rem',
-          borderRadius: '0.25rem',
-          fontSize: '0.7rem',
-          fontWeight: 700,
-          textTransform: 'uppercase'
-        }}>
-          {PRODUCT_TYPE_LABELS[product.product_type] || product.product_type}
-        </div>
+        <button
+          type="button"
+          onClick={handleLikeToggle}
+          style={{
+            position: 'absolute',
+            top: '0.75rem',
+            right: '0.75rem',
+            zIndex: 15,
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: '#ffffff',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            cursor: 'pointer',
+            color: isLiked ? '#ef4444' : '#8B8278',
+            transition: 'all 0.2s ease'
+          }}
+          title={isLiked ? 'Remove from Liked' : 'Add to Liked'}
+        >
+          <Heart size={16} fill={isLiked ? '#ef4444' : 'none'} />
+        </button>
       </div>
 
       {/* Listing Body Info */}
@@ -155,39 +214,73 @@ export const ListingCard = ({ listing: product }) => {
 
         {/* Bid status & CTA */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '0.35rem' }}>
-          {product.status === 'live' ? (
-            <div>
-              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Current Bid</span>
-              <p style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>
-                {formatINR(product.current_bid || 0)}
-              </p>
-            </div>
+          {isBuyer ? (
+            <button
+              onClick={handleAction}
+              className={`btn ${product.status === 'live' ? 'btn-success' : 'btn-secondary'}`}
+              style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', fontWeight: 700, width: '100%' }}
+            >
+              {product.status === 'live' ? (
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem' }}>
+                  Bid <ArrowUpRight size={12} />
+                </span>
+              ) : (
+                'Details'
+              )}
+            </button>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
-              <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Price</span>
-              <p style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>
-                {formatINR(product.expected_price || 0)}
-              </p>
-              <span style={{ fontSize: '0.72rem', color: '#8B8278', fontWeight: 700 }}>
-                Bid starts from {formatINR(startingBidAmount || 0)}
-              </span>
-            </div>
+            <>
+              {product.status === 'live' ? (
+                <div>
+                  <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Current Bid</span>
+                  <p style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>
+                    {formatINR(product.current_bid || 0)}
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+                  <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 600 }}>Price</span>
+                  <p style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1F1A1D', margin: 0 }}>
+                    {formatINR(product.expected_price || 0)}
+                  </p>
+                </div>
+              )}
+              
+              <button
+                onClick={handleAction}
+                className={`btn ${product.status === 'live' ? 'btn-success' : 'btn-secondary'}`}
+                style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', fontWeight: 700 }}
+              >
+                {product.status === 'live' ? (
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                    Bid <ArrowUpRight size={12} />
+                  </span>
+                ) : (
+                  'Details'
+                )}
+              </button>
+            </>
           )}
-          
-          <button
-            onClick={handleAction}
-            className={`btn ${product.status === 'live' ? 'btn-success' : 'btn-secondary'}`}
-            style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', fontWeight: 700 }}
-          >
-            {product.status === 'live' ? (
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                Bid <ArrowUpRight size={12} />
-              </span>
-            ) : (
-              'Details'
-            )}
-          </button>
         </div>
+
+        {product.location && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderTop: '1px solid #f1f5f9',
+            paddingTop: '0.65rem',
+            marginTop: '0.65rem',
+            fontSize: '0.7rem',
+            color: '#8B8278',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em'
+          }}>
+            <span>{product.location.address}</span>
+            <span>{getListingDateText(product.created_at)}</span>
+          </div>
+        )}
       </div>
     </div>
   );

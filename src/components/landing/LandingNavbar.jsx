@@ -76,7 +76,10 @@ Own More.</span>
       </nav>
 
       {/* Right side: Login / Register CTA */}
-      <div className="nav-actions landing-nav-auth-desktop">
+      <div className="nav-actions landing-nav-auth-desktop" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <Link to="/login" className="sell-btn-custom">
+          <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#6B1B71', lineHeight: 1 }}>+</span> SELL
+        </Link>
         <Link to="/login" className="login-btn">
           Login
         </Link>
@@ -125,6 +128,9 @@ Own More.</span>
           <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.1)', margin: '0.25rem 0' }} />
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="sell-btn-custom-mobile">
+              + SELL
+            </Link>
             <Link to="/login" onClick={() => setMobileMenuOpen(false)} style={{
               color: '#ffffff',
               textDecoration: 'none',
@@ -155,6 +161,46 @@ Own More.</span>
 
       {/* Inline media query style for display override */}
       <style>{`
+        .sell-btn-custom {
+          padding: 0 1.25rem;
+          border: 3.5px solid #6B1B71;
+          color: #1F1A1D;
+          background-color: #ffffff;
+          border-radius: 999px;
+          font-weight: 800;
+          font-size: 0.85rem;
+          text-decoration: none;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.25rem;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          height: 38px;
+          box-sizing: border-box;
+          transition: all 0.15s ease;
+        }
+        .sell-btn-custom:hover {
+          transform: translateY(-1.5px);
+          box-shadow: 0 4px 12px rgba(107, 27, 113, 0.2);
+          border-color: #55155a;
+        }
+        .sell-btn-custom-mobile {
+          color: #6B1B71;
+          background-color: #ffffff;
+          text-decoration: none;
+          font-weight: 800;
+          font-size: 0.95rem;
+          text-align: center;
+          padding: 0.65rem;
+          border-radius: 999px;
+          border: 3px solid #6B1B71;
+          box-sizing: border-box;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
         @media (max-width: 1024px) {
           .landing-nav-links-desktop,
           .landing-nav-auth-desktop {
