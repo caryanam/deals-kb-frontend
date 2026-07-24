@@ -407,7 +407,7 @@ export const ListingLocationCard = ({ value, onChange }) => {
                 <LocateFixed size={22} />
               </div>
               <div className="loc-details">
-                <h4 className="loc-heading">Listing Location</h4>
+                <h4 className="loc-heading">Listing Location *</h4>
                 <p className="loc-main-text">No location selected</p>
                 <p className="loc-sub-text">This is the location where the product will be listed from.</p>
               </div>
@@ -429,7 +429,7 @@ export const ListingLocationCard = ({ value, onChange }) => {
                 <LocateFixed size={22} />
               </div>
               <div className="loc-details">
-                <h4 className="loc-heading">Listing Location</h4>
+                <h4 className="loc-heading">Listing Location *</h4>
                 <p className="loc-main-text">No location selected</p>
                 <p className="loc-sub-text">This is the location where the product will be listed from.</p>
               </div>
@@ -451,7 +451,7 @@ export const ListingLocationCard = ({ value, onChange }) => {
                 <MapPin size={22} />
               </div>
               <div className="loc-details">
-                <h4 className="loc-heading">Listing Location</h4>
+                <h4 className="loc-heading">Listing Location *</h4>
                 <p className="loc-main-text" style={{ fontSize: '1.05rem', color: '#166534' }}>{loc.address}</p>
                 
                 {loc.accuracy && (
@@ -480,7 +480,7 @@ export const ListingLocationCard = ({ value, onChange }) => {
       {viewState === 'change-location' && (
         <div className="loc-card-container" style={{ backgroundColor: '#ffffff', border: '1px solid #D8CFC1' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <h4 className="loc-heading">Listing Location</h4>
+            <h4 className="loc-heading">Listing Location *</h4>
             <p className="loc-sub-text" style={{ fontWeight: 700, color: '#1F1A1D', margin: 0 }}>
               Search for area, city or pin code
             </p>

@@ -265,7 +265,7 @@ export const ListingDetailsPage = () => {
       if (user?.role === 'Buyer') {
         try {
           const plans = await getMyPlans();
-          const activePlan = (plans || []).find((plan) => plan.product_type === product.product_type && plan.active);
+          const activePlan = (plans || []).find((plan) => (plan.product_type || '').toLowerCase() === (product.product_type || '').toLowerCase() && plan.active);
           if (!activePlan) {
             setRequiredPlan(null);
             setShowPlans(true);

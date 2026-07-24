@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { getProducts } from '../../api/productApi';
 import { getMyBids, getMyWins } from '../../api/userApi';
 import { getNotifications } from '../../api/notificationApi';
+import { getMyPlans } from '../../api/paymentApi';
 
 
 export const BuyerDashboard = () => {
@@ -36,7 +37,13 @@ export const BuyerDashboard = () => {
     enabled: !!user
   });
 
-  const loading = loadingProducts || loadingBids || loadingWins || loadingNotifications;
+  const { data: myPlans = [], isLoading: loadingPlans } = useQuery({
+    queryKey: ['myPlans'],
+    queryFn: getMyPlans,
+    enabled: !!user
+  });
+
+  const loading = loadingProducts || loadingBids || loadingWins || loadingNotifications || loadingPlans;
   const errorObj = errorProducts || errorBids || errorWins || errorNotifications;
   const error = errorObj ? (errorObj.response?.data?.detail || errorObj.response?.data?.message || 'Failed to retrieve dashboard parameters.') : null;
 
@@ -53,6 +60,7 @@ export const BuyerDashboard = () => {
     queryClient.invalidateQueries({ queryKey: ['myBids'] });
     queryClient.invalidateQueries({ queryKey: ['myWins'] });
     queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    queryClient.invalidateQueries({ queryKey: ['myPlans'] });
   };
 
   return (
@@ -179,6 +187,81 @@ export const BuyerDashboard = () => {
             <h3 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: '#10b981' }}>{loading ? '...' : myWinsCount}</h3>
           </div>
         </div>
+      </div>
+
+      {/* Bidding Passes Section */}
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#1F1A1D', marginBottom: '1.15rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: "'Outfit', sans-serif" }}>
+          <Clock size={20} style={{ color: '#6B1B71' }} /> My Bidding Passes
+        </h2>
+        
+        {myPlans.length === 0 ? (
+          <div style={{
+            padding: '2.5rem 1.5rem',
+            textAlign: 'center',
+            color: '#8B8278',
+            backgroundColor: '#FAF6EA',
+            border: '3px dashed #D8CFC1',
+            borderRadius: '1.5rem',
+            fontWeight: 700,
+            fontSize: '0.9rem'
+          }}>
+            You don't have any bidding passes yet. Click "Explore Marketplace" and bid on a product to activate a day pass.
+          </div>
+        ) : (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: '1rem'
+          }}>
+            {myPlans.map((plan) => (
+              <div
+                key={plan.plan_id || plan.payment_id}
+                style={{
+                  backgroundColor: plan.active ? '#f0fdf4' : '#ffffff',
+                  border: plan.active ? '3px solid #16a34a' : '3px solid #D8CFC1',
+                  borderRadius: '1.5rem',
+                  padding: '1.25rem 1.5rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.45rem',
+                  boxShadow: plan.active ? '6px 6px 0px rgba(22, 163, 74, 0.2)' : 'none',
+                  position: 'relative'
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#8B8278', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                    Day Pass
+                  </span>
+                  <span style={{
+                    padding: '0.25rem 0.6rem',
+                    borderRadius: '999px',
+                    fontSize: '0.65rem',
+                    fontWeight: 900,
+                    backgroundColor: plan.active ? '#dcfce7' : '#fee2e2',
+                    color: plan.active ? '#166534' : '#991b1b',
+                    border: plan.active ? '1.5px solid #16a34a' : '1.5px solid #ef4444',
+                    textTransform: 'uppercase'
+                  }}>
+                    {plan.active ? 'Active' : 'Expired'}
+                  </span>
+                </div>
+                <h4 style={{ margin: '0.15rem 0 0', fontSize: '1.1rem', fontWeight: 900, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>
+                  {plan.plan_name}
+                </h4>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: '#8B8278', fontWeight: 700 }}>
+                  Category: <span style={{ color: '#6B1B71', fontWeight: 800 }}>{plan.notes?.product_type?.toUpperCase() || 'Any'}</span>
+                </p>
+                {plan.active_until && (
+                  <span style={{ fontSize: '0.72rem', color: plan.active ? '#166534' : '#8B8278', fontWeight: 750, marginTop: '0.5rem', borderTop: '1px solid #EFEAE0', paddingTop: '0.5rem' }}>
+                    {plan.active ? 'Valid until:' : 'Expired on:'} <br />
+                    <span style={{ fontWeight: 800 }}>{new Date(plan.active_until).toLocaleString()}</span>
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Main Content Layout splits */}

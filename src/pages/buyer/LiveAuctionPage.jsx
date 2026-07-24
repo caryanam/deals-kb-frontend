@@ -74,7 +74,7 @@ export const LiveAuctionPage = () => {
           try {
             const plans = await getMyPlans();
             const activePlan = (plans || []).find(
-              (p) => p.product_type === details.product_type && p.active
+              (p) => (p.product_type || '').toLowerCase() === (details.product_type || '').toLowerCase() && p.active
             );
             if (!activePlan) {
               setShowPlans(true);

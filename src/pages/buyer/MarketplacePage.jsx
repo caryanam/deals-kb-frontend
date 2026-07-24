@@ -143,7 +143,7 @@ export const MarketplacePage = () => {
         </div>
       )}
 
-      {user?.role === 'Buyer' && <BiddingPassBanner productType={selectedType === 'all' ? 'mobile' : selectedType} />}
+      {user?.role === 'Buyer' && <BiddingPassBanner productType={selectedType} />}
 
       {/* Search and Filters Card */}
       <div className="card" style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -246,7 +246,7 @@ export const MarketplacePage = () => {
                   if (user?.role === 'Buyer') {
                     try {
                       const plans = await getMyPlans();
-                      const activePlan = (plans || []).find((p) => p.product_type === product.product_type && p.active);
+                      const activePlan = (plans || []).find((p) => (p.product_type || '').toLowerCase() === (product.product_type || '').toLowerCase() && p.active);
                       if (!activePlan) {
                         setTargetProductType(product.product_type);
                         setShowPlans(true);

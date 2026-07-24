@@ -8,6 +8,7 @@ import HowItWorksSection from "../../components/landing/HowItWorksSection";
 import AboutSection from "../../components/landing/AboutSection";
 import AppComingSoonSection from "../../components/landing/AppComingSoonSection";
 import NewsletterSection from "../../components/landing/NewsletterSection";
+import LaunchOfferFloatingWidget from "../../components/landing/LaunchOfferFloatingWidget";
 import Footer from "../../components/common/Footer";
 import "../../styles/landing.css";
 
@@ -36,15 +37,14 @@ const LandingPage = () => {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '0px',
-      threshold: 0.1, // Trigger when 10% of the section is visible
+      rootMargin: '150px 0px',
+      threshold: 0.01,
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('scroll-reveal-active');
-          // Stop observing once animated
           observer.unobserve(entry.target);
         }
       });
@@ -53,13 +53,22 @@ const LandingPage = () => {
     const sections = document.querySelectorAll('.scroll-reveal');
     sections.forEach((section) => observer.observe(section));
 
+    // Fallback: Ensure all sections reveal automatically after 800ms
+    const timer = setTimeout(() => {
+      sections.forEach((section) => section.classList.add('scroll-reveal-active'));
+    }, 800);
+
     return () => {
+      clearTimeout(timer);
       sections.forEach((section) => observer.unobserve(section));
     };
   }, []);
 
   return (
     <div className="landing-page">
+      {/* Right side floating sticky firecracker launch offer widget */}
+      <LaunchOfferFloatingWidget />
+
       <HeroSection />
       
       <div className="scroll-reveal">
@@ -86,9 +95,7 @@ const LandingPage = () => {
         <AppComingSoonSection />
       </div>
       
-      <div className="scroll-reveal">
-        <NewsletterSection />
-      </div>
+      <NewsletterSection />
       
       <Footer />
     </div>

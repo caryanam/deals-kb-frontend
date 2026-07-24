@@ -5,12 +5,18 @@ import { useAuth } from '../../hooks/useAuth';
 import { getProducts } from '../../api/productApi';
 import { getMyPlans } from '../../api/paymentApi';
 import { triggerDealerPlanPayment } from '../../utils/paymentHelper';
+import UpiPaymentModal from '../../components/payments/UpiPaymentModal';
 
 
 export const SellerDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const basePath = user?.role === 'Dealer' ? '/dealer' : '/seller';
+
+  const [showPaymentChoice, setShowPaymentChoice] = useState(false);
+  const [selectedPlanId, setSelectedPlanId] = useState('');
+  const [planAmount, setPlanAmount] = useState(0);
+  const [showUpiModal, setShowUpiModal] = useState(false);
 
   const [stats, setStats] = useState({
     total: 0,
@@ -64,12 +70,10 @@ export const SellerDashboard = () => {
   }, [user]);
 
   const handleActivatePlan = async (planId) => {
-    try {
-      setPayingPlanId(planId);
-      await triggerDealerPlanPayment(planId);
-    } finally {
-      setPayingPlanId(null);
-    }
+    setSelectedPlanId(planId);
+    const amt = planId.includes('car') ? 3538.82 : planId.includes('laptop') ? 2358.82 : 1178.82;
+    setPlanAmount(amt);
+    setShowPaymentChoice(true);
   };
 
   return (
@@ -139,13 +143,18 @@ export const SellerDashboard = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Mobile Plan</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}1,178.82/month for unlimited Mobile listings.</p>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>
+                Dealer Mobile Plan <span style={{ fontSize: '0.72rem', backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #f59e0b', padding: '0.15rem 0.4rem', borderRadius: '0.4rem', marginLeft: '0.4rem' }}>🔥 Launch Offer till 31 Aug</span>
+              </h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>
+                <span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '0.35rem' }}>{"\u20B9"}1,178.82</span>
+                <span style={{ color: '#16a34a', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}1.00</span>/month for unlimited Mobile listings.
+              </p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_mobile_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_mobile_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Mobile Plan ({"\u20B9"}1,178.82)
+            Activate Mobile Plan ({"\u20B9"}1.00)
           </button>
         </div>
       )}
@@ -155,13 +164,18 @@ export const SellerDashboard = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Laptop & Bike Plan</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}2,358.82/month for unlimited Laptop & Bike listings.</p>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>
+                Dealer Laptop &amp; Bike Plan <span style={{ fontSize: '0.72rem', backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #f59e0b', padding: '0.15rem 0.4rem', borderRadius: '0.4rem', marginLeft: '0.4rem' }}>🔥 Launch Offer till 31 Aug</span>
+              </h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>
+                <span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '0.35rem' }}>{"\u20B9"}2,358.82</span>
+                <span style={{ color: '#16a34a', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}1.00</span>/month for unlimited Laptop &amp; Bike listings.
+              </p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_laptop_bike_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_laptop_bike_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Laptop & Bike Plan ({"\u20B9"}2,358.82)
+            Activate Laptop &amp; Bike Plan ({"\u20B9"}1.00)
           </button>
         </div>
       )}
@@ -171,13 +185,18 @@ export const SellerDashboard = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>Dealer Car Plan</h2>
-              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>{"\u20B9"}3,538.82/month for unlimited Car listings.</p>
+              <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>
+                Dealer Car Plan <span style={{ fontSize: '0.72rem', backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #f59e0b', padding: '0.15rem 0.4rem', borderRadius: '0.4rem', marginLeft: '0.4rem' }}>🔥 Launch Offer till 31 Aug</span>
+              </h2>
+              <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>
+                <span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '0.35rem' }}>{"\u20B9"}3,538.82</span>
+                <span style={{ color: '#16a34a', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}1.00</span>/month for unlimited Car listings.
+              </p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_car_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_car_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Car Plan ({"\u20B9"}3,538.82)
+            Activate Car Plan ({"\u20B9"}1.00)
           </button>
         </div>
       )}
@@ -298,9 +317,102 @@ export const SellerDashboard = () => {
             <p style={{ fontSize: '0.8rem', color: '#8B8278', margin: 0 }}>Finished live bids transactions</p>
           </div>
         </div>
-
       </div>
 
+      {/* Payment Choice Modal */}
+      {showPaymentChoice && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.5)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          zIndex: 10500,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '1rem'
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '380px',
+            backgroundColor: '#FAF6EA',
+            borderRadius: '1.25rem',
+            border: '1.5px solid #D8CFC1',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.08)',
+            padding: '1.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.25rem'
+          }}>
+            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#1F1A1D', textAlign: 'center' }}>
+              Choose Payment Method
+            </h3>
+            <div style={{ backgroundColor: '#fef3c7', border: '1px solid #f59e0b', borderRadius: '0.75rem', padding: '0.6rem', textAlign: 'center' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#92400e', display: 'block' }}>
+                🔥 LAUNCH OFFER TILL 31st AUGUST
+              </span>
+              <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1F1A1D', marginTop: '0.15rem', display: 'block' }}>
+                Pay only <span style={{ textDecoration: 'line-through', color: '#8B8278', fontSize: '0.78rem', marginRight: '0.25rem' }}>₹{selectedPlanId?.includes('car') ? '3538.82' : selectedPlanId?.includes('laptop') ? '2358.82' : '1178.82'}</span> <span style={{ color: '#16a34a', fontSize: '1.1rem' }}>₹1.00</span>
+              </span>
+            </div>
+            
+            <button
+              onClick={async () => {
+                setShowPaymentChoice(false);
+                await triggerDealerPlanPayment(selectedPlanId);
+                loadSellerStats();
+              }}
+              className="btn btn-primary"
+              style={{
+                width: '100%',
+                height: '42px',
+                borderRadius: '999px',
+                fontWeight: 900,
+                border: '3px solid #1F1A1D',
+                boxShadow: '4px 4px 0px #1F1A1D'
+              }}
+            >
+              Pay via NetBanking (CCAvenue)
+            </button>
+            
+            <button
+              onClick={() => {
+                setShowPaymentChoice(false);
+                setShowUpiModal(true);
+              }}
+              className="btn btn-secondary"
+              style={{
+                width: '100%',
+                height: '42px',
+                borderRadius: '999px',
+                fontWeight: 900,
+                border: '3px solid #1F1A1D',
+                boxShadow: '4px 4px 0px #1F1A1D'
+              }}
+            >
+              Pay via UPI / QR Scan
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showUpiModal && (
+        <UpiPaymentModal
+          isOpen={showUpiModal}
+          onClose={() => {
+            setShowUpiModal(false);
+          }}
+          amount={planAmount}
+          planName="Dealer Plan Upgrade"
+          paymentType="DEALER_PLAN"
+          planId={selectedPlanId}
+          onSuccess={() => {
+            toast.success("UPI payment request submitted successfully!");
+            loadSellerStats();
+          }}
+        />
+      )}
     </div>
   );
 };

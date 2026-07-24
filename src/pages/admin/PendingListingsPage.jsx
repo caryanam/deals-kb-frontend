@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ClipboardList, Eye, Check, X, AlertTriangle, FileText, Film, RefreshCw } from 'lucide-react';
 import { getProducts, reviewProduct } from '../../api/productApi';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON } from '../../utils/helpers';
@@ -11,6 +12,9 @@ const getVerificationDocuments = (docs = {}) => Object.fromEntries(
 );
 
 export const PendingListingsPage = () => {
+  const [searchParams] = useSearchParams();
+  const openId = searchParams.get('open');
+
   const [pendingList, setPendingList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedListing, setSelectedListing] = useState(null);
@@ -46,6 +50,15 @@ export const PendingListingsPage = () => {
   useEffect(() => {
     fetchPending();
   }, []);
+
+  useEffect(() => {
+    if (openId && pendingList.length > 0) {
+      const listing = pendingList.find(p => p.product_id === openId);
+      if (listing) {
+        setSelectedListing(listing);
+      }
+    }
+  }, [openId, pendingList]);
 
   const handleApprove = (id) => {
     setConfirmModal({

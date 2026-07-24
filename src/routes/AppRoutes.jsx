@@ -43,6 +43,7 @@ import AnalyticsPage from '../pages/admin/AnalyticsPage';
 import ReportsPage from '../pages/admin/ReportsPage';
 import AdminCommunityRequestsPage from '../pages/admin/AdminCommunityRequestsPage';
 import AdminProductsPage from '../pages/admin/AdminProductsPage';
+import AdminPaymentsPage from '../pages/admin/AdminPaymentsPage';
 import DeleteAccountPage from '../pages/public/DeleteAccountPage';
 
 // Common
@@ -143,6 +144,7 @@ export const AppRoutes = () => {
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="reports" element={<ReportsPage />} />
         <Route path="community-requests" element={<AdminCommunityRequestsPage />} />
+        <Route path="payments" element={<AdminPaymentsPage />} />
       </Route>
 
       {/* 6. Fallback 404 Route */}

@@ -11,36 +11,48 @@ const categoryPlans = [
   {
     category: 'Mobile',
     image: mobileImg,
-    seller: '₹11.80',
-    buyer: '₹24.78',
-    dealer: '₹1,178.82',
+    sellerOrig: '₹11.80',
+    seller: '₹1.00',
+    buyerOrig: '₹24.78',
+    buyer: '₹1.00',
+    dealerOrig: '₹1,178.82',
+    dealer: '₹1.00',
     regularLimit: '401',
     offerLimit: '1,000',
   },
   {
     category: 'Laptop',
     image: laptopImg,
-    seller: '₹59.00',
-    buyer: '₹60.18',
-    dealer: '₹2,358.82',
+    sellerOrig: '₹59.00',
+    seller: '₹1.00',
+    buyerOrig: '₹60.18',
+    buyer: '₹1.00',
+    dealerOrig: '₹2,358.82',
+    dealer: '₹1.00',
     regularLimit: '300',
     offerLimit: '500',
   },
   {
     category: 'Bike',
     image: bikeImg,
-    seller: '₹118.00',
-    buyer: '₹119.18',
-    dealer: '₹2,358.82',
+    sellerOrig: '₹118.00',
+    seller: '₹1.00',
+    buyerOrig: '₹119.18',
+    buyer: '₹1.00',
+    dealerOrig: '₹2,358.82',
+    dealer: '₹1.00',
     regularLimit: '150',
     offerLimit: '500',
   },
   {
     category: 'Car',
     image: carImg,
-    seller: '₹590.00',
-    buyer: '₹591.18',
-    dealer: '₹3,538.82',
+    sellerOrig: '₹590.00',
+    seller: '₹1.00',
+    buyerOrig: '₹591.18',
+    buyer: '₹1.00',
+    dealerOrig: '₹3,538.82',
+    dealer: '₹1.00',
     regularLimit: '30',
     offerLimit: '100',
   },
@@ -105,7 +117,7 @@ const PlansSection = () => {
           min-height: 104px;
           display: flex;
           flex-direction: column;
-          justifyContent: center;
+          justify-content: center;
           margin-top: auto;
           box-shadow: 3px 3px 0px #B2772D;
           transition: all 0.25s ease;
@@ -120,10 +132,10 @@ const PlansSection = () => {
           border-radius: 20px 10px 25px 12px / 12px 22px 10px 20px;
           padding: 1.25rem 1.75rem;
           margin: 0 auto 3rem;
-          max-width: 800px;
+          max-width: 850px;
           display: flex;
           align-items: center;
-          justifyContent: center;
+          justify-content: center;
           gap: 16px;
           box-shadow: 6px 6px 0px #F59E0B;
           transition: all 0.25s ease;
@@ -184,13 +196,13 @@ const PlansSection = () => {
 
         {/* Launch Offer Banner */}
         <div className="offer-banner">
-          <span style={{ fontSize: '2rem', lineHeight: 1 }}>🚀</span>
+          <span style={{ fontSize: '2.2rem', lineHeight: 1 }}>💥</span>
           <div style={{ textAlign: 'left' }}>
-            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#D97706', fontFamily: "'Outfit', sans-serif" }}>
-              Special Dealer Launch Offer — Valid Till 31st August!
+            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 950, color: '#D97706', fontFamily: "'Outfit', sans-serif" }}>
+              🔥 LAUNCHING OFFER — ALL SELLER, BUYER &amp; DEALER PLANS AT JUST ₹1 TILL 31st AUGUST!
             </h4>
-            <p style={{ margin: '4px 0 0', fontSize: '0.86rem', color: '#78350F', fontWeight: 700 }}>
-              Join before the month end and get upgraded listings limits on all monthly dealer plans permanently.
+            <p style={{ margin: '4px 0 0', fontSize: '0.88rem', color: '#78350F', fontWeight: 700 }}>
+              Enjoy full access across all categories for just ₹1! Dealers also get upgraded listing limits permanently on all monthly plans.
             </p>
           </div>
         </div>
@@ -221,13 +233,19 @@ const PlansSection = () => {
                     <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, display: 'block' }}>Seller Fee</span>
                     <span style={{ fontSize: '0.65rem', color: '#9CA3AF', fontWeight: 700 }}>Per Listing</span>
                   </div>
-                  <span style={{ fontSize: '1.1rem', color: '#1F1A1D', fontWeight: 900 }}>{item.seller}</span>
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ textDecoration: 'line-through', color: '#9CA3AF', fontSize: '0.78rem', marginRight: '0.35rem', fontWeight: 700 }}>{item.sellerOrig}</span>
+                    <span style={{ fontSize: '1.15rem', color: '#16a34a', fontWeight: 950 }}>{item.seller}</span>
+                  </div>
                 </div>
 
                 {/* Buyer Pass */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700 }}>Buyer Pass <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 600 }}>(24h)</span></span>
-                  <span style={{ fontSize: '1.1rem', color: '#1F1A1D', fontWeight: 900 }}>{item.buyer}</span>
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ textDecoration: 'line-through', color: '#9CA3AF', fontSize: '0.78rem', marginRight: '0.35rem', fontWeight: 700 }}>{item.buyerOrig}</span>
+                    <span style={{ fontSize: '1.15rem', color: '#16a34a', fontWeight: 950 }}>{item.buyer}</span>
+                  </div>
                 </div>
 
                 <div style={{ height: '2px', backgroundColor: '#1F1A1D', margin: '0.15rem 0' }} />
@@ -238,7 +256,10 @@ const PlansSection = () => {
                     <span style={{ fontSize: '0.85rem', color: PURPLE, fontWeight: 900, display: 'block' }}>Dealer Plan</span>
                     <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 700 }}>Monthly Plan</span>
                   </div>
-                  <span style={{ fontSize: '1.25rem', color: PURPLE, fontWeight: 950 }}>{item.dealer}</span>
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ textDecoration: 'line-through', color: '#9CA3AF', fontSize: '0.78rem', marginRight: '0.35rem', fontWeight: 700, display: 'block' }}>{item.dealerOrig}</span>
+                    <span style={{ fontSize: '1.3rem', color: PURPLE, fontWeight: 950 }}>{item.dealer}</span>
+                  </div>
                 </div>
               </div>
 

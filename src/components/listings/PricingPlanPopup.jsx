@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { X, ShieldCheck, Loader2, CheckCircle2 } from 'lucide-react';
+import { X, ShieldCheck, Loader2, CheckCircle2, Clock } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { triggerBuyerPassPayment } from '../../utils/paymentHelper';
 import { formatCurrency, PRODUCT_TYPE_LABELS } from '../../utils/helpers';
-import { getMyPlans } from '../../api/paymentApi';
+import { getMyPlans, getMyPayments } from '../../api/paymentApi';
+import UpiPaymentModal from '../payments/UpiPaymentModal';
 
 const CATEGORY_PLAN_IDS = {
   mobile: 'buyer_mobile_day',
@@ -16,25 +17,29 @@ const FALLBACK_PLANS = {
   mobile: {
     plan_id: 'buyer_mobile_day',
     name: 'Mobile Bidding Pass',
-    amount: 24.78,
+    amount: 1.00,
+    original_amount: 24.78,
     description: 'Unlimited mobile bidding for 24 hours.'
   },
   laptop: {
     plan_id: 'buyer_laptop_day',
     name: 'Laptop Bidding Pass',
-    amount: 60.18,
+    amount: 1.00,
+    original_amount: 60.18,
     description: 'Unlimited laptop bidding for 24 hours.'
   },
   car: {
     plan_id: 'buyer_car_day',
     name: 'Car Bidding Pass',
-    amount: 591.18,
+    amount: 1.00,
+    original_amount: 591.18,
     description: 'Unlimited car bidding for 24 hours.'
   },
   bike: {
     plan_id: 'buyer_bike_day',
     name: 'Bike Bidding Pass',
-    amount: 119.18,
+    amount: 1.00,
+    original_amount: 119.18,
     description: 'Unlimited bike bidding for 24 hours.'
   }
 };
@@ -42,6 +47,9 @@ const FALLBACK_PLANS = {
 const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClose, onActivated }) => {
   const [activatingPlanId, setActivatingPlanId] = useState('');
   const [planStatuses, setPlanStatuses] = useState([]);
+  const [showUpiModal, setShowUpiModal] = useState(false);
+  const [selectedUpiPlan, setSelectedUpiPlan] = useState(null);
+  const [pendingPayments, setPendingPayments] = useState([]);
   const normalizedType = (productType || requiredPlan?.product_type || 'mobile').toLowerCase();
   const plans = useMemo(() => {
     const byId = {};
@@ -61,15 +69,37 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
     return ['mobile', 'laptop', 'car', 'bike'].map((type) => byId[CATEGORY_PLAN_IDS[type]] || { ...FALLBACK_PLANS[type], product_type: type });
   }, [planStatuses, requiredPlan]);
 
+  // When opened from a specific product, only show that category's plan
+  const displayPlans = useMemo(() => {
+    if (!normalizedType || normalizedType === 'all') return plans;
+    const match = plans.filter((p) => (p.product_type || '').toLowerCase() === normalizedType);
+    return match.length > 0 ? match : plans;
+  }, [plans, normalizedType]);
+
+  // Build a set of plan_ids that have a pending UPI payment request
+  const pendingPlanIds = useMemo(() => {
+    const ids = new Set();
+    pendingPayments
+      .filter((p) => p.status === 'PENDING' && p.payment_gateway === 'UPI')
+      .forEach((p) => { if (p.plan_id) ids.add(p.plan_id); });
+    return ids;
+  }, [pendingPayments]);
+
   useEffect(() => {
     if (!isOpen) return;
     let mounted = true;
-    getMyPlans()
-      .then((data) => {
-        if (mounted) setPlanStatuses(Array.isArray(data) ? data : []);
+    Promise.all([getMyPlans(), getMyPayments()])
+      .then(([plans, payments]) => {
+        if (mounted) {
+          setPlanStatuses(Array.isArray(plans) ? plans : []);
+          setPendingPayments(Array.isArray(payments) ? payments : []);
+        }
       })
       .catch(() => {
-        if (mounted) setPlanStatuses([]);
+        if (mounted) {
+          setPlanStatuses([]);
+          setPendingPayments([]);
+        }
       });
     return () => {
       mounted = false;
@@ -152,7 +182,7 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
       `}</style>
       <div style={{
         width: '100%',
-        maxWidth: '1080px',
+        maxWidth: displayPlans.length === 1 ? '420px' : '1080px',
         backgroundColor: '#FAF6EA',
         borderRadius: '1.25rem',
         boxShadow: '0 24px 64px rgba(107, 27, 113, 0.15)',
@@ -161,9 +191,15 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
       }}>
         <div style={{ padding: '1.5rem 1.75rem 1.25rem', display: 'flex', justifyContent: 'space-between', gap: '1rem', alignItems: 'flex-start' }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: '1.45rem', fontWeight: 900, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>Start your unlimited bidding experience with us.</h2>
+            <h2 style={{ margin: 0, fontSize: '1.45rem', fontWeight: 900, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>
+              {displayPlans.length === 1
+                ? `Activate ${PRODUCT_TYPE_LABELS[normalizedType] || normalizedType} Bidding Pass`
+                : 'Start your unlimited bidding experience with us.'}
+            </h2>
             <p style={{ margin: '0.4rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 600 }}>
-              Choose a 24-hour bidding pass and place unlimited bids on live auctions for this category.
+              {displayPlans.length === 1
+                ? `Purchase a 24-hour ${PRODUCT_TYPE_LABELS[normalizedType] || normalizedType} bidding pass to start placing bids on this listing.`
+                : 'Choose a 24-hour bidding pass and place unlimited bids on live auctions for this category.'}
             </p>
           </div>
           <button type="button" onClick={onClose} style={{ border: 'none', background: '#EFEAE0', borderRadius: '50%', width: 34, height: 34, display: 'grid', placeItems: 'center', cursor: 'pointer', color: '#1F1A1D', transition: 'all 0.15s ease' }}>
@@ -172,14 +208,18 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
         </div>
 
         <div style={{ padding: '0 1.75rem 1.75rem' }}>
-          <div className="pricing-grid-row-container">
-            {plans.map((plan) => {
+          <div
+            className={displayPlans.length > 1 ? 'pricing-grid-row-container' : ''}
+            style={displayPlans.length === 1 ? { display: 'flex', justifyContent: 'center' } : {}}
+          >
+            {displayPlans.map((plan) => {
               const type = plan.product_type || Object.keys(CATEGORY_PLAN_IDS).find((key) => CATEGORY_PLAN_IDS[key] === plan.plan_id) || normalizedType;
               const activating = activatingPlanId === plan.plan_id;
               return (
                 <div 
                   key={plan.plan_id} 
                   className={`pricing-card-item ${plan.active ? 'active-plan' : ''}`}
+                  style={displayPlans.length === 1 ? { width: '100%', maxWidth: 360 } : {}}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem', alignItems: 'center' }}>
                     <span style={{ color: '#8B8278', fontSize: '0.72rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -189,10 +229,30 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                   </div>
                   <h3 style={{ margin: 0, color: '#1F1A1D', fontSize: '1.05rem', fontWeight: 800 }}>{plan.name || plan.plan_name}</h3>
                   <div style={{ marginTop: '0.25rem', marginBottom: '0.25rem' }}>
-                    <span style={{ color: '#6B1B71', fontSize: '1.85rem', fontWeight: 950 }}>
-                      {formatCurrency(Number(plan.amount))}
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      {plan.original_amount && Number(plan.original_amount) > Number(plan.amount) && (
+                        <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '1.1rem', fontWeight: 700 }}>
+                          {formatCurrency(Number(plan.original_amount))}
+                        </span>
+                      )}
+                      <span style={{ color: '#6B1B71', fontSize: '1.85rem', fontWeight: 950 }}>
+                        {formatCurrency(Number(plan.amount))}
+                      </span>
+                    </div>
+                    <span style={{
+                      display: 'inline-block',
+                      marginTop: '0.25rem',
+                      padding: '0.15rem 0.5rem',
+                      backgroundColor: '#fef3c7',
+                      color: '#92400e',
+                      border: '1px solid #f59e0b',
+                      borderRadius: '0.4rem',
+                      fontSize: '0.68rem',
+                      fontWeight: 800
+                    }}>
+                      🔥 Launch Offer ₹1 till 31 Aug
                     </span>
-                    <span style={{ fontSize: '0.68rem', color: '#8B8278', fontWeight: 800, display: 'block', marginTop: '0.15rem', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                    <span style={{ fontSize: '0.68rem', color: '#8B8278', fontWeight: 800, display: 'block', marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                       / 24 Hours
                     </span>
                   </div>
@@ -204,29 +264,79 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                     </span>
                   )}
                   
-                  <button
-                    type="button"
-                    onClick={() => handleActivate(plan)}
-                    disabled={activating}
-                    className={plan.active ? 'btn btn-secondary' : 'btn btn-primary'}
-                    style={{
-                      width: '100%',
+                  {pendingPlanIds.has(plan.plan_id) ? (
+                    /* Pending UPI payment awaiting admin approval */
+                    <div style={{
                       marginTop: 'auto',
-                      height: '38px',
-                      borderRadius: '999px',
                       display: 'flex',
+                      flexDirection: 'column',
                       alignItems: 'center',
-                      justifyContent: 'center',
                       gap: '0.35rem',
-                      fontWeight: 900,
-                      fontSize: '0.8rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em'
-                    }}
-                  >
-                    {activating ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={14} />}
-                    {plan.active ? 'Active' : 'Buy Pass'}
-                  </button>
+                      backgroundColor: '#fef9c3',
+                      border: '1.5px solid #fbbf24',
+                      borderRadius: '0.75rem',
+                      padding: '0.6rem 0.75rem',
+                      width: '100%'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#92400e', fontWeight: 800, fontSize: '0.75rem' }}>
+                        <Clock size={13} />
+                        Payment Awaiting Approval
+                      </div>
+                      <span style={{ fontSize: '0.67rem', color: '#78350f', fontWeight: 600, textAlign: 'center', lineHeight: 1.35 }}>
+                        Your UPI payment request is pending admin verification. You'll be notified once approved.
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleActivate(plan)}
+                        disabled={activating}
+                        className={plan.active ? 'btn btn-secondary' : 'btn btn-primary'}
+                        style={{
+                          width: '100%',
+                          marginTop: 'auto',
+                          height: '38px',
+                          borderRadius: '999px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.35rem',
+                          fontWeight: 900,
+                          fontSize: '0.8rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em'
+                        }}
+                      >
+                        {activating ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={14} />}
+                        {plan.active ? 'Active' : 'Buy Pass'}
+                      </button>
+
+                      {!plan.active && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedUpiPlan(plan);
+                            setShowUpiModal(true);
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#6B1B71',
+                            textDecoration: 'underline',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            marginTop: '0.45rem',
+                            textAlign: 'center',
+                            width: '100%'
+                          }}
+                        >
+                          Don't have netbanking? Pay via UPI
+                        </button>
+                      )}
+                    </>
+                  )}
                 </div>
               );
             })}
@@ -236,6 +346,24 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
           </p>
         </div>
       </div>
+
+      {selectedUpiPlan && (
+        <UpiPaymentModal
+          isOpen={showUpiModal}
+          onClose={() => {
+            setShowUpiModal(false);
+            setSelectedUpiPlan(null);
+          }}
+          amount={selectedUpiPlan.amount}
+          planName={selectedUpiPlan.name || selectedUpiPlan.plan_name}
+          paymentType="BUYER_PASS"
+          planId={selectedUpiPlan.plan_id}
+          onSuccess={() => {
+            onActivated?.(null, selectedUpiPlan);
+            onClose?.();
+          }}
+        />
+      )}
     </div>
   );
 };

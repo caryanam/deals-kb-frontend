@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, ClipboardList, Users, BarChart3, ShieldAlert, Compass, ShoppingBag } from 'lucide-react';
+import { LayoutDashboard, ClipboardList, Users, BarChart3, ShieldAlert, Compass, ShoppingBag, CreditCard } from 'lucide-react';
 
 export const AdminSidebar = ({ onClose }) => {
   const location = useLocation();
@@ -9,6 +9,7 @@ export const AdminSidebar = ({ onClose }) => {
   const links = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Pending Listings', path: '/admin/listings/pending', icon: ClipboardList },
+    { name: 'Payments', path: '/admin/payments', icon: CreditCard },
     { name: 'Products', path: '/admin/products', icon: ShoppingBag },
     { name: 'Community Demands', path: '/admin/community-requests', icon: Compass },
     { name: 'Users', path: '/admin/users', icon: Users },

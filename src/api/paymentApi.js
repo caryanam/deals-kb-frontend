@@ -45,3 +45,18 @@ export const getMyPayments = async () => {
   const response = await api.get("/payments/my");
   return response.data;
 };
+
+export const createManualPayment = async (payload) => {
+  const response = await api.post("/payments/manual/create", payload);
+  return response.data;
+};
+
+export const getAdminPayments = async () => {
+  const response = await api.get("/payments/admin/all");
+  return response.data;
+};
+
+export const approvePayment = async (paymentId) => {
+  const response = await api.post(`/payments/admin/approve/${paymentId}`);
+  return response.data;
+};

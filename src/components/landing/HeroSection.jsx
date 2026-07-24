@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Gavel, ShoppingBag, ShieldCheck } from 'lucide-react';
 import LandingNavbar from './LandingNavbar';
 import landingVideo from '../../assets/landing_video.mp4';
 
@@ -41,7 +40,7 @@ const HeroSection = () => {
               <p className="hero-description">
                 DealsKB is built on {" "}
                 <span className="highlight-kb">Khareedo Becho</span>{" "}
-                a trusted buy/sell platform where sellers list with confidence and buyers win the best deals on Cars, Bikes, Mobiles & Laptops.
+                a trusted buy/sell platform where sellers list with confidence and buyers win the best deals on Cars, Bikes, Mobiles &amp; Laptops.
               </p>
               
               <div className="hero-actions hero-actions-desktop">
