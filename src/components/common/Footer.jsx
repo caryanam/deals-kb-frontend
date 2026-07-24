@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Laptop, Car, Bike, Smartphone, Mail, MapPin } from 'lucide-react';
 import '../../styles/footer.css';
 import logoImg from '../../assets/logo.png';
 
@@ -87,15 +87,27 @@ Own More.</p>
 
           <div className="footer-contact">
             <h4>Contact Us</h4>
-            <p>
-              <Phone size={15} />
-              <span>+91 99232 24600</span>
+            <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+              <Laptop size={15} />
+              <span>Laptop +91-7083252124</span>
             </p>
-            <p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+              <Car size={15} />
+              <span>Car +91-8669632125</span>
+            </p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+              <Bike size={15} />
+              <span>Bike +91-9764052126</span>
+            </p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.65rem' }}>
+              <Smartphone size={15} />
+              <span>Mobile +91-9552772127</span>
+            </p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
               <Mail size={15} />
               <span>support@dealskb.com</span>
             </p>
-            <p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <MapPin size={15} />
               <span>Pune, Maharashtra, India</span>
             </p>
