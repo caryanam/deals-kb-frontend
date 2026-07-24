@@ -41,6 +41,7 @@ export const ListingDetailsPage = () => {
   const [mediaMode, setMediaMode] = useState('image'); // 'image' or 'video'
   const [showPlans, setShowPlans] = useState(false);
   const [requiredPlan, setRequiredPlan] = useState(null);
+  const [hasActivePass, setHasActivePass] = useState(false);
 
   const photosArray = useMemo(() => {
     return product ? getProductGalleryImages(product) : [];
@@ -55,6 +56,26 @@ export const ListingDetailsPage = () => {
   useEffect(() => {
     setActiveImage('');
   }, [productId]);
+
+  useEffect(() => {
+    if (!product || !user || user.role !== 'Buyer') return;
+    let mounted = true;
+    getMyPlans()
+      .then((plans) => {
+        if (!mounted) return;
+        const active = (plans || []).some(
+          (p) => p.product_type === product.product_type && p.active
+        );
+        setHasActivePass(active);
+      })
+      .catch((err) => {
+        console.warn('Failed to verify active pass on details mount:', err);
+        if (mounted) setHasActivePass(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, [product, user]);
 
   // Seller contact states (Buyer View)
   const [sellerContact, setSellerContact] = useState(null);
@@ -482,7 +503,7 @@ export const ListingDetailsPage = () => {
             overflow: 'hidden',
             border: '1px solid #cbd5e1'
           }}>
-            {mediaMode === 'video' && product.video ? (
+            {mediaMode === 'video' && product.video && !(user?.role === 'Buyer' && !hasActivePass) ? (
               <video 
                 src={normalizeImageUrl(product.video)} 
                 controls 
@@ -515,50 +536,84 @@ export const ListingDetailsPage = () => {
 
           {/* Thumbnail list */}
           <div style={{ display: 'flex', gap: '0.75rem', overflowX: 'auto', paddingBottom: '0.25rem', alignItems: 'center' }}>
-            {gallery.map((img, index) => (
-              <button
-                key={index}
-                onClick={() => { setActiveImage(img); setMediaMode('image'); }}
-                style={{
-                  width: '80px',
-                  height: '60px',
-                  borderRadius: '0.5rem',
-                  border: mediaMode === 'image' && activeImage === img ? '2.5px solid #6B1B71' : '1px solid #cbd5e1',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  padding: 0,
-                  flexShrink: 0
-                }}
-              >
-                <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={handleImageError} />
-              </button>
-            ))}
+            {gallery.map((img, index) => {
+              const isLocked = index > 0 && user?.role === 'Buyer' && !hasActivePass;
+              return (
+                <button
+                  key={index}
+                  onClick={() => {
+                    if (isLocked) {
+                      toast.info('Please purchase a bidding pass to unlock the full gallery.');
+                      setShowPlans(true);
+                    } else {
+                      setActiveImage(img);
+                      setMediaMode('image');
+                    }
+                  }}
+                  style={{
+                    width: '80px',
+                    height: '60px',
+                    borderRadius: '0.5rem',
+                    border: mediaMode === 'image' && activeImage === img ? '2.5px solid #6B1B71' : '1px solid #cbd5e1',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    padding: 0,
+                    flexShrink: 0
+                  }}
+                >
+                  <img 
+                    src={img} 
+                    alt="" 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      filter: isLocked ? 'blur(4px) brightness(0.9)' : 'none',
+                      transition: 'filter 0.3s ease'
+                    }} 
+                    onError={handleImageError} 
+                  />
+                </button>
+              );
+            })}
 
             {/* Video Walkthrough Thumbnail tab */}
-            {product.video && (
-              <button
-                onClick={() => setMediaMode('video')}
-                style={{
-                  width: '80px',
-                  height: '60px',
-                  borderRadius: '0.5rem',
-                  border: mediaMode === 'video' ? '2.5px solid #6B1B71' : '1px solid #cbd5e1',
-                  backgroundColor: '#1F1A1D',
-                  color: '#ffffff',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.25rem',
-                  cursor: 'pointer',
-                  padding: 0,
-                  flexShrink: 0
-                }}
-              >
-                <PlayCircle size={20} style={{ color: '#ef4444' }} />
-                <span style={{ fontSize: '0.65rem', fontWeight: 700 }}>Walkthrough</span>
-              </button>
-            )}
+            {product.video && (() => {
+              const isLocked = user?.role === 'Buyer' && !hasActivePass;
+              return (
+                <button
+                  onClick={() => {
+                    if (isLocked) {
+                      toast.info('Please purchase a bidding pass to unlock the walkthrough video.');
+                      setShowPlans(true);
+                    } else {
+                      setMediaMode('video');
+                    }
+                  }}
+                  style={{
+                    width: '80px',
+                    height: '60px',
+                    borderRadius: '0.5rem',
+                    border: mediaMode === 'video' ? '2.5px solid #6B1B71' : '1px solid #cbd5e1',
+                    backgroundColor: '#1F1A1D',
+                    color: '#ffffff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.25rem',
+                    cursor: 'pointer',
+                    padding: 0,
+                    flexShrink: 0,
+                    filter: isLocked ? 'blur(2px) brightness(0.8)' : 'none',
+                    transition: 'filter 0.3s ease'
+                  }}
+                >
+                  <PlayCircle size={20} style={{ color: '#ef4444' }} />
+                  <span style={{ fontSize: '0.65rem', fontWeight: 700 }}>Walkthrough</span>
+                </button>
+              );
+            })()}
           </div>
         </div>
 
