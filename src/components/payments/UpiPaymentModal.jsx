@@ -139,40 +139,28 @@ export const UpiPaymentModal = ({
                 </span>
               </div>
 
-              {/* QR Image Cropped to show ONLY the center QR barcode square */}
+              {/* Clean Google Pay QR Image */}
               <div style={{
                 backgroundColor: '#ffffff',
                 border: '3.5px solid #1F1A1D',
                 borderRadius: '0.85rem',
-                padding: '0.25rem',
+                padding: '0.4rem',
                 boxShadow: '3px 3px 0px #1F1A1D',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '145px',
-                height: '145px',
-                overflow: 'hidden'
+                width: '150px',
+                height: '150px'
               }}>
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '0.5rem'
-                }}>
-                  <img
-                    src={qrPaymentImg}
-                    alt="UPI QR Code"
-                    style={{
-                      width: '185%',
-                      height: '185%',
-                      objectFit: 'cover',
-                      objectPosition: 'center 46%'
-                    }}
-                  />
-                </div>
+                <img
+                  src={qrPaymentImg}
+                  alt="Google Pay UPI QR Code"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain'
+                  }}
+                />
               </div>
 
               {/* UPI ID Info */}
@@ -199,14 +187,14 @@ export const UpiPaymentModal = ({
                 padding: '0.45rem 0.75rem',
                 width: '100%',
                 color: '#0369a1',
-                fontSize: '0.68rem',
+                fontSize: '0.72rem',
                 fontWeight: 700,
                 lineHeight: 1.35,
                 textAlign: 'left'
               }}>
                 <Info size={14} style={{ flexShrink: 0, marginTop: '0.05rem', color: '#0284c7' }} />
                 <div>
-                  Please verify the UPI recipient name before making the payment. Our integrated CC Avenue UPI &amp; QR payment option will be available soon. Recipient Name: <strong>Asif Tajuddin Attar</strong>
+                  Our integrated CC Avenue UPI &amp; QR payment option will be available soon.
                 </div>
               </div>
 
