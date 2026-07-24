@@ -6,6 +6,8 @@ import { useAuctionSocket } from '../../hooks/useAuctionSocket';
 import { getProductById } from '../../api/productApi';
 import { formatCurrency, safeParseJSON, formatRelativeTime, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
 import { getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
+import { getMyPlans } from '../../api/paymentApi';
+import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
 
 const formatTimer = (seconds = 0) => {
   const safeSeconds = Math.max(0, Number(seconds) || 0);
@@ -45,6 +47,7 @@ export const LiveAuctionPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [mediaMode, setMediaMode] = useState('image'); // 'image' or 'video'
   const [activeImage, setActiveImage] = useState('');
+  const [showPlans, setShowPlans] = useState(false);
 
   // Trigger periodic updates for relative times
   const [timeTick, setTimeTick] = useState(0);
@@ -65,12 +68,28 @@ export const LiveAuctionPage = () => {
         if (photosArray.length > 0) {
           setActiveImage(photosArray[0]);
         }
+
+        // Validate bidding pass for Buyers
+        if (user?.role === 'Buyer') {
+          try {
+            const plans = await getMyPlans();
+            const activePlan = (plans || []).find(
+              (p) => p.product_type === details.product_type && p.active
+            );
+            if (!activePlan) {
+              setShowPlans(true);
+            }
+          } catch (err) {
+            console.warn('Failed to verify active buyer pass:', err);
+            setShowPlans(true);
+          }
+        }
       } catch (err) {
         console.error('Failed to load product details for live auction page:', err);
       }
     };
     loadProduct();
-  }, [productId]);
+  }, [productId, user]);
 
   const handleBidSubmit = async (e) => {
     e.preventDefault();
@@ -510,6 +529,13 @@ export const LiveAuctionPage = () => {
         </div>
 
       </div>
+
+      <PricingPlanPopup
+        isOpen={showPlans}
+        productType={product?.product_type}
+        onClose={() => navigate('/buyer/marketplace')}
+        onActivated={() => setShowPlans(false)}
+      />
     </div>
   );
 };

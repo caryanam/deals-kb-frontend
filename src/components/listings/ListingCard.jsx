@@ -23,7 +23,7 @@ const getListingDateText = (dateStr) => {
   }
 };
 
-export const ListingCard = ({ listing: product }) => {
+export const ListingCard = ({ listing: product, onJoinAuction }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const isBuyer = !user || user.role === 'Buyer';
@@ -61,7 +61,11 @@ export const ListingCard = ({ listing: product }) => {
   const handleAction = (e) => {
     e.stopPropagation();
     if (product.status === 'live' && product.product_id) {
-      navigate(`/buyer/auction/${product.product_id}`);
+      if (onJoinAuction) {
+        onJoinAuction();
+      } else {
+        navigate(`/buyer/auction/${product.product_id}`);
+      }
     } else {
       navigate(`/buyer/listings/${product.product_id}`);
     }

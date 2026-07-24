@@ -1,5 +1,8 @@
 import React from 'react';
-import { Smartphone, Laptop, Car, Bike, Zap, Cpu, Flame, Wind } from 'lucide-react';
+import mobileImg from '../../assets/mobile.png';
+import laptopImg from '../../assets/laptop.png';
+import bikeImg from '../../assets/bike.png';
+import carImg from '../../assets/car.png';
 
 const PURPLE = '#6B1B71';
 const GOLD = '#B2772D';
@@ -7,27 +10,7 @@ const GOLD = '#B2772D';
 const categoryPlans = [
   {
     category: 'Mobile',
-    icon: (
-      <div style={{ position: 'relative', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Smartphone size={22} color="#ffffff" />
-        <div style={{
-          position: 'absolute',
-          top: '-6px',
-          right: '-6px',
-          backgroundColor: '#1F1A1D',
-          border: '1.5px solid #ffffff',
-          borderRadius: '50%',
-          width: '18px',
-          height: '18px',
-          display: 'grid',
-          placeItems: 'center',
-          boxShadow: '1px 1px 0px #1F1A1D'
-        }}>
-          <Zap size={9} color="#FFD700" fill="#FFD700" />
-        </div>
-      </div>
-    ),
-    gradient: 'linear-gradient(135deg, #6B1B71 0%, #9c3f9e 100%)',
+    image: mobileImg,
     seller: '₹11.80',
     buyer: '₹24.78',
     dealer: '₹1,178.82',
@@ -36,27 +19,7 @@ const categoryPlans = [
   },
   {
     category: 'Laptop',
-    icon: (
-      <div style={{ position: 'relative', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Laptop size={22} color="#ffffff" />
-        <div style={{
-          position: 'absolute',
-          top: '-6px',
-          right: '-6px',
-          backgroundColor: '#1F1A1D',
-          border: '1.5px solid #ffffff',
-          borderRadius: '50%',
-          width: '18px',
-          height: '18px',
-          display: 'grid',
-          placeItems: 'center',
-          boxShadow: '1px 1px 0px #1F1A1D'
-        }}>
-          <Cpu size={9} color="#00E5FF" />
-        </div>
-      </div>
-    ),
-    gradient: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+    image: laptopImg,
     seller: '₹59.00',
     buyer: '₹60.18',
     dealer: '₹2,358.82',
@@ -64,62 +27,22 @@ const categoryPlans = [
     offerLimit: '500',
   },
   {
-    category: 'Car',
-    icon: (
-      <div style={{ position: 'relative', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Car size={22} color="#ffffff" />
-        <div style={{
-          position: 'absolute',
-          top: '-6px',
-          right: '-6px',
-          backgroundColor: '#1F1A1D',
-          border: '1.5px solid #ffffff',
-          borderRadius: '50%',
-          width: '18px',
-          height: '18px',
-          display: 'grid',
-          placeItems: 'center',
-          boxShadow: '1px 1px 0px #1F1A1D'
-        }}>
-          <Flame size={9} color="#FF3B30" fill="#FF3B30" />
-        </div>
-      </div>
-    ),
-    gradient: 'linear-gradient(135deg, #ef4444 0%, #f87171 100%)',
-    seller: '₹590.00',
-    buyer: '₹591.18',
-    dealer: '₹3,538.82',
-    regularLimit: '30',
-    offerLimit: '100',
-  },
-  {
     category: 'Bike',
-    icon: (
-      <div style={{ position: 'relative', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Bike size={22} color="#ffffff" />
-        <div style={{
-          position: 'absolute',
-          top: '-6px',
-          right: '-6px',
-          backgroundColor: '#1F1A1D',
-          border: '1.5px solid #ffffff',
-          borderRadius: '50%',
-          width: '18px',
-          height: '18px',
-          display: 'grid',
-          placeItems: 'center',
-          boxShadow: '1px 1px 0px #1F1A1D'
-        }}>
-          <Wind size={9} color="#FF9500" />
-        </div>
-      </div>
-    ),
-    gradient: 'linear-gradient(135deg, #f97316 0%, #fb923c 100%)',
+    image: bikeImg,
     seller: '₹118.00',
     buyer: '₹119.18',
     dealer: '₹2,358.82',
     regularLimit: '150',
     offerLimit: '500',
+  },
+  {
+    category: 'Car',
+    image: carImg,
+    seller: '₹590.00',
+    buyer: '₹591.18',
+    dealer: '₹3,538.82',
+    regularLimit: '30',
+    offerLimit: '100',
   },
 ];
 
@@ -156,18 +79,21 @@ const PlansSection = () => {
           border-color: #6B1B71;
           box-shadow: 12px 12px 0px #6B1B71 !important;
         }
-        .wobbly-icon-container {
-          width: 48px;
-          height: 48px;
+        .wobbly-img-container {
+          width: 58px;
+          height: 58px;
           border: 2.5px solid #1F1A1D;
           border-radius: 50% 45% 52% 48% / 48% 52% 45% 50%;
           display: flex;
           align-items: center;
-          justifyContent: center;
+          justify-content: center;
+          background-color: #ffffff;
           box-shadow: 2px 2px 0px #1F1A1D;
           transition: all 0.25s ease;
+          overflow: hidden;
+          padding: 4px;
         }
-        .plan-card:hover .wobbly-icon-container {
+        .plan-card:hover .wobbly-img-container {
           border-color: #6B1B71;
           box-shadow: 3px 3px 0px #6B1B71;
         }
@@ -275,11 +201,12 @@ const PlansSection = () => {
             <div key={idx} className="plan-card">
               {/* Category Icon and Name */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.25rem' }}>
-                <div 
-                  className="wobbly-icon-container"
-                  style={{ background: item.gradient }}
-                >
-                  {item.icon}
+                <div className="wobbly-img-container">
+                  <img
+                    src={item.image}
+                    alt={item.category}
+                    style={{ width: '90%', height: '90%', objectFit: 'contain' }}
+                  />
                 </div>
                 <h4 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 900, color: '#1F1A1D', fontFamily: "'Outfit', sans-serif" }}>
                   {item.category}

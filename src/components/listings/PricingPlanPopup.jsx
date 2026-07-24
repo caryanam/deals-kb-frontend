@@ -16,26 +16,26 @@ const FALLBACK_PLANS = {
   mobile: {
     plan_id: 'buyer_mobile_day',
     name: 'Mobile Bidding Pass',
-    amount: 21,
-    description: 'Unlimited mobile bidding for 24 hours (+ 18% GST).'
+    amount: 24.78,
+    description: 'Unlimited mobile bidding for 24 hours.'
   },
   laptop: {
     plan_id: 'buyer_laptop_day',
     name: 'Laptop Bidding Pass',
-    amount: 41,
-    description: 'Unlimited laptop bidding for 24 hours (+ 18% GST).'
+    amount: 60.18,
+    description: 'Unlimited laptop bidding for 24 hours.'
   },
   car: {
     plan_id: 'buyer_car_day',
     name: 'Car Bidding Pass',
-    amount: 211,
-    description: 'Unlimited car bidding for 24 hours (+ 18% GST).'
+    amount: 591.18,
+    description: 'Unlimited car bidding for 24 hours.'
   },
   bike: {
     plan_id: 'buyer_bike_day',
     name: 'Bike Bidding Pass',
-    amount: 101,
-    description: 'Unlimited bike bidding for 24 hours (+ 18% GST).'
+    amount: 119.18,
+    description: 'Unlimited bike bidding for 24 hours.'
   }
 };
 
@@ -51,10 +51,12 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
     planStatuses
       .filter((plan) => plan.role === 'Buyer' && plan.product_type)
       .forEach((plan) => {
-        byId[plan.plan_id] = { ...byId[plan.plan_id], ...plan };
+        const { amount, name, plan_name, description, ...statusData } = plan;
+        byId[plan.plan_id] = { ...byId[plan.plan_id], ...statusData };
       });
     if (requiredPlan?.plan_id) {
-      byId[requiredPlan.plan_id] = { ...byId[requiredPlan.plan_id], ...requiredPlan };
+      const { amount, name, plan_name, description, ...requiredData } = requiredPlan;
+      byId[requiredPlan.plan_id] = { ...byId[requiredPlan.plan_id], ...requiredData };
     }
     return ['mobile', 'laptop', 'car', 'bike'].map((type) => byId[CATEGORY_PLAN_IDS[type]] || { ...FALLBACK_PLANS[type], product_type: type });
   }, [planStatuses, requiredPlan]);

@@ -7,6 +7,7 @@ import ListingCard from '../../components/listings/ListingCard';
 import { useAuth } from '../../hooks/useAuth';
 import BiddingPassBanner from '../../components/listings/BiddingPassBanner';
 import PricingPlanPopup from '../../components/listings/PricingPlanPopup';
+import { getMyPlans } from '../../api/paymentApi';
 
 export const MarketplacePage = () => {
   const { user } = useAuth();
@@ -20,6 +21,7 @@ export const MarketplacePage = () => {
   const [selectedType, setSelectedType] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState(initialStatus || 'live_or_upcoming');
   const [showPlans, setShowPlans] = useState(false);
+  const [targetProductType, setTargetProductType] = useState('mobile');
   const [showOnlyLiked, setShowOnlyLiked] = useState(false);
   const [likedIds, setLikedIds] = useState(() => {
     try {
@@ -240,6 +242,24 @@ export const MarketplacePage = () => {
                     } catch {}
                   }
                 }} 
+                onJoinAuction={async () => {
+                  if (user?.role === 'Buyer') {
+                    try {
+                      const plans = await getMyPlans();
+                      const activePlan = (plans || []).find((p) => p.product_type === product.product_type && p.active);
+                      if (!activePlan) {
+                        setTargetProductType(product.product_type);
+                        setShowPlans(true);
+                        return;
+                      }
+                    } catch (err) {
+                      setTargetProductType(product.product_type);
+                      setShowPlans(true);
+                      return;
+                    }
+                  }
+                  navigate(`/buyer/auction/${product.product_id}`);
+                }}
               />
             </div>
           ))}
@@ -255,7 +275,7 @@ export const MarketplacePage = () => {
 
       <PricingPlanPopup
         isOpen={showPlans}
-        productType={selectedType === 'all' ? 'mobile' : selectedType}
+        productType={targetProductType}
         onClose={() => setShowPlans(false)}
       />
     </div>
