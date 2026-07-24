@@ -12,15 +12,15 @@ const faqs = [
   },
   {
     q: 'What is a Buyer Pass?',
-    a: 'A bidding pass grans you 24 hours of unlimited access for a specific product category. Passes are priced at ₹1 for mobiles, ₹1 for laptops, ₹1 for bikes, and ₹1 for cars (inclusive of 18% GST).',
+    a: 'A bidding pass grants you 24 hours of unlimited access for a specific product category. Passes are priced at ₹24.78 for mobiles, ₹60.18 for laptops, ₹119.18 for bikes, and ₹591.18 for cars.',
   },
   {
     q: 'How much does it cost to list a product as a seller?',
-    a: 'Listing fees are ₹1 for mobiles, ₹1 for laptops, ₹1 for bikes, and ₹1 for cars (inclusive of 18% GST). Your product goes live after admin verification.',
+    a: 'Listing fees are ₹11.80 for mobiles, ₹59.00 for laptops, ₹118.00 for bikes, and ₹590.00 for cars. Your product goes live after admin verification.',
   },
   {
     q: 'What is the Dealer Monthly Plan?',
-    a: 'Dealers can subscribe to a monthly plan for unlimited listings: ₹1/month for Mobile/Laptop/Bike and ₹1/month for Cars (inclusive of 18% GST). This allows them to list multiple products without per-listing charges.',
+    a: 'Dealers can subscribe to a monthly plan for unlimited listings: ₹1,178.82/month for Mobile, ₹2,358.82/month for Laptop/Bike, and ₹3,538.82/month for Cars. This allows them to list multiple products without per-listing charges.',
   },
   {
     q: 'How does product approval work?',

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import HeroSection from "../../components/landing/HeroSection";
 import CategorySection from "../../components/landing/CategorySection";
+import PlansSection from "../../components/landing/PlansSection";
 import LiveAuctionSection from "../../components/landing/LiveAuctionSection";
 import HowItWorksSection from "../../components/landing/HowItWorksSection";
 import AboutSection from "../../components/landing/AboutSection";
@@ -63,6 +64,10 @@ const LandingPage = () => {
       
       <div className="scroll-reveal">
         <CategorySection />
+      </div>
+      
+      <div className="scroll-reveal">
+        <PlansSection />
       </div>
       
       <div className="scroll-reveal">

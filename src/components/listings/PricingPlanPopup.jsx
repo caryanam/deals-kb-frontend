@@ -191,7 +191,7 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                       {formatCurrency(Number(plan.amount))}
                     </span>
                     <span style={{ fontSize: '0.68rem', color: '#8B8278', fontWeight: 800, display: 'block', marginTop: '0.15rem', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
-                      + 18% GST / 24 Hours
+                      / 24 Hours
                     </span>
                   </div>
                   <p style={{ margin: 0, color: '#8B8278', fontSize: '0.84rem', fontWeight: 600, minHeight: 38, lineHeight: 1.4 }}>{plan.description}</p>

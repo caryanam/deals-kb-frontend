@@ -11,30 +11,50 @@ const LandingNavbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.location.pathname !== '/') return;
+      if (!document.getElementById('home')) return;
 
-      // Bottom of page check
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
-        setActiveSection('about-us');
-        return;
-      }
+      const sections = ['home', 'marketplace', 'pricing-plans', 'how-it-works', 'about-us'];
+      let currentSection = 'home';
+      let minDistance = Infinity;
 
-      const sections = ['home', 'marketplace', 'how-it-works', 'about-us'];
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom > 150) {
-            setActiveSection(section);
-            break;
+          const distance = Math.abs(rect.top - 72); // Offset by navbar height (approx 72px)
+          if (distance < minDistance) {
+            minDistance = distance;
+            currentSection = section;
           }
         }
       }
+      setActiveSection(currentSection);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    const customContainers = [
+      document.getElementById('root'),
+      document.querySelector('.app-container'),
+      document.querySelector('.landing-page'),
+    ];
+
+    customContainers.forEach((container) => {
+      if (container) {
+        container.addEventListener('scroll', handleScroll, { passive: true });
+      }
+    });
+
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      customContainers.forEach((container) => {
+        if (container) {
+          container.removeEventListener('scroll', handleScroll);
+        }
+      });
+    };
   }, []);
 
   const handleScrollToSection = (id) => {
@@ -71,6 +91,7 @@ Own More.</span>
       <nav className="nav-links landing-nav-links-desktop">
         <button onClick={() => handleScrollToSection('home')} className={`nav-link ${activeSection === 'home' ? 'active' : ''}`}>Home</button>
         <button onClick={() => handleScrollToSection('marketplace')} className={`nav-link ${activeSection === 'marketplace' ? 'active' : ''}`}>Our Products</button>
+        <button onClick={() => handleScrollToSection('pricing-plans')} className={`nav-link ${activeSection === 'pricing-plans' ? 'active' : ''}`}>Plans</button>
         <button onClick={() => handleScrollToSection('how-it-works')} className={`nav-link ${activeSection === 'how-it-works' ? 'active' : ''}`}>How It Works</button>
         <button onClick={() => handleScrollToSection('about-us')} className={`nav-link ${activeSection === 'about-us' ? 'active' : ''}`}>About Us</button>
       </nav>
@@ -122,6 +143,7 @@ Own More.</span>
         }}>
           <Link to="/" onClick={() => setMobileMenuOpen(false)} style={{ color: '#ffffff', textDecoration: 'none', fontWeight: 600, fontSize: '0.95rem' }}>Home</Link>
           <button onClick={() => handleScrollToSection('marketplace')} style={{ background: 'none', border: 'none', textAlign: 'left', color: '#ffffff', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', padding: 0 }}>Our Products</button>
+          <button onClick={() => handleScrollToSection('pricing-plans')} style={{ background: 'none', border: 'none', textAlign: 'left', color: '#ffffff', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', padding: 0 }}>Plans</button>
           <button onClick={() => handleScrollToSection('how-it-works')} style={{ background: 'none', border: 'none', textAlign: 'left', color: '#ffffff', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', padding: 0 }}>How It Works</button>
           <button onClick={() => handleScrollToSection('about-us')} style={{ background: 'none', border: 'none', textAlign: 'left', color: '#ffffff', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer', padding: 0 }}>About Us</button>
           

@@ -177,22 +177,37 @@ body,
   font-weight: 600;
   color: #1F1A1D;
   text-decoration: none;
-  transition: 0.2s ease;
+  transition: color 0.3s ease;
   background: none;
   border: none;
-  padding: 0;
+  padding: 4px 0;
   cursor: pointer;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #6B1B71;
+  transition: width 0.3s ease, left 0.3s ease;
 }
 
 .nav-link:hover {
   color: #6B1B71;
 }
 
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+  left: 0;
+}
+
 .nav-link.active {
   color: #6B1B71;
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  text-decoration-thickness: 2px;
 }
 
 /* Navbar Auth Actions */
