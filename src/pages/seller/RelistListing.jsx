@@ -601,7 +601,11 @@ export const RelistListing = () => {
           await submitRelistAfterPayment(listingId, formData);
           setPaymentChoiceType('DEALER');
           setPaymentChoicePlanId(planId);
-          const amt = 1.00;
+          const amt = planId === 'dealer_car_monthly'
+            ? 3538.82
+            : planId === 'dealer_laptop_bike_monthly'
+            ? 2358.82
+            : 1178.82;
           setListingAmount(amt);
           setShowPaymentChoice(true);
           setSuccessMsg('Please choose your payment option.');
@@ -612,7 +616,7 @@ export const RelistListing = () => {
         await submitRelistAfterPayment(listingId, formData);
         setRelistingId(listingId);
         setPaymentChoiceType('SELLER');
-        const amt = 1.00;
+        const amt = { mobile: 11.80, laptop: 59.00, bike: 118.00, car: 590.00 }[productType?.toLowerCase()] || 590.00;
         setListingAmount(amt);
         // Fetch latest payments to check for already-pending UPI
         try {
@@ -727,8 +731,8 @@ export const RelistListing = () => {
                   gap: '1rem',
                   marginBottom: '1rem'
                 }}>
-                  <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Relisting Fee</span>
-                  <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{"\u20B9"}1</strong>
+                  <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Listing Fee</span>
+                  <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>₹{{ mobile: '11.80', laptop: '59.00', bike: '118.00', car: '590.00' }[productType?.toLowerCase()] || '590.00'}</strong>
                 </div>
               )}
 
@@ -946,12 +950,9 @@ export const RelistListing = () => {
                   <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#1F1A1D', textAlign: 'center' }}>
                     Choose Payment Method
                   </h3>
-                  <div style={{ backgroundColor: '#fef3c7', border: '1px solid #f59e0b', borderRadius: '0.75rem', padding: '0.6rem', textAlign: 'center' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#92400e', display: 'block' }}>
-                      🔥 LAUNCH OFFER TILL 31st AUGUST
-                    </span>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1F1A1D', marginTop: '0.15rem', display: 'block' }}>
-                      Pay only <span style={{ textDecoration: 'line-through', color: '#8B8278', fontSize: '0.78rem', marginRight: '0.25rem' }}>₹{paymentChoiceType === 'DEALER' ? (paymentChoicePlanId.includes('car') ? '3538.82' : paymentChoicePlanId.includes('laptop') ? '2358.82' : '1178.82') : ({ mobile: '11.80', laptop: '59.00', bike: '118.00', car: '590.00' }[productType?.toLowerCase()] || '590.00')}</span> <span style={{ color: '#16a34a', fontSize: '1.1rem' }}>₹1.00</span>
+                  <div style={{ backgroundColor: '#f3f4f6', border: '1px solid #d1d5db', borderRadius: '0.75rem', padding: '0.6rem', textAlign: 'center' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1F1A1D', display: 'block' }}>
+                      Total Amount: <span style={{ color: '#6B1B71', fontSize: '1.15rem', fontWeight: 950 }}>₹{paymentChoiceType === 'DEALER' ? (paymentChoicePlanId.includes('car') ? '3,538.82' : paymentChoicePlanId.includes('laptop') ? '2,358.82' : '1,178.82') : ({ mobile: '11.80', laptop: '59.00', bike: '118.00', car: '590.00' }[productType?.toLowerCase()] || '590.00')}</span>
                     </span>
                   </div>
                   <button

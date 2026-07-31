@@ -144,17 +144,16 @@ export const SellerDashboard = () => {
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
               <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>
-                Dealer Mobile Plan <span style={{ fontSize: '0.72rem', backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #f59e0b', padding: '0.15rem 0.4rem', borderRadius: '0.4rem', marginLeft: '0.4rem' }}>🔥 Launch Offer till 31 Aug</span>
+                Dealer Mobile Plan
               </h2>
               <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>
-                <span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '0.35rem' }}>{"\u20B9"}1,178.82</span>
-                <span style={{ color: '#16a34a', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}1.00</span>/month for unlimited Mobile listings.
+                <span style={{ color: '#6B1B71', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}1,178.82</span>/month for unlimited Mobile listings.
               </p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_mobile_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_mobile_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Mobile Plan ({"\u20B9"}1.00)
+            Activate Mobile Plan ({"\u20B9"}1,178.82)
           </button>
         </div>
       )}
@@ -165,17 +164,16 @@ export const SellerDashboard = () => {
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
               <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>
-                Dealer Laptop &amp; Bike Plan <span style={{ fontSize: '0.72rem', backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #f59e0b', padding: '0.15rem 0.4rem', borderRadius: '0.4rem', marginLeft: '0.4rem' }}>🔥 Launch Offer till 31 Aug</span>
+                Dealer Laptop &amp; Bike Plan
               </h2>
               <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>
-                <span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '0.35rem' }}>{"\u20B9"}2,358.82</span>
-                <span style={{ color: '#16a34a', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}1.00</span>/month for unlimited Laptop &amp; Bike listings.
+                <span style={{ color: '#6B1B71', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}2,358.82</span>/month for unlimited Laptop &amp; Bike listings.
               </p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_laptop_bike_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_laptop_bike_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Laptop &amp; Bike Plan ({"\u20B9"}1.00)
+            Activate Laptop &amp; Bike Plan ({"\u20B9"}2,358.82)
           </button>
         </div>
       )}
@@ -186,17 +184,16 @@ export const SellerDashboard = () => {
             <ShieldCheck size={24} style={{ color: '#6B1B71' }} />
             <div>
               <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#1F1A1D' }}>
-                Dealer Car Plan <span style={{ fontSize: '0.72rem', backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #f59e0b', padding: '0.15rem 0.4rem', borderRadius: '0.4rem', marginLeft: '0.4rem' }}>🔥 Launch Offer till 31 Aug</span>
+                Dealer Car Plan
               </h2>
               <p style={{ margin: '0.25rem 0 0', color: '#8B8278', fontSize: '0.9rem', fontWeight: 650 }}>
-                <span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '0.35rem' }}>{"\u20B9"}3,538.82</span>
-                <span style={{ color: '#16a34a', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}1.00</span>/month for unlimited Car listings.
+                <span style={{ color: '#6B1B71', fontWeight: 900, fontSize: '1.1rem' }}>{"\u20B9"}3,538.82</span>/month for unlimited Car listings.
               </p>
             </div>
           </div>
           <button type="button" onClick={() => handleActivatePlan('dealer_car_monthly')} disabled={payingPlanId !== null} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 900 }}>
             {payingPlanId === 'dealer_car_monthly' ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={16} />}
-            Activate Car Plan ({"\u20B9"}1.00)
+            Activate Car Plan ({"\u20B9"}3,538.82)
           </button>
         </div>
       )}
@@ -348,12 +345,9 @@ export const SellerDashboard = () => {
             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#1F1A1D', textAlign: 'center' }}>
               Choose Payment Method
             </h3>
-            <div style={{ backgroundColor: '#fef3c7', border: '1px solid #f59e0b', borderRadius: '0.75rem', padding: '0.6rem', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#92400e', display: 'block' }}>
-                🔥 LAUNCH OFFER TILL 31st AUGUST
-              </span>
-              <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1F1A1D', marginTop: '0.15rem', display: 'block' }}>
-                Pay only <span style={{ textDecoration: 'line-through', color: '#8B8278', fontSize: '0.78rem', marginRight: '0.25rem' }}>₹{selectedPlanId?.includes('car') ? '3538.82' : selectedPlanId?.includes('laptop') ? '2358.82' : '1178.82'}</span> <span style={{ color: '#16a34a', fontSize: '1.1rem' }}>₹1.00</span>
+            <div style={{ backgroundColor: '#f3f4f6', border: '1px solid #d1d5db', borderRadius: '0.75rem', padding: '0.6rem', textAlign: 'center' }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1F1A1D', display: 'block' }}>
+                Total Amount: <span style={{ color: '#6B1B71', fontSize: '1.15rem', fontWeight: 950 }}>₹{selectedPlanId?.includes('car') ? '3,538.82' : selectedPlanId?.includes('laptop') ? '2,358.82' : '1,178.82'}</span>
               </span>
             </div>
             

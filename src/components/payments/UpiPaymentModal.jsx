@@ -117,26 +117,8 @@ export const UpiPaymentModal = ({
               <div style={{ textAlign: 'center', width: '100%' }}>
                 <p style={{ margin: 0, fontSize: '0.78rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>{planName}</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '0.4rem', marginTop: '0.15rem' }}>
-                  {origAmt > 1 && (
-                    <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '1.1rem', fontWeight: 700 }}>
-                      {formatCurrency(origAmt)}
-                    </span>
-                  )}
-                  <h2 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 950, color: '#6B1B71' }}>₹1.00</h2>
+                  <h2 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 950, color: '#6B1B71' }}>{formatCurrency(origAmt)}</h2>
                 </div>
-                <span style={{
-                  display: 'inline-block',
-                  marginTop: '0.2rem',
-                  padding: '0.15rem 0.55rem',
-                  backgroundColor: '#fef3c7',
-                  color: '#92400e',
-                  border: '1px solid #f59e0b',
-                  borderRadius: '0.4rem',
-                  fontSize: '0.68rem',
-                  fontWeight: 800
-                }}>
-                  🔥 Launch Offer ₹1 till 31 Aug
-                </span>
               </div>
 
               {/* Clean Google Pay QR Image */}
@@ -199,7 +181,7 @@ export const UpiPaymentModal = ({
               </div>
 
               <div style={{ fontSize: '0.72rem', color: '#8B8278', textAlign: 'center', lineHeight: 1.35, fontWeight: 700 }}>
-                Scan the QR code above and transfer exactly <strong style={{ color: '#16a34a' }}>₹1.00</strong>. After payment, click below to notify admin.
+                Scan the QR code above and transfer exactly <strong style={{ color: '#16a34a' }}>{formatCurrency(origAmt)}</strong>. After payment, click below to notify admin.
               </div>
 
               {/* Action Button */}

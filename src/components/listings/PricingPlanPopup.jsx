@@ -17,29 +17,25 @@ const FALLBACK_PLANS = {
   mobile: {
     plan_id: 'buyer_mobile_day',
     name: 'Mobile Bidding Pass',
-    amount: 1.00,
-    original_amount: 24.78,
+    amount: 24.78,
     description: 'Unlimited mobile bidding for 24 hours.'
   },
   laptop: {
     plan_id: 'buyer_laptop_day',
     name: 'Laptop Bidding Pass',
-    amount: 1.00,
-    original_amount: 60.18,
+    amount: 60.18,
     description: 'Unlimited laptop bidding for 24 hours.'
   },
   car: {
     plan_id: 'buyer_car_day',
     name: 'Car Bidding Pass',
-    amount: 1.00,
-    original_amount: 591.18,
+    amount: 591.18,
     description: 'Unlimited car bidding for 24 hours.'
   },
   bike: {
     plan_id: 'buyer_bike_day',
     name: 'Bike Bidding Pass',
-    amount: 1.00,
-    original_amount: 119.18,
+    amount: 119.18,
     description: 'Unlimited bike bidding for 24 hours.'
   }
 };
@@ -230,28 +226,10 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                   <h3 style={{ margin: 0, color: '#1F1A1D', fontSize: '1.05rem', fontWeight: 800 }}>{plan.name || plan.plan_name}</h3>
                   <div style={{ marginTop: '0.25rem', marginBottom: '0.25rem' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      {plan.original_amount && Number(plan.original_amount) > Number(plan.amount) && (
-                        <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '1.1rem', fontWeight: 700 }}>
-                          {formatCurrency(Number(plan.original_amount))}
-                        </span>
-                      )}
                       <span style={{ color: '#6B1B71', fontSize: '1.85rem', fontWeight: 950 }}>
                         {formatCurrency(Number(plan.amount))}
                       </span>
                     </div>
-                    <span style={{
-                      display: 'inline-block',
-                      marginTop: '0.25rem',
-                      padding: '0.15rem 0.5rem',
-                      backgroundColor: '#fef3c7',
-                      color: '#92400e',
-                      border: '1px solid #f59e0b',
-                      borderRadius: '0.4rem',
-                      fontSize: '0.68rem',
-                      fontWeight: 800
-                    }}>
-                      🔥 Launch Offer ₹1 till 31 Aug
-                    </span>
                     <span style={{ fontSize: '0.68rem', color: '#8B8278', fontWeight: 800, display: 'block', marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                       / 24 Hours
                     </span>

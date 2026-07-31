@@ -8,7 +8,6 @@ import HowItWorksSection from "../../components/landing/HowItWorksSection";
 import AboutSection from "../../components/landing/AboutSection";
 import AppComingSoonSection from "../../components/landing/AppComingSoonSection";
 import NewsletterSection from "../../components/landing/NewsletterSection";
-import LaunchOfferFloatingWidget from "../../components/landing/LaunchOfferFloatingWidget";
 import Footer from "../../components/common/Footer";
 import "../../styles/landing.css";
 
@@ -66,9 +65,6 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
-      {/* Right side floating sticky firecracker launch offer widget */}
-      <LaunchOfferFloatingWidget />
-
       <HeroSection />
       
       <div className="scroll-reveal">
