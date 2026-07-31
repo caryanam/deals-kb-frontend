@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { triggerBuyerPassPayment } from '../../utils/paymentHelper';
 import { formatCurrency, PRODUCT_TYPE_LABELS } from '../../utils/helpers';
 import { getMyPlans, getMyPayments } from '../../api/paymentApi';
-import UpiPaymentModal from '../payments/UpiPaymentModal';
 
 const CATEGORY_PLAN_IDS = {
   mobile: 'buyer_mobile_day',
@@ -43,8 +42,6 @@ const FALLBACK_PLANS = {
 const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClose, onActivated }) => {
   const [activatingPlanId, setActivatingPlanId] = useState('');
   const [planStatuses, setPlanStatuses] = useState([]);
-  const [showUpiModal, setShowUpiModal] = useState(false);
-  const [selectedUpiPlan, setSelectedUpiPlan] = useState(null);
   const [pendingPayments, setPendingPayments] = useState([]);
   const normalizedType = (productType || requiredPlan?.product_type || 'mobile').toLowerCase();
   const plans = useMemo(() => {
@@ -289,30 +286,6 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                         {activating ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={14} />}
                         {plan.active ? 'Active' : 'Buy Pass'}
                       </button>
-
-                      {!plan.active && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedUpiPlan(plan);
-                            setShowUpiModal(true);
-                          }}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#6B1B71',
-                            textDecoration: 'underline',
-                            fontSize: '0.72rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            marginTop: '0.45rem',
-                            textAlign: 'center',
-                            width: '100%'
-                          }}
-                        >
-                          Don't have netbanking? Pay via UPI
-                        </button>
-                      )}
                     </>
                   )}
                 </div>
@@ -325,23 +298,6 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
         </div>
       </div>
 
-      {selectedUpiPlan && (
-        <UpiPaymentModal
-          isOpen={showUpiModal}
-          onClose={() => {
-            setShowUpiModal(false);
-            setSelectedUpiPlan(null);
-          }}
-          amount={selectedUpiPlan.amount}
-          planName={selectedUpiPlan.name || selectedUpiPlan.plan_name}
-          paymentType="BUYER_PASS"
-          planId={selectedUpiPlan.plan_id}
-          onSuccess={() => {
-            onActivated?.(null, selectedUpiPlan);
-            onClose?.();
-          }}
-        />
-      )}
     </div>
   );
 };

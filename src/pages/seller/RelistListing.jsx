@@ -8,8 +8,6 @@ import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers'
 import { normalizeImageUrl } from '../../utils/imageUtils';
 import { getMyPlans } from '../../api/paymentApi';
 import { triggerDealerPlanPayment, triggerRelistPayment } from '../../utils/paymentHelper';
-import UpiPaymentModal from '../../components/payments/UpiPaymentModal';
-import { getMyPayments } from '../../api/paymentApi';
 import {
   BIKE_BRANDS,
   BIKE_BRAND_TO_MODELS,
@@ -155,13 +153,6 @@ export const RelistListing = () => {
   const { listingId } = useParams();
   const basePath = user?.role === 'Dealer' ? '/dealer' : '/seller';
 
-  const [showPaymentChoice, setShowPaymentChoice] = useState(false);
-  const [paymentChoiceType, setPaymentChoiceType] = useState('SELLER');
-  const [paymentChoicePlanId, setPaymentChoicePlanId] = useState('');
-  const [listingAmount, setListingAmount] = useState(0);
-  const [showUpiModal, setShowUpiModal] = useState(false);
-  const [pendingPayments, setPendingPayments] = useState([]);
-  const [relistingId, setRelistingId] = useState('');
 
   const [productType, setProductType] = useState('car');
   const [title, setTitle] = useState('');
@@ -599,32 +590,19 @@ export const RelistListing = () => {
         } else {
           // Save details first
           await submitRelistAfterPayment(listingId, formData);
-          setPaymentChoiceType('DEALER');
-          setPaymentChoicePlanId(planId);
-          const amt = planId === 'dealer_car_monthly'
-            ? 3538.82
-            : planId === 'dealer_laptop_bike_monthly'
-            ? 2358.82
-            : 1178.82;
-          setListingAmount(amt);
-          setShowPaymentChoice(true);
-          setSuccessMsg('Please choose your payment option.');
+          toast.info('Listing details saved! Redirecting to plan payment...');
+          await triggerDealerPlanPayment(planId);
+          setSuccessMsg('Please complete payment in the CCAvenue window to activate your monthly plan.');
+          setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
         }
       } else {
         // Regular Seller pays for each relisting
         // Save details first
         await submitRelistAfterPayment(listingId, formData);
-        setRelistingId(listingId);
-        setPaymentChoiceType('SELLER');
-        const amt = { mobile: 11.80, laptop: 59.00, bike: 118.00, car: 590.00 }[productType?.toLowerCase()] || 590.00;
-        setListingAmount(amt);
-        // Fetch latest payments to check for already-pending UPI
-        try {
-          const myPays = await getMyPayments();
-          setPendingPayments(Array.isArray(myPays) ? myPays : []);
-        } catch (_) { setPendingPayments([]); }
-        setShowPaymentChoice(true);
-        setSuccessMsg('Please choose your payment option.');
+        toast.info('Listing details saved! Redirecting to relisting payment...');
+        await triggerRelistPayment(listingId);
+        setSuccessMsg('Please complete payment in the CCAvenue window to complete the relisting.');
+        setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
       }
     } catch (err) {
       console.error('Relisting submit failed:', err);
@@ -899,108 +877,6 @@ export const RelistListing = () => {
         </form>
       </div>
 
-      {/* Payment Choice Modal */}      {showPaymentChoice && (() => {
-        const hasPendingForListing = pendingPayments.some(
-          (p) => p.status === 'PENDING' && p.payment_gateway === 'UPI' &&
-            (p.listing_id === relistingId || p.plan_id === paymentChoicePlanId)
-        );
-        return (
-          <div style={{
-            position: 'fixed', inset: 0,
-            backgroundColor: 'rgba(15, 23, 42, 0.5)',
-            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-            zIndex: 10500, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', padding: '1rem'
-          }}>
-            <div style={{
-              width: '100%', maxWidth: '380px',
-              backgroundColor: '#FAF6EA', borderRadius: '1.25rem',
-              border: '1.5px solid #D8CFC1',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.08)',
-              padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem'
-            }}>
-              {hasPendingForListing ? (
-                <>
-                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 900, color: '#1F1A1D', textAlign: 'center' }}>
-                    Payment Request Submitted
-                  </h3>
-                  <div style={{
-                    backgroundColor: '#fef9c3', border: '1.5px solid #fbbf24',
-                    borderRadius: '0.85rem', padding: '1rem', textAlign: 'center',
-                    display: 'flex', flexDirection: 'column', gap: '0.5rem'
-                  }}>
-                    <span style={{ fontSize: '1.5rem' }}>⏳</span>
-                    <p style={{ margin: 0, fontWeight: 800, color: '#92400e', fontSize: '0.9rem' }}>
-                      Payment Awaiting Admin Approval
-                    </p>
-                    <p style={{ margin: 0, fontWeight: 600, color: '#78350f', fontSize: '0.8rem', lineHeight: 1.45 }}>
-                      Your UPI payment request has already been submitted and is pending admin verification. You'll be notified once approved. No need to pay again.
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => { setShowPaymentChoice(false); navigate(`${basePath}/my-listings`); }}
-                    className="btn btn-secondary"
-                    style={{ width: '100%', height: '40px', borderRadius: '999px', fontWeight: 800, border: '1.5px solid #D8CFC1' }}
-                  >
-                    Go to My Listings
-                  </button>
-                </>
-              ) : (
-                <>
-                  <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#1F1A1D', textAlign: 'center' }}>
-                    Choose Payment Method
-                  </h3>
-                  <div style={{ backgroundColor: '#f3f4f6', border: '1px solid #d1d5db', borderRadius: '0.75rem', padding: '0.6rem', textAlign: 'center' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1F1A1D', display: 'block' }}>
-                      Total Amount: <span style={{ color: '#6B1B71', fontSize: '1.15rem', fontWeight: 950 }}>₹{paymentChoiceType === 'DEALER' ? (paymentChoicePlanId.includes('car') ? '3,538.82' : paymentChoicePlanId.includes('laptop') ? '2,358.82' : '1,178.82') : ({ mobile: '11.80', laptop: '59.00', bike: '118.00', car: '590.00' }[productType?.toLowerCase()] || '590.00')}</span>
-                    </span>
-                  </div>
-                  <button
-                    onClick={async () => {
-                      setShowPaymentChoice(false);
-                      if (paymentChoiceType === 'DEALER') {
-                        await triggerDealerPlanPayment(paymentChoicePlanId);
-                      } else {
-                        await triggerSellerListingPayment(relistingId);
-                      }
-                      navigate(`${basePath}/my-listings`);
-                    }}
-                    className="btn btn-primary"
-                    style={{ width: '100%', height: '42px', borderRadius: '999px', fontWeight: 900, border: 'none', boxShadow: '0 4px 12px rgba(107,27,113,0.18)' }}
-                  >
-                    Pay via NetBanking (CCAvenue)
-                  </button>
-                  <button
-                    onClick={() => { setShowPaymentChoice(false); setShowUpiModal(true); }}
-                    className="btn btn-secondary"
-                    style={{ width: '100%', height: '42px', borderRadius: '999px', fontWeight: 900, border: '1.5px solid #D8CFC1', backgroundColor: '#ffffff' }}
-                  >
-                    Pay via UPI / QR Scan
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        );
-      })()}
-
-      {showUpiModal && (
-        <UpiPaymentModal
-          isOpen={showUpiModal}
-          onClose={() => {
-            setShowUpiModal(false);
-            navigate(`${basePath}/my-listings`);
-          }}
-          amount={listingAmount}
-          planName={paymentChoiceType === 'DEALER' ? 'Dealer Upgrade' : `${productType.toUpperCase()} Relisting Fee`}
-          paymentType={paymentChoiceType === 'DEALER' ? 'DEALER_PLAN' : 'SELLER_LISTING'}
-          planId={paymentChoiceType === 'DEALER' ? paymentChoicePlanId : undefined}
-          listingId={paymentChoiceType === 'SELLER' ? listingId : undefined}
-          onSuccess={() => {
-            toast.success("UPI relisting payment request submitted successfully!");
-          }}
-        />
-      )}
     </div>
   );
 };

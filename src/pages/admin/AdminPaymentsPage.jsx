@@ -6,7 +6,7 @@ import {
   Smartphone, Laptop, Car, Bike, ShoppingBag, User, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { getAdminPayments, approvePayment } from '../../api/paymentApi';
+import { getAdminPayments } from '../../api/paymentApi';
 import { formatCurrency } from '../../utils/helpers';
 
 /* ── helpers ─────────────────────────────────────── */
@@ -188,7 +188,6 @@ const HistoryCard = ({ item }) => {
 export const AdminPaymentsPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [approvingId, setApprovingId] = useState('');
   const [historyPage, setHistoryPage] = useState(1);
 
   const ITEMS_PER_PAGE = 6;
@@ -207,23 +206,6 @@ export const AdminPaymentsPage = () => {
   const totalPages = Math.ceil(history.length / ITEMS_PER_PAGE) || 1;
   const paginatedHistory = history.slice((historyPage - 1) * ITEMS_PER_PAGE, historyPage * ITEMS_PER_PAGE);
 
-  const handleApprove = async (payment) => {
-    try {
-      setApprovingId(payment.payment_id);
-      await approvePayment(payment.payment_id);
-      toast.success('Payment approved successfully!');
-      queryClient.invalidateQueries({ queryKey: ['adminPayments'] });
-      if (payment.payment_type === 'SELLER_LISTING' && payment.listing_id) {
-        toast.info('Redirecting to pending listings page...');
-        setTimeout(() => navigate(`/admin/listings/pending?open=${payment.listing_id}`), 1200);
-      }
-    } catch (err) {
-      console.error('Failed to approve payment:', err);
-      toast.error(err.response?.data?.detail || 'Failed to approve payment.');
-    } finally {
-      setApprovingId('');
-    }
-  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -233,10 +215,10 @@ export const AdminPaymentsPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontWeight: 900, color: '#1F1A1D', margin: 0, fontFamily: "'Outfit', sans-serif" }}>
-            UPI Payments Verification
+            Payment History Log
           </h1>
           <p style={{ color: '#8B8278', margin: '0.35rem 0 0', fontWeight: 600 }}>
-            Verify scanned QR manual UPI requests and review global transactions.
+            Review global transaction history and audit checkout records.
           </p>
         </div>
       </div>
@@ -246,34 +228,8 @@ export const AdminPaymentsPage = () => {
           <Loader2 size={36} style={{ animation: 'spin 1s linear infinite', color: '#6B1B71' }} />
         </div>
       ) : (
-        <>
-          {/* ── Pending Requests ── */}
-          <section style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <h2 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#1F1A1D', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <CreditCard size={18} style={{ color: '#6B1B71' }} />
-              Bidding &amp; Listing Verification Requests
-              {requests.length > 0 && (
-                <span style={{ marginLeft: '0.35rem', backgroundColor: '#6B1B71', color: '#fff', borderRadius: '999px', fontSize: '0.7rem', fontWeight: 800, padding: '0.15rem 0.55rem' }}>
-                  {requests.length}
-                </span>
-              )}
-            </h2>
-
-            {requests.length === 0 ? (
-              <div style={{ padding: '3rem 2rem', textAlign: 'center', color: '#8B8278', backgroundColor: '#FAF6EA', border: '2px dashed #D8CFC1', borderRadius: '1.25rem', fontWeight: 700 }}>
-                No pending UPI payment requests at this moment.
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: '1rem' }}>
-                {requests.map((req) => (
-                  <RequestCard key={req.payment_id} req={req} approvingId={approvingId} onApprove={handleApprove} />
-                ))}
-              </div>
-            )}
-          </section>
-
-          {/* ── History with 6 items/page Pagination ── */}
-          <section style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        /* ── History with 6 items/page Pagination ── */
+        <section style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#1F1A1D', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Clock size={18} style={{ color: '#8B8278' }} />
@@ -384,10 +340,9 @@ export const AdminPaymentsPage = () => {
                     </button>
                   </div>
                 )}
-              </>
+               </>
             )}
           </section>
-        </>
       )}
     </div>
   );

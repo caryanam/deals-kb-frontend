@@ -5,18 +5,13 @@ import { useAuth } from '../../hooks/useAuth';
 import { getProducts } from '../../api/productApi';
 import { getMyPlans } from '../../api/paymentApi';
 import { triggerDealerPlanPayment } from '../../utils/paymentHelper';
-import UpiPaymentModal from '../../components/payments/UpiPaymentModal';
+import { CurrentLocationMap } from '../../components/CurrentLocationMap';
 
 
 export const SellerDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const basePath = user?.role === 'Dealer' ? '/dealer' : '/seller';
-
-  const [showPaymentChoice, setShowPaymentChoice] = useState(false);
-  const [selectedPlanId, setSelectedPlanId] = useState('');
-  const [planAmount, setPlanAmount] = useState(0);
-  const [showUpiModal, setShowUpiModal] = useState(false);
 
   const [stats, setStats] = useState({
     total: 0,
@@ -70,10 +65,13 @@ export const SellerDashboard = () => {
   }, [user]);
 
   const handleActivatePlan = async (planId) => {
-    setSelectedPlanId(planId);
-    const amt = planId.includes('car') ? 3538.82 : planId.includes('laptop') ? 2358.82 : 1178.82;
-    setPlanAmount(amt);
-    setShowPaymentChoice(true);
+    setPayingPlanId(planId);
+    try {
+      await triggerDealerPlanPayment(planId);
+      loadSellerStats();
+    } finally {
+      setPayingPlanId(null);
+    }
   };
 
   return (
@@ -316,100 +314,12 @@ export const SellerDashboard = () => {
         </div>
       </div>
 
-      {/* Payment Choice Modal */}
-      {showPaymentChoice && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(15, 23, 42, 0.5)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          zIndex: 10500,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '1rem'
-        }}>
-          <div style={{
-            width: '100%',
-            maxWidth: '380px',
-            backgroundColor: '#FAF6EA',
-            borderRadius: '1.25rem',
-            border: '1.5px solid #D8CFC1',
-            boxShadow: '0 10px 25px rgba(0,0,0,0.08)',
-            padding: '1.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.25rem'
-          }}>
-            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#1F1A1D', textAlign: 'center' }}>
-              Choose Payment Method
-            </h3>
-            <div style={{ backgroundColor: '#f3f4f6', border: '1px solid #d1d5db', borderRadius: '0.75rem', padding: '0.6rem', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#1F1A1D', display: 'block' }}>
-                Total Amount: <span style={{ color: '#6B1B71', fontSize: '1.15rem', fontWeight: 950 }}>₹{selectedPlanId?.includes('car') ? '3,538.82' : selectedPlanId?.includes('laptop') ? '2,358.82' : '1,178.82'}</span>
-              </span>
-            </div>
-            
-            <button
-              onClick={async () => {
-                setShowPaymentChoice(false);
-                await triggerDealerPlanPayment(selectedPlanId);
-                loadSellerStats();
-              }}
-              className="btn btn-primary"
-              style={{
-                width: '100%',
-                height: '42px',
-                borderRadius: '999px',
-                fontWeight: 900,
-                border: '3px solid #1F1A1D',
-                boxShadow: '4px 4px 0px #1F1A1D'
-              }}
-            >
-              Pay via NetBanking (CCAvenue)
-            </button>
-            
-            <button
-              onClick={() => {
-                setShowPaymentChoice(false);
-                setShowUpiModal(true);
-              }}
-              className="btn btn-secondary"
-              style={{
-                width: '100%',
-                height: '42px',
-                borderRadius: '999px',
-                fontWeight: 900,
-                border: '3px solid #1F1A1D',
-                boxShadow: '4px 4px 0px #1F1A1D'
-              }}
-            >
-              Pay via UPI / QR Scan
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showUpiModal && (
-        <UpiPaymentModal
-          isOpen={showUpiModal}
-          onClose={() => {
-            setShowUpiModal(false);
-          }}
-          amount={planAmount}
-          planName="Dealer Plan Upgrade"
-          paymentType="DEALER_PLAN"
-          planId={selectedPlanId}
-          onSuccess={() => {
-            toast.success("UPI payment request submitted successfully!");
-            loadSellerStats();
-          }}
-        />
-      )}
+      {/* Live Location Map Widget */}
+      <div style={{ marginTop: '2rem' }}>
+        <CurrentLocationMap onLocationChange={(loc) => console.log('Seller/Dealer Dashboard Map Location:', loc)} />
+      </div>
     </div>
   );
 };
 
 export default SellerDashboard;
-
