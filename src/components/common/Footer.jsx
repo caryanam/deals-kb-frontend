@@ -97,7 +97,7 @@ Own More.</p>
             </p>
             <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
               <Bike size={15} />
-              <span>Bike +91-9764052126</span>
+              <span>Bike +91-8669632125</span>
             </p>
             <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.65rem' }}>
               <Smartphone size={15} />
