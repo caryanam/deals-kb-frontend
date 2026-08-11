@@ -11,33 +11,45 @@ const categoryPlans = [
   {
     category: 'Mobile',
     image: mobileImg,
-    seller: '₹11.80',
-    buyer: '₹24.78',
-    dealer: '₹1,178.82',
+    seller: '₹0',
+    originalSeller: '₹11.80',
+    buyer: '₹0',
+    originalBuyer: '₹24.78',
+    dealer: '₹0',
+    originalDealer: '₹1,178.82',
     limit: '401',
   },
   {
     category: 'Laptop',
     image: laptopImg,
-    seller: '₹59.00',
-    buyer: '₹60.18',
-    dealer: '₹2,358.82',
+    seller: '₹0',
+    originalSeller: '₹59.00',
+    buyer: '₹0',
+    originalBuyer: '₹60.18',
+    dealer: '₹0',
+    originalDealer: '₹2,358.82',
     limit: '300',
   },
   {
     category: 'Bike',
     image: bikeImg,
-    seller: '₹118.00',
-    buyer: '₹119.18',
-    dealer: '₹2,358.82',
+    seller: '₹0',
+    originalSeller: '₹118.00',
+    buyer: '₹0',
+    originalBuyer: '₹119.18',
+    dealer: '₹0',
+    originalDealer: '₹2,358.82',
     limit: '150',
   },
   {
     category: 'Car',
     image: carImg,
-    seller: '₹590.00',
-    buyer: '₹591.18',
-    dealer: '₹3,538.82',
+    seller: '₹0',
+    originalSeller: '₹590.00',
+    buyer: '₹0',
+    originalBuyer: '₹591.18',
+    dealer: '₹0',
+    originalDealer: '₹3,538.82',
     limit: '30',
   },
 ];
@@ -203,18 +215,27 @@ const PlansSection = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, display: 'block' }}>Seller Fee</span>
-                    <span style={{ fontSize: '0.65rem', color: '#9CA3AF', fontWeight: 700 }}>Per Listing</span>
+                    <span style={{ fontSize: '0.65rem', color: '#15803D', fontWeight: 800 }}>Free Listing (30 Days)</span>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '1.15rem', color: '#1F1A1D', fontWeight: 950 }}>{item.seller}</span>
+                    <span style={{ fontSize: '0.8rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.35rem', fontWeight: 700 }}>
+                      {item.originalSeller}
+                    </span>
+                    <span style={{ fontSize: '1.25rem', color: '#15803D', fontWeight: 950 }}>{item.seller}</span>
                   </div>
                 </div>
 
                 {/* Buyer Pass */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700 }}>Buyer Pass <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 600 }}>(24h)</span></span>
+                  <div>
+                    <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, display: 'block' }}>Buyer Bidding</span>
+                    <span style={{ fontSize: '0.65rem', color: '#15803D', fontWeight: 800 }}>Direct Free Bidding</span>
+                  </div>
                   <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '1.15rem', color: '#1F1A1D', fontWeight: 950 }}>{item.buyer}</span>
+                    <span style={{ fontSize: '0.8rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.35rem', fontWeight: 700 }}>
+                      {item.originalBuyer}
+                    </span>
+                    <span style={{ fontSize: '1.25rem', color: '#15803D', fontWeight: 950 }}>{item.buyer}</span>
                   </div>
                 </div>
 
@@ -224,10 +245,13 @@ const PlansSection = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <span style={{ fontSize: '0.85rem', color: PURPLE, fontWeight: 900, display: 'block' }}>Dealer Plan</span>
-                    <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 700 }}>Monthly Plan</span>
+                    <span style={{ fontSize: '0.65rem', color: '#15803D', fontWeight: 800 }}>30-Day Free Plan</span>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '1.3rem', color: PURPLE, fontWeight: 950 }}>{item.dealer}</span>
+                    <span style={{ fontSize: '0.85rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.35rem', fontWeight: 700 }}>
+                      {item.originalDealer}
+                    </span>
+                    <span style={{ fontSize: '1.35rem', color: '#15803D', fontWeight: 950 }}>{item.dealer}</span>
                   </div>
                 </div>
               </div>

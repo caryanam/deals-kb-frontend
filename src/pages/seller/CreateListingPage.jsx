@@ -30,11 +30,34 @@ const CATEGORIES = [
   { value: 'laptop', label: 'LAPTOP' }
 ];
 
+// --- ORIGINAL REGULAR LISTING FEES (Preserved in comments for future reactivation) ---
+// const LISTING_FEES = {
+//   car: '₹590.00',
+//   mobile: '₹11.80',
+//   bike: '₹118.00',
+//   laptop: '₹59.00'
+// };
+
+const ORIGINAL_LISTING_FEES = {
+  car: '₹590.00',
+  mobile: '₹11.80',
+  bike: '₹118.00',
+  laptop: '₹59.00'
+};
+
+const ORIGINAL_DEALER_FEES = {
+  car: '₹3,538.82',
+  mobile: '₹1,178.82',
+  bike: '₹2,358.82',
+  laptop: '₹2,358.82'
+};
+
+// --- ACTIVE: INDEPENDENCE DAY ₹0 OFFER FEES ---
 const LISTING_FEES = {
-  car: '\u20B9590.00',
-  mobile: '\u20B911.80',
-  bike: '\u20B9118.00',
-  laptop: '\u20B959.00'
+  car: '₹0',
+  mobile: '₹0',
+  bike: '₹0',
+  laptop: '₹0'
 };
 
 const TITLE_PLACEHOLDERS = {
@@ -610,32 +633,36 @@ export const CreateListingPage = () => {
         const createdProduct = await createProduct(payload);
         const listingId = createdProduct?.product_id || createdProduct?.id;
 
-        if (user?.role === 'Dealer') {
-          const planId = productType === 'car'
-            ? 'dealer_car_monthly'
-            : productType === 'mobile'
-            ? 'dealer_mobile_monthly'
-            : 'dealer_laptop_bike_monthly';
+        // --- ACTIVE: INDEPENDENCE DAY ₹0 OFFER (Direct Free Product Listing) ---
+        toast.success('Listing created and submitted for verification successfully! (₹0 Special Offer)');
+        setSuccessMsg('Listing submitted for approval. Redirecting...');
+        setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
 
-          const hasActivePlan = dealerPlans.some(p => p.plan_id === planId && p.active);
-
-          if (hasActivePlan) {
-            toast.success('Product listing created successfully under your active plan!');
-            setSuccessMsg('Listing submitted for approval. Redirecting...');
-            setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
-          } else {
-            toast.info('Listing saved. Redirecting to plan payment...');
-            await triggerDealerPlanPayment(planId);
-            setSuccessMsg('Please complete payment in the CCAvenue window to activate your monthly plan.');
-            setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
-          }
-        } else {
-          // Regular Seller pays for each listing
-          toast.info('Listing saved. Redirecting to payment...');
-          await triggerSellerListingPayment(listingId);
-          setSuccessMsg('Please complete payment in the CCAvenue window to activate your listing.');
-          setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
-        }
+        // --- REGULAR PAID LISTING FLOW (Commented out during ₹0 Offer) ---
+        // if (user?.role === 'Dealer') {
+        //   const planId = productType === 'car'
+        //     ? 'dealer_car_monthly'
+        //     : productType === 'mobile'
+        //     ? 'dealer_mobile_monthly'
+        //     : 'dealer_laptop_bike_monthly';
+        //   const hasActivePlan = dealerPlans.some(p => p.plan_id === planId && p.active);
+        //   if (hasActivePlan) {
+        //     toast.success('Product listing created successfully under your active plan!');
+        //     setSuccessMsg('Listing submitted for approval. Redirecting...');
+        //     setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
+        //   } else {
+        //     toast.info('Listing saved. Redirecting to plan payment...');
+        //     await triggerDealerPlanPayment(planId);
+        //     setSuccessMsg('Please complete payment in the CCAvenue window to activate your monthly plan.');
+        //     setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
+        //   }
+        // } else {
+        //   // Regular Seller pays for each listing
+        //   toast.info('Listing saved. Redirecting to payment...');
+        //   await triggerSellerListingPayment(listingId);
+        //   setSuccessMsg('Please complete payment in the CCAvenue window to activate your listing.');
+        //   setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
+        // }
       }
     } catch (err) {
       const msg = err.response?.data?.detail || err.response?.data?.message || 'Failed to submit product listing.';
@@ -687,9 +714,24 @@ export const CreateListingPage = () => {
               ))}
             </div>
             {user?.role !== 'Dealer' ? (
-              <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', border: '1px solid #D8CFC1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-                <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Listing fee for selected category</span>
-                <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
+              <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#FEF9C3', border: '1.5px solid #FACC15', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                <div>
+                  <span style={{ color: '#713F12', fontWeight: 800, fontSize: '0.9rem', display: 'block' }}>Listing fee for selected category</span>
+                  <span style={{ color: '#15803D', fontWeight: 700, fontSize: '0.75rem' }}>🇮🇳 Independence Day Offer (100% Free)</span>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <span style={{ fontSize: '0.9rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.5rem', fontWeight: 700 }}>
+                    {ORIGINAL_LISTING_FEES[productType]}
+                  </span>
+                  <strong style={{ color: '#15803D', fontSize: '1.3rem', fontWeight: 950 }}>{LISTING_FEES[productType]}</strong>
+                </div>
+
+                {/* --- ORIGINAL REGULAR FEE DISPLAY (Preserved in comments) ---
+                <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '0.75rem', backgroundColor: '#F5ECDD', border: '1px solid #D8CFC1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ color: '#7A2181', fontWeight: 800, fontSize: '0.9rem' }}>Listing fee for selected category</span>
+                  <strong style={{ color: '#1F1A1D', fontSize: '1.2rem' }}>{LISTING_FEES[productType]}</strong>
+                </div>
+                */}
               </div>
             ) : (() => {
               const planId = productType === 'car'
@@ -697,7 +739,6 @@ export const CreateListingPage = () => {
                 : productType === 'mobile'
                 ? 'dealer_mobile_monthly'
                 : 'dealer_laptop_bike_monthly';
-              const isActive = dealerPlans.some(p => p.plan_id === planId && p.active);
               const planName = productType === 'car'
                 ? 'Dealer Car Plan'
                 : productType === 'mobile'
@@ -708,26 +749,29 @@ export const CreateListingPage = () => {
                   marginTop: '1rem',
                   padding: '0.85rem 1rem',
                   borderRadius: '0.75rem',
-                  backgroundColor: isActive ? '#f0fdf4' : '#fef2f2',
-                  border: isActive ? '1px solid #bbf7d0' : '1px solid #fca5a5',
+                  backgroundColor: '#FEF9C3',
+                  border: '1.5px solid #FACC15',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   gap: '1rem'
                 }}>
-                  <span style={{ color: isActive ? '#166534' : '#991b1b', fontWeight: 800, fontSize: '0.9rem' }}>
-                    {planName} Status
-                  </span>
-                  <strong style={{
-                    padding: '0.25rem 0.55rem',
-                    borderRadius: '999px',
-                    fontSize: '0.75rem',
-                    fontWeight: 800,
-                    backgroundColor: isActive ? '#dcfce7' : '#fee2e2',
-                    color: isActive ? '#166534' : '#991b1b'
-                  }}>
-                    {isActive ? 'Active' : 'Inactive (Payment needed)'}
-                  </strong>
+                  <div>
+                    <span style={{ color: '#713F12', fontWeight: 800, fontSize: '0.9rem', display: 'block' }}>
+                      {planName} (Monthly Access)
+                    </span>
+                    <span style={{ color: '#15803D', fontWeight: 700, fontSize: '0.75rem' }}>
+                      🇮🇳 Independence Day Offer (100% Free)
+                    </span>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ fontSize: '0.9rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.5rem', fontWeight: 700 }}>
+                      {ORIGINAL_DEALER_FEES[productType] || '₹2,358.82'}
+                    </span>
+                    <strong style={{ color: '#15803D', fontSize: '1.3rem', fontWeight: 950 }}>
+                      ₹0
+                    </strong>
+                  </div>
                 </div>
               );
             })()}

@@ -35,6 +35,12 @@ export const triggerPayment = async (payload, onSuccess, onCancel) => {
       : payload;
 
     const data = await createCCAvenuePayment(requestPayload);
+    if (data?.free_activated || data?.status === 'SUCCESS') {
+      toast.success(data.message || 'Independence Day ₹0 Offer Activated Successfully!');
+      if (onSuccess) onSuccess(data);
+      return data;
+    }
+
     sessionStorage.setItem('pending_payment_order_id', data.order_id || '');
     toast.info('Redirecting to secure CCAvenue checkout...');
     submitCCAvenueForm(data);

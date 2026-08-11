@@ -58,23 +58,27 @@ export const ListingDetailsPage = () => {
   }, [productId]);
 
   useEffect(() => {
-    if (!product || !user || user.role !== 'Buyer') return;
-    let mounted = true;
-    getMyPlans()
-      .then((plans) => {
-        if (!mounted) return;
-        const active = (plans || []).some(
-          (p) => p.product_type === product.product_type && p.active
-        );
-        setHasActivePass(active);
-      })
-      .catch((err) => {
-        console.warn('Failed to verify active pass on details mount:', err);
-        if (mounted) setHasActivePass(false);
-      });
-    return () => {
-      mounted = false;
-    };
+    // --- ACTIVE: INDEPENDENCE DAY ₹0 OFFER (Free access to all listing media & bidding) ---
+    setHasActivePass(true);
+
+    // --- REGULAR PAID PASS VERIFICATION (Commented out during ₹0 Offer) ---
+    // if (!product || !user || user.role !== 'Buyer') return;
+    // let mounted = true;
+    // getMyPlans()
+    //   .then((plans) => {
+    //     if (!mounted) return;
+    //     const active = (plans || []).some(
+    //       (p) => p.product_type === product.product_type && p.active
+    //     );
+    //     setHasActivePass(active);
+    //   })
+    //   .catch((err) => {
+    //     console.warn('Failed to verify active pass on details mount:', err);
+    //     if (mounted) setHasActivePass(false);
+    //   });
+    // return () => {
+    //   mounted = false;
+    // };
   }, [product, user]);
 
   // Seller contact states (Buyer View)
@@ -262,21 +266,24 @@ export const ListingDetailsPage = () => {
 
   const handleJoinAuction = async () => {
     if (product && product.status === 'live') {
-      if (user?.role === 'Buyer') {
-        try {
-          const plans = await getMyPlans();
-          const activePlan = (plans || []).find((plan) => (plan.product_type || '').toLowerCase() === (product.product_type || '').toLowerCase() && plan.active);
-          if (!activePlan) {
-            setRequiredPlan(null);
-            setShowPlans(true);
-            return;
-          }
-        } catch (err) {
-          console.warn('Failed to check bidding pass:', err);
-          setShowPlans(true);
-          return;
-        }
-      }
+      // --- REGULAR PAID PASS CHECK (Commented out during ₹0 Offer) ---
+      // if (user?.role === 'Buyer') {
+      //   try {
+      //     const plans = await getMyPlans();
+      //     const activePlan = (plans || []).find((plan) => (plan.product_type || '').toLowerCase() === (product.product_type || '').toLowerCase() && plan.active);
+      //     if (!activePlan) {
+      //       setRequiredPlan(null);
+      //       setShowPlans(true);
+      //       return;
+      //     }
+      //   } catch (err) {
+      //     console.warn('Failed to check bidding pass:', err);
+      //     setShowPlans(true);
+      //     return;
+      //   }
+      // }
+
+      // --- ACTIVE: INDEPENDENCE DAY ₹0 OFFER (Direct Auction Joining) ---
       navigate(`/buyer/auction/${product.product_id}`);
     }
   };

@@ -8,6 +8,7 @@ import BuyerSidebar from './BuyerSidebar';
 import SellerSidebar from './SellerSidebar';
 import AdminSidebar from './AdminSidebar';
 import Footer from '../common/Footer';
+import TricolorOfferBanner from '../common/TricolorOfferBanner';
 
 export const DashboardLayout = () => {
   const { user } = useAuth();
@@ -66,6 +67,7 @@ export const DashboardLayout = () => {
           <Topbar onToggleSidebar={toggleSidebar} />
           
           <main className="dashboard-content">
+            {user?.role !== 'Admin' && <TricolorOfferBanner variant="dashboard-bar" />}
             <Outlet />
           </main>
         </section>

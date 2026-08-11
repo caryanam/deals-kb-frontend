@@ -8,6 +8,8 @@ import HowItWorksSection from "../../components/landing/HowItWorksSection";
 import AboutSection from "../../components/landing/AboutSection";
 import AppComingSoonSection from "../../components/landing/AppComingSoonSection";
 import NewsletterSection from "../../components/landing/NewsletterSection";
+import LaunchOfferFloatingWidget from "../../components/landing/LaunchOfferFloatingWidget";
+import TricolorOfferBanner from "../../components/common/TricolorOfferBanner";
 import Footer from "../../components/common/Footer";
 import "../../styles/landing.css";
 
@@ -65,7 +67,12 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      {/* Sleek Top Announcement Overlay Bar */}
+      <TricolorOfferBanner variant="landing-overlay" />
+
       <HeroSection />
+
+      <LaunchOfferFloatingWidget />
       
       <div className="scroll-reveal">
         <CategorySection />

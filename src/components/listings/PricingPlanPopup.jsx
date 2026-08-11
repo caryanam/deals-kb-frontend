@@ -16,26 +16,30 @@ const FALLBACK_PLANS = {
   mobile: {
     plan_id: 'buyer_mobile_day',
     name: 'Mobile Bidding Pass',
-    amount: 24.78,
-    description: 'Unlimited mobile bidding for 24 hours.'
+    amount: 0,
+    original_amount: 24.78,
+    description: 'Unlimited mobile bidding (Independence Day Special Offer).'
   },
   laptop: {
     plan_id: 'buyer_laptop_day',
     name: 'Laptop Bidding Pass',
-    amount: 60.18,
-    description: 'Unlimited laptop bidding for 24 hours.'
+    amount: 0,
+    original_amount: 60.18,
+    description: 'Unlimited laptop bidding (Independence Day Special Offer).'
   },
   car: {
     plan_id: 'buyer_car_day',
     name: 'Car Bidding Pass',
-    amount: 591.18,
-    description: 'Unlimited car bidding for 24 hours.'
+    amount: 0,
+    original_amount: 591.18,
+    description: 'Unlimited car bidding (Independence Day Special Offer).'
   },
   bike: {
     plan_id: 'buyer_bike_day',
     name: 'Bike Bidding Pass',
-    amount: 119.18,
-    description: 'Unlimited bike bidding for 24 hours.'
+    amount: 0,
+    original_amount: 119.18,
+    description: 'Unlimited bike bidding (Independence Day Special Offer).'
   }
 };
 
@@ -223,10 +227,24 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                   <h3 style={{ margin: 0, color: '#1F1A1D', fontSize: '1.05rem', fontWeight: 800 }}>{plan.name || plan.plan_name}</h3>
                   <div style={{ marginTop: '0.25rem', marginBottom: '0.25rem' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      {Number(plan.amount) === 0 && (
+                        <span style={{ fontSize: '1.1rem', color: '#9CA3AF', textDecoration: 'line-through', fontWeight: 700 }}>
+                          {formatCurrency(Number(plan.original_amount || (type === 'mobile' ? 24.78 : type === 'laptop' ? 60.18 : type === 'bike' ? 119.18 : 591.18)))}
+                        </span>
+                      )}
+                      <span style={{ color: Number(plan.amount) === 0 ? '#15803D' : '#6B1B71', fontSize: '1.85rem', fontWeight: 950 }}>
+                        {formatCurrency(Number(plan.amount))}
+                      </span>
+                    </div>
+
+                    {/* --- ORIGINAL REGULAR PRICE DISPLAY (Preserved in comments) ---
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', flexWrap: 'wrap' }}>
                       <span style={{ color: '#6B1B71', fontSize: '1.85rem', fontWeight: 950 }}>
                         {formatCurrency(Number(plan.amount))}
                       </span>
                     </div>
+                    */}
+
                     <span style={{ fontSize: '0.68rem', color: '#8B8278', fontWeight: 800, display: 'block', marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                       / 24 Hours
                     </span>
@@ -284,7 +302,7 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                         }}
                       >
                         {activating ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> : <ShieldCheck size={14} />}
-                        {plan.active ? 'Active' : 'Buy Pass'}
+                        {plan.active ? 'Active' : 'Claim Free Pass (₹0)'}
                       </button>
                     </>
                   )}
