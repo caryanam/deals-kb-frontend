@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, CheckCircle2, Zap, X, ShieldCheck, Tag, Sparkles } from 'lucide-react';
+import { Clock, CheckCircle2, Zap, X, ShieldCheck, Tag, Sparkles, Calendar } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
-// Offer period: From 15 August midnight for 30 days (Ends September 14, 2026, 23:59:59 IST)
-const OFFER_END_TIMESTAMP = new Date('2026-09-14T23:59:59+05:30').getTime();
+// Offer period: From 12 August 12:01 AM for 30 days (Ends September 11, 2026, 23:59:59 IST)
+const OFFER_END_TIMESTAMP = new Date('2026-09-11T23:59:59+05:30').getTime();
+const OFFER_VALID_TILL_DATE = '11th September 2026';
 
 const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, role = null }) => {
   const { user } = useAuth();
@@ -49,9 +50,6 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
             <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#713F12' }}>
               <strong>Seller Offer:</strong> Unlimited Free Product Listings (<strong>₹0 Listing Fee</strong>)
             </span>
-            <span style={{ fontSize: '0.74rem', color: '#15803D', fontWeight: 700 }}>
-              (15th Aug – Next 30 Days)
-            </span>
           </>
         );
       case 'Buyer':
@@ -59,9 +57,6 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
           <>
             <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#713F12' }}>
               <strong>Buyer Offer:</strong> Unlimited Direct Bidding on All Live Auctions (<strong>₹0 Pass</strong>)
-            </span>
-            <span style={{ fontSize: '0.74rem', color: '#15803D', fontWeight: 700 }}>
-              (15th Aug – Next 30 Days)
             </span>
           </>
         );
@@ -71,9 +66,6 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
             <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#713F12' }}>
               <strong>Dealer Offer:</strong> 30-Day Unlimited Inventory & Listing Plan (<strong>₹0 Monthly Plan</strong>)
             </span>
-            <span style={{ fontSize: '0.74rem', color: '#15803D', fontWeight: 700 }}>
-              (15th Aug – Next 30 Days)
-            </span>
           </>
         );
       default:
@@ -82,15 +74,12 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
             <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#713F12' }}>
               <strong>100% Free Access (₹0 Fee)</strong> for Sellers, Buyers & Dealers
             </span>
-            <span style={{ fontSize: '0.74rem', color: '#15803D', fontWeight: 700 }}>
-              (15th Aug – Next 30 Days)
-            </span>
           </>
         );
     }
   };
 
-  // --- DASHBOARD VARIANT: Small, compact rectangle bar ---
+  // --- DASHBOARD VARIANT: Small, compact rectangle bar with date & countdown below ---
   if (variant === 'dashboard-bar') {
     return (
       <div 
@@ -101,7 +90,7 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
           marginBottom: '1rem',
           backgroundColor: '#FEF9C3',
           border: '1.5px solid #FACC15',
-          borderRadius: '0.6rem',
+          borderRadius: '0.65rem',
           overflow: 'hidden',
           boxShadow: '0 2px 8px rgba(234, 179, 8, 0.15)',
           fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -116,12 +105,12 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
         }} />
 
         <div style={{
-          padding: '0.45rem 0.9rem',
+          padding: '0.5rem 0.95rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '0.6rem'
+          gap: '0.75rem'
         }}>
           {/* Left: Role-Specific Info */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
@@ -141,26 +130,45 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
             {renderRoleOfferMessage()}
           </div>
 
-          {/* Right: Inline Countdown Pill */}
+          {/* Right: Offer Valid Till Date & Countdown Below */}
           {showCountdown && (
             <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              backgroundColor: '#ffffff',
-              border: '1px solid #CA8A04',
-              borderRadius: '999px',
-              padding: '0.2rem 0.65rem',
-              fontSize: '0.74rem',
-              fontWeight: 800,
-              color: '#854D0E',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              gap: '0.15rem'
             }}>
-              <Clock size={12} color="#EA580C" />
-              <span>Ends in:</span>
-              <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#1F1A1D' }}>
-                {timeLeft.days}d {String(timeLeft.hours).padStart(2, '0')}h {String(timeLeft.minutes).padStart(2, '0')}m {String(timeLeft.seconds).padStart(2, '0')}s
-              </span>
+              <div style={{
+                fontSize: '0.72rem',
+                color: '#854D0E',
+                fontWeight: 800,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem'
+              }}>
+                <Calendar size={11} color="#EA580C" />
+                <span>Offer Valid Till: <strong>{OFFER_VALID_TILL_DATE}</strong></span>
+              </div>
+
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                backgroundColor: '#ffffff',
+                border: '1px solid #CA8A04',
+                borderRadius: '999px',
+                padding: '0.15rem 0.6rem',
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                color: '#854D0E',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+              }}>
+                <Clock size={11} color="#EA580C" />
+                <span>Ending in:</span>
+                <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#1F1A1D' }}>
+                  {timeLeft.days}d {String(timeLeft.hours).padStart(2, '0')}h {String(timeLeft.minutes).padStart(2, '0')}m {String(timeLeft.seconds).padStart(2, '0')}s
+                </span>
+              </div>
             </div>
           )}
         </div>
@@ -213,7 +221,7 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
             textTransform: 'uppercase',
             letterSpacing: '0.04em'
           }}>
-            Independence Special
+            Independence Day Special
           </span>
           <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#713F12' }}>
             All Listings, Passes & Monthly Plans are <strong>100% Free (₹0)</strong> for the next 30 days!
@@ -224,22 +232,41 @@ const TricolorOfferBanner = ({ variant = 'dashboard-bar', showCountdown = true, 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           {showCountdown && (
             <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              backgroundColor: '#ffffff',
-              border: '1px solid #CA8A04',
-              borderRadius: '999px',
-              padding: '0.2rem 0.65rem',
-              fontSize: '0.74rem',
-              fontWeight: 800,
-              color: '#854D0E'
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              gap: '0.15rem'
             }}>
-              <Clock size={12} color="#EA580C" />
-              <span>Offer Ends In:</span>
-              <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#1F1A1D' }}>
-                {timeLeft.days}d {String(timeLeft.hours).padStart(2, '0')}h {String(timeLeft.minutes).padStart(2, '0')}m {String(timeLeft.seconds).padStart(2, '0')}s
-              </span>
+              <div style={{
+                fontSize: '0.7rem',
+                color: '#854D0E',
+                fontWeight: 800,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem'
+              }}>
+                <Calendar size={11} color="#EA580C" />
+                <span>Offer Valid Till: <strong>{OFFER_VALID_TILL_DATE}</strong></span>
+              </div>
+
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                backgroundColor: '#ffffff',
+                border: '1px solid #CA8A04',
+                borderRadius: '999px',
+                padding: '0.15rem 0.6rem',
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                color: '#854D0E'
+              }}>
+                <Clock size={11} color="#EA580C" />
+                <span>Ending in:</span>
+                <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#1F1A1D' }}>
+                  {timeLeft.days}d {String(timeLeft.hours).padStart(2, '0')}h {String(timeLeft.minutes).padStart(2, '0')}m {String(timeLeft.seconds).padStart(2, '0')}s
+                </span>
+              </div>
             </div>
           )}
 

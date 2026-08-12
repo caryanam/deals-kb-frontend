@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Flame, Sparkles, Clock } from 'lucide-react';
+import { Flame, Sparkles, Clock, Calendar } from 'lucide-react';
 
-// Offer period: From 15 August midnight for 30 days (Ends September 14, 2026, 23:59:59 IST)
-const OFFER_END_TIMESTAMP = new Date('2026-09-14T23:59:59+05:30').getTime();
+// Offer period: From 12 August 12:01 AM for 30 days (Ends September 11, 2026, 23:59:59 IST)
+const OFFER_END_TIMESTAMP = new Date('2026-09-11T23:59:59+05:30').getTime();
+const OFFER_VALID_TILL_DATE = '11th Sept 2026';
 
 const LaunchOfferFloatingWidget = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -119,12 +120,12 @@ const LaunchOfferFloatingWidget = () => {
           background: #ffffff;
           border: 1.5px solid #EAB308;
           border-radius: 0.75rem;
-          padding: 0.4rem 0.85rem;
+          padding: 0.45rem 0.85rem;
           cursor: pointer;
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 0.15rem;
+          gap: 0.2rem;
           box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
           transition: all 0.2s ease;
           width: 100%;
@@ -190,11 +191,13 @@ const LaunchOfferFloatingWidget = () => {
           onClick={handleClick}
           title="Click to view all ₹0 Free Plans"
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#dc2626', fontSize: '0.68rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            <Clock size={11} color="#dc2626" />
-            <span>Offer Ending In:</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#854D0E', fontSize: '0.68rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+            <Calendar size={11} color="#EA580C" />
+            <span>Valid Till: <strong>{OFFER_VALID_TILL_DATE}</strong></span>
           </div>
+          
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontFamily: 'monospace', fontWeight: 950, fontSize: '0.8rem', color: '#1F1A1D' }}>
+            <Clock size={11} color="#dc2626" style={{ marginRight: '2px' }} />
             <span style={{ color: '#713F12' }}>{timeLeft.days}d</span>
             <span style={{ color: '#CA8A04' }}>:</span>
             <span style={{ color: '#713F12' }}>{String(timeLeft.hours).padStart(2, '0')}h</span>
