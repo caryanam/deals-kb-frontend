@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { triggerBuyerPassPayment } from '../../utils/paymentHelper';
 import { formatCurrency, PRODUCT_TYPE_LABELS } from '../../utils/helpers';
 import { getMyPlans, getMyPayments } from '../../api/paymentApi';
+import ActivePlanCountdown from '../common/ActivePlanCountdown';
 
 const CATEGORY_PLAN_IDS = {
   mobile: 'buyer_mobile_day',
@@ -252,9 +253,13 @@ const PricingPlanPopup = ({ isOpen, productType = 'mobile', requiredPlan, onClos
                   <p style={{ margin: 0, color: '#8B8278', fontSize: '0.84rem', fontWeight: 600, minHeight: 38, lineHeight: 1.4 }}>{plan.description}</p>
                   
                   {plan.active && (plan.active_until || plan.expires_at) && (
-                    <span style={{ fontSize: '0.7rem', color: '#166534', fontWeight: 800, marginTop: '0.25rem' }}>
-                      Active until {new Date(plan.active_until || plan.expires_at).toLocaleString()}
-                    </span>
+                    <div style={{ marginTop: '0.45rem' }}>
+                      <ActivePlanCountdown 
+                        expiresAt={plan.active_until || plan.expires_at} 
+                        planId={plan.plan_id}
+                        compact={false}
+                      />
+                    </div>
                   )}
                   
                   {pendingPlanIds.has(plan.plan_id) ? (

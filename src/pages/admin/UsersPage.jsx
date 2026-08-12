@@ -147,6 +147,7 @@ export const UsersPage = () => {
                   <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Email Address</th>
                   <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Mobile Number</th>
                   <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Role</th>
+                  <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Active Plan & Plan ID</th>
                   <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Created Date</th>
                   <th style={{ padding: '1rem 1.5rem', fontSize: '0.8rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Account Status</th>
                 </tr>
@@ -190,6 +191,59 @@ export const UsersPage = () => {
                         {usr.role === 'Seller' ? <ShieldCheck size={14} /> : usr.role === 'Dealer' ? <ShieldCheck size={14} /> : <UserCheck size={14} />}
                         {usr.role}
                       </span>
+                    </td>
+                    <td style={{ padding: '1.25rem 1.5rem' }}>
+                      {usr.active_plan ? (
+                        <div>
+                          <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            backgroundColor: '#dcfce7',
+                            color: '#166534',
+                            fontSize: '0.74rem',
+                            fontWeight: 800,
+                            padding: '0.2rem 0.55rem',
+                            borderRadius: '999px',
+                            border: '1px solid #86efac'
+                          }}>
+                            <CheckCircle2 size={12} /> {usr.active_plan.plan_name}
+                          </span>
+                          <span style={{ display: 'block', fontSize: '0.68rem', fontFamily: 'monospace', color: '#4b5563', marginTop: '0.2rem', fontWeight: 700 }}>
+                            ID: {usr.active_plan.plan_id}
+                          </span>
+                          {usr.active_plan.active_until && (
+                            <span style={{ display: 'block', fontSize: '0.65rem', color: '#8B8278', marginTop: '0.1rem' }}>
+                              Valid till: {formatDate(usr.active_plan.active_until)}
+                            </span>
+                          )}
+                        </div>
+                      ) : usr.role === 'Seller' ? (
+                        <span style={{
+                          fontSize: '0.72rem',
+                          color: '#713F12',
+                          backgroundColor: '#FEF9C3',
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '999px',
+                          border: '1px solid #FACC15',
+                          fontWeight: 700,
+                          display: 'inline-block'
+                        }}>
+                          📦 Pay-Per-Listing (₹0)
+                        </span>
+                      ) : (
+                        <span style={{
+                          fontSize: '0.72rem',
+                          color: '#6b7280',
+                          backgroundColor: '#f3f4f6',
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '999px',
+                          fontWeight: 600,
+                          display: 'inline-block'
+                        }}>
+                          ⚪ No Active Plan
+                        </span>
+                      )}
                     </td>
                     <td style={{ padding: '1.25rem 1.5rem', fontSize: '0.85rem', color: '#8B8278' }}>
                       {formatDate(usr.created_at) || 'N/A'}
@@ -280,6 +334,61 @@ export const UsersPage = () => {
                     <span style={{ fontSize: '0.7rem', color: '#8B8278', fontWeight: 700, textTransform: 'uppercase' }}>Created Date</span>
                     <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: 600, color: '#4a1a50' }}>{formatDate(userDetails.created_at) || 'N/A'}</p>
                   </div>
+                </div>
+
+                {/* Active Subscription & Plan ID Info */}
+                <div>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1F1A1D', marginBottom: '0.75rem' }}>Active Subscription & Plan Details</h4>
+                  {(!selectedUser.active_plans || selectedUser.active_plans.length === 0) && !userDetails.active_plan ? (
+                    <div style={{ padding: '1rem', backgroundColor: '#FAF6EA', borderRadius: '0.5rem', color: '#8B8278', fontSize: '0.85rem' }}>
+                      {userDetails.role === 'Seller' ? 'Seller Account (Pay-Per-Listing — ₹0 Offer Active)' : 'No active subscription plans found for this account.'}
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                      {(selectedUser.active_plans || (userDetails.active_plan ? [userDetails.active_plan] : [])).map((plan, pIdx) => (
+                        <div key={pIdx} style={{
+                          padding: '0.85rem 1rem',
+                          backgroundColor: '#f0fdf4',
+                          border: '1.5px solid #86efac',
+                          borderRadius: '0.5rem',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          flexWrap: 'wrap',
+                          gap: '0.5rem'
+                        }}>
+                          <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <strong style={{ color: '#166534', fontSize: '0.9rem' }}>{plan.plan_name}</strong>
+                              <span style={{ fontSize: '0.68rem', backgroundColor: '#dcfce7', color: '#166534', fontWeight: 800, padding: '0.1rem 0.4rem', borderRadius: '4px', border: '1px solid #bbf7d0' }}>
+                                ACTIVE
+                              </span>
+                            </div>
+                            <span style={{ display: 'block', fontSize: '0.75rem', fontFamily: 'monospace', color: '#374151', marginTop: '0.2rem' }}>
+                              <strong>Plan ID:</strong> {plan.plan_id}
+                            </span>
+                            {plan.product_type && (
+                              <span style={{ display: 'block', fontSize: '0.72rem', color: '#4b5563', marginTop: '0.1rem' }}>
+                                Category: {plan.product_type}
+                              </span>
+                            )}
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            {plan.active_until && (
+                              <span style={{ fontSize: '0.75rem', color: '#15803D', fontWeight: 700, display: 'block' }}>
+                                Valid until {formatDate(plan.active_until)}
+                              </span>
+                            )}
+                            {plan.order_id && (
+                              <span style={{ fontSize: '0.68rem', color: '#9ca3af', display: 'block', fontFamily: 'monospace' }}>
+                                Ref: {plan.order_id}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* User Listings / Products */}

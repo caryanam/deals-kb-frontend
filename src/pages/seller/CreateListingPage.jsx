@@ -8,6 +8,7 @@ import { compressImage, fileToBase64, safeParseJSON } from '../../utils/helpers'
 import { normalizeImageUrl, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { triggerSellerListingPayment, triggerDealerPlanPayment } from '../../utils/paymentHelper';
 import { getMyPlans } from '../../api/paymentApi';
+import ActivePlanCountdown from '../../components/common/ActivePlanCountdown';
 import { ListingLocationCard } from '../../components/location/ListingLocationCard';
 import {
   BIKE_BRANDS,
@@ -736,14 +737,21 @@ export const CreateListingPage = () => {
             ) : (() => {
               const planId = productType === 'car'
                 ? 'dealer_car_monthly'
-                : productType === 'mobile'
-                ? 'dealer_mobile_monthly'
-                : 'dealer_laptop_bike_monthly';
+                : productType === 'bike'
+                ? 'dealer_bike_monthly'
+                : productType === 'laptop'
+                ? 'dealer_laptop_monthly'
+                : 'dealer_mobile_monthly';
               const planName = productType === 'car'
                 ? 'Dealer Car Plan'
-                : productType === 'mobile'
-                ? 'Dealer Mobile Plan'
-                : 'Dealer Laptop & Bike Plan';
+                : productType === 'bike'
+                ? 'Dealer Bike Plan'
+                : productType === 'laptop'
+                ? 'Dealer Laptop Plan'
+                : 'Dealer Mobile Plan';
+              const activePlan = dealerPlans.find(
+                p => (p.plan_id === planId || (p.plan_id === 'dealer_laptop_bike_monthly' && (productType === 'laptop' || productType === 'bike'))) && p.active
+              );
               return (
                 <div style={{
                   marginTop: '1rem',
@@ -752,26 +760,43 @@ export const CreateListingPage = () => {
                   backgroundColor: '#FEF9C3',
                   border: '1.5px solid #FACC15',
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: '1rem'
+                  flexDirection: 'column',
+                  gap: '0.5rem'
                 }}>
-                  <div>
-                    <span style={{ color: '#713F12', fontWeight: 800, fontSize: '0.9rem', display: 'block' }}>
-                      {planName} (Monthly Access)
-                    </span>
-                    <span style={{ color: '#15803D', fontWeight: 700, fontSize: '0.75rem' }}>
-                      🇮🇳 Independence Day Offer (100% Free)
-                    </span>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: '1rem'
+                  }}>
+                    <div>
+                      <span style={{ color: '#713F12', fontWeight: 800, fontSize: '0.9rem', display: 'block' }}>
+                        {planName} (Monthly Access)
+                      </span>
+                      <span style={{ color: '#15803D', fontWeight: 700, fontSize: '0.75rem' }}>
+                        🇮🇳 Independence Day Offer (100% Free)
+                      </span>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <span style={{ fontSize: '0.9rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.5rem', fontWeight: 700 }}>
+                        {ORIGINAL_DEALER_FEES[productType] || '₹2,358.82'}
+                      </span>
+                      <strong style={{ color: '#15803D', fontSize: '1.3rem', fontWeight: 950 }}>
+                        ₹0
+                      </strong>
+                    </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '0.9rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.5rem', fontWeight: 700 }}>
-                      {ORIGINAL_DEALER_FEES[productType] || '₹2,358.82'}
-                    </span>
-                    <strong style={{ color: '#15803D', fontSize: '1.3rem', fontWeight: 950 }}>
-                      ₹0
-                    </strong>
-                  </div>
+
+                  {activePlan && (activePlan.active_until || activePlan.expires_at) && (
+                    <div style={{ borderTop: '1px dashed #FACC15', paddingTop: '0.4rem' }}>
+                      <ActivePlanCountdown 
+                        expiresAt={activePlan.active_until || activePlan.expires_at}
+                        planName={planName}
+                        planId={planId}
+                        compact={false}
+                      />
+                    </div>
+                  )}
                 </div>
               );
             })()}

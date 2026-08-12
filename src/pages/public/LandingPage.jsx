@@ -67,9 +67,6 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
-      {/* Sleek Top Announcement Overlay Bar */}
-      <TricolorOfferBanner variant="landing-overlay" />
-
       <HeroSection />
 
       <LaunchOfferFloatingWidget />
