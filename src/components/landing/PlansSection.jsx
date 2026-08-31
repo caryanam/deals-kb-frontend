@@ -11,44 +11,44 @@ const categoryPlans = [
   {
     category: 'Mobile',
     image: mobileImg,
-    seller: '₹0',
+    seller: '₹1',
     originalSeller: '₹11.80',
-    buyer: '₹0',
+    buyer: '₹1',
     originalBuyer: '₹24.78',
-    dealer: '₹0',
+    dealer: '₹1',
     originalDealer: '₹1,178.82',
     limit: '401',
   },
   {
     category: 'Laptop',
     image: laptopImg,
-    seller: '₹0',
+    seller: '₹1',
     originalSeller: '₹59.00',
-    buyer: '₹0',
+    buyer: '₹1',
     originalBuyer: '₹60.18',
-    dealer: '₹0',
+    dealer: '₹1',
     originalDealer: '₹2,358.82',
     limit: '300',
   },
   {
     category: 'Bike',
     image: bikeImg,
-    seller: '₹0',
+    seller: '₹1',
     originalSeller: '₹118.00',
-    buyer: '₹0',
+    buyer: '₹1',
     originalBuyer: '₹119.18',
-    dealer: '₹0',
+    dealer: '₹1',
     originalDealer: '₹2,358.82',
     limit: '150',
   },
   {
     category: 'Car',
     image: carImg,
-    seller: '₹0',
+    seller: '₹1',
     originalSeller: '₹590.00',
-    buyer: '₹0',
+    buyer: '₹1',
     originalBuyer: '₹591.18',
-    dealer: '₹0',
+    dealer: '₹1',
     originalDealer: '₹3,538.82',
     limit: '30',
   },
@@ -108,25 +108,41 @@ const PlansSection = () => {
         .plan-badge-dealer {
           background-color: #FFFDF5;
           border: 2.5px solid #B2772D;
-          border-radius: 18px 10px 20px 8px / 8px 18px 10px 18px;
-          padding: 0.85rem;
-          min-height: 104px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
+          border-radius: 12px 6px 12px 6px / 6px 12px 6px 12px;
           margin-top: auto;
-          box-shadow: 3px 3px 0px #B2772D;
+          box-shadow: 3px 3px 0px #1F1A1D;
           transition: all 0.25s ease;
         }
+        .plan-badge-dealer-label {
+          color: #1F1A1D;
+          font-weight: 900;
+          transition: color 0.25s ease;
+        }
+        .plan-badge-dealer-value {
+          color: #B2772D;
+          font-weight: 950;
+          transition: color 0.25s ease;
+        }
         .plan-card:hover .plan-badge-dealer {
+          background-color: #6B1B71;
           border-color: #6B1B71;
-          box-shadow: 4px 4px 0px #6B1B71;
+          box-shadow: 4px 4px 0px #1F1A1D;
+        }
+        .plan-card:hover .plan-badge-dealer-label {
+          color: #ffffff;
+        }
+        .plan-card:hover .plan-badge-dealer-value {
+          color: #FBBF24;
         }
         .offer-banner {
-          background: linear-gradient(135deg, #FEF3C7 0%, #FFFDF5 100%);
-          border: 3px solid #1F1A1D;
-          border-radius: 20px 10px 25px 12px / 12px 22px 10px 20px;
-          padding: 1.25rem 1.75rem;
+          border: 3.5px solid #1F1A1D;
+          border-radius: 20px 40px 15px 30px / 30px 15px 40px 20px;
+          background-color: #FEF3C7;
+          color: #78350F;
+          font-weight: 900;
+          font-size: clamp(14px, 2vw, 17px);
+          padding: 1rem 2rem;
+          text-align: center;
           margin: 0 auto 3rem;
           max-width: 850px;
           display: flex;
@@ -215,13 +231,13 @@ const PlansSection = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, display: 'block' }}>Seller Fee</span>
-                    <span style={{ fontSize: '0.65rem', color: '#15803D', fontWeight: 800 }}>Free Listing (30 Days)</span>
+                    <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 800 }}>Per Listing Fee</span>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <span style={{ fontSize: '0.8rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.35rem', fontWeight: 700 }}>
                       {item.originalSeller}
                     </span>
-                    <span style={{ fontSize: '1.25rem', color: '#15803D', fontWeight: 950 }}>{item.seller}</span>
+                    <span style={{ fontSize: '1.25rem', color: '#6B1B71', fontWeight: 950 }}>{item.seller}</span>
                   </div>
                 </div>
 
@@ -229,13 +245,13 @@ const PlansSection = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <span style={{ fontSize: '0.85rem', color: '#8B8278', fontWeight: 700, display: 'block' }}>Buyer Bidding</span>
-                    <span style={{ fontSize: '0.65rem', color: '#15803D', fontWeight: 800 }}>Direct Free Bidding</span>
+                    <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 800 }}>Category Bidding Pass</span>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <span style={{ fontSize: '0.8rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.35rem', fontWeight: 700 }}>
                       {item.originalBuyer}
                     </span>
-                    <span style={{ fontSize: '1.25rem', color: '#15803D', fontWeight: 950 }}>{item.buyer}</span>
+                    <span style={{ fontSize: '1.25rem', color: '#6B1B71', fontWeight: 950 }}>{item.buyer}</span>
                   </div>
                 </div>
 
@@ -245,13 +261,13 @@ const PlansSection = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <span style={{ fontSize: '0.85rem', color: PURPLE, fontWeight: 900, display: 'block' }}>Dealer Plan</span>
-                    <span style={{ fontSize: '0.65rem', color: '#15803D', fontWeight: 800 }}>30-Day Free Plan</span>
+                    <span style={{ fontSize: '0.65rem', color: '#8B8278', fontWeight: 800 }}>Dealer Monthly Plan</span>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <span style={{ fontSize: '0.85rem', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '0.35rem', fontWeight: 700 }}>
                       {item.originalDealer}
                     </span>
-                    <span style={{ fontSize: '1.35rem', color: '#15803D', fontWeight: 950 }}>{item.dealer}</span>
+                    <span style={{ fontSize: '1.35rem', color: '#6B1B71', fontWeight: 950 }}>{item.dealer}</span>
                   </div>
                 </div>
               </div>
@@ -259,8 +275,8 @@ const PlansSection = () => {
               {/* Dealer Benefit Box */}
               <div className="plan-badge-dealer" style={{ minHeight: 'auto', padding: '0.65rem 0.85rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.82rem' }}>
-                  <span style={{ color: '#1F1A1D', fontWeight: 900 }}>Dealer Monthly Limit:</span>
-                  <span style={{ color: GOLD, fontWeight: 950 }}>{item.limit} / mo</span>
+                  <span className="plan-badge-dealer-label">Dealer Monthly Limit:</span>
+                  <span className="plan-badge-dealer-value">{item.limit} / mo</span>
                 </div>
               </div>
             </div>

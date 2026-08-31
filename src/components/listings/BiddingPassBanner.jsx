@@ -82,13 +82,13 @@ const BiddingPassBanner = ({ productType = 'all', onActivated }) => {
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', flex: 1, minWidth: '260px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <ShieldCheck size={24} style={{ color: '#15803D' }} />
+            <Clock size={24} style={{ color: '#6B1B71' }} />
             <div>
               <span style={{ fontWeight: 900, fontSize: '1rem', color: '#1F1A1D', display: 'block' }}>
-                🇮🇳 Independence Day Special: 100% Free Direct Bidding
+                Category Bidding Pass Required
               </span>
-              <span style={{ fontSize: '0.82rem', color: '#15803D', fontWeight: 700 }}>
-                All buyers enjoy free unlimited bidding (₹0 fee) on all live auctions for the next 30 days!
+              <span style={{ fontSize: '0.82rem', color: '#8B8278', fontWeight: 700 }}>
+                Activate a 24-Hour Bidding Pass for ₹1.00 to place unlimited bids on live auctions.
               </span>
             </div>
           </div>

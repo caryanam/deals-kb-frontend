@@ -69,23 +69,21 @@ export const LiveAuctionPage = () => {
           setActiveImage(photosArray[0]);
         }
 
-        // --- ACTIVE: INDEPENDENCE DAY ₹0 OFFER (Direct free bidding for all buyers without requiring a pass) ---
-
-        // --- REGULAR PAID PASS VERIFICATION (Commented out during ₹0 Offer) ---
-        // if (user?.role === 'Buyer') {
-        //   try {
-        //     const plans = await getMyPlans();
-        //     const activePlan = (plans || []).find(
-        //       (p) => (p.product_type || '').toLowerCase() === (details.product_type || '').toLowerCase() && p.active
-        //     );
-        //     if (!activePlan) {
-        //       setShowPlans(true);
-        //     }
-        //   } catch (err) {
-        //     console.warn('Failed to verify active buyer pass:', err);
-        //     setShowPlans(true);
-        //   }
-        // }
+        // --- ACTIVE: REGULAR PAID PASS VERIFICATION (Set to ₹1.00) ---
+        if (user?.role === 'Buyer') {
+          try {
+            const plans = await getMyPlans();
+            const activePlan = (plans || []).find(
+              (p) => (p.product_type || '').toLowerCase() === (details.product_type || '').toLowerCase() && p.active
+            );
+            if (!activePlan) {
+              setShowPlans(true);
+            }
+          } catch (err) {
+            console.warn('Failed to verify active buyer pass:', err);
+            setShowPlans(true);
+          }
+        }
       } catch (err) {
         console.error('Failed to load product details for live auction page:', err);
       }

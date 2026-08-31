@@ -67,7 +67,7 @@ export const DashboardLayout = () => {
           <Topbar onToggleSidebar={toggleSidebar} />
           
           <main className="dashboard-content">
-            {user?.role !== 'Admin' && <TricolorOfferBanner variant="dashboard-bar" />}
+            {/* {user?.role !== 'Admin' && <TricolorOfferBanner variant="dashboard-bar" />} */}
             <Outlet />
           </main>
         </section>

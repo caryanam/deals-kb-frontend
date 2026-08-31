@@ -69,7 +69,7 @@ const LandingPage = () => {
     <div className="landing-page">
       <HeroSection />
 
-      <LaunchOfferFloatingWidget />
+      {/* <LaunchOfferFloatingWidget /> */}
       
       <div className="scroll-reveal">
         <CategorySection />

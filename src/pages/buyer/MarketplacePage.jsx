@@ -242,26 +242,25 @@ export const MarketplacePage = () => {
                     } catch {}
                   }
                 }} 
-                onJoinAuction={() => {
-                  // --- ACTIVE: INDEPENDENCE DAY ₹0 OFFER (Direct Auction Joining) ---
-                  navigate(`/buyer/auction/${product.product_id}`);
+                onJoinAuction={async () => {
+                  // --- ACTIVE: REGULAR PAID PASS CHECK (Set to ₹1.00) ---
+                  if (user?.role === 'Buyer') {
+                    try {
+                      const plans = await getMyPlans();
+                      const activePlan = (plans || []).find((p) => (p.product_type || '').toLowerCase() === (product.product_type || '').toLowerCase() && p.active);
+                      if (!activePlan) {
+                        setTargetProductType(product.product_type);
+                        setShowPlans(true);
+                        return;
+                      }
+                    } catch (err) {
+                      setTargetProductType(product.product_type);
+                      setShowPlans(true);
+                      return;
+                    }
+                  }
 
-                  // --- REGULAR PAID PASS CHECK (Commented out during ₹0 Offer) ---
-                  // if (user?.role === 'Buyer') {
-                  //   try {
-                  //     const plans = await getMyPlans();
-                  //     const activePlan = (plans || []).find((p) => (p.product_type || '').toLowerCase() === (product.product_type || '').toLowerCase() && p.active);
-                  //     if (!activePlan) {
-                  //       setTargetProductType(product.product_type);
-                  //       setShowPlans(true);
-                  //       return;
-                  //     }
-                  //   } catch (err) {
-                  //     setTargetProductType(product.product_type);
-                  //     setShowPlans(true);
-                  //     return;
-                  //   }
-                  // }
+                  navigate(`/buyer/auction/${product.product_id}`);
                 }}
               />
             </div>

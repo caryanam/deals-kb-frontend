@@ -53,12 +53,12 @@ const ORIGINAL_DEALER_FEES = {
   laptop: '₹2,358.82'
 };
 
-// --- ACTIVE: INDEPENDENCE DAY ₹0 OFFER FEES ---
+// --- ACTIVE: REGULAR LISTING FEES (Set to ₹1) ---
 const LISTING_FEES = {
-  car: '₹0',
-  mobile: '₹0',
-  bike: '₹0',
-  laptop: '₹0'
+  car: '₹1',
+  mobile: '₹1',
+  bike: '₹1',
+  laptop: '₹1'
 };
 
 const TITLE_PLACEHOLDERS = {
@@ -634,36 +634,40 @@ export const CreateListingPage = () => {
         const createdProduct = await createProduct(payload);
         const listingId = createdProduct?.product_id || createdProduct?.id;
 
-        // --- ACTIVE: INDEPENDENCE DAY ₹0 OFFER (Direct Free Product Listing) ---
-        toast.success('Listing created and submitted for verification successfully! (₹0 Special Offer)');
-        setSuccessMsg('Listing submitted for approval. Redirecting...');
-        setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
+        // --- ACTIVE: REGULAR PAID LISTING FLOW (Set to ₹1.00) ---
+        if (user?.role === 'Dealer') {
+          const planId = productType === 'car'
+            ? 'dealer_car_monthly'
+            : productType === 'bike'
+            ? 'dealer_bike_monthly'
+            : productType === 'laptop'
+            ? 'dealer_laptop_monthly'
+            : 'dealer_mobile_monthly';
+          const hasActivePlan = dealerPlans.some(
+            p => (p.plan_id === planId || (p.plan_id === 'dealer_laptop_bike_monthly' && (productType === 'laptop' || productType === 'bike'))) && p.active
+          );
+          if (hasActivePlan) {
+            toast.success('Product listing created successfully under your active plan!');
+            setSuccessMsg('Listing submitted for approval. Redirecting...');
+            setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
+          } else {
+            toast.info('Listing saved. Redirecting to plan payment...');
+            await triggerDealerPlanPayment(planId);
+            setSuccessMsg('Please complete payment in the CCAvenue window to activate your monthly plan.');
+            setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
+          }
+        } else {
+          // Regular Seller pays for each listing
+          toast.info('Listing saved. Redirecting to payment...');
+          await triggerSellerListingPayment(listingId);
+          setSuccessMsg('Please complete payment in the CCAvenue window to activate your listing.');
+          setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
+        }
 
-        // --- REGULAR PAID LISTING FLOW (Commented out during ₹0 Offer) ---
-        // if (user?.role === 'Dealer') {
-        //   const planId = productType === 'car'
-        //     ? 'dealer_car_monthly'
-        //     : productType === 'mobile'
-        //     ? 'dealer_mobile_monthly'
-        //     : 'dealer_laptop_bike_monthly';
-        //   const hasActivePlan = dealerPlans.some(p => p.plan_id === planId && p.active);
-        //   if (hasActivePlan) {
-        //     toast.success('Product listing created successfully under your active plan!');
-        //     setSuccessMsg('Listing submitted for approval. Redirecting...');
-        //     setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
-        //   } else {
-        //     toast.info('Listing saved. Redirecting to plan payment...');
-        //     await triggerDealerPlanPayment(planId);
-        //     setSuccessMsg('Please complete payment in the CCAvenue window to activate your monthly plan.');
-        //     setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
-        //   }
-        // } else {
-        //   // Regular Seller pays for each listing
-        //   toast.info('Listing saved. Redirecting to payment...');
-        //   await triggerSellerListingPayment(listingId);
-        //   setSuccessMsg('Please complete payment in the CCAvenue window to activate your listing.');
-        //   setTimeout(() => navigate(`${basePath}/my-listings`), 3000);
-        // }
+        // --- INDEPENDENCE DAY ₹0 OFFER (Commented out) ---
+        // toast.success('Listing created and submitted for verification successfully! (₹0 Special Offer)');
+        // setSuccessMsg('Listing submitted for approval. Redirecting...');
+        // setTimeout(() => navigate(`${basePath}/my-listings`), 1200);
       }
     } catch (err) {
       const msg = err.response?.data?.detail || err.response?.data?.message || 'Failed to submit product listing.';
