@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plane, Trophy, X, ChevronRight, Gift } from 'lucide-react';
+import { Plane, Trophy, ChevronRight, Gift } from 'lucide-react';
 
 export const DubaiDrawOverlay = () => {
   const [isOnHero, setIsOnHero] = useState(true);
@@ -13,7 +13,6 @@ export const DubaiDrawOverlay = () => {
 
       if (heroEl) {
         const rect = heroEl.getBoundingClientRect();
-        // User is considered on hero section only when top is near 0 and scrollY < 180px
         onHero = rect.top > -180 && scrollY < 180;
       } else {
         onHero = scrollY < 180;
@@ -54,9 +53,52 @@ export const DubaiDrawOverlay = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const tickerContent = (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2.5rem' }}>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+        <span style={{ fontSize: '1.2rem' }}>🎉</span>
+        <strong style={{ fontSize: '1.02rem', fontWeight: 900, color: '#FACC15', letterSpacing: '0.02em' }}>
+          DUBAI LUCKY DRAW!
+        </strong>
+        <Plane size={18} className="animate-plane" style={{ color: '#38bdf8', transform: 'rotate(45deg)' }} />
+        <span style={{ fontSize: '1.1rem' }}>🇦🇪</span>
+      </div>
+
+      <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#ffffff' }}>
+        Buy or Sell &amp; Get a Chance to Fly to Dubai on 31st Dec!
+      </span>
+
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.35rem',
+        backgroundColor: 'rgba(255, 255, 255, 0.12)',
+        padding: '0.2rem 0.75rem',
+        borderRadius: '999px',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        fontSize: '0.8rem',
+        fontWeight: 800
+      }}>
+        <Trophy size={14} className="animate-trophy" style={{ color: '#FACC15' }} />
+        <span>Winner Announced:</span>
+        <span style={{ color: '#FACC15' }}>1st Dec</span>
+      </div>
+
+      <span style={{ fontSize: '0.85rem', fontWeight: 950, color: '#38bdf8', letterSpacing: '0.1em' }}>
+        BUY • SELL • WIN!
+      </span>
+
+      <span style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 300, fontSize: '1.2rem' }}>✦</span>
+    </div>
+  );
+
   return (
     <>
       <style>{`
+        @keyframes headlineTicker {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
         @keyframes planeGlide {
           0% { transform: translateX(-6px) translateY(0px) rotate(0deg); }
           50% { transform: translateX(6px) translateY(-3px) rotate(6deg); }
@@ -66,18 +108,28 @@ export const DubaiDrawOverlay = () => {
           0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px #F59E0B); }
           50% { transform: scale(1.08); filter: drop-shadow(0 0 8px #FACC15); }
         }
-        @keyframes floatBounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); }
-        }
         .animate-plane {
           animation: planeGlide 3s ease-in-out infinite;
         }
         .animate-trophy {
           animation: pulseGold 2s infinite;
         }
-        .animate-float-bounce {
-          animation: floatBounce 2.5s ease-in-out infinite;
+        .headline-ticker-wrapper {
+          overflow: hidden;
+          width: 100%;
+          display: flex;
+          align-items: center;
+        }
+        .headline-ticker-track {
+          display: flex;
+          align-items: center;
+          gap: 2.5rem;
+          white-space: nowrap;
+          animation: headlineTicker 24s linear infinite;
+          will-change: transform;
+        }
+        .headline-ticker-track:hover {
+          animation-play-state: paused;
         }
         .dubai-bubble-btn {
           box-shadow: 0 10px 30px rgba(15, 23, 42, 0.4), 0 0 15px rgba(245, 158, 11, 0.3);
@@ -89,91 +141,55 @@ export const DubaiDrawOverlay = () => {
         }
       `}</style>
 
-      {/* PERMANENT TOP OVERLAY BANNER (No close button, positioned cleanly below 72px navbar) */}
+      {/* HEADLINE ANIMATED TICKER TOP BANNER (Positioned below the 72px fixed navbar) */}
       <div style={{
-        marginTop: '72px', // Pushes banner cleanly below fixed 72px navbar
-        marginBottom: 0,   // Zero gap before hero section starts
+        marginTop: '72px',
+        marginBottom: 0,
         background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #0369a1 80%, #b45309 100%)',
-        borderBottom: '3px solid #F59E0B',
-        padding: '0.75rem 1.5rem',
+        borderBottom: '3.5px solid #F59E0B',
+        padding: '0.7rem 0',
         color: '#ffffff',
         position: 'relative',
         zIndex: 990,
         fontFamily: "'Outfit', sans-serif",
         boxShadow: '0 4px 15px rgba(0, 0, 0, 0.25)',
+        display: 'flex',
+        alignItems: 'center'
       }}>
+        {/* Static Left Badge */}
         <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
+          paddingLeft: '1.25rem',
+          paddingRight: '1rem',
+          backgroundColor: '#0f172a',
+          zIndex: 2,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '0.75rem'
+          gap: '0.5rem',
+          borderRight: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '4px 0 10px rgba(0,0,0,0.3)',
+          flexShrink: 0
         }}>
-          {/* Left Side: Offer Details */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', flex: 1 }}>
-            <span style={{
-              backgroundColor: '#F59E0B',
-              color: '#0f172a',
-              fontSize: '0.7rem',
-              fontWeight: 950,
-              padding: '0.2rem 0.6rem',
-              borderRadius: '4px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em'
-            }}>
-              EXCLUSIVE OFFER
-            </span>
+          <span style={{
+            backgroundColor: '#F59E0B',
+            color: '#0f172a',
+            fontSize: '0.7rem',
+            fontWeight: 950,
+            padding: '0.2rem 0.55rem',
+            borderRadius: '4px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em'
+          }}>
+            BREAKING OFFER
+          </span>
+        </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span style={{ fontSize: '1.2rem' }}>🎉</span>
-              <strong style={{
-                fontSize: '1rem',
-                fontWeight: 900,
-                letterSpacing: '0.02em',
-                color: '#FACC15',
-                textShadow: '0 1px 3px rgba(0,0,0,0.5)'
-              }}>
-                DUBAI LUCKY DRAW!
-              </strong>
-              <Plane size={18} className="animate-plane" style={{ color: '#38bdf8', transform: 'rotate(45deg)' }} />
-              <span style={{ fontSize: '1.1rem' }}>🇦🇪</span>
-            </div>
-
-            <div style={{ width: '1px', height: '18px', backgroundColor: 'rgba(255,255,255,0.25)', margin: '0 0.2rem' }} />
-
-            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f3f4f6' }}>
-              Buy or Sell &amp; Get a Chance to Fly to Dubai on 31st Dec!
-            </span>
-          </div>
-
-          {/* Right Side: Winner Announcement */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.12)',
-              padding: '0.25rem 0.75rem',
-              borderRadius: '999px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              fontSize: '0.78rem',
-              fontWeight: 800
-            }}>
-              <Trophy size={14} className="animate-trophy" style={{ color: '#FACC15' }} />
-              <span>Winner Announced:</span>
-              <span style={{ color: '#FACC15' }}>1st Dec</span>
-            </div>
-
-            <span style={{
-              fontSize: '0.8rem',
-              fontWeight: 950,
-              letterSpacing: '0.08em',
-              color: '#38bdf8'
-            }}>
-              BUY • SELL • WIN!
-            </span>
+        {/* Continuous Headline Ticker Track */}
+        <div className="headline-ticker-wrapper">
+          <div className="headline-ticker-track">
+            {tickerContent}
+            {tickerContent}
+            {tickerContent}
+            {tickerContent}
           </div>
         </div>
       </div>
@@ -188,7 +204,7 @@ export const DubaiDrawOverlay = () => {
           position: 'fixed',
           bottom: '2rem',
           right: '1.75rem',
-          zIndex: 9999, // High z-index to stay above all section content
+          zIndex: 9999,
           background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #b45309 100%)',
           border: '2.5px solid #F59E0B',
           borderRadius: '999px',
@@ -230,7 +246,7 @@ export const DubaiDrawOverlay = () => {
         <ChevronRight size={16} style={{ color: '#FACC15', marginLeft: '0.2rem' }} />
       </div>
 
-      {/* POPUP MODAL (Opens when clicking the floating bubble) */}
+      {/* POPUP MODAL */}
       {isModalOpen && (
         <div style={{
           position: 'fixed',
