@@ -83,7 +83,7 @@ body,
 
 .hero-section {
   position: relative;
-  margin-top: 72px;
+  margin-top: 0;
   min-height: calc(100vh - 72px);
   overflow: hidden;
   background: #FAF6EA;

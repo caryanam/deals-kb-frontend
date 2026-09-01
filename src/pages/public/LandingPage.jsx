@@ -9,6 +9,7 @@ import AboutSection from "../../components/landing/AboutSection";
 import AppComingSoonSection from "../../components/landing/AppComingSoonSection";
 import NewsletterSection from "../../components/landing/NewsletterSection";
 import LaunchOfferFloatingWidget from "../../components/landing/LaunchOfferFloatingWidget";
+import DubaiDrawOverlay from "../../components/landing/DubaiDrawOverlay";
 import TricolorOfferBanner from "../../components/common/TricolorOfferBanner";
 import Footer from "../../components/common/Footer";
 import "../../styles/landing.css";
@@ -67,6 +68,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      <DubaiDrawOverlay />
       <HeroSection />
 
       {/* <LaunchOfferFloatingWidget /> */}
