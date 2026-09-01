@@ -390,7 +390,7 @@ const AppComingSoonSection = () => {
           {/* Store Download Buttons */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <a
-              href="https://play.google.com/store/apps/details?id=com.caryanam_broker_new&utm_source=chatgpt.com"
+              href="https://expo.dev/accounts/shubham1702/projects/dealskb/builds/0afb63aa-d17d-431c-9936-9615306732f0"
               target="_blank"
               rel="noopener noreferrer"
               style={{
