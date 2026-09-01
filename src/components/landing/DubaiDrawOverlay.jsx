@@ -2,16 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Plane, Trophy, X, ChevronRight, Gift } from 'lucide-react';
 
 export const DubaiDrawOverlay = () => {
-  const [isBannerVisible, setIsBannerVisible] = useState(true);
   const [isOnHero, setIsOnHero] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const isDismissed = sessionStorage.getItem('dubai_draw_dismissed');
-    if (isDismissed) {
-      setIsBannerVisible(false);
-    }
-
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
       const heroEl = document.getElementById('home');
@@ -56,11 +50,6 @@ export const DubaiDrawOverlay = () => {
     };
   }, []);
 
-  const handleDismissBanner = () => {
-    sessionStorage.setItem('dubai_draw_dismissed', 'true');
-    setIsBannerVisible(false);
-  };
-
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -100,125 +89,94 @@ export const DubaiDrawOverlay = () => {
         }
       `}</style>
 
-      {/* TOP OVERLAY BANNER (Positioned below the 72px fixed navbar with 0 bottom gap) */}
-      {isBannerVisible ? (
+      {/* PERMANENT TOP OVERLAY BANNER (No close button, positioned cleanly below 72px navbar) */}
+      <div style={{
+        marginTop: '72px', // Pushes banner cleanly below fixed 72px navbar
+        marginBottom: 0,   // Zero gap before hero section starts
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #0369a1 80%, #b45309 100%)',
+        borderBottom: '3px solid #F59E0B',
+        padding: '0.75rem 1.5rem',
+        color: '#ffffff',
+        position: 'relative',
+        zIndex: 990,
+        fontFamily: "'Outfit', sans-serif",
+        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.25)',
+      }}>
         <div style={{
-          marginTop: '72px', // Pushes banner cleanly below fixed 72px navbar
-          marginBottom: 0,   // Zero gap before hero section starts
-          background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #0369a1 80%, #b45309 100%)',
-          borderBottom: '3px solid #F59E0B',
-          padding: '0.75rem 1.5rem',
-          color: '#ffffff',
-          position: 'relative',
-          zIndex: 990,
-          fontFamily: "'Outfit', sans-serif",
-          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.25)',
+          maxWidth: '1200px',
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.75rem'
         }}>
-          <div style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '0.75rem',
-            paddingRight: '2rem'
-          }}>
-            {/* Left Side: Offer Details */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', flex: 1 }}>
-              <span style={{
-                backgroundColor: '#F59E0B',
-                color: '#0f172a',
-                fontSize: '0.7rem',
-                fontWeight: 950,
-                padding: '0.2rem 0.6rem',
-                borderRadius: '4px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
+          {/* Left Side: Offer Details */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', flex: 1 }}>
+            <span style={{
+              backgroundColor: '#F59E0B',
+              color: '#0f172a',
+              fontSize: '0.7rem',
+              fontWeight: 950,
+              padding: '0.2rem 0.6rem',
+              borderRadius: '4px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              EXCLUSIVE OFFER
+            </span>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span style={{ fontSize: '1.2rem' }}>🎉</span>
+              <strong style={{
+                fontSize: '1rem',
+                fontWeight: 900,
+                letterSpacing: '0.02em',
+                color: '#FACC15',
+                textShadow: '0 1px 3px rgba(0,0,0,0.5)'
               }}>
-                EXCLUSIVE OFFER
-              </span>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <span style={{ fontSize: '1.2rem' }}>🎉</span>
-                <strong style={{
-                  fontSize: '1rem',
-                  fontWeight: 900,
-                  letterSpacing: '0.02em',
-                  color: '#FACC15',
-                  textShadow: '0 1px 3px rgba(0,0,0,0.5)'
-                }}>
-                  DUBAI LUCKY DRAW!
-                </strong>
-                <Plane size={18} className="animate-plane" style={{ color: '#38bdf8', transform: 'rotate(45deg)' }} />
-                <span style={{ fontSize: '1.1rem' }}>🇦🇪</span>
-              </div>
-
-              <div style={{ width: '1px', height: '18px', backgroundColor: 'rgba(255,255,255,0.25)', margin: '0 0.2rem' }} />
-
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f3f4f6' }}>
-                Buy or Sell &amp; Get a Chance to Fly to Dubai on 31st Dec!
-              </span>
+                DUBAI LUCKY DRAW!
+              </strong>
+              <Plane size={18} className="animate-plane" style={{ color: '#38bdf8', transform: 'rotate(45deg)' }} />
+              <span style={{ fontSize: '1.1rem' }}>🇦🇪</span>
             </div>
 
-            {/* Right Side: Winner Announcement */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                padding: '0.25rem 0.75rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                fontSize: '0.78rem',
-                fontWeight: 800
-              }}>
-                <Trophy size={14} className="animate-trophy" style={{ color: '#FACC15' }} />
-                <span>Winner Announced:</span>
-                <span style={{ color: '#FACC15' }}>1st Dec</span>
-              </div>
+            <div style={{ width: '1px', height: '18px', backgroundColor: 'rgba(255,255,255,0.25)', margin: '0 0.2rem' }} />
 
-              <span style={{
-                fontSize: '0.8rem',
-                fontWeight: 950,
-                letterSpacing: '0.08em',
-                color: '#38bdf8'
-              }}>
-                BUY • SELL • WIN!
-              </span>
-            </div>
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f3f4f6' }}>
+              Buy or Sell &amp; Get a Chance to Fly to Dubai on 31st Dec!
+            </span>
           </div>
 
-          {/* Dismiss Button */}
-          <button
-            onClick={handleDismissBanner}
-            style={{
-              position: 'absolute',
-              right: '0.75rem',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              background: 'none',
-              border: 'none',
-              color: 'rgba(255, 255, 255, 0.7)',
-              cursor: 'pointer',
-              padding: '0.25rem',
-              transition: 'color 0.2s ease',
-              display: 'flex',
+          {/* Right Side: Winner Announcement */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <div style={{
+              display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            title="Dismiss offer banner"
-            onMouseEnter={(e) => e.currentTarget.style.color = '#ffffff'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)'}
-          >
-            <X size={18} />
-          </button>
+              gap: '0.35rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.12)',
+              padding: '0.25rem 0.75rem',
+              borderRadius: '999px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              fontSize: '0.78rem',
+              fontWeight: 800
+            }}>
+              <Trophy size={14} className="animate-trophy" style={{ color: '#FACC15' }} />
+              <span>Winner Announced:</span>
+              <span style={{ color: '#FACC15' }}>1st Dec</span>
+            </div>
+
+            <span style={{
+              fontSize: '0.8rem',
+              fontWeight: 950,
+              letterSpacing: '0.08em',
+              color: '#38bdf8'
+            }}>
+              BUY • SELL • WIN!
+            </span>
+          </div>
         </div>
-      ) : (
-        /* Spacer when banner is dismissed so content doesn't get covered by fixed navbar */
-        <div style={{ height: '72px' }} />
-      )}
+      </div>
 
       {/* RIGHT-SIDE FLOATING OVERLAY BUBBLE
           - Fades out (opacity: 0) when on top of hero section
