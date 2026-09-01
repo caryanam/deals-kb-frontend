@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plane, Trophy, ChevronRight, Gift } from 'lucide-react';
+import { Plane, Trophy, X, ChevronRight, Gift } from 'lucide-react';
 
 export const DubaiDrawOverlay = () => {
   const [isOnHero, setIsOnHero] = useState(true);
