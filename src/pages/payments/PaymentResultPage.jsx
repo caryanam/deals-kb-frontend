@@ -27,6 +27,13 @@ const PaymentResultPage = () => {
     return '/buyer/dashboard';
   }, [user]);
 
+  const myListingsPath = useMemo(() => {
+    if (user?.role === 'Dealer') return '/dealer/my-listings';
+    return '/seller/my-listings';
+  }, [user]);
+
+  const isSellerListing = payment?.payment_type === 'SELLER_LISTING' || user?.role === 'Seller' || user?.role === 'Dealer';
+
   const loadStatus = async () => {
     if (!orderId) {
       setLoading(false);
@@ -76,9 +83,15 @@ const PaymentResultPage = () => {
           <button type="button" onClick={loadStatus} disabled={loading} className="btn btn-secondary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}>
             <RefreshCw size={16} /> Refresh
           </button>
-          <Link to={dashboardPath} className="btn btn-primary" style={{ textDecoration: 'none' }}>
-            Go to dashboard
-          </Link>
+          {isSellerListing ? (
+            <Link to={myListingsPath} className="btn btn-primary" style={{ textDecoration: 'none' }}>
+              Go to My Listings
+            </Link>
+          ) : (
+            <Link to={dashboardPath} className="btn btn-primary" style={{ textDecoration: 'none' }}>
+              Go to dashboard
+            </Link>
+          )}
         </div>
       </section>
     </main>

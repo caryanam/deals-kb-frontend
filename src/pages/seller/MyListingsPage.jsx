@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { normalizeImageUrl, getProductCoverImage, getProductGalleryImages, handleImageError } from '../../utils/imageUtils';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -17,13 +17,15 @@ import {
   MessageSquare,
   Clock3,
   Loader2,
-  ArrowUpRight
+  ArrowUpRight,
+  CreditCard
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../hooks/useAuth';
 import { getProducts, getProductById, getProductBids, startAuction } from '../../api/productApi';
 import { getSellerChatRequests } from '../../api/chatRequestApi';
 import { formatINR, PRODUCT_TYPE_LABELS, safeParseJSON, getNameInitials, getBidderDisplayName } from '../../utils/helpers';
+import { triggerSellerListingPayment } from '../../utils/paymentHelper';
 import { toast } from 'react-toastify';
 
 const VERIFICATION_DOCUMENT_KEYS = new Set(['rc_copy', 'insurance_copy', 'aadhaar_card', 'pan_card']);
@@ -92,6 +94,14 @@ const sortByLatest = (items = [], field = 'created_at') => {
     const rightTime = new Date(right?.[field] || right?.updated_at || 0).getTime();
     return rightTime - leftTime;
   });
+};
+
+const isPaymentPendingOrFailed = (product) => {
+  if (!product) return false;
+  const status = String(product.status || '').toLowerCase();
+  if (status !== 'pending') return false;
+  const paymentStatus = String(product.relist_payment_status || '').toLowerCase();
+  return !['paid', 'bypassed'].includes(paymentStatus);
 };
 
 export const MyListingsPage = () => {
@@ -249,7 +259,48 @@ export const MyListingsPage = () => {
     closeDetailsModal();
   };
 
-  const getStatusBadge = (status) => {
+  const [retryingPaymentId, setRetryingPaymentId] = useState(null);
+
+  useEffect(() => {
+    if (searchParams.get('payment') === 'failed') {
+      toast.error('Payment was not completed. You can retry payment anytime by clicking "Retry Payment" on your listing.');
+    }
+  }, [searchParams]);
+
+  const handleRetryPayment = async (product) => {
+    if (!product?.product_id) return;
+    setRetryingPaymentId(product.product_id);
+    try {
+      toast.info('Redirecting to payment gateway...');
+      await triggerSellerListingPayment(
+        product.product_id,
+        () => setRetryingPaymentId(null),
+        () => setRetryingPaymentId(null)
+      );
+    } catch (err) {
+      console.error('Failed to retry payment:', err);
+      toast.error('Could not initialize payment. Please try again.');
+      setRetryingPaymentId(null);
+    }
+  };
+
+  const getStatusBadge = (status, product = null) => {
+    if (product && isPaymentPendingOrFailed(product)) {
+      const isFailed = String(product.relist_payment_status || '').toLowerCase() === 'failed';
+      return (
+        <span
+          className="badge"
+          style={{
+            backgroundColor: '#fee2e2',
+            color: '#991b1b',
+            border: '1px solid #fca5a5',
+            fontWeight: 800
+          }}
+        >
+          {isFailed ? 'Payment Failed' : 'Payment Pending'}
+        </span>
+      );
+    }
     switch (status) {
       case 'live':
         return <span className="badge badge-live">Live</span>;
@@ -491,7 +542,7 @@ export const MyListingsPage = () => {
                     >
                       {product.title}
                     </button>
-                    {getStatusBadge(product.status)}
+                    {getStatusBadge(product.status, product)}
                   </div>
                   <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', color: '#8B8278' }}>
                     Category: <strong>{PRODUCT_TYPE_LABELS[product.product_type] || product.product_type}</strong> | Brand: <strong>{product.brand}</strong> | Model: <strong>{product.model}</strong>
@@ -575,10 +626,54 @@ export const MyListingsPage = () => {
                     </button>
                   )}
 
-                  {product.status === 'pending' && (
-                    <div style={{ fontSize: '0.8rem', color: '#d97706', backgroundColor: '#fffbeb', border: '1px solid #fde68a', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontWeight: 600 }}>
-                      Awaiting Admin Review
+                  {isPaymentPendingOrFailed(product) ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                      <div style={{
+                        fontSize: '0.8rem',
+                        color: '#991b1b',
+                        backgroundColor: '#fee2e2',
+                        border: '1px solid #fca5a5',
+                        padding: '0.5rem 0.85rem',
+                        borderRadius: '0.5rem',
+                        fontWeight: 700,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem'
+                      }}>
+                        <AlertCircle size={15} />
+                        <span>Payment pending · Admin review locked</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRetryPayment(product)}
+                        className="btn btn-primary"
+                        disabled={retryingPaymentId === product.product_id}
+                        style={{
+                          padding: '0.5rem 1.25rem',
+                          fontSize: '0.85rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          backgroundColor: '#e11d48',
+                          borderColor: '#be123c',
+                          color: '#ffffff',
+                          fontWeight: 800
+                        }}
+                      >
+                        {retryingPaymentId === product.product_id ? (
+                          <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} />
+                        ) : (
+                          <CreditCard size={15} />
+                        )}
+                        Retry Payment
+                      </button>
                     </div>
+                  ) : (
+                    product.status === 'pending' && (
+                      <div style={{ fontSize: '0.8rem', color: '#d97706', backgroundColor: '#fffbeb', border: '1px solid #fde68a', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontWeight: 600 }}>
+                        Awaiting Admin Review
+                      </div>
+                    )
                   )}
 
                   {product.status === 'live' && (
@@ -640,7 +735,7 @@ export const MyListingsPage = () => {
             }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  {getStatusBadge(modalListing.status)}
+                  {getStatusBadge(modalListing.status, modalListing)}
                   <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#6B1B71', textTransform: 'uppercase' }}>
                     Seller Listing View
                   </span>
@@ -827,7 +922,43 @@ export const MyListingsPage = () => {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', minWidth: 0 }}>
-                {['approved', 'pending'].includes(modalListing.status) ? (
+                {isPaymentPendingOrFailed(modalListing) ? (
+                  <section className="card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.9rem', border: '1.5px solid #fca5a5', backgroundColor: '#fffafb' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#991b1b' }}>
+                      <AlertCircle size={18} />
+                      <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#991b1b' }}>Payment Required</h3>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.5, color: '#64748b' }}>
+                      Payment for this listing was not completed. Admin review is locked until listing fee payment is completed. Please retry payment to submit this listing for verification.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => handleRetryPayment(modalListing)}
+                      className="btn btn-primary"
+                      disabled={retryingPaymentId === modalListing.product_id}
+                      style={{
+                        padding: '0.65rem 1.25rem',
+                        fontSize: '0.88rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.45rem',
+                        backgroundColor: '#e11d48',
+                        borderColor: '#be123c',
+                        color: '#ffffff',
+                        fontWeight: 800,
+                        width: '100%'
+                      }}
+                    >
+                      {retryingPaymentId === modalListing.product_id ? (
+                        <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+                      ) : (
+                        <CreditCard size={16} />
+                      )}
+                      Retry Payment
+                    </button>
+                  </section>
+                ) : ['approved', 'pending'].includes(modalListing.status) ? (
                   <section className="card" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
                     <div>
                       <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#1F1A1D' }}>Bidding Yet to Start</h3>
